@@ -15,6 +15,7 @@ object DialogReader {
     fun reset(){
         current = DialogItem.None
     }
+
     fun navigateTo(destination: DialogItem){
         current = destination
     }
