@@ -10,7 +10,7 @@ sealed class DialogItem {
     object RestoreUserDialog : DialogItem()
 }
 
-object DialogReader {
+object DialogRouter {
     var current : DialogItem by mutableStateOf(DialogItem.None)
     fun reset(){
         current = DialogItem.None
