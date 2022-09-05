@@ -22,14 +22,14 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting("Adnroid")
+                    LoginScreen()
                 }
             }
         }
     }
 }
 
-@Composable
+/*@Composable
 fun Greeting(name: String) {
     Text(text = "Hello $name!")
 }
@@ -40,4 +40,4 @@ fun DefaultPreview() {
     ShopLocalTheme {
         Greeting("Android")
     }
-}
+}*/
