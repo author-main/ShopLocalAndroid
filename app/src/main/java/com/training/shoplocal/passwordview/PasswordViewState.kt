@@ -9,6 +9,8 @@ import androidx.compose.runtime.setValue
 import kotlinx.parcelize.Parcelize
 
 class PasswordViewState {
+    private val emptyChar   = "○"
+    private val fillChar    = "●"
     private var password by mutableStateOf("")
     companion object {
         fun getPasswordState(value: String) = PasswordViewState().apply { this.password = value }
