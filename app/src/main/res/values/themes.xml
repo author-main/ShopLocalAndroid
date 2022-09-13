@@ -2,7 +2,7 @@
 <resources>
 
     <style name="Theme.ShopLocal" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/purple_700</item>
+        <item name="android:statusBarColor">@color/PrimaryDark</item>
         <item name="android:windowBackground">@color/PrimaryDark</item>
     </style>
 

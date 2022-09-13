@@ -41,7 +41,7 @@ fun ShopLocalTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composa
     val systemUiController = rememberSystemUiController()
     if(darkTheme){
         systemUiController.setSystemBarsColor(
-            color = Color.Transparent
+            color = PrimaryDark
         )
     }else{
 
