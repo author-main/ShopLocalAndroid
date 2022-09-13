@@ -6,7 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.setValue
-import kotlinx.parcelize.Parcelize
 
 class PasswordViewState {
     private val emptyChar   = '○'
@@ -27,11 +26,9 @@ class PasswordViewState {
         return array
     }
 
-
-
     companion object {
         const val PASSWORD_LENGTH = 5
-        fun getPasswordState(value: String) = PasswordViewState().apply { this.password = value }
+        fun getPasswordState(value: String = "") = PasswordViewState().apply { this.password = value }
 
         @Suppress("UNCHECKED_CAST")
         val Saver: Saver<PasswordViewState,Any> = listSaver(

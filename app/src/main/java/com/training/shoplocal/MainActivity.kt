@@ -10,11 +10,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.training.shoplocal.passwordview.PasswordViewState
 import com.training.shoplocal.ui.theme.ShopLocalTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val passwordState = PasswordViewState.getPasswordState()
         setContent {
             ShopLocalTheme {
                 // A surface container using the 'background' color from the theme
@@ -22,7 +24,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    LoginScreen()
+                    LoginScreen(passwordState)
                 }
             }
         }
