@@ -22,6 +22,7 @@ fun PasswordView(state: PasswordViewState) {
         for (index in 0 until PasswordViewState.PASSWORD_LENGTH) {
             val textColor = if (chars[index] == PasswordViewState.emptyChar)
                 TextLightGray else TextOrange
+
             Text(
                 text = chars[index].toString(),
                 modifier = Modifier
