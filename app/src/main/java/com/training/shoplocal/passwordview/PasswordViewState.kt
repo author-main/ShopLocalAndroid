@@ -8,8 +8,6 @@ import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.setValue
 
 class PasswordViewState {
-    private val emptyChar   = '○'
-    private val fillChar    = '●'
     private var password by mutableStateOf("")
 
     @JvmName("getPassword1")
@@ -20,9 +18,7 @@ class PasswordViewState {
     }
 
     fun getPasswordChar(): CharArray {
-        val array = CharArray(PASSWORD_LENGTH)
-        for (index in 0 until PASSWORD_LENGTH)
-            array[index] = emptyChar
+        val array = arrayEmptyChar.clone()
         password.forEachIndexed { index, _ ->
             array[index] = fillChar
         }
@@ -30,7 +26,14 @@ class PasswordViewState {
     }
 
     companion object {
-        const val PASSWORD_LENGTH = 5
+        private const val PASSWORD_LENGTH = 5
+        private const val emptyChar   = '○'
+        private const val fillChar    = '●'
+        private val arrayEmptyChar: CharArray = CharArray(PASSWORD_LENGTH).apply {
+            for (index in 0 until PASSWORD_LENGTH)
+                this[index] = emptyChar
+        }
+
         fun getPasswordState(value: String = "") = PasswordViewState().apply { this.password = value }
 
         @Suppress("UNCHECKED_CAST")
