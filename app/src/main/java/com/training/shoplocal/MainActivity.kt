@@ -18,13 +18,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val passwordState = PasswordViewState.getPasswordState()
         setContent {
-            ShopLocalTheme {
+            ShopLocalTheme(true) {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    LoginScreen(passwordState)
+                        LoginScreen(passwordState)
                 }
             }
         }

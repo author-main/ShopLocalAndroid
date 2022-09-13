@@ -26,9 +26,9 @@ class PasswordViewState {
     }
 
     companion object {
-        private const val PASSWORD_LENGTH = 5
-        private const val emptyChar   = '○'
-        private const val fillChar    = '●'
+        const val PASSWORD_LENGTH = 5
+        const val emptyChar   = '○'
+        const val fillChar    = '●'
         private val arrayEmptyChar: CharArray = CharArray(PASSWORD_LENGTH).apply {
             for (index in 0 until PASSWORD_LENGTH)
                 this[index] = emptyChar
