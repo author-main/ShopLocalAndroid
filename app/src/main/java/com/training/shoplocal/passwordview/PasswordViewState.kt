@@ -27,8 +27,6 @@ class PasswordViewState {
         return array
     }
 
-
-
     companion object {
         const val PASSWORD_LENGTH = 5
         fun getPasswordState(value: String) = PasswordViewState().apply { this.password = value }
