@@ -11,15 +11,18 @@ class PasswordViewState {
     private val emptyChar   = '○'
     private val fillChar    = '●'
     private var password by mutableStateOf("")
+
+    @JvmName("getPassword1")
+    fun getPassword() = password
+
     fun changePassword(value: String) {
         password = value
     }
 
     fun getPasswordChar(): CharArray {
         val array = CharArray(PASSWORD_LENGTH)
-        for (index in 0..4)
+        for (index in 0 until PASSWORD_LENGTH)
             array[index] = emptyChar
-
         password.forEachIndexed { index, _ ->
             array[index] = fillChar
         }
