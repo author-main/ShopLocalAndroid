@@ -12,7 +12,7 @@ fun LoginScreen(state: PasswordViewState){
     Box(contentAlignment = Alignment.Center) {
         PasswordView(state)
     }
-    SideEffect {
+   /* SideEffect {
         state.changePassword("12")
-    }
+    }*/
 }

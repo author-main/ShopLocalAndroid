@@ -35,4 +35,10 @@ fun PasswordView(state: PasswordViewState) {
             )
         }
     }
+    /*SideEffect {
+        if (passwordState.getPassword().isEmpty()) {
+            Log.v("shoplocal", "empty")
+            passwordState.changePassword("123")
+        }
+    }*/
 }
