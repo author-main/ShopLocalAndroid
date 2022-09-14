@@ -36,9 +36,12 @@ fun PasswordView(state: PasswordViewState) {
                     durationMillis = 1500
                 )
             )*/
-            /*if (passwordState.isAnimated() && index == indexChar) {
+            if (passwordState.isAnimated() && index == indexChar) {
                 Log.v("shoplocal", "animate")
-            }*/
+                SideEffect {
+                    passwordState.stopAnimate()
+                }
+            }
             /*LaunchedEffect(passwordState.isAnimated() && index == indexChar) {
                 scale.animateTo(
                     targetValue = 10f,
@@ -57,9 +60,6 @@ fun PasswordView(state: PasswordViewState) {
                 fontSize = 27.sp,
                 color = textColor
             )
-            SideEffect {
-                passwordState.stopAnimate()
-            }
         }
     }
   /*  SideEffect {

@@ -17,7 +17,10 @@ class PasswordViewState {
 
     fun isAnimated() = animated
     fun stopAnimate(){
-        animated = false;
+        if (animated) {
+            Log.v("shoplocal", "stop animate")
+            animated = false;
+        }
     }
 
     fun changePassword(value: String) {
