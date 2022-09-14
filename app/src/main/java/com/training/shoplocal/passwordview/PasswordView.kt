@@ -24,42 +24,45 @@ fun PasswordView(state: PasswordViewState) {
     val passwordState = rememberSaveable(saver = PasswordViewState.Saver) { state }
     val chars = passwordState.getPasswordChar()
     val indexChar = chars.lastIndexOf(PasswordViewState.fillChar)
-    var scale = remember { Animatable(initialValue = 0f) }
+    //val scale = remember { Animatable(initialValue = 0f) }
  //   Log.v("shoplocal", "password=${passwordState.getPassword()}, prev=${passwordState.prev}")
     Row(){
         for (index in 0 until PasswordViewState.PASSWORD_LENGTH) {
             val textColor = if (chars[index] == PasswordViewState.emptyChar)
                 TextLightGray else TextOrange
-            val animate by animateFloatAsState(
+          /*  val animate by animateFloatAsState(
                 targetValue = 20f,
                 animationSpec = tween(
                     durationMillis = 1500
                 )
-            )
+            )*/
             /*if (passwordState.isAnimated() && index == indexChar) {
                 Log.v("shoplocal", "animate")
             }*/
-            LaunchedEffect(passwordState.isAnimated() && index == indexChar) {
+            /*LaunchedEffect(passwordState.isAnimated() && index == indexChar) {
                 scale.animateTo(
                     targetValue = 10f,
                     animationSpec = tween(durationMillis = 2000),
                 )
-            }
+            }*/
 
             Text(
                 text = chars[index].toString(),
                 modifier = Modifier
                     .padding(8.dp)
-                    .graphicsLayer(
+                  /*  .graphicsLayer(
                         scaleX = scale.value,
                         scaleY = scale.value
-                    ),
+                    )*/,
                 fontSize = 27.sp,
                 color = textColor
             )
+            SideEffect {
+                passwordState.stopAnimate()
+            }
         }
     }
-    SideEffect {
+  /*  SideEffect {
         passwordState.stopAnimate()
-    }
+    }*/
 }
