@@ -37,7 +37,6 @@ fun PasswordView(state: PasswordViewState) {
             color = color
         )
     }
-
     val visible = MutableTransitionState(false)
     val passwordState = rememberSaveable(saver = PasswordViewState.Saver) { state }
     val chars = passwordState.getPasswordChar()
