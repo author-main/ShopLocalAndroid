@@ -21,11 +21,16 @@ import com.training.shoplocal.ui.theme.TextOrange
 fun PasswordView(state: PasswordViewState) {
     val passwordState = rememberSaveable(saver = PasswordViewState.Saver) { state }
     val chars = passwordState.getPasswordChar()
+    val indexChar = chars.lastIndexOf(PasswordViewState.fillChar)
 //    Log.v("shoplocal", passwordState.getPassword())
     Row(){
         for (index in 0 until PasswordViewState.PASSWORD_LENGTH) {
             val textColor = if (chars[index] == PasswordViewState.emptyChar)
                 TextLightGray else TextOrange
+
+            if (passwordState.isAnimated() && index == indexChar)
+                Log.v("shoplocal", "animated")
+
             Text(
                 text = chars[index].toString(),
                 modifier = Modifier
@@ -35,10 +40,7 @@ fun PasswordView(state: PasswordViewState) {
             )
         }
     }
-    /*SideEffect {
-        if (passwordState.getPassword().isEmpty()) {
-            Log.v("shoplocal", "empty")
-            passwordState.changePassword("123")
-        }
-    }*/
+    SideEffect {
+        passwordState.stopAnimate()
+    }
 }

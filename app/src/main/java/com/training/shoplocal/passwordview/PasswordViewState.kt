@@ -1,6 +1,7 @@
 package com.training.shoplocal.passwordview
 
 import android.os.Parcelable
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
@@ -9,12 +10,23 @@ import androidx.compose.runtime.setValue
 
 class PasswordViewState {
     private var password by mutableStateOf("")
+    private var animated = false
 
     @JvmName("getPassword1")
     fun getPassword() = password
 
     fun changePassword(value: String) {
+        animated = true
         password = value
+    }
+
+    fun isAnimated() = animated
+
+    fun stopAnimate() {
+        if (animated) {
+            Log.v("shoplocal", "stop animate")
+            animated = false
+        }
     }
 
     fun getPasswordChar(): CharArray {
