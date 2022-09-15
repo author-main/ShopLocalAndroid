@@ -54,7 +54,8 @@ fun PasswordView(state: PasswordViewState) {
                         visibleState = visible,
                         enter = fadeIn(
                             animationSpec = tween(
-                                durationMillis = 200
+                                durationMillis = 200,
+                                easing = LinearEasing
                             )
                         )
                     ) {
