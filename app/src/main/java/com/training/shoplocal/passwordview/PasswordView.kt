@@ -41,6 +41,7 @@ fun PasswordView(state: PasswordViewState) {
     val passwordState = rememberSaveable(saver = PasswordViewState.Saver) { state }
     val chars = passwordState.getPasswordChar()
     val indexChar = chars.lastIndexOf(PasswordViewState.fillChar)
+
     Row(){
         for (index in 0 until PasswordViewState.PASSWORD_LENGTH) {
             val textColor = if (chars[index] == PasswordViewState.emptyChar)
