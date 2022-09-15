@@ -15,6 +15,7 @@ fun LoginScreen(state: PasswordViewState){
         PasswordView(state)
     }
     LaunchedEffect(true) {
+        delay(1000)
         state.changePassword("1")
         delay(1000)
         state.changePassword("12")
