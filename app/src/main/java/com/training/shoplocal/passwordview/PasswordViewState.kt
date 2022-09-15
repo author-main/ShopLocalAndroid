@@ -11,21 +11,24 @@ import androidx.compose.runtime.setValue
 class PasswordViewState {
     private var password by mutableStateOf("")
     private var animated = false
+    private var prev = ""
 
     @JvmName("getPassword1")
     fun getPassword() = password
 
-    fun isAnimated() = animated
-    fun stopAnimate(){
-        if (animated) {
-            Log.v("shoplocal", "stop animate")
-            animated = false;
-        }
+    fun changePassword(value: String) {
+        animated =  value.length > password.length
+        prev = password
+        password = value
     }
 
-    fun changePassword(value: String) {
-        animated = password.length < value.length
-        password = value
+    fun isAnimated() = animated
+
+    fun stopAnimate() {
+        if (animated) {
+            Log.v("shoplocal", "stop animate")
+            animated = false
+        }
     }
 
     fun getPasswordChar(): CharArray {

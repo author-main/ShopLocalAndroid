@@ -4,13 +4,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import com.training.shoplocal.passwordview.PasswordView
 import com.training.shoplocal.passwordview.PasswordViewState
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(state: PasswordViewState){
@@ -18,11 +15,11 @@ fun LoginScreen(state: PasswordViewState){
         PasswordView(state)
     }
     LaunchedEffect(true) {
-        delay(500)
+        delay(1000)
         state.changePassword("1")
         delay(1000)
         state.changePassword("12")
-        delay(700)
+        delay(500)
         state.changePassword("123")
         delay(1000)
         state.changePassword("12")
