@@ -41,37 +41,20 @@ fun PasswordView(state: PasswordViewState) {
     val passwordState = rememberSaveable(saver = PasswordViewState.Saver) { state }
     val chars = passwordState.getPasswordChar()
     val indexChar = chars.lastIndexOf(PasswordViewState.fillChar)
-//    Log.v("shoplocal", passwordState.getPassword())
     Row(){
         for (index in 0 until PasswordViewState.PASSWORD_LENGTH) {
             val textColor = if (chars[index] == PasswordViewState.emptyChar)
                 TextLightGray else TextOrange
-          /*  if (passwordState.isAnimated() && index == indexChar)
-            AnimatedVisibility(visible = true,
-                enter = fadeIn(animationSpec = tween(durationMillis = 300, easing = LinearEasing)),
-                exit = fadeOut(animationSpec = tween(durationMillis = 300))) {
-                Text(
-                    text = chars[index].toString(),
-                    modifier = Modifier
-                        .padding(8.dp),
-                    fontSize = 27.sp,
-                    color = textColor
-                )
-            }
-            else*/
-
             Box(modifier = Modifier
                 .size(32.dp, 36.dp),
                 contentAlignment = Alignment.Center
             ) {
-                //val duration = if (passwordState.isAnimated() && index == indexChar) 300 else 0
                 if (passwordState.isAnimated() && index == indexChar)
                     androidx.compose.animation.AnimatedVisibility(
                         visibleState = visible,
                         enter = fadeIn(
                             animationSpec = tween(
-                                durationMillis = 200,
-                                easing = LinearEasing
+                                durationMillis = 200
                             )
                         )
                     ) {
