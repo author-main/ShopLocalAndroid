@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
+import com.training.shoplocal.buttonpanel.ButtonPanel
 import com.training.shoplocal.passwordview.PasswordView
 import com.training.shoplocal.passwordview.PasswordViewState
 import kotlinx.coroutines.delay
@@ -13,6 +14,7 @@ import kotlinx.coroutines.delay
 fun LoginScreen(state: PasswordViewState){
     Box(contentAlignment = Alignment.Center) {
         PasswordView(state)
+        ButtonPanel(state)
     }
     LaunchedEffect(true) {
         delay(1000)
