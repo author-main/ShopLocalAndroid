@@ -7,3 +7,9 @@ import com.training.shoplocal.passwordview.PasswordViewState
 fun ButtonPanel(state: PasswordViewState){
 
 }
+
+/*
+fun ButtonPanel(onClick: ((char:Char) -> Unit)?){
+    onClick?.invoke(char)
+}
+ */
