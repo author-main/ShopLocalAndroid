@@ -13,6 +13,8 @@ class PasswordViewState {
     private var animated = false
     private var prev = ""
 
+    var onChangeChar: ((char:Char) -> Unit)? = null
+
     @JvmName("getPassword1")
     fun getPassword() = password
 
