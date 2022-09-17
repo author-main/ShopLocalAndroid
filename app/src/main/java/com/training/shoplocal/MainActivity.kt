@@ -16,7 +16,7 @@ import com.training.shoplocal.ui.theme.ShopLocalTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val passwordState = PasswordViewState.getPasswordState()
+        val passwordState = PasswordViewState.getPasswordState("123")
         setContent {
             ShopLocalTheme(true) {
                 // A surface container using the 'background' color from the theme
