@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import com.training.shoplocal.passwordview.PasswordViewState
 
 @Composable
-fun ButtonPanel(state: PasswordViewState){
+fun ButtonPanel(changeChar: (value: Char)-> Unit){
 
 }
 

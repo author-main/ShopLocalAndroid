@@ -18,7 +18,6 @@ class PasswordViewState {
     @JvmName("getPassword1")
     fun getPassword() = password
 
-
     fun changeChar(value: Char){
         if (value == ' ') {
             if (password.isNotEmpty()){
