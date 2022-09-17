@@ -18,6 +18,21 @@ class PasswordViewState {
     @JvmName("getPassword1")
     fun getPassword() = password
 
+
+    fun changeChar(value: Char){
+        if (value == ' ') {
+            if (password.isNotEmpty()){
+                password = password.dropLast(1)
+            }
+        } else
+            if (password.length < 5) {
+                password += value
+                if (password.length == 5) {
+
+                }
+            }
+    }
+
     fun changePassword(value: String) {
         animated =  value.length > password.length
         prev = password
