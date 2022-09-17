@@ -14,9 +14,9 @@ import kotlinx.coroutines.delay
 fun LoginScreen(state: PasswordViewState){
     Box(contentAlignment = Alignment.Center) {
         PasswordView(state)
-        ButtonPanel(state)
+        ButtonPanel(state::changeChar)
     }
-    LaunchedEffect(true) {
+  /*  LaunchedEffect(true) {
         delay(1000)
         state.changePassword("1")
         delay(1000)
@@ -25,5 +25,5 @@ fun LoginScreen(state: PasswordViewState){
         state.changePassword("123")
         delay(1000)
         state.changePassword("12")
-    }
+    }*/
 }

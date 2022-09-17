@@ -9,14 +9,28 @@ import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.setValue
 
 class PasswordViewState {
-    private var password by mutableStateOf("")
+    private var password by mutableStateOf("4")
     private var animated = false
     private var prev = ""
 
-    var onChangeChar: ((char:Char) -> Unit)? = null
+    var onLogin: ((password:String) -> Boolean)? = null
 
     @JvmName("getPassword1")
     fun getPassword() = password
+
+    fun changeChar(value: Char){
+       if (value == ' ') {
+            if (password.isNotEmpty()){
+                password = password.dropLast(1)
+            }
+        } else
+            if (password.length < 5) {
+                password += value
+                if (password.length == 5) {
+
+                }
+            }
+    }
 
     fun changePassword(value: String) {
         animated =  value.length > password.length
