@@ -54,6 +54,7 @@ fun PasswordView(state: PasswordViewState) {
                 contentAlignment = Alignment.Center
             ) {
                 if (passwordState.isAnimated() && index == indexChar) {
+                    //Log.v("shoplocal", "animated")
                     androidx.compose.animation.AnimatedVisibility(
                         visibleState = visible,
                         enter = fadeIn(
