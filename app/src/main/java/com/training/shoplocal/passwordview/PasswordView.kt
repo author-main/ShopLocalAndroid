@@ -35,7 +35,7 @@ fun PasswordView(state: PasswordViewState) {
     fun textChar(value: Char, color: Color){
         Text(
             text = value.toString(),
-            fontSize = 27.sp,
+            fontSize = 25.sp,
             color = color
         )
     }
@@ -50,7 +50,7 @@ fun PasswordView(state: PasswordViewState) {
             val textColor = if (chars[index] == PasswordViewState.emptyChar)
                 TextLightGray else TextOrange
             Box(modifier = Modifier
-                .size(32.dp, 36.dp),
+                .size(40.dp, 36.dp),
                 contentAlignment = Alignment.Center
             ) {
                 if (passwordState.isAnimated() && index == indexChar)
@@ -58,7 +58,7 @@ fun PasswordView(state: PasswordViewState) {
                         visibleState = visible,
                         enter = fadeIn(
                             animationSpec = tween(
-                                durationMillis = 200,
+                                durationMillis = 300,
                                 easing = LinearEasing
                             )
                         )

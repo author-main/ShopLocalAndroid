@@ -11,7 +11,6 @@ import androidx.compose.runtime.setValue
 class PasswordViewState {
     private var password by mutableStateOf("4")
     private var animated = false
-    private var prev = ""
 
     var onLogin: ((password:String) -> Boolean)? = null
 
@@ -19,22 +18,23 @@ class PasswordViewState {
     fun getPassword() = password
 
     fun changeChar(value: Char){
-       if (value == ' ') {
+       if (value == '<') {
             if (password.isNotEmpty()){
+                animated = true
                 password = password.dropLast(1)
             }
         } else
             if (password.length < 5) {
+                animated = true
                 password += value
                 if (password.length == 5) {
-
+                    onLogin?.invoke(password)
                 }
             }
     }
 
     fun changePassword(value: String) {
         animated =  value.length > password.length
-        prev = password
         password = value
     }
 
