@@ -1,6 +1,7 @@
 package com.training.shoplocal
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,7 +25,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                        LoginScreen(passwordState)
+                    //Log.v("shoplocal", passwordState.getPassword())
+                    LoginScreen(passwordState)
                 }
             }
         }

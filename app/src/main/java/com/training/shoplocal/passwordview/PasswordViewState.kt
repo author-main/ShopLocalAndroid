@@ -70,6 +70,7 @@ class PasswordViewState {
         val Saver: Saver<PasswordViewState,Any> = listSaver(
             save = { listOf(it.password) },
             restore = {
+                Log.v("shoplocal", it[0] as String)
                 getPasswordState( value = it[0] as String )
             }
         )
