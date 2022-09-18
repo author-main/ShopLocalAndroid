@@ -27,7 +27,6 @@ fun ButtonPanel(changeChar: (value: Char)-> Unit){
                 for (j in 1..3 ) {
                     val char: Char= ((i * 3) + j).toChar()
                     OutlinedButton(
-
                         onClick = {changeChar.invoke(char)},
                         modifier = Modifier.size(64.dp, 64.dp),
                         border = BorderStroke(1.dp, Color.Transparent),
