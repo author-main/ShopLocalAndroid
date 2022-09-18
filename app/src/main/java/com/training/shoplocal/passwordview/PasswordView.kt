@@ -39,7 +39,7 @@ fun PasswordView(state: PasswordViewState) {
             color = color
         )
     }
-    Log.v("shoplocal", "recomposition ${state.getPassword()}")
+    //Log.v("shoplocal", "recomposition ${state.getPassword()}")
     val visible = MutableTransitionState(false)
     val passwordState = rememberSaveable(saver = PasswordViewState.Saver) { state }
     val chars = passwordState.getPasswordChar()
@@ -53,7 +53,7 @@ fun PasswordView(state: PasswordViewState) {
                 .size(40.dp, 36.dp),
                 contentAlignment = Alignment.Center
             ) {
-                if (passwordState.isAnimated() && index == indexChar)
+                if (passwordState.isAnimated() && index == indexChar) {
                     androidx.compose.animation.AnimatedVisibility(
                         visibleState = visible,
                         enter = fadeIn(
@@ -65,6 +65,7 @@ fun PasswordView(state: PasswordViewState) {
                     ) {
                         textChar(value = chars[index], color = textColor)
                     }
+                }
                  else textChar(value = chars[index], color = textColor)
             }
         }

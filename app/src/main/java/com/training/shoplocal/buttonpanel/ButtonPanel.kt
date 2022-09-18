@@ -1,5 +1,6 @@
 package com.training.shoplocal.buttonpanel
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -11,7 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -19,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import com.training.shoplocal.passwordview.PasswordViewState
 import com.training.shoplocal.ui.theme.TextLightGray
 import kotlinx.coroutines.delay
+import com.training.shoplocal.R
 
 @Composable
 fun ButtonPanel(changeChar: (value: Char)-> Unit){
@@ -26,7 +30,22 @@ fun ButtonPanel(changeChar: (value: Char)-> Unit){
         for (i in 0..3) {
             Row(){
                 for (j in 1..3 ) {
-                    val char: Char= ((i * 3) + j).toChar()
+                    val st = i * 3 + j
+//                    val char: Char= ((i * 3) + j).toChar()
+                    var image = 0
+                    val char = if (st > 9) {
+                        when (st){
+                            10 -> {
+                                image = R.drawable.ic_fingerprint
+                                ' '}
+                            12 -> {
+                                image = R.drawable.ic_backspace
+                                '<'}
+                            else -> '0'
+                        }
+                    }
+                    else st.toString()[0]
+
                     OutlinedButton(
                         onClick = {changeChar.invoke(char)},
                         modifier = Modifier.size(64.dp, 64.dp),
@@ -34,23 +53,16 @@ fun ButtonPanel(changeChar: (value: Char)-> Unit){
                         shape = CircleShape,
                         contentPadding = PaddingValues(0.dp),
                     ) {
-                        val st = i * 3 + j
-                        val caption = if (st > 9) {
-                            when (st){
-                                10 -> {""}
-                                12 -> {""}
-                                else -> "0"
-                            }
-                        }
-                            else st.toString()
-                        if (caption.isNotEmpty())
+                        if (char != ' ' && char != '<')
                             Text(
-                                text = caption,
+                                text = char.toString(),
                                 fontSize = 36.sp,
                                 color = TextLightGray,
                                 fontWeight = FontWeight.Light
                             )
-                        //else Image(painter = , contentDescription = )
+                        else Image(imageVector = ImageVector.vectorResource(image),
+                            modifier = Modifier.size(28.dp, 28.dp),
+                            contentDescription = null)
                     }
                     if (j<3)
                         Spacer(modifier = Modifier.width(32.dp))

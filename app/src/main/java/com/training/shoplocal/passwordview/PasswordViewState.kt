@@ -18,9 +18,9 @@ class PasswordViewState {
     fun getPassword() = password
 
     fun changeChar(value: Char){
+        animated = false
        if (value == '<') {
             if (password.isNotEmpty()){
-                animated = true
                 password = password.dropLast(1)
             }
         } else
@@ -40,12 +40,12 @@ class PasswordViewState {
 
     fun isAnimated() = animated
 
-    fun stopAnimate() {
+   /* fun stopAnimate() {
         if (animated) {
-            Log.v("shoplocal", "stop animate")
+          //  Log.v("shoplocal", "stop animate")
             animated = false
         }
-    }
+    }*/
 
     fun getPasswordChar(): CharArray {
         val array = arrayEmptyChar.clone()
