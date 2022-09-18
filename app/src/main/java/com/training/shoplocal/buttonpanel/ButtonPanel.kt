@@ -33,6 +33,7 @@ fun ButtonPanel(changeChar: (value: Char)-> Unit){
                         shape = CircleShape,
                         contentPadding = PaddingValues(0.dp),
                     ) {
+
                         val st = i * 3 + j
                         val caption = st.toString()
                         Text(
