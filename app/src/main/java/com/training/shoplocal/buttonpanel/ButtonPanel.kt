@@ -1,6 +1,7 @@
 package com.training.shoplocal.buttonpanel
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
@@ -34,13 +35,22 @@ fun ButtonPanel(changeChar: (value: Char)-> Unit){
                         contentPadding = PaddingValues(0.dp),
                     ) {
                         val st = i * 3 + j
-                        val caption = st.toString()
-                        Text(
-                            text = caption,
-                            fontSize = 36.sp,
-                            color = TextLightGray,
-                            fontWeight = FontWeight.Light
-                        )
+                        val caption = if (st > 9) {
+                            when (st){
+                                10 -> {""}
+                                12 -> {""}
+                                else -> "0"
+                            }
+                        }
+                            else st.toString()
+                        if (caption.isNotEmpty())
+                            Text(
+                                text = caption,
+                                fontSize = 36.sp,
+                                color = TextLightGray,
+                                fontWeight = FontWeight.Light
+                            )
+                        //else Image(painter = , contentDescription = )
                     }
                     if (j<3)
                         Spacer(modifier = Modifier.width(32.dp))
