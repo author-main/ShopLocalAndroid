@@ -40,7 +40,6 @@ class PasswordViewState {
                         CoroutineScope(Dispatchers.Main).launch {
                             delay(500)
                             password = ""
-
                         }
                     }
                     //onLogin?.invoke(password)
