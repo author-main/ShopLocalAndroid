@@ -11,7 +11,6 @@ import androidx.compose.runtime.setValue
 class PasswordViewState {
     private var password by mutableStateOf("4")
     private var animated = false
-    //private var prev = ""
 
     var onLogin: ((password:String) -> Boolean)? = null
 
@@ -19,34 +18,34 @@ class PasswordViewState {
     fun getPassword() = password
 
     fun changeChar(value: Char){
-       if (value == ' ') {
+        animated = false
+        if (value == '<') {
             if (password.isNotEmpty()){
                 password = password.dropLast(1)
             }
         } else
             if (password.length < 5) {
-                animated =  true
+                animated = true
                 password += value
                 if (password.length == 5) {
-
+                    onLogin?.invoke(password)
                 }
             }
     }
 
     fun changePassword(value: String) {
-        animated =  value.length > password.length
-        //prev = password
+       // animated =  value.length > password.length
         password = value
     }
 
     fun isAnimated() = animated
 
-    fun stopAnimate() {
-        if (animated) {
-            Log.v("shoplocal", "stop animate")
-            animated = false
-        }
-    }
+    /* fun stopAnimate() {
+         if (animated) {
+           //  Log.v("shoplocal", "stop animate")
+             animated = false
+         }
+     }*/
 
     fun getPasswordChar(): CharArray {
         val array = arrayEmptyChar.clone()
@@ -67,12 +66,12 @@ class PasswordViewState {
 
         fun getPasswordState(value: String = "") = PasswordViewState().apply { this.password = value }
 
-        @Suppress("UNCHECKED_CAST")
+     /*   @Suppress("UNCHECKED_CAST")
         val Saver: Saver<PasswordViewState,Any> = listSaver(
             save = { listOf(it.password) },
             restore = {
                 getPasswordState( value = it[0] as String )
             }
-        )
+        )*/
     }
 }

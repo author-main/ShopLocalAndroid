@@ -16,6 +16,7 @@ import com.training.shoplocal.ui.theme.ShopLocalTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val repository = AppShopLocal.appRepository();
         val passwordState = PasswordViewState.getPasswordState("123")
         setContent {
             ShopLocalTheme(true) {
