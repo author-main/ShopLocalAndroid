@@ -41,7 +41,8 @@ fun PasswordView(state: PasswordViewState) {
     }
     //Log.v("shoplocal", "recomposition ${state.getPassword()}")
     val visible = MutableTransitionState(false)
-    val passwordState = rememberSaveable(saver = PasswordViewState.Saver) { state }
+    val passwordState = remember { state }
+    //val passwordState = rememberSaveable(saver = PasswordViewState.Saver) { state }
     val chars = passwordState.getPasswordChar()
     val indexChar = chars.lastIndexOf(PasswordViewState.fillChar)
 

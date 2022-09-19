@@ -25,14 +25,14 @@ fun LoginScreen(state: PasswordViewState){
         }
 
     }
-  /*  LaunchedEffect(true) {
-        delay(1000)
-        state.changePassword("1")
-        delay(1000)
-        state.changePassword("12")
-        delay(500)
-        state.changePassword("123")
-        delay(1000)
-        state.changePassword("12")
-    }*/
+    /*  LaunchedEffect(true) {
+          delay(1000)
+          state.changePassword("1")
+          delay(1000)
+          state.changePassword("12")
+          delay(500)
+          state.changePassword("123")
+          delay(1000)
+          state.changePassword("12")
+      }*/
 }

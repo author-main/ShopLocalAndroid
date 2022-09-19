@@ -19,7 +19,7 @@ class PasswordViewState {
 
     fun changeChar(value: Char){
         animated = false
-       if (value == '<') {
+        if (value == '<') {
             if (password.isNotEmpty()){
                 password = password.dropLast(1)
             }
@@ -34,18 +34,18 @@ class PasswordViewState {
     }
 
     fun changePassword(value: String) {
-        animated =  value.length > password.length
+       // animated =  value.length > password.length
         password = value
     }
 
     fun isAnimated() = animated
 
-   /* fun stopAnimate() {
-        if (animated) {
-          //  Log.v("shoplocal", "stop animate")
-            animated = false
-        }
-    }*/
+    /* fun stopAnimate() {
+         if (animated) {
+           //  Log.v("shoplocal", "stop animate")
+             animated = false
+         }
+     }*/
 
     fun getPasswordChar(): CharArray {
         val array = arrayEmptyChar.clone()
@@ -66,13 +66,12 @@ class PasswordViewState {
 
         fun getPasswordState(value: String = "") = PasswordViewState().apply { this.password = value }
 
-        @Suppress("UNCHECKED_CAST")
+     /*   @Suppress("UNCHECKED_CAST")
         val Saver: Saver<PasswordViewState,Any> = listSaver(
             save = { listOf(it.password) },
             restore = {
-                Log.v("shoplocal", it[0] as String)
                 getPasswordState( value = it[0] as String )
             }
-        )
+        )*/
     }
 }

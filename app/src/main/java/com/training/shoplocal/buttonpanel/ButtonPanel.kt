@@ -73,11 +73,11 @@ fun ButtonPanel(changeChar: (value: Char)-> Unit){
         }
     }
 
-   /*
-    LaunchedEffect(true) {
-        delay(1000)
-        changeChar.invoke('<')
-    }*/
+    /*
+     LaunchedEffect(true) {
+         delay(1000)
+         changeChar.invoke('<')
+     }*/
 }
 
 /*
