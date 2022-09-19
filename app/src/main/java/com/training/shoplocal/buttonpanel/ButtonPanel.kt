@@ -10,6 +10,10 @@ fun ButtonPanel(changeChar: (value: Char)-> Unit){
     LaunchedEffect(true) {
         delay(1000)
         changeChar.invoke(' ')
+        delay(1200)
+        changeChar.invoke('5')
+        delay(2000)
+        changeChar.invoke('7')
     }
 }
 
