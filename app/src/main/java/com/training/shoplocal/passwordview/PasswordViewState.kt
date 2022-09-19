@@ -7,6 +7,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.setValue
+import com.training.shoplocal.ScreenItem
+import com.training.shoplocal.ScreenRouter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class PasswordViewState {
     private var password by mutableStateOf("4")
@@ -28,7 +34,15 @@ class PasswordViewState {
                 animated = true
                 password += value
                 if (password.length == 5) {
-                    onLogin?.invoke(password)
+                    if (onLogin?.invoke(password) == true)
+                        ScreenRouter.navigateTo(ScreenItem.MainScreen)
+                    else {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            delay(500)
+                            password = ""
+                        }
+                    }
+                    //onLogin?.invoke(password)
                 }
             }
     }

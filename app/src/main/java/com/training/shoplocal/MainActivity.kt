@@ -36,7 +36,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                        LoginScreen(viewModel.getRepository().passwordState)
+                    when (ScreenRouter.current) {
+                        ScreenItem.LoginScreen ->
+                            LoginScreen(viewModel.getRepository().passwordState)
+                        ScreenItem.MainScreen -> {}
+                    }
                 }
             }
         }
