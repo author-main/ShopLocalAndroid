@@ -79,7 +79,7 @@ fun ButtonPanel(changeChar: (value: Char)-> Unit){
                 onClick = {},
                 border = null,
                 shape = CircleShape,
-          //     contentPadding = PaddingValues(8.dp)
+                contentPadding = PaddingValues(8.dp)
             ) {
                 Text(
                     text = stringResource(id = R.string.btn_reg),
@@ -89,16 +89,18 @@ fun ButtonPanel(changeChar: (value: Char)-> Unit){
             }
 
             Text(
+                modifier = Modifier
+                    .padding(horizontal = 4.dp),
                 text = "|",
                 color = TextLightGray,
-                fontSize = 14.sp
+                fontSize = 14.sp,
             )
 
             OutlinedButton(
                 onClick = {},
                 border = null,
                 shape = CircleShape,
-                //contentPadding = PaddingValues(8.dp)
+                contentPadding = PaddingValues(8.dp)
             ) {
                 Text(
                     text = stringResource(id = R.string.btn_rest),
