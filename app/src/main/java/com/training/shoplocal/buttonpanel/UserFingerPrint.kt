@@ -6,7 +6,10 @@ import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import com.training.shoplocal.AppShopLocal.Companion.appContext
 
 class UserFingerPrint {
-    fun canAuthenticate() =
-        BiometricManager.from(appContext())
-        .canAuthenticate(BIOMETRIC_STRONG or DEVICE_CREDENTIAL) == BiometricManager.BIOMETRIC_SUCCESS
+    companion object {
+        fun canAuthenticate() =
+            BiometricManager.from(appContext())
+                //.canAuthenticate(BIOMETRIC_STRONG or DEVICE_CREDENTIAL) == BiometricManager.BIOMETRIC_SUCCESS
+                .canAuthenticate(BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS
+    }
 }

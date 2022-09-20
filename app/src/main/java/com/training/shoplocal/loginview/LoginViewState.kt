@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.training.shoplocal.ScreenItem
 import com.training.shoplocal.ScreenRouter
+import com.training.shoplocal.buttonpanel.UserFingerPrint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -13,9 +14,7 @@ import kotlinx.coroutines.launch
 class LoginViewState {
     private var password by mutableStateOf("4")
     private var animated = false
-
     var onLogin: ((password:String) -> Boolean)? = null
-
     @JvmName("getPassword1")
     fun getPassword() = password
 

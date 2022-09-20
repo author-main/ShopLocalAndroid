@@ -6,6 +6,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -20,6 +21,7 @@ import com.training.shoplocal.ui.theme.TextOrange
 
 @Composable
 fun ButtonPasswordPanel(changeChar: (value: Char)-> Unit){
+    val canFingerPrint = remember {UserFingerPrint.canAuthenticate()}
     Column(horizontalAlignment = Alignment.CenterHorizontally){
         for (i in 0..3) {
             Row(){
@@ -40,7 +42,12 @@ fun ButtonPasswordPanel(changeChar: (value: Char)-> Unit){
                     }
                     else st.toString()[0]
 
+                    var enabled = true
+                    if (char == ' ' && !canFingerPrint)
+                        enabled = false
+
                     OutlinedButton(
+                        enabled = enabled,
                         onClick = {changeChar.invoke(char)},
                         modifier = Modifier.size(64.dp, 64.dp),
                         border = null,
@@ -54,9 +61,13 @@ fun ButtonPasswordPanel(changeChar: (value: Char)-> Unit){
                                 color = TextLightGray,
                                 fontWeight = FontWeight.Light
                             )
-                        else Image(imageVector = ImageVector.vectorResource(image),
-                            modifier = Modifier.size(24.dp, 24.dp),
-                            contentDescription = null)
+                        else {
+                            Image(
+                                imageVector = ImageVector.vectorResource(image),
+                                modifier = Modifier.size(24.dp, 24.dp),
+                                contentDescription = null
+                            )
+                        }
                     }
                     if (j<3)
                         Spacer(modifier = Modifier.width(16.dp))
