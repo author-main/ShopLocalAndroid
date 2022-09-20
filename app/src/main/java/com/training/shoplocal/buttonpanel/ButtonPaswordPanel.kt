@@ -19,7 +19,7 @@ import com.training.shoplocal.R
 import com.training.shoplocal.ui.theme.TextOrange
 
 @Composable
-fun ButtonPanel(changeChar: (value: Char)-> Unit){
+fun ButtonPasswordPanel(changeChar: (value: Char)-> Unit){
     Column(horizontalAlignment = Alignment.CenterHorizontally){
         for (i in 0..3) {
             Row(){
@@ -64,43 +64,6 @@ fun ButtonPanel(changeChar: (value: Char)-> Unit){
             }
           /*  if (i<3)
                 Spacer(modifier = Modifier.height(8.dp))*/
-        }
-        Row(verticalAlignment = Alignment.CenterVertically){
-            OutlinedButton(
-                onClick = {},
-                border = null,
-                shape = CircleShape,
-                contentPadding = PaddingValues(8.dp)
-            ) {
-                Text(
-                    text = stringResource(id = R.string.btn_reg),
-                    color = TextOrange,
-                    fontSize = 13.sp
-                    //fontWeight = FontWeight.Light
-                )
-            }
-
-            Text(
-                modifier = Modifier
-                    .padding(horizontal = 4.dp),
-                text = "|",
-                color = TextLightGray,
-                fontSize = 14.sp,
-            )
-
-            OutlinedButton(
-                onClick = {},
-                border = null,
-                shape = CircleShape,
-                contentPadding = PaddingValues(8.dp)
-            ) {
-                Text(
-                    text = stringResource(id = R.string.btn_rest),
-                    color = TextOrange,
-                    fontSize = 13.sp
-                )
-            }
-
         }
     }
 
