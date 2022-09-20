@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">ShopLocal</string>
+    <string name="text_auth">АВТОРИЗАЦИЯ</string>
+    <string name="btn_reg">РЕГИСТРАЦИЯ</string>
+    <string name="btn_rest">ЗАБЫЛИ ПАРОЛЬ?</string>
 </resources>
