@@ -43,8 +43,11 @@ fun ButtonPasswordPanel(changeChar: (value: Char)-> Unit){
                     else st.toString()[0]
 
                     var enabled = true
-                    if (char == ' ' && !canFingerPrint)
+                    var alpha   = 1f
+                    if (char == ' ' && !canFingerPrint) {
                         enabled = false
+                        alpha   = 0.3f
+                    }
 
                     OutlinedButton(
                         enabled = enabled,
@@ -65,6 +68,7 @@ fun ButtonPasswordPanel(changeChar: (value: Char)-> Unit){
                             Image(
                                 imageVector = ImageVector.vectorResource(image),
                                 modifier = Modifier.size(24.dp, 24.dp),
+                                alpha = alpha,
                                 contentDescription = null
                             )
                         }
