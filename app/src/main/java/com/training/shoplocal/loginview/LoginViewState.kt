@@ -21,6 +21,9 @@ class LoginViewState {
 
     fun changeChar(value: Char){
         animated = false
+        if (value == ' ') {
+            return
+        }
         if (value == '<') {
             if (password.isNotEmpty()){
                 password = password.dropLast(1)
