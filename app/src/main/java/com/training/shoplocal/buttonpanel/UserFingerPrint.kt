@@ -12,5 +12,6 @@ class UserFingerPrint {
             BiometricManager.from(appContext())
                 //.canAuthenticate(BIOMETRIC_STRONG or DEVICE_CREDENTIAL) == BiometricManager.BIOMETRIC_SUCCESS
                 .canAuthenticate(BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS
+
     }
 }

@@ -18,5 +18,6 @@ class AppShopLocal: Application() {
         }
         fun appContext(): Context =
             instance.applicationContext
+
     }
 }
