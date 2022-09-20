@@ -76,6 +76,7 @@ fun ButtonPanel(changeChar: (value: Char)-> Unit){
                     text = stringResource(id = R.string.btn_reg),
                     color = TextOrange,
                     fontSize = 13.sp
+                    //fontWeight = FontWeight.Light
                 )
             }
 
