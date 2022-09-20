@@ -1,11 +1,7 @@
-package com.training.shoplocal.passwordview
+package com.training.shoplocal.loginview
 
-import android.os.Parcelable
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.setValue
 import com.training.shoplocal.ScreenItem
 import com.training.shoplocal.ScreenRouter
@@ -14,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class PasswordViewState {
+class LoginViewState {
     private var password by mutableStateOf("4")
     private var animated = false
 
@@ -78,7 +74,7 @@ class PasswordViewState {
                 this[index] = emptyChar
         }
 
-        fun getPasswordState(value: String = "") = PasswordViewState().apply { this.password = value }
+        fun getPasswordState(value: String = "") = LoginViewState().apply { this.password = value }
 
      /*   @Suppress("UNCHECKED_CAST")
         val Saver: Saver<PasswordViewState,Any> = listSaver(

@@ -1,9 +1,9 @@
 package com.training.shoplocal.repository
 
-import com.training.shoplocal.passwordview.PasswordViewState
+import com.training.shoplocal.loginview.LoginViewState
 
 class Repository: CrudInterface {
-    val passwordState = PasswordViewState.getPasswordState().apply {
+    val passwordState = LoginViewState.getPasswordState().apply {
         this.onLogin = {
             login(it)
         }
