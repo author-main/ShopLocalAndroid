@@ -3,10 +3,8 @@ package com.training.shoplocal.loginview
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import com.training.shoplocal.ScreenItem
 import com.training.shoplocal.ScreenRouter
-import com.training.shoplocal.buttonpanel.UserFingerPrint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

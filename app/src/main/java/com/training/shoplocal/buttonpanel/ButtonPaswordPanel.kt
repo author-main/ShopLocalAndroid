@@ -10,18 +10,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.training.shoplocal.ui.theme.TextLightGray
 import com.training.shoplocal.R
-import com.training.shoplocal.ui.theme.TextOrange
+import com.training.shoplocal.buttonpanel.userfingerprint.UserFingerPrint
 
 @Composable
 fun ButtonPasswordPanel(changeChar: (value: Char)-> Unit){
-    val canFingerPrint = remember {UserFingerPrint.canAuthenticate()}
+    val canFingerPrint = remember { UserFingerPrint.canAuthenticate()}
     Column(horizontalAlignment = Alignment.CenterHorizontally){
         for (i in 0..3) {
             Row(){

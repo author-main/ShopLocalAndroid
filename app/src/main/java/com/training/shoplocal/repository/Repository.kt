@@ -1,9 +1,8 @@
 package com.training.shoplocal.repository
 
 import android.content.Context
-import androidx.compose.ui.platform.LocalContext
-import com.training.shoplocal.buttonpanel.UserFingerPrint
-import com.training.shoplocal.buttonpanel.UserFingerPrintInterface
+import com.training.shoplocal.buttonpanel.userfingerprint.UserFingerPrint
+import com.training.shoplocal.buttonpanel.userfingerprint.UserPasswordStorage
 import com.training.shoplocal.loginview.LoginViewState
 
 class Repository: CrudInterface {
@@ -20,9 +19,12 @@ class Repository: CrudInterface {
 
     fun getUserFingerPrint(context: Context) {
         userFingetPrint = if (UserFingerPrint.canAuthenticate())
-                                UserFingerPrint(context)
-                          else
-                             null
+                                UserFingerPrint(context).apply {
+                                    addPasswordStorage(UserPasswordStorage())
+                                }
+                                else
+                                    null
+
     }
 
 }

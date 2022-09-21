@@ -1,36 +1,38 @@
-package com.training.shoplocal.buttonpanel
+package com.training.shoplocal.buttonpanel.userfingerprint
 
 import android.content.Context
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
-import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.biometric.BiometricPrompt
-import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
-import com.training.shoplocal.AppShopLocal
 import com.training.shoplocal.AppShopLocal.Companion.appContext
 import com.training.shoplocal.R
 import com.training.shoplocal.getStringResource
 import javax.crypto.Cipher
 
 class UserFingerPrint(private val context: Context): UserFingerPrintInterface {
+    private  var userPasswordStorage: UserPasswordStorageInterface? = null
     override var userFingerPrintListener: UserFingerPrintListener? = null
+    fun addPasswordStorage(storage: UserPasswordStorageInterface){
+        userPasswordStorage = storage
+    }
 
-    override fun authenticate(cryptoObject: Cipher?): Boolean {
-        if (!canAuthenticate() || cryptoObject == null)
+    //override fun authenticate(cryptoObject: Cipher?): Boolean {
+    override fun authenticate(): Boolean {
+        if (!canAuthenticate())
             return false
+
+        val cipher = userPasswordStorage?.getDecryptCipher() ?: return false
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle(getStringResource(R.string.biometric_title))
             .setConfirmationRequired(false)
             .setNegativeButtonText(getStringResource(R.string.button_cancel))
             .build()
-
-
         val biometricPrompt = createBiometricPrompt()
         biometricPrompt.authenticate(
             promptInfo,
-            BiometricPrompt.CryptoObject(cryptoObject)
+            BiometricPrompt.CryptoObject(cipher)
         )
         return true
     }
