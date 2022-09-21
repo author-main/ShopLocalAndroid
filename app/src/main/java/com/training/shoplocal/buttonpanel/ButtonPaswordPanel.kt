@@ -42,15 +42,13 @@ fun ButtonPasswordPanel(changeChar: (value: Char)-> Unit){
                     }
                     else st.toString()[0]
 
-                    var enabled = true
-                    var alpha   = 1f
-                    if (char == ' ' && !canFingerPrint) {
-                        enabled = false
-                        alpha   = 0.3f
-                    }
+                    val alpha  =    if (st==10 && !canFingerPrint)
+                                        0.3f
+                                    else
+                                        1.0f
 
                     OutlinedButton(
-                        enabled = enabled,
+                        enabled = alpha == 1.0f,
                         onClick = {changeChar.invoke(char)},
                         modifier = Modifier.size(64.dp, 64.dp),
                         border = null,
