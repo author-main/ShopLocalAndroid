@@ -1,11 +1,14 @@
 package com.training.shoplocal
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.training.shoplocal.buttonpanel.ButtonPasswordPanel
@@ -18,20 +21,35 @@ import com.training.shoplocal.ui.theme.TextOrange
 @Composable
 fun LoginScreen(state: LoginViewState){
     Box(contentAlignment = Alignment.TopCenter){
-        Text(
-            modifier = Modifier.padding(vertical = 32.dp),
-            text = stringResource(id = R.string.text_auth),
-            color = TextLightGray,
-            //fontSize = 13.sp
-        )
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Spacer(modifier = Modifier.height(32.dp))
+            Image(
+                modifier = Modifier//.padding(vertical = 32.dp)
+                    .size(100.dp, 150.dp),
+                imageVector = ImageVector.vectorResource(R.drawable.ic_local_shop),
+                contentDescription = null
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+//                modifier = Modifier.padding(vertical = 32.dp),
+                text = stringResource(id = R.string.text_auth),
+                color = TextLightGray,
+                //fontSize = 13.sp
+            )
+
+            LoginView(state)
+            Spacer(modifier = Modifier.height(8.dp))
+            ButtonPasswordPanel(state::changeChar)
+
+        }
     }
-    Box(contentAlignment = Alignment.Center) {
+    /*Box(contentAlignment = Alignment.Center) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             LoginView(state)
             Spacer(modifier = Modifier.height(24.dp))
             ButtonPasswordPanel(state::changeChar)
         }
-    }
+    }*/
     Box(contentAlignment = Alignment.BottomCenter) {
         ButtonUserAccessPanel()
     }
