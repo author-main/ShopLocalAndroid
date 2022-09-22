@@ -56,6 +56,5 @@ fun ButtonUserAccessPanel(){
                 fontSize = 13.sp
             )
         }
-
-     }
+      }
 }

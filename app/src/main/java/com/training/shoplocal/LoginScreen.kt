@@ -1,9 +1,6 @@
 package com.training.shoplocal
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,6 +19,7 @@ import com.training.shoplocal.ui.theme.TextOrange
 fun LoginScreen(state: LoginViewState){
     Box(contentAlignment = Alignment.TopCenter){
         Text(
+            modifier = Modifier.padding(vertical = 32.dp),
             text = stringResource(id = R.string.text_auth),
             color = TextLightGray,
             //fontSize = 13.sp
