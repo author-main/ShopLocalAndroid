@@ -22,7 +22,6 @@ class UserFingerPrint(private val context: Context): UserFingerPrintInterface {
     override fun authenticate(): Boolean {
         if (!canAuthenticate())
             return false
-
         val cipher = userPasswordStorage?.getDecryptCipher() ?: return false
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle(getStringResource(R.string.biometric_title))
