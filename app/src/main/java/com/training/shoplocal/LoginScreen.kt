@@ -39,12 +39,19 @@ fun LoginScreen(state: LoginViewState){
                 //fontSize = 13.sp
             )
 
-            BoxWithConstraints(Modifier.background(Color.Red)
-                .fillMaxHeight()) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Box(Modifier.background(Color.Red)
+                ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
                     LoginView(state)
                     Spacer(modifier = Modifier.height(8.dp))
                     ButtonPasswordPanel(state::changeChar)
+                    Box(Modifier.fillMaxHeight()
+                        .background(Color.Blue)
+                        , contentAlignment = Alignment.BottomCenter) {
+                        ButtonUserAccessPanel()
+                    }
                 }
             }
 
@@ -57,9 +64,9 @@ fun LoginScreen(state: LoginViewState){
             ButtonPasswordPanel(state::changeChar)
         }
     }*/
-    Box(contentAlignment = Alignment.BottomCenter) {
+   /* Box(contentAlignment = Alignment.BottomCenter) {
         ButtonUserAccessPanel()
-    }
+    }*/
 
     /*Box(contentAlignment = Alignment.BottomCenter){
         ButtonPanel(state::changeChar)
