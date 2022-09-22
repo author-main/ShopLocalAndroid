@@ -27,7 +27,7 @@ fun LoginScreen(state: LoginViewState){
             Spacer(modifier = Modifier.height(32.dp))
             Image(
                 modifier = Modifier//.padding(vertical = 32.dp)
-                    .size(100.dp, 150.dp),
+                    .size(150.dp, 200.dp),
                 imageVector = ImageVector.vectorResource(R.drawable.ic_local_shop),
                 contentDescription = null
             )
