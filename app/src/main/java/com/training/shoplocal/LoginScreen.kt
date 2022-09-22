@@ -20,8 +20,10 @@ import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.ui.theme.TextLightGray
 import com.training.shoplocal.ui.theme.TextOrange
 
+
 @Composable
 fun LoginScreen(state: LoginViewState){
+//    val (ivIcon, tvCategory, tvDescription) = createRefs()
     Box(contentAlignment = Alignment.TopCenter){
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Spacer(modifier = Modifier.height(32.dp))
