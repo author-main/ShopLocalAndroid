@@ -20,7 +20,7 @@ import com.training.shoplocal.ui.theme.TextOrange
 
 @Composable
 fun ButtonUserAccessPanel(){
-     Row(modifier = Modifier.padding(vertical = 16.dp),
+     Row(//modifier = Modifier.padding(vertical = 16.dp),
          verticalAlignment = Alignment.CenterVertically
      ){
         OutlinedButton(
