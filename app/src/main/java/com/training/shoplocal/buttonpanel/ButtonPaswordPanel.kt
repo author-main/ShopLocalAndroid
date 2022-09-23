@@ -57,7 +57,7 @@ fun ButtonPasswordPanel(changeChar: (value: Char)-> Unit){
                         if (char != ' ' && char != '<')
                             Text(
                                 text = char.toString(),
-                                fontSize = 28.sp,
+                                fontSize = 32.sp,
                                 color = TextLightGray,
                                 fontWeight = FontWeight.Light
                             )

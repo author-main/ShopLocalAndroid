@@ -37,7 +37,7 @@ fun HeaderView(modifier: Modifier){
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = stringResource(id = R.string.text_auth),
-            color = TextLightGray,
+            color = TextLightGray
         )
     }
 }
@@ -64,26 +64,18 @@ fun FooterView(state: LoginViewState, modifier: Modifier){
 fun LoginScreen(state: LoginViewState){
     ConstraintLayout {
         val (header, body, footer) = createRefs()
-     //   Box(contentAlignment = Alignment.TopCenter) {
-//            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                HeaderView(modifier=Modifier.constrainAs(header){
-                    top.linkTo(parent.top, margin = 32.dp)
-                    centerHorizontallyTo(parent)
-                })
-               // BodyView(state)
-                //FooterView(state)
-
+        HeaderView(modifier=Modifier.constrainAs(header){
+            top.linkTo(parent.top, margin = 32.dp)
+            centerHorizontallyTo(parent)
+        })
         BodyView(state, modifier=Modifier.constrainAs(body){
             top.linkTo(header.bottom)
             bottom.linkTo(footer.top)
             centerHorizontallyTo(parent)
         })
-
         FooterView(state, modifier=Modifier.constrainAs(footer){
             bottom.linkTo(parent.bottom, margin = 16.dp)
             centerHorizontallyTo(parent)
         })
-//            }
-       // }
     }
 }
