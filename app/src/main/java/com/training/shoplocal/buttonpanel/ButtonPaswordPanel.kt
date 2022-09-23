@@ -49,7 +49,7 @@ fun ButtonPasswordPanel(changeChar: (value: Char)-> Unit){
                     OutlinedButton(
                         enabled = alpha == 1.0f,
                         onClick = {changeChar.invoke(char)},
-                        modifier = Modifier.size(64.dp, 64.dp),
+                        modifier = Modifier.size(54.dp, 54.dp),
                         border = null,
                         shape = CircleShape,
                         contentPadding = PaddingValues(0.dp),
@@ -57,7 +57,7 @@ fun ButtonPasswordPanel(changeChar: (value: Char)-> Unit){
                         if (char != ' ' && char != '<')
                             Text(
                                 text = char.toString(),
-                                fontSize = 32.sp,
+                                fontSize = 28.sp,
                                 color = TextLightGray,
                                 fontWeight = FontWeight.Light
                             )
