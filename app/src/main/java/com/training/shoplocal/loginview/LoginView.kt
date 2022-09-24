@@ -52,7 +52,7 @@ fun LoginView(state: LoginViewState) {
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
             ),
-            label = { Text("Email") },
+            placeholder = { Text("Email") },
             shape = RoundedCornerShape(8.dp),
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
