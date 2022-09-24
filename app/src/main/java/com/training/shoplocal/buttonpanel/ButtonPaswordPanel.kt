@@ -48,7 +48,9 @@ fun ButtonPasswordPanel(changeChar: (value: Char)-> Unit){
 
                     OutlinedButton(
                         enabled = alpha == 1.0f,
-                        onClick = {changeChar.invoke(char)},
+                        onClick = {
+                            changeChar.invoke(char)
+                                  },
                         modifier = Modifier.size(54.dp, 54.dp),
                         border = null,
                         shape = CircleShape,

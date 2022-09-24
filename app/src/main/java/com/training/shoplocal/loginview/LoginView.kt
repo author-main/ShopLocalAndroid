@@ -1,11 +1,14 @@
 package com.training.shoplocal.loginview
 
+import android.util.Log
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Text
@@ -14,7 +17,11 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -33,9 +40,16 @@ fun LoginView(state: LoginViewState) {
         )
     }
     //Log.v("shoplocal", "recomposition ${state.getPassword()}")
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
+
     val email = remember { mutableStateOf("") }
     val visible = MutableTransitionState(false)
     val passwordState = remember { state }
+    /*if (!passwordState.isFocused()) {
+        passwordState.setFocus(false)
+        focusManager.clearFocus()
+    }*/
     //val passwordState = rememberSaveable(saver = PasswordViewState.Saver) { state }
     val chars = passwordState.getPasswordChar()
     val indexChar = chars.lastIndexOf(LoginViewState.fillChar)
@@ -43,7 +57,18 @@ fun LoginView(state: LoginViewState) {
         TextField(value = email.value, onValueChange = {
             email.value = it
         },
-            Modifier.padding(vertical = 16.dp),
+            Modifier.padding(vertical = 16.dp)
+                .focusRequester(focusRequester)
+                .onFocusChanged {
+                    if (it.isFocused)
+                        passwordState.setFocus(true)
+                },
+
+           /* keyboardActions = KeyboardActions(
+                onAny = {
+                    Log.v("shoplocal", "focus");
+                    passwordState.setFocus(true)}
+            ) ,*/
             textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = TextFieldBg,
@@ -52,11 +77,18 @@ fun LoginView(state: LoginViewState) {
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
             ),
-            label = { Text("Email") },
-            shape = RoundedCornerShape(8.dp),
+            //label = { Text("Email") },
+            placeholder = { Text("Email") },
+            shape = RoundedCornerShape(16.dp),
             singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
-            )
+            keyboardActions = KeyboardActions (
+                onDone = {
+                    //passwordState.setFocus(false)
+                    focusManager.clearFocus(true)
+                }
+            ),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+        )
         Row() {
             for (index in 0 until LoginViewState.PASSWORD_LENGTH) {
                 val textColor = if (chars[index] == LoginViewState.emptyChar)
