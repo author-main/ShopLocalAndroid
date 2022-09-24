@@ -10,6 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -51,7 +52,7 @@ fun ButtonPasswordPanel(changeChar: (value: Char)-> Unit){
                         onClick = {
                             changeChar.invoke(char)
                                   },
-                        modifier = Modifier.size(54.dp, 54.dp),
+                        modifier = Modifier.size(64.dp, 64.dp),
                         border = null,
                         shape = CircleShape,
                         contentPadding = PaddingValues(0.dp),

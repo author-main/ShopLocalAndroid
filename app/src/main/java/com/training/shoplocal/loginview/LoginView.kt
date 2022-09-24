@@ -10,10 +10,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import com.training.shoplocal.ui.theme.*
 import java.time.format.TextStyle
 
+
 @Composable
 fun LoginView(state: LoginViewState) {
     @Composable
@@ -42,26 +43,31 @@ fun LoginView(state: LoginViewState) {
     //Log.v("shoplocal", "recomposition ${state.getPassword()}")
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
-
     val email = remember { mutableStateOf("") }
     val visible = MutableTransitionState(false)
     val passwordState = remember { state }
-    /*if (!passwordState.isFocused()) {
-        passwordState.setFocus(false)
-        focusManager.clearFocus()
-    }*/
+
+    if (passwordState.isPressedButtons()) {
+        focusManager.clearFocus(true)
+        passwordState.setPressedButtons(false)
+    }
+
     //val passwordState = rememberSaveable(saver = PasswordViewState.Saver) { state }
+
     val chars = passwordState.getPasswordChar()
     val indexChar = chars.lastIndexOf(LoginViewState.fillChar)
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         TextField(value = email.value, onValueChange = {
             email.value = it
         },
-            Modifier.padding(vertical = 16.dp)
+            Modifier
+                .fillMaxWidth()
+                .padding(start = 32.dp, end = 32.dp)
+                .padding(vertical = 16.dp)
                 .focusRequester(focusRequester)
                 .onFocusChanged {
                     if (it.isFocused)
-                        passwordState.setFocus(true)
+                        passwordState.setPressedButtons(false)
                 },
 
            /* keyboardActions = KeyboardActions(
@@ -69,6 +75,7 @@ fun LoginView(state: LoginViewState) {
                     Log.v("shoplocal", "focus");
                     passwordState.setFocus(true)}
             ) ,*/
+            trailingIcon = { Icon(Icons.Filled.Email, contentDescription = "Проверено") },
             textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = TextFieldBg,
@@ -78,12 +85,12 @@ fun LoginView(state: LoginViewState) {
                 unfocusedIndicatorColor = Color.Transparent
             ),
             //label = { Text("Email") },
-            placeholder = { Text("Email") },
+            //placeholder = { Text("Email") },
             shape = RoundedCornerShape(16.dp),
             singleLine = true,
             keyboardActions = KeyboardActions (
                 onDone = {
-                    //passwordState.setFocus(false)
+                    passwordState.setPressedButtons(false)
                     focusManager.clearFocus(true)
                 }
             ),
@@ -118,5 +125,6 @@ fun LoginView(state: LoginViewState) {
     }
     SideEffect {
         visible.targetState = true
+        passwordState.stopAnimate()
     }
 }

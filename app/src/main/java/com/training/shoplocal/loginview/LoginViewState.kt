@@ -11,7 +11,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class LoginViewState {
-    private var focused = false//by mutableStateOf(false)
+    private var pressedButtons = false
+    //private var focused = false//by mutableStateOf(false)
     private var password by mutableStateOf("4")
     private var animated = false
     var onLogin: ((password:String) -> Boolean)? = null
@@ -19,17 +20,17 @@ class LoginViewState {
     fun getPassword() = password
 
 
-    fun setFocus(value: Boolean) {
-        if (value != focused)
-            focused = value
+    fun setPressedButtons(value: Boolean) {
+        pressedButtons = value
     }
 
-    fun isFocused() =
-        focused
+    fun isPressedButtons() =
+        pressedButtons
 
     fun changeChar(value: Char){
-        if (focused)
-            focused = false
+        pressedButtons = true
+      /*  if (focused)
+            focused = false*/
         animated = false
         if (value == ' ') {
             return
@@ -63,12 +64,10 @@ class LoginViewState {
 
     fun isAnimated() = animated
 
-    /* fun stopAnimate() {
-         if (animated) {
-           //  Log.v("shoplocal", "stop animate")
+    fun stopAnimate() {
+         if (animated)
              animated = false
-         }
-     }*/
+    }
 
     fun getPasswordChar(): CharArray {
         val array = arrayEmptyChar.clone()
