@@ -77,13 +77,11 @@ fun LoginView(state: LoginViewState) {
                 .onFocusChanged { focusState ->
                     passwordState.setPressedButtons(!focusState.isFocused)
                     focused.value = focusState.isFocused
-                    log("$focusState.toString()")
-                    var error = false
-                    error = if (focusState.isFocused)
+                    errorEmail.value = if (focusState.isFocused)
                         false
                     else
                         !validateMail(email.value)
-                    errorEmail.value = error
+
                     /*if (focusState.isFocused)
                         errorEmail.value = false
                     if (focusState.hasFocus)
