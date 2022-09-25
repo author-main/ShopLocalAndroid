@@ -26,7 +26,7 @@ class Repository: CrudInterface, AccessUserInterface {
     }
 
     override fun onLogin(password: String): Boolean {
-        TODO("Not yet implemented")
+       return false
     }
 
     override fun onRegisterUser() {

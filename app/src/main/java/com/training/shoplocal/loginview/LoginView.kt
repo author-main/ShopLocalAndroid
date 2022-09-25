@@ -14,7 +14,9 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -28,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.*
+import com.training.shoplocal.validateMail
 import java.time.format.TextStyle
 
 
@@ -43,7 +46,7 @@ fun LoginView(state: LoginViewState) {
     }
     //Log.v("shoplocal", "recomposition ${state.getPassword()}")
     //val focusRequester = remember { FocusRequester() }
-
+    val errorEmail = rememberSaveable { mutableStateOf(false) }
     val focused= remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
     val visible = MutableTransitionState(false)
@@ -71,9 +74,21 @@ fun LoginView(state: LoginViewState) {
                 .fillMaxWidth()
                 .padding(start = 32.dp, end = 32.dp)
                 .padding(vertical = 16.dp)
-                .onFocusChanged {focusState ->
-                        passwordState.setPressedButtons(!focusState.isFocused)
-                        focused.value = focusState.isFocused
+                .onFocusChanged { focusState ->
+                    passwordState.setPressedButtons(!focusState.isFocused)
+                    focused.value = focusState.isFocused
+                    log("$focusState.toString()")
+                    var error = false
+                    error = if (focusState.isFocused)
+                        false
+                    else
+                        !validateMail(email.value)
+                    errorEmail.value = error
+                    /*if (focusState.isFocused)
+                        errorEmail.value = false
+                    if (focusState.hasFocus)
+                        errorEmail.value = !validateMail(email.value)*/
+
 /*                when {
                     focusState.isFocused -> {
                         passwordState.setPressedButtons(false)
@@ -95,7 +110,12 @@ fun LoginView(state: LoginViewState) {
                     Log.v("shoplocal", "focus");
                     passwordState.setFocus(true)}
             ) ,*/
-            trailingIcon = { Icon(Icons.Filled.Email, contentDescription = "Проверено") },
+            trailingIcon = {
+                if (errorEmail.value)
+                    Icon(Icons.Filled.Email, contentDescription = "", tint = SelectedItem)
+                else
+                    Icon(Icons.Filled.Email, contentDescription = "")
+                           },
             textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = TextFieldBg,
