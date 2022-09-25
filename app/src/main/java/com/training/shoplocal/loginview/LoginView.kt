@@ -45,11 +45,10 @@ fun LoginView(state: LoginViewState) {
     //val focusRequester = remember { FocusRequester() }
 
     val focused= remember { mutableStateOf(false) }
-
     val focusManager = LocalFocusManager.current
-    val email = remember { mutableStateOf("") }
     val visible = MutableTransitionState(false)
     val passwordState = remember { state }
+    val email = remember { mutableStateOf(state.getEmail()) }
 
 
     if (passwordState.isPressedButtons() && focused.value) {
@@ -66,6 +65,7 @@ fun LoginView(state: LoginViewState) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         TextField(value = email.value, onValueChange = {
             email.value = it
+            passwordState.setEmail(it)
         },
             Modifier
                 .fillMaxWidth()

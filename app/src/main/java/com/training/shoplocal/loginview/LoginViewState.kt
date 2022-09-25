@@ -5,17 +5,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.training.shoplocal.ScreenItem
 import com.training.shoplocal.ScreenRouter
+import com.training.shoplocal.validateMail
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class LoginViewState {
+    private var onAccessUser: AccessUserInterface? = null
+    fun addOnAccessUser(value: AccessUserInterface) {
+        onAccessUser = value
+    }
     private var pressedButtons = false
     //private var focused = false//by mutableStateOf(false)
-    private var password by mutableStateOf("4")
+    private var email = ""
+    private var password by mutableStateOf("")
     private var animated = false
-    var onLogin: ((password:String) -> Boolean)? = null
+
+//    var onLogin: ((password:String) -> Boolean)? = null
+
     @JvmName("getPassword1")
     fun getPassword() = password
 
@@ -23,6 +31,12 @@ class LoginViewState {
     fun setPressedButtons(value: Boolean) {
         pressedButtons = value
     }
+
+    fun setEmail(value: String) {
+        email = value
+    }
+
+    fun getEmail() = email
 
     fun isPressedButtons() =
         pressedButtons
@@ -33,6 +47,9 @@ class LoginViewState {
             focused = false*/
         animated = false
         if (value == ' ') {
+            if (!validateMail(email))
+                return
+            onAccessUser?.onFingerPrint(email)
             return
         }
         if (value == '<') {
@@ -44,7 +61,7 @@ class LoginViewState {
                 animated = true
                 password += value
                 if (password.length == 5) {
-                    if (onLogin?.invoke(password) == true)
+                    if (onAccessUser?.onLogin(password) == true)
                         ScreenRouter.navigateTo(ScreenItem.MainScreen)
                     else {
                         CoroutineScope(Dispatchers.Main).launch {
@@ -96,4 +113,5 @@ class LoginViewState {
             }
         )*/
     }
+
 }
