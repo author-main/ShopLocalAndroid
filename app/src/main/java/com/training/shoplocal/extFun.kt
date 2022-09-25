@@ -1,5 +1,6 @@
 package com.training.shoplocal
 
+import android.util.Log
 import androidx.annotation.StringRes
 
 const val defaultStringResource = ""
@@ -10,3 +11,7 @@ fun getStringResource(@StringRes id: Int): String =
     catch (e: Exception){
         defaultStringResource
     }
+
+fun log(value: String) {
+    Log.v("shoplocal", value)
+}

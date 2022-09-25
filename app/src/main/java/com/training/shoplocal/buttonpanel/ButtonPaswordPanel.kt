@@ -1,10 +1,13 @@
 package com.training.shoplocal.buttonpanel
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -18,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import com.training.shoplocal.ui.theme.TextLightGray
 import com.training.shoplocal.R
 import com.training.shoplocal.buttonpanel.userfingerprint.UserFingerPrint
+import com.training.shoplocal.ui.theme.TextOrange
 
 @Composable
 fun ButtonPasswordPanel(changeChar: (value: Char)-> Unit){

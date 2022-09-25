@@ -32,6 +32,7 @@ fun ButtonUserAccessPanel(){
             Text(
                 text = stringResource(id = R.string.btn_reg),
                 color = TextOrange,
+                fontWeight = FontWeight.Light,
                 fontSize = 13.sp
             )
         }
@@ -53,6 +54,7 @@ fun ButtonUserAccessPanel(){
             Text(
                 text = stringResource(id = R.string.btn_rest),
                 color = TextOrange,
+                fontWeight = FontWeight.Light,
                 fontSize = 13.sp
             )
         }

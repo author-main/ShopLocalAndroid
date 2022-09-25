@@ -26,6 +26,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.*
 import java.time.format.TextStyle
 
@@ -41,15 +42,21 @@ fun LoginView(state: LoginViewState) {
         )
     }
     //Log.v("shoplocal", "recomposition ${state.getPassword()}")
-    val focusRequester = remember { FocusRequester() }
+    //val focusRequester = remember { FocusRequester() }
+
+    val focused= remember { mutableStateOf(false) }
+
     val focusManager = LocalFocusManager.current
     val email = remember { mutableStateOf("") }
     val visible = MutableTransitionState(false)
     val passwordState = remember { state }
 
-    if (passwordState.isPressedButtons()) {
+
+    if (passwordState.isPressedButtons() && focused.value) {
         focusManager.clearFocus(true)
         passwordState.setPressedButtons(false)
+        focused.value = false
+        //log("lost focus")
     }
 
     //val passwordState = rememberSaveable(saver = PasswordViewState.Saver) { state }
@@ -64,11 +71,24 @@ fun LoginView(state: LoginViewState) {
                 .fillMaxWidth()
                 .padding(start = 32.dp, end = 32.dp)
                 .padding(vertical = 16.dp)
-                .focusRequester(focusRequester)
+                .onFocusChanged {focusState ->
+                        passwordState.setPressedButtons(!focusState.isFocused)
+                        focused.value = focusState.isFocused
+/*                when {
+                    focusState.isFocused -> {
+                        passwordState.setPressedButtons(false)
+                    }
+                    focusState.hasFocus -> {
+                        passwordState.setPressedButtons(true)
+                    }
+                }*/
+
+                }
+               /* .focusRequester(focusRequester)
                 .onFocusChanged {
                     if (it.isFocused)
                         passwordState.setPressedButtons(false)
-                },
+                }*/,
 
            /* keyboardActions = KeyboardActions(
                 onAny = {
@@ -92,6 +112,7 @@ fun LoginView(state: LoginViewState) {
                 onDone = {
                     passwordState.setPressedButtons(false)
                     focusManager.clearFocus(true)
+                    focused.value = false
                 }
             ),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
