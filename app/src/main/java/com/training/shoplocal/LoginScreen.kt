@@ -30,7 +30,7 @@ fun HeaderView(modifier: Modifier){
 //        Spacer(modifier = Modifier.height(32.dp))
         Image(
             modifier = Modifier
-                .size(150.dp, 200.dp),
+                .size(170.dp, 250.dp),
             imageVector = ImageVector.vectorResource(R.drawable.ic_local_shop),
             contentDescription = null
         )
@@ -46,7 +46,7 @@ fun HeaderView(modifier: Modifier){
 fun BodyView(state: LoginViewState, modifier: Modifier){
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         LoginView(state)
-        Spacer(modifier = Modifier.height(8.dp))
+            //Spacer(modifier = Modifier.height(8.dp))
         ButtonPasswordPanel(state::changeChar)
     }
 }

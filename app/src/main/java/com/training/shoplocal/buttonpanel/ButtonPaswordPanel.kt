@@ -56,7 +56,7 @@ fun ButtonPasswordPanel(changeChar: (value: Char)-> Unit){
                         onClick = {
                             changeChar.invoke(char)
                                   },
-                        modifier = Modifier.size(64.dp, 64.dp),
+                        modifier = Modifier.size(60.dp, 60.dp),
                         border = null,
                         shape = CircleShape,
                         contentPadding = PaddingValues(0.dp),
