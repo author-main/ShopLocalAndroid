@@ -66,7 +66,7 @@ fun LoginView(state: LoginViewState) {
         }
     }*/
 
-    log(stateFocused.value.toString())
+   // log(stateFocused.value.toString())
 
     if (state.isPressedButtons() && state.isFocused()) {
 //    if (stateFocused.value){

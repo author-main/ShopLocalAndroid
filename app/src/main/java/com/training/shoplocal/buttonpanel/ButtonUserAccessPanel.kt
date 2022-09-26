@@ -24,14 +24,24 @@ import com.training.shoplocal.ui.theme.TextOrange
 
 @Composable
 fun ButtonUserAccessPanel(state: LoginViewState){
-    val password = state.getPassword()
+    /*fun clearPassword(){
+        val password = state.getPassword()
+        if (password.isEmpty()) {
+            state.changePassword("12345")
+            state.changePassword("")
+        }
+        else
+            state.changePassword("")
+
+    }*/
+
      Row(//modifier = Modifier.padding(vertical = 16.dp),
          verticalAlignment = Alignment.CenterVertically
      ){
          OutlinedButton(
             onClick = {
                 state.setPressedButtons(true)
-                DialogRouter.navigateTo(DialogItem.RestoreUserDialog)
+                //DialogRouter.navigateTo(DialogItem.RestoreUserDialog)
             },
 
             border = null,
@@ -57,9 +67,8 @@ fun ButtonUserAccessPanel(state: LoginViewState){
         OutlinedButton(
             onClick = {
                 state.setPressedButtons(true)
-                state.forceRecomposition()
                 DialogRouter.navigateTo(DialogItem.RestoreUserDialog)
-                //DialogRouter.navigateTo(DialogItem.RestoreUserDialog)
+                DialogRouter.navigateTo(DialogItem.RestoreUserDialog)
             },
             border = null,
             shape = CircleShape,

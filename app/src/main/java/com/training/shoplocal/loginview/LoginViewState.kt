@@ -25,14 +25,14 @@ class LoginViewState {
     private var password by mutableStateOf("")
     private var animated = false
 
-    private var force by mutableStateOf(false)
+/*    private var force by mutableStateOf(false)
 
     fun forceRecomposition(){
         force = !force
         log(force.toString())
     }
 
-    fun getForceAction() = force
+    fun getForceAction() = force*/
 
 //    var onLogin: ((password:String) -> Boolean)? = null
 
