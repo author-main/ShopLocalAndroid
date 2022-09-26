@@ -54,7 +54,7 @@ fun BodyView(state: LoginViewState, modifier: Modifier){
 @Composable
 fun FooterView(state: LoginViewState, modifier: Modifier){
     Box(modifier) {
-        ButtonUserAccessPanel()
+        ButtonUserAccessPanel(state)
     }
 }
 

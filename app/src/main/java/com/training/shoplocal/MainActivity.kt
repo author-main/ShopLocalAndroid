@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.FragmentActivity
@@ -39,25 +40,42 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    when (ScreenRouter.current) {
-                        ScreenItem.LoginScreen ->
-                            LoginScreen(viewModel.getRepository().passwordState)
-                        ScreenItem.MainScreen -> {}
-                    }
-
-                    when (DialogRouter.current) {
-                        DialogItem.None -> {}
-                        DialogItem.RegUserDialog -> {}
-                        DialogItem.RestoreUserDialog -> {
-                            DialogRestore()
-                        }
-                    }
-
+                    ShowScreen()
+                    ShowDialog()
                 }
             }
         }
     }
+
+
+    @Composable
+    fun ShowScreen(){
+        when (ScreenRouter.current) {
+            ScreenItem.LoginScreen ->
+                LoginScreen(viewModel.getRepository().passwordState)
+            ScreenItem.MainScreen -> {}
+        }
+    }
+
+    @Composable
+    fun ShowDialog(){
+        when (DialogRouter.current) {
+            DialogItem.None -> {}
+            DialogItem.RegUserDialog -> {}
+            DialogItem.RestoreUserDialog -> {
+                DialogRestore()
+            }
+        }
+    }
+
+
 }
+
+
+
+
+
+
 
 /*@Composable
 fun Greeting(name: String) {

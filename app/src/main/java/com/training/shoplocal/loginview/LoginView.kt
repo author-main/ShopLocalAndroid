@@ -47,36 +47,41 @@ fun LoginView(state: LoginViewState) {
     //Log.v("shoplocal", "recomposition ${state.getPassword()}")
     //val focusRequester = remember { FocusRequester() }
     val errorEmail = rememberSaveable { mutableStateOf(false) }
-    val focused= remember { mutableStateOf(false) }
+    //val focused= remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
     val visible = MutableTransitionState(false)
     val passwordState = remember { state }
     val email = remember { mutableStateOf(state.getEmail()) }
 
 
-    if (passwordState.isPressedButtons() && focused.value) {
+    if (state.isPressedButtons())
+        log("isPressed")
+
+    if (state.isFocused())
+        log("isFocused")
+
+    if (state.isPressedButtons() && state.isFocused()) {
         focusManager.clearFocus(true)
-        passwordState.setPressedButtons(false)
-        focused.value = false
-        //log("lost focus")
+        state.setPressedButtons(false)
+        state.setFocus(false)
+//        return
     }
-
+    log("recomposition")
     //val passwordState = rememberSaveable(saver = PasswordViewState.Saver) { state }
-
-    val chars = passwordState.getPasswordChar()
+    val chars = state.getPasswordChar()
     val indexChar = chars.lastIndexOf(LoginViewState.fillChar)
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         TextField(value = email.value, onValueChange = {
             email.value = it
-            passwordState.setEmail(it)
+            state.setEmail(it)
         },
             Modifier
                 .fillMaxWidth()
                 .padding(start = 32.dp, end = 32.dp)
                 .padding(vertical = 16.dp)
                 .onFocusChanged { focusState ->
-                    passwordState.setPressedButtons(!focusState.isFocused)
-                    focused.value = focusState.isFocused
+                    state.setPressedButtons(!focusState.isFocused)
+                    state.setFocus(focusState.isFocused)
                     errorEmail.value = if (focusState.isFocused)
                         false
                     else
@@ -128,9 +133,9 @@ fun LoginView(state: LoginViewState) {
             singleLine = true,
             keyboardActions = KeyboardActions (
                 onDone = {
-                    passwordState.setPressedButtons(false)
+                    state.setPressedButtons(false)
                     focusManager.clearFocus(true)
-                    focused.value = false
+                    state.setFocus(false)
                 }
             ),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -144,7 +149,7 @@ fun LoginView(state: LoginViewState) {
                         .size(40.dp, 36.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    if (passwordState.isAnimated() && index == indexChar) {
+                    if (state.isAnimated() && index == indexChar) {
                         //Log.v("shoplocal", "animated")
                         androidx.compose.animation.AnimatedVisibility(
                             visibleState = visible,
@@ -164,6 +169,6 @@ fun LoginView(state: LoginViewState) {
     }
     SideEffect {
         visible.targetState = true
-        passwordState.stopAnimate()
+        state.stopAnimate()
     }
 }

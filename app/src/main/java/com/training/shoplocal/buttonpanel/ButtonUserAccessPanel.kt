@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -17,16 +17,23 @@ import androidx.compose.ui.unit.sp
 import com.training.shoplocal.DialogItem
 import com.training.shoplocal.DialogRouter
 import com.training.shoplocal.R
+import com.training.shoplocal.log
+import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.ui.theme.TextLightGray
 import com.training.shoplocal.ui.theme.TextOrange
 
 @Composable
-fun ButtonUserAccessPanel(){
+fun ButtonUserAccessPanel(state: LoginViewState){
      Row(//modifier = Modifier.padding(vertical = 16.dp),
          verticalAlignment = Alignment.CenterVertically
      ){
-        OutlinedButton(
-            onClick = {},
+         OutlinedButton(
+            onClick = {
+                state.setPressedButtons(true)
+                //state.setFocus(false)
+                DialogRouter.navigateTo(DialogItem.RestoreUserDialog)
+            },
+
             border = null,
             shape = CircleShape,
             contentPadding = PaddingValues(8.dp)
@@ -48,7 +55,11 @@ fun ButtonUserAccessPanel(){
         )
 
         OutlinedButton(
-            onClick = {DialogRouter.navigateTo(DialogItem.RestoreUserDialog)},
+            onClick = {
+                state.setPressedButtons(true)
+//                state.setFocus(false)
+                DialogRouter.navigateTo(DialogItem.RestoreUserDialog)
+            },
             border = null,
             shape = CircleShape,
             contentPadding = PaddingValues(8.dp)
@@ -61,4 +72,9 @@ fun ButtonUserAccessPanel(){
             )
         }
       }
+  /*  SideEffect {
+        if (click) {
+            state.setFocus(false)
+        }
+    }*/
 }

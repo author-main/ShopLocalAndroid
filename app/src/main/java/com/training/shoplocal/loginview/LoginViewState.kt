@@ -17,9 +17,10 @@ class LoginViewState {
     fun addOnAccessUser(value: AccessUserInterface) {
         onAccessUser = value
     }
-    private var pressedButtons = false
-    //private var focused = false//by mutableStateOf(false)
+
     private var email = ""
+    private var pressedButtons = false
+    private var focused by mutableStateOf(false)
     private var password by mutableStateOf("")
     private var animated = false
 
@@ -32,6 +33,14 @@ class LoginViewState {
     fun setPressedButtons(value: Boolean) {
         pressedButtons = value
     }
+
+    fun setFocus(value: Boolean) {
+        focused = value
+    }
+
+    fun isFocused() =
+        focused
+
 
     fun setEmail(value: String) {
         email = value
