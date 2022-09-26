@@ -24,6 +24,7 @@ import com.training.shoplocal.ui.theme.TextOrange
 
 @Composable
 fun ButtonUserAccessPanel(state: LoginViewState){
+    val password = state.getPassword()
      Row(//modifier = Modifier.padding(vertical = 16.dp),
          verticalAlignment = Alignment.CenterVertically
      ){
@@ -56,8 +57,8 @@ fun ButtonUserAccessPanel(state: LoginViewState){
 
         OutlinedButton(
             onClick = {
+                state.setFocus(false)
                 state.setPressedButtons(true)
-//                state.setFocus(false)
                 DialogRouter.navigateTo(DialogItem.RestoreUserDialog)
             },
             border = null,

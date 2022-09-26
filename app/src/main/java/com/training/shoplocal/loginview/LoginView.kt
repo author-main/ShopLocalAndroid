@@ -54,11 +54,11 @@ fun LoginView(state: LoginViewState) {
     val email = remember { mutableStateOf(state.getEmail()) }
 
 
-    if (state.isPressedButtons())
+  /*  if (state.isPressedButtons())
         log("isPressed")
 
     if (state.isFocused())
-        log("isFocused")
+        log("isFocused")*/
 
     if (state.isPressedButtons() && state.isFocused()) {
         focusManager.clearFocus(true)
