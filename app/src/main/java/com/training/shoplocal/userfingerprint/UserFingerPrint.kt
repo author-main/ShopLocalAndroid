@@ -1,7 +1,6 @@
-package com.training.shoplocal.buttonpanel.userfingerprint
+package com.training.shoplocal.userfingerprint
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricPrompt
@@ -10,7 +9,6 @@ import androidx.fragment.app.FragmentActivity
 import com.training.shoplocal.AppShopLocal.Companion.appContext
 import com.training.shoplocal.R
 import com.training.shoplocal.getStringResource
-import javax.crypto.Cipher
 
 class UserFingerPrint(private val context: Context): UserFingerPrintInterface {
     private  var userPasswordStorage: UserPasswordStorageInterface? = null

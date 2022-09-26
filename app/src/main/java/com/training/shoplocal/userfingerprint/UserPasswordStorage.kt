@@ -1,4 +1,4 @@
-package com.training.shoplocal.buttonpanel.userfingerprint
+package com.training.shoplocal.userfingerprint
 
 import android.content.Context
 import android.content.SharedPreferences

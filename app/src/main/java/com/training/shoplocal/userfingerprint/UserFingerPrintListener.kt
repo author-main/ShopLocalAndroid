@@ -1,4 +1,4 @@
-package com.training.shoplocal.buttonpanel.userfingerprint
+package com.training.shoplocal.userfingerprint
 
 import javax.crypto.Cipher
 

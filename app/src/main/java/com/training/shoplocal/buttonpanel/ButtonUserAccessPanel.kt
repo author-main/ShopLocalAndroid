@@ -14,6 +14,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.training.shoplocal.DialogItem
+import com.training.shoplocal.DialogRouter
 import com.training.shoplocal.R
 import com.training.shoplocal.ui.theme.TextLightGray
 import com.training.shoplocal.ui.theme.TextOrange
@@ -46,7 +48,7 @@ fun ButtonUserAccessPanel(){
         )
 
         OutlinedButton(
-            onClick = {},
+            onClick = {DialogRouter.navigateTo(DialogItem.RestoreUserDialog)},
             border = null,
             shape = CircleShape,
             contentPadding = PaddingValues(8.dp)

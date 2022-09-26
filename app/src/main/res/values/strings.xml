@@ -5,4 +5,7 @@
     <string name="btn_rest">ЗАБЫЛИ ПАРОЛЬ?</string>
     <string name="biometric_title">Вход в ShopLocal</string>
     <string name="button_cancel">Отмена</string>
+    <string name="title_restore">Восстановление пароля</string>
+    <string name="btn_send">Отправить</string>
+
 </resources>

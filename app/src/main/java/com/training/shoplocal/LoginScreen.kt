@@ -30,7 +30,7 @@ fun HeaderView(modifier: Modifier){
 //        Spacer(modifier = Modifier.height(32.dp))
         Image(
             modifier = Modifier
-                .size(170.dp, 250.dp),
+                .size(170.dp, 200.dp),
             imageVector = ImageVector.vectorResource(R.drawable.ic_local_shop),
             contentDescription = null
         )

@@ -1,6 +1,4 @@
-package com.training.shoplocal.buttonpanel.userfingerprint
-
-import javax.crypto.Cipher
+package com.training.shoplocal.userfingerprint
 
 interface UserFingerPrintInterface {
     var userFingerPrintListener: UserFingerPrintListener?
