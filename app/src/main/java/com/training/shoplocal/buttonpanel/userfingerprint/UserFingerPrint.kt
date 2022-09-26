@@ -1,6 +1,7 @@
 package com.training.shoplocal.buttonpanel.userfingerprint
 
 import android.content.Context
+import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricPrompt

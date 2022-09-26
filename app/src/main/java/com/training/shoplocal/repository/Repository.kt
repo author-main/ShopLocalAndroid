@@ -38,5 +38,6 @@ class Repository: CrudInterface, AccessUserInterface {
     }
 
     override fun onFingerPrint(email: String) {
+        userFingetPrint?.authenticate()
     }
 }
