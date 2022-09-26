@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import com.training.shoplocal.ScreenItem
 import com.training.shoplocal.ScreenRouter
+import com.training.shoplocal.log
 import com.training.shoplocal.validateMail
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,9 +21,18 @@ class LoginViewState {
 
     private var email = ""
     private var pressedButtons = false
-    private var focused by mutableStateOf(false)
+    private var focused = false//by mutableStateOf(false)
     private var password by mutableStateOf("")
     private var animated = false
+
+    private var force by mutableStateOf(false)
+
+    fun forceRecomposition(){
+        force = !force
+        log(force.toString())
+    }
+
+    fun getForceAction() = force
 
 //    var onLogin: ((password:String) -> Boolean)? = null
 

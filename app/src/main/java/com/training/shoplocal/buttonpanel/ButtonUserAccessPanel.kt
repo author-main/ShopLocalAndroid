@@ -31,7 +31,6 @@ fun ButtonUserAccessPanel(state: LoginViewState){
          OutlinedButton(
             onClick = {
                 state.setPressedButtons(true)
-                //state.setFocus(false)
                 DialogRouter.navigateTo(DialogItem.RestoreUserDialog)
             },
 
@@ -57,9 +56,10 @@ fun ButtonUserAccessPanel(state: LoginViewState){
 
         OutlinedButton(
             onClick = {
-                state.setFocus(false)
                 state.setPressedButtons(true)
+                state.forceRecomposition()
                 DialogRouter.navigateTo(DialogItem.RestoreUserDialog)
+                //DialogRouter.navigateTo(DialogItem.RestoreUserDialog)
             },
             border = null,
             shape = CircleShape,
@@ -73,9 +73,5 @@ fun ButtonUserAccessPanel(state: LoginViewState){
             )
         }
       }
-  /*  SideEffect {
-        if (click) {
-            state.setFocus(false)
-        }
-    }*/
+
 }

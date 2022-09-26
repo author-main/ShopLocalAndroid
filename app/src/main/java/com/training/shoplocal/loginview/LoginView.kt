@@ -60,7 +60,16 @@ fun LoginView(state: LoginViewState) {
     if (state.isFocused())
         log("isFocused")*/
 
+   /* val stateFocused = remember {
+        derivedStateOf {
+            state.isPressedButtons() && state.isFocused()
+        }
+    }*/
+
+    log(stateFocused.value.toString())
+
     if (state.isPressedButtons() && state.isFocused()) {
+//    if (stateFocused.value){
         focusManager.clearFocus(true)
         state.setPressedButtons(false)
         state.setFocus(false)
