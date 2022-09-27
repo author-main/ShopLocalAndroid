@@ -53,7 +53,7 @@ fun DialogRestore(){
         },
         title = { Text(text = stringResource(R.string.title_restore))},
         text = {
-            Column() {
+            Column(Modifier.fillMaxHeight()) {
                 //Spacer(modifier = Modifier.height(64.dp))
                 TextField(
                     value = email.value,
