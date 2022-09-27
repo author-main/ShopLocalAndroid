@@ -68,8 +68,7 @@ fun DialogRestore(){
             contentColor = TextLightGray
         ) {
 
-            Column(modifier = Modifier.padding(8.dp)
-            ) {
+            Column(modifier = Modifier.padding(8.dp)) {
                 Text(
                     text = stringResource(id = R.string.title_restore),
                     //fontWeight = FontWeight.Bold,
