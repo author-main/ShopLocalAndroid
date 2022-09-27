@@ -50,7 +50,7 @@ fun LoginView(state: LoginViewState) {
     //val focused= remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
     val visible = MutableTransitionState(false)
-    val passwordState = remember { state }
+        //val passwordState = remember { state }
     val email = remember { mutableStateOf(state.getEmail()) }
 
 
@@ -75,7 +75,7 @@ fun LoginView(state: LoginViewState) {
         state.setFocus(false)
 //        return
     }
-    log("recomposition")
+    //log("recomposition")
     //val passwordState = rememberSaveable(saver = PasswordViewState.Saver) { state }
     val chars = state.getPasswordChar()
     val indexChar = chars.lastIndexOf(LoginViewState.fillChar)

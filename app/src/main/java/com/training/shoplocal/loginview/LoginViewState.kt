@@ -21,7 +21,7 @@ class LoginViewState {
 
     private var email = ""
     private var pressedButtons = false
-    private var focused = false//by mutableStateOf(false)
+    private var focused = false
     private var password by mutableStateOf("")
     private var animated = false
 
@@ -42,6 +42,11 @@ class LoginViewState {
 
     fun setPressedButtons(value: Boolean) {
         pressedButtons = value
+    }
+
+    fun clearPassword(){
+        password = "xxxxx"
+        password = ""
     }
 
     fun setFocus(value: Boolean) {
@@ -108,9 +113,10 @@ class LoginViewState {
 
     fun getPasswordChar(): CharArray {
         val array = arrayEmptyChar.clone()
-        password.forEachIndexed { index, _ ->
-            array[index] = fillChar
-        }
+        //if (password!="xxxxx" && password != "")
+            password.forEachIndexed { index, _ ->
+                array[index] = fillChar
+            }
         return array
     }
 
