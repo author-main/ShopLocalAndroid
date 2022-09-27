@@ -45,6 +45,7 @@ class LoginViewState {
     }
 
     fun clearPassword(){
+        animated = false
         password = "xxxxx"
         password = ""
     }
