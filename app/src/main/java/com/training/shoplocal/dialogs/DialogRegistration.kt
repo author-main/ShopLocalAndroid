@@ -77,11 +77,16 @@ fun DialogRegistration(){
                     fontSize = 17.sp,
                     modifier=Modifier.padding(bottom = 8.dp)
                 )
-                TextGroup(label = stringResource(id = R.string.text_family), text = family)
-                TextGroup(label = stringResource(id = R.string.text_name), text = name)
-                TextGroup(label = stringResource(id = R.string.text_phone), text = phone)
-                TextGroup(label = stringResource(id = R.string.text_email), text = email)
-                TextGroup(label = stringResource(id = R.string.text_password), text = password)
+                TextGroup(label = stringResource(id = R.string.text_family),    text = family,
+                    onTextChange = {value -> family.value = value})
+                TextGroup(label = stringResource(id = R.string.text_name),      text = name,
+                    onTextChange = {value -> name.value = value})
+                TextGroup(label = stringResource(id = R.string.text_phone),     text = phone,
+                    onTextChange = {value -> phone.value = value})
+                TextGroup(label = stringResource(id = R.string.text_email),     text = email,
+                    onTextChange = {value -> email.value = value})
+                TextGroup(label = stringResource(id = R.string.text_password),  text = password,
+                    onTextChange = {value -> password.value = value})
                 Row(
                     horizontalArrangement = Arrangement.End,
                     modifier = Modifier
