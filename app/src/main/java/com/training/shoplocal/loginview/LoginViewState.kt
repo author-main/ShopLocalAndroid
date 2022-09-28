@@ -68,9 +68,10 @@ class LoginViewState {
 
 
     @JvmName("setEmail1")
-    fun setEmail(value: String) {
+    fun setEmail(value: String, check: Boolean = false) {
         email = value
-        errorEmail = !validateMail(value)
+        if (check)
+            errorEmail = !validateMail(value)
     }
 
     @JvmName("getEmail1")

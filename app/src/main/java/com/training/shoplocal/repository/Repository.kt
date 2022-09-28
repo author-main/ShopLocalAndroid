@@ -40,7 +40,7 @@ class Repository: CrudInterface, AccessUserInterface {
     }
 
     override fun onRestoreUser(email: String) {
-        loginState.setEmail(email)
+        loginState.setEmail(email, true)
         //log(email)
     }
 
