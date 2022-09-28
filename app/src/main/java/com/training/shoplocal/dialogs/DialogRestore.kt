@@ -52,7 +52,7 @@ fun DialogRestore(){
     val viewModel: RepositoryViewModel = viewModel()
     val email = remember{mutableStateOf("")}
     val error = remember {
-        mutableStateOf(false)
+        mutableStateOf(true)
     }
     Dialog(onDismissRequest = {
         DialogRouter.reset()
