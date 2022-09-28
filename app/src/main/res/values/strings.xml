@@ -6,6 +6,11 @@
     <string name="biometric_title">Вход в ShopLocal</string>
     <string name="button_cancel">Отмена</string>
     <string name="title_restore">Восстановление пароля</string>
+    <string name="title_reg">Регистрация</string>
     <string name="btn_send">Отправить</string>
-
+    <string name="text_family">Фамилия</string>
+    <string name="text_name">Имя</string>
+    <string name="text_phone">Телефон</string>
+    <string name="text_email">EMail</string>
+    <string name="text_password">Пароль</string>
 </resources>
