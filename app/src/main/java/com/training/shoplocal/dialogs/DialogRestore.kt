@@ -28,6 +28,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -74,6 +76,7 @@ fun DialogRestore(){
                     //fontWeight = FontWeight.Bold,
                     fontSize = 17.sp,
                     modifier = Modifier.padding(8.dp)
+                    //style = MaterialTheme.typography.h1
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 TextField(
