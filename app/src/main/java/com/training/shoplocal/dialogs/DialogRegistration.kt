@@ -25,11 +25,6 @@ import com.training.shoplocal.ui.theme.*
 
 @Composable
 fun DialogRegistration(){
-    val paintText = TextPaint().also {
-        it.textSize = 30f
-    }
-    paintText.textSize
-
 
     //LocalConfiguration.current.screenWidthDp.dp
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
