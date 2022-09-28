@@ -75,8 +75,8 @@ fun DialogRestore(){
                     text = stringResource(id = R.string.title_restore),
                     //fontWeight = FontWeight.Bold,
                     fontSize = 17.sp,
-                    modifier = Modifier.padding(8.dp)
-                    //style = MaterialTheme.typography.h1
+                    modifier = Modifier.padding(8.dp),
+                    style = MaterialTheme.typography.h1
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 TextField(
