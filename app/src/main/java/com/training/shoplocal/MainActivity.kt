@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.FragmentActivity
 import com.training.shoplocal.AppShopLocal.Companion.appContext
 import com.training.shoplocal.AppShopLocal.Companion.appRepository
+import com.training.shoplocal.dialogs.DialogRegistration
 import com.training.shoplocal.dialogs.DialogRestore
 import com.training.shoplocal.ui.theme.ShopLocalTheme
 import com.training.shoplocal.viewmodel.FactoryViewModel
@@ -61,7 +62,9 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
     fun ShowDialog(){
         when (DialogRouter.current) {
             DialogItem.None -> {}
-            DialogItem.RegUserDialog -> {}
+            DialogItem.RegUserDialog -> {
+                DialogRegistration()
+            }
             DialogItem.RestoreUserDialog -> {
                 DialogRestore()
             }
