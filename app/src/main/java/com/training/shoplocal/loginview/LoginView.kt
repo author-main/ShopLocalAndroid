@@ -46,12 +46,12 @@ fun LoginView(state: LoginViewState) {
     }
     //Log.v("shoplocal", "recomposition ${state.getPassword()}")
     //val focusRequester = remember { FocusRequester() }
-    val errorEmail = rememberSaveable { mutableStateOf(false) }
+    //val errorEmail = rememberSaveable { mutableStateOf(false) }
     //val focused= remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
     val visible = MutableTransitionState(false)
         //val passwordState = remember { state }
-    val email = remember { mutableStateOf(state.getEmail()) }
+    //var email = remember {state.getEmail()}
 
 
   /*  if (state.isPressedButtons())
@@ -80,9 +80,10 @@ fun LoginView(state: LoginViewState) {
     val chars = state.getPasswordChar()
     val indexChar = chars.lastIndexOf(LoginViewState.fillChar)
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        TextField(value = email.value, onValueChange = {
-            email.value = it
+        TextField(value = state.getEmail(), onValueChange = {
+            //email = it
             state.setEmail(it)
+//            state.setEmail(it)
         },
             Modifier
                 .fillMaxWidth()
@@ -91,10 +92,11 @@ fun LoginView(state: LoginViewState) {
                 .onFocusChanged { focusState ->
                     state.setPressedButtons(!focusState.isFocused)
                     state.setFocus(focusState.isFocused)
-                    errorEmail.value = if (focusState.isFocused)
+                    state.setErrorEmail(if (focusState.isFocused)
                         false
                     else
-                        !validateMail(email.value)
+                        !validateMail(state.getEmail())
+                    )
 
                     /*if (focusState.isFocused)
                         errorEmail.value = false
@@ -123,7 +125,7 @@ fun LoginView(state: LoginViewState) {
                     passwordState.setFocus(true)}
             ) ,*/
             trailingIcon = {
-                if (errorEmail.value)
+                if (state.getErrorEmail())
                     Icon(Icons.Filled.Email, contentDescription = "", tint = SelectedItem)
                 else
                     Icon(Icons.Filled.Email, contentDescription = "")

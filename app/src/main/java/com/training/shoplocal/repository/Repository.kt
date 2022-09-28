@@ -8,21 +8,21 @@ import com.training.shoplocal.loginview.AccessUserInterface
 import com.training.shoplocal.loginview.LoginViewState
 
 class Repository: CrudInterface, AccessUserInterface {
-    private var userFingetPrint: UserFingerPrint? = null
-    val passwordState = LoginViewState.getPasswordState()
+    private var userFingerPrint: UserFingerPrint? = null
+    val loginState = LoginViewState.getLoginState()
 
     init {
-        passwordState.addOnAccessUser(this)
+        loginState.addOnAccessUser(this)
     }
 
     fun getPassword(): String =
-        passwordState.getPassword()
+        loginState.getPassword()
 
     fun getEmail(): String =
-        passwordState.getEmail()
+        loginState.getEmail()
 
     fun getUserFingerPrint(context: Context) {
-        userFingetPrint = if (UserFingerPrint.canAuthenticate())
+        userFingerPrint = if (UserFingerPrint.canAuthenticate())
                                 UserFingerPrint(context).apply {
                                     addPasswordStorage(UserPasswordStorage())
                                 }
@@ -40,11 +40,11 @@ class Repository: CrudInterface, AccessUserInterface {
     }
 
     override fun onRestoreUser(email: String) {
-        passwordState.setEmail(email)
-        log(email)
+        loginState.setEmail(email, true)
+        //log(email)
     }
 
     override fun onFingerPrint(email: String) {
-        userFingetPrint?.authenticate()
+        userFingerPrint?.authenticate()
     }
 }

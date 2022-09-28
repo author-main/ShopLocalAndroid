@@ -29,7 +29,7 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        val context = LocalContext.current as FragmentActivity
-        viewModel.getRepository().getUserFingerPrint(this)
+        viewModel.getUserFingerPrint(this)
 //        val repository = AppShopLocal.appRepository();
 
         //val passwordState = PasswordViewState.getPasswordState()
@@ -52,7 +52,7 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
     fun ShowScreen(){
         when (ScreenRouter.current) {
             ScreenItem.LoginScreen ->
-                LoginScreen(viewModel.getRepository().passwordState)
+                LoginScreen(viewModel.getLoginState())
             ScreenItem.MainScreen -> {}
         }
     }

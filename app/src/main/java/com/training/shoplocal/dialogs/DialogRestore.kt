@@ -132,8 +132,7 @@ fun DialogRestore(){
                             focusManager.clearFocus()
                         }
                         else {
-                            val repository = viewModel.getRepository()
-                            repository.onRestoreUser(email.value)
+                            viewModel.onRestoreUser(email.value)
                             DialogRouter.reset()
                         }
                     }) {

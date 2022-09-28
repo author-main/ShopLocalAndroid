@@ -19,10 +19,11 @@ class LoginViewState {
         onAccessUser = value
     }
 
-    private var email = ""
+    private var email by mutableStateOf("")
     private var pressedButtons = false
     private var focused = false
     private var password by mutableStateOf("")
+    private var errorEmail by mutableStateOf(true)
     private var animated = false
 
 /*    private var force by mutableStateOf(false)
@@ -35,6 +36,14 @@ class LoginViewState {
     fun getForceAction() = force*/
 
 //    var onLogin: ((password:String) -> Boolean)? = null
+
+    @JvmName("getErrorEmail1")
+    fun getErrorEmail() = errorEmail
+
+    @JvmName("setErrorEmail1")
+    fun setErrorEmail(value: Boolean) {
+        errorEmail = value
+    }
 
     @JvmName("getPassword1")
     fun getPassword() = password
@@ -58,10 +67,14 @@ class LoginViewState {
         focused
 
 
-    fun setEmail(value: String) {
+    @JvmName("setEmail1")
+    fun setEmail(value: String, check: Boolean = false) {
         email = value
+        if (check)
+            errorEmail = !validateMail(value)
     }
 
+    @JvmName("getEmail1")
     fun getEmail() = email
 
     fun isPressedButtons() =
@@ -130,7 +143,7 @@ class LoginViewState {
                 this[index] = emptyChar
         }
 
-        fun getPasswordState(value: String = "") = LoginViewState().apply { this.password = value }
+        fun getLoginState(value: String = "") = LoginViewState().apply { this.password = value }
 
      /*   @Suppress("UNCHECKED_CAST")
         val Saver: Saver<PasswordViewState,Any> = listSaver(
