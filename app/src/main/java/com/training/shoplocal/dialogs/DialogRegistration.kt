@@ -97,7 +97,7 @@ fun DialogRegistration(){
                 TextGroup(label = stringResource(id = R.string.text_phone),     text = phone, keyboardType = KeyboardType.Phone,
                     onTextChange = {
                         val firstCharValid = try {
-                            it[0] == '+' || it[0].isDi
+                            it[0] == '+' || it[0].isDigit()
                         } catch(e: java.lang.Exception){
                             false
                         }
