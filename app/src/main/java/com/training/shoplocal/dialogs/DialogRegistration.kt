@@ -3,6 +3,7 @@ package com.training.shoplocal.dialogs
 import android.text.TextPaint
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -15,6 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -58,7 +60,8 @@ fun DialogRegistration(){
                 ),
                 shape = RoundedCornerShape(16.dp),
                 singleLine = true,
-                visualTransformation = visualTransformation
+                visualTransformation = visualTransformation,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done, keyboardType = keyboardType)
             )
         }
     }
