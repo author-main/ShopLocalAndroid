@@ -16,7 +16,7 @@ val RobotoCondensedLight = FontFamily(
 val Typography = Typography(
     h1 = TextStyle(
         fontFamily = RobotoCondensedLight,
-        fontSize = 24.sp
+        fontSize = 50.sp
     ),
     body1 = TextStyle(
         fontFamily = FontFamily.Default,
