@@ -15,6 +15,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -35,7 +38,11 @@ fun DialogRegistration(){
     val password  = remember{mutableStateOf("")}
 
     @Composable
-    fun TextGroup(label: String, text: MutableState<String>, onTextChange: (value: String)-> Unit = { }){
+    fun TextGroup(label: String, text: MutableState<String>, keyboardType: KeyboardType = KeyboardType.Text, onTextChange: (value: String)-> Unit = { }){
+        val visualTransformation = if (keyboardType == KeyboardType.NumberPassword)
+            PasswordVisualTransformation()
+        else
+            VisualTransformation.None
         Row(verticalAlignment = Alignment.CenterVertically){
             Text(text = label, fontFamily = labelFont, modifier = Modifier.width(70.dp))
             //Spacer(modifier = Modifier.width(8.dp))
@@ -50,7 +57,8 @@ fun DialogRegistration(){
                     unfocusedIndicatorColor = Color.Transparent
                 ),
                 shape = RoundedCornerShape(16.dp),
-                singleLine = true
+                singleLine = true,
+                visualTransformation = visualTransformation
             )
         }
     }
@@ -81,12 +89,16 @@ fun DialogRegistration(){
                     onTextChange = {value -> family.value = value})
                 TextGroup(label = stringResource(id = R.string.text_name),      text = name,
                     onTextChange = {value -> name.value = value})
-                TextGroup(label = stringResource(id = R.string.text_phone),     text = phone,
+                TextGroup(label = stringResource(id = R.string.text_phone),     text = phone, keyboardType = KeyboardType.Phone,
                     onTextChange = {value -> phone.value = value})
-                TextGroup(label = stringResource(id = R.string.text_email),     text = email,
+                TextGroup(label = stringResource(id = R.string.text_email),     text = email, keyboardType = KeyboardType.Email,
                     onTextChange = {value -> email.value = value})
-                TextGroup(label = stringResource(id = R.string.text_password),  text = password,
-                    onTextChange = {value -> password.value = value})
+                TextGroup(label = stringResource(id = R.string.text_password),  text = password, keyboardType = KeyboardType.NumberPassword,
+                    onTextChange = {value ->
+                        val regExp = "\\d{0,5}".toRegex()
+                        if (regExp.matches(value))
+                            password.value = value
+                    })
                 Row(
                     horizontalArrangement = Arrangement.End,
                     modifier = Modifier
