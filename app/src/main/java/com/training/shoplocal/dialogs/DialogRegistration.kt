@@ -23,8 +23,10 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.core.text.isDigitsOnly
 import com.training.shoplocal.DialogRouter
 import com.training.shoplocal.R
+import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.*
 
 
@@ -93,7 +95,38 @@ fun DialogRegistration(){
                 TextGroup(label = stringResource(id = R.string.text_name),      text = name,
                     onTextChange = {value -> name.value = value})
                 TextGroup(label = stringResource(id = R.string.text_phone),     text = phone, keyboardType = KeyboardType.Phone,
-                    onTextChange = {value -> phone.value = value})
+                    onTextChange = {
+                        val firstCharValid = try {
+                            it[0] == '+' || it[0].isDi
+                        } catch(e: java.lang.Exception){
+                            false
+                        }
+
+                        if (it.isEmpty())
+                            phone.value = it
+                        else
+                        if (firstCharValid) {
+                            val str = if (it[0] == '+')
+                                it.substring(1)
+                            else
+                                it.substring(0)
+                            if (str.isDigitsOnly() && str.length <=11)
+                                phone.value = it
+                        }
+
+
+                        /*val isDigit =try {it[0].isDigit()}
+                        catch (e: Exception){false}
+                        val validate =
+                            if (it.isNotEmpty())
+                                (isDigit && it.length <=11) || (!isDigit && it.length<=12)
+                            else
+                                true
+
+                        if (validate) {
+                            phone.value = it
+                        }*/
+                    })
                 TextGroup(label = stringResource(id = R.string.text_email),     text = email, keyboardType = KeyboardType.Email,
                     onTextChange = {value -> email.value = value})
                 TextGroup(label = stringResource(id = R.string.text_password),  text = password, keyboardType = KeyboardType.NumberPassword,
