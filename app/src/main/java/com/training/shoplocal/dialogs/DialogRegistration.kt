@@ -114,18 +114,6 @@ fun DialogRegistration(){
                                 phone.value = it
                         }
 
-
-                        /*val isDigit =try {it[0].isDigit()}
-                        catch (e: Exception){false}
-                        val validate =
-                            if (it.isNotEmpty())
-                                (isDigit && it.length <=11) || (!isDigit && it.length<=12)
-                            else
-                                true
-
-                        if (validate) {
-                            phone.value = it
-                        }*/
                     })
                 TextGroup(label = stringResource(id = R.string.text_email),     text = email, keyboardType = KeyboardType.Email,
                     onTextChange = {value -> email.value = value})
