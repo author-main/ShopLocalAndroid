@@ -82,6 +82,7 @@ fun DialogRegistration(){
                         )
                     }
                 },
+
                 singleLine = true,
                 visualTransformation = visualTransformation,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done, keyboardType = keyboardType)
