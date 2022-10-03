@@ -2,6 +2,7 @@ package com.training.shoplocal.dialogs
 
 import android.text.TextPaint
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -50,10 +51,11 @@ fun DialogRegistration(){
 
     @Composable
     fun TextGroup(label: String, text: MutableState<String>, keyboardType: KeyboardType = KeyboardType.Text, onTextChange: (value: String)-> Unit = { }){
-        val visualTransformation = if (keyboardType == KeyboardType.NumberPassword)
-            PasswordVisualTransformation()
-        else
-            VisualTransformation.None
+        val visualTransformation =
+            if (keyboardType == KeyboardType.NumberPassword && !showChar.value)
+                    PasswordVisualTransformation()
+                else
+                    VisualTransformation.None
         Row(verticalAlignment = Alignment.CenterVertically){
             Text(text = label, fontFamily = labelFont, modifier = Modifier.width(70.dp))
             //Spacer(modifier = Modifier.width(8.dp))
@@ -75,8 +77,14 @@ fun DialogRegistration(){
                         else
                             R.drawable.ic_showsym_off
                         Image(
+                            modifier = Modifier
+                                .clickable (
+                                    onClick = {
+                                        showChar.value = !showChar.value
+                                    }
+                                )
+                                .size(24.dp, 24.dp),
                             imageVector = ImageVector.vectorResource(idDrawable),
-                            modifier = Modifier.size(24.dp, 24.dp),
                             colorFilter = ColorFilter.tint(MaterialTheme.colors.secondary),
                             contentDescription = null
                         )
