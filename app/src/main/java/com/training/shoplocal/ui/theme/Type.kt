@@ -9,15 +9,15 @@ import androidx.compose.ui.unit.sp
 import com.training.shoplocal.R
 
 // Set of Material typography styles to start with
-/*val RobotoCondensedLight = FontFamily(
+val RobotoCondensedLight = FontFamily(
     Font(R.font.robotocondensed_light)
-)*/
+)
 
 val Typography = Typography(
- /*   h1 = TextStyle(
+    h1 = TextStyle(
         fontFamily = RobotoCondensedLight,
-        fontSize = 50.sp
-    ),*/
+        fontSize = 24.sp
+    ),
     body1 = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
