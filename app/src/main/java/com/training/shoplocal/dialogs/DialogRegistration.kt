@@ -1,9 +1,13 @@
 package com.training.shoplocal.dialogs
 
 import android.text.TextPaint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -11,27 +15,32 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.core.text.isDigitsOnly
 import com.training.shoplocal.DialogRouter
 import com.training.shoplocal.R
+import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.*
 
 
 @Composable
 fun DialogRegistration(){
-    val paintText = TextPaint().also {
-        it.textSize = 30f
-    }
-    paintText.textSize
-
 
     //LocalConfiguration.current.screenWidthDp.dp
+    val showChar  = remember{mutableStateOf(false)}
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
     val family    = remember{mutableStateOf("")}
     val name      = remember{mutableStateOf("")}
@@ -40,7 +49,11 @@ fun DialogRegistration(){
     val password  = remember{mutableStateOf("")}
 
     @Composable
-    fun TextGroup(label: String, text: MutableState<String>, onTextChange: (value: String)-> Unit = { }){
+    fun TextGroup(label: String, text: MutableState<String>, keyboardType: KeyboardType = KeyboardType.Text, onTextChange: (value: String)-> Unit = { }){
+        val visualTransformation = if (keyboardType == KeyboardType.NumberPassword)
+            PasswordVisualTransformation()
+        else
+            VisualTransformation.None
         Row(verticalAlignment = Alignment.CenterVertically){
             Text(text = label, fontFamily = labelFont, modifier = Modifier.width(70.dp))
             //Spacer(modifier = Modifier.width(8.dp))
@@ -55,7 +68,23 @@ fun DialogRegistration(){
                     unfocusedIndicatorColor = Color.Transparent
                 ),
                 shape = RoundedCornerShape(16.dp),
-                singleLine = true
+                trailingIcon = {
+                    if (keyboardType == KeyboardType.NumberPassword) {
+                        val idDrawable = if (showChar.value)
+                            R.drawable.ic_showsym_on
+                        else
+                            R.drawable.ic_showsym_off
+                        Image(
+                            imageVector = ImageVector.vectorResource(idDrawable),
+                            modifier = Modifier.size(24.dp, 24.dp),
+                            colorFilter = ColorFilter.tint(MaterialTheme.colors.secondary),
+                            contentDescription = null
+                        )
+                    }
+                },
+                singleLine = true,
+                visualTransformation = visualTransformation,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done, keyboardType = keyboardType)
             )
         }
     }
@@ -82,11 +111,39 @@ fun DialogRegistration(){
                     fontSize = 17.sp,
                     modifier=Modifier.padding(bottom = 8.dp)
                 )
-                TextGroup(label = stringResource(id = R.string.text_family), text = family)
-                TextGroup(label = stringResource(id = R.string.text_name), text = name)
-                TextGroup(label = stringResource(id = R.string.text_phone), text = phone)
-                TextGroup(label = stringResource(id = R.string.text_email), text = email)
-                TextGroup(label = stringResource(id = R.string.text_password), text = password)
+                TextGroup(label = stringResource(id = R.string.text_family),    text = family,
+                    onTextChange = {value -> family.value = value})
+                TextGroup(label = stringResource(id = R.string.text_name),      text = name,
+                    onTextChange = {value -> name.value = value})
+                TextGroup(label = stringResource(id = R.string.text_phone),     text = phone, keyboardType = KeyboardType.Phone,
+                    onTextChange = {
+                        val firstCharValid = try {
+                            it[0] == '+' || it[0].isDigit()
+                        } catch(e: java.lang.Exception){
+                            false
+                        }
+
+                        if (it.isEmpty())
+                            phone.value = it
+                        else
+                        if (firstCharValid) {
+                            val str = if (it[0] == '+')
+                                it.substring(1)
+                            else
+                                it.substring(0)
+                            if (str.isDigitsOnly() && str.length <=11)
+                                phone.value = it
+                        }
+
+                    })
+                TextGroup(label = stringResource(id = R.string.text_email),     text = email, keyboardType = KeyboardType.Email,
+                    onTextChange = {value -> email.value = value})
+                TextGroup(label = stringResource(id = R.string.text_password),  text = password, keyboardType = KeyboardType.NumberPassword,
+                    onTextChange = {value ->
+                        val regExp = "\\d{0,5}".toRegex()
+                        if (regExp.matches(value))
+                            password.value = value
+                    })
                 Row(
                     horizontalArrangement = Arrangement.End,
                     modifier = Modifier
