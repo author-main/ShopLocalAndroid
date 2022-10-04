@@ -4,13 +4,14 @@ import android.util.Log
 import android.util.Patterns
 import androidx.annotation.StringRes
 
-const val defaultStringResource = ""
+const val DEFAULT_RESOURCE_STR = ""
+
 fun getStringResource(@StringRes id: Int): String =
     try {
         AppShopLocal.appContext().getString(id)
     }
     catch (e: Exception){
-        defaultStringResource
+        DEFAULT_RESOURCE_STR
     }
 
 fun log(value: String) {
