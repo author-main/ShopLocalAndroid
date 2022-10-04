@@ -195,6 +195,7 @@ fun DialogRegistration(){
                         if (regExp.matches(value))
                             password.value = value
                     }, order=4)
+                Spacer(modifier = Modifier.height(8.dp))
                 Row(
                     horizontalArrangement = Arrangement.End,
                     modifier = Modifier
