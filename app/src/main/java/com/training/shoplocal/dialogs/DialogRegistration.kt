@@ -1,5 +1,6 @@
 package com.training.shoplocal.dialogs
 
+import android.util.Patterns
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -37,6 +38,7 @@ import com.training.shoplocal.DialogRouter
 import com.training.shoplocal.R
 import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.*
+import com.training.shoplocal.validateMail
 
 
 @Composable
@@ -46,11 +48,12 @@ fun DialogRegistration(){
     val focusRequesters = List(5) { FocusRequester() }
     val showChar  = remember{mutableStateOf(false)}
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
-    val family    = remember{mutableStateOf("")}
+    val dataUser  = List(5){remember{mutableStateOf("")}}
+    /*val family    = remember{mutableStateOf("")}
     val name      = remember{mutableStateOf("")}
     val phone     = remember{mutableStateOf("")}
     val email     = remember{mutableStateOf("")}
-    val password  = remember{mutableStateOf("")}
+    val password  = remember{mutableStateOf("")}*/
 
     fun changeError(order: Int, value: Boolean) {
         val tError = errors.value.toMutableList()
@@ -156,17 +159,20 @@ fun DialogRegistration(){
         ) {
 
 
+            val focusManager = LocalFocusManager.current
+
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
                     text = stringResource(id = R.string.title_reg),
                     fontSize = 17.sp,
                     modifier=Modifier.padding(bottom = 8.dp)
                 )
-                TextGroup(label = stringResource(id = R.string.text_family),    text = family,
-                    onTextChange = {value -> family.value = value}, order=0)
-                TextGroup(label = stringResource(id = R.string.text_name),      text = name,
-                    onTextChange = {value -> name.value = value}, order=1)
-                TextGroup(label = stringResource(id = R.string.text_phone),     text = phone, keyboardType = KeyboardType.Phone,
+                TextGroup(label = stringResource(id = R.string.text_family),    text = dataUser[0],//family,
+                    onTextChange = {value -> dataUser[0].value = value}, order=0)
+                TextGroup(label = stringResource(id = R.string.text_name),      text = dataUser[1],//name,
+                    onTextChange = {value -> dataUser[1].value = value}, order=1)
+                TextGroup(label = stringResource(id = R.string.text_phone),     text = dataUser[2],//phone,
+                    keyboardType = KeyboardType.Phone,
                     onTextChange = {
                         val firstCharValid = try {
                             it[0] == '+' || it[0].isDigit()
@@ -175,7 +181,7 @@ fun DialogRegistration(){
                         }
 
                         if (it.isEmpty())
-                            phone.value = it
+                            dataUser[2].value = it
                         else
                         if (firstCharValid) {
                             val str = if (it[0] == '+')
@@ -183,17 +189,19 @@ fun DialogRegistration(){
                             else
                                 it.substring(0)
                             if (str.isDigitsOnly() && str.length <=11)
-                                phone.value = it
+                                dataUser[2].value = it
                         }
 
                     }, order=2)
-                TextGroup(label = stringResource(id = R.string.text_email),     text = email, keyboardType = KeyboardType.Email,
-                    onTextChange = {value -> email.value = value},order=3)
-                TextGroup(label = stringResource(id = R.string.text_password),  text = password, keyboardType = KeyboardType.NumberPassword,
+                TextGroup(label = stringResource(id = R.string.text_email),     text = dataUser[3],//email,
+                    keyboardType = KeyboardType.Email,
+                    onTextChange = {value -> dataUser[3].value = value},order=3)
+                TextGroup(label = stringResource(id = R.string.text_password),  text = dataUser[4],//password,
+                    keyboardType = KeyboardType.NumberPassword,
                     onTextChange = {value ->
                         val regExp = "\\d{0,5}".toRegex()
                         if (regExp.matches(value))
-                            password.value = value
+                            dataUser[4].value = value
                     }, order=4)
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
@@ -212,10 +220,27 @@ fun DialogRegistration(){
                     }
                     Spacer(modifier = Modifier.width(4.dp))
                     TextButton(onClick = {
-                            changeError(0, true)
-                            /*val tError = errors.value.toMutableList()
-                            tError[0] = true
-                            errors.value = tError.toList()*/
+                            focusManager.clearFocus()
+                            val tErrors = MutableList(5){false}
+                            for (i in 0..4)
+                                if (dataUser[i].value.isBlank())
+                                    tErrors[i] = true
+
+                            if (dataUser[4].value.length < 5)
+                                tErrors[4] = true
+
+                            if (!validateMail(dataUser[3].value))
+                                tErrors[3] = true
+
+                            val regExp = "^(8|\\+7)\\d{10}".toRegex()
+                            if (!regExp.matches(dataUser[2].value))
+                                tErrors[2] = true
+
+                            /*if (!Patterns.PHONE.matcher(dataUser[2].value).matches())
+                                tErrors[2] = true*/
+
+
+                            errors.value = tErrors.toList()
                     }) {
                         Text(text = stringResource(id = R.string.btn_reg).uppercase(),
                             color = TextOrange
