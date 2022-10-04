@@ -123,29 +123,7 @@ fun DialogRegistration(){
                 ),
                 shape = RoundedCornerShape(16.dp),
                 trailingIcon = if (keyboardType == KeyboardType.NumberPassword)
-                    trailingIcon else null
-                   /* {
-                    if (keyboardType == KeyboardType.NumberPassword) {
-                        val idDrawable = if (showChar.value)
-                            R.drawable.ic_showsym_on
-                        else
-                            R.drawable.ic_showsym_off
-                        Image(
-                            modifier = Modifier
-                                .clickable(
-                                    onClick = {
-                                        showChar.value = !showChar.value
-                                    }
-                                )
-                                .size(24.dp, 24.dp),
-                            imageVector = ImageVector.vectorResource(idDrawable),
-                            colorFilter = ColorFilter.tint(MaterialTheme.colors.secondary),
-                            contentDescription = null
-                        )
-                    }
-                }*/,
-                //isError = true,
-                //isError = errors.value[order],
+                    trailingIcon else null,
                 singleLine = true,
                 visualTransformation = visualTransformation,
                 keyboardActions = KeyboardActions (
@@ -194,7 +172,8 @@ fun DialogRegistration(){
                 TextGroup(label = stringResource(id = R.string.text_phone),     text = dataUser[2],//phone,
                     keyboardType = KeyboardType.Phone,
                     onTextChange = {
-                        val firstCharValid = try {
+                        value -> dataUser[2].value = value
+                        /*val firstCharValid = try {
                             it[0] == '+' || it[0].isDigit()
                         } catch(e: java.lang.Exception){
                             false
@@ -211,7 +190,7 @@ fun DialogRegistration(){
                             if (str.isDigitsOnly() && str.length <=11)
                                 dataUser[2].value = it
                         }
-
+*/
                     }, order=2)
                 TextGroup(label = stringResource(id = R.string.text_email),     text = dataUser[3],//email,
                     keyboardType = KeyboardType.Email,
