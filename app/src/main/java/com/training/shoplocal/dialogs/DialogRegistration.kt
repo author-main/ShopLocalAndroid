@@ -245,7 +245,7 @@ fun DialogRegistration(){
                             tErrors.forEach foreach@{value ->
                                 if (value) {
                                     validate = false
-                                    return@foreach // возврат по метке, можно заменить на return@forEach
+                                    return@foreach // возврат по метке, можно заменить на return@forEach без указания метки
                                 }
                             }
 
