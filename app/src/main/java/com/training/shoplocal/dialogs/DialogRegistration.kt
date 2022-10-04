@@ -52,8 +52,15 @@ fun DialogRegistration(){
     val email     = remember{mutableStateOf("")}
     val password  = remember{mutableStateOf("")}
 
+    fun changeError(order: Int, value: Boolean) {
+        val tError = errors.value.toMutableList()
+        tError[order] = value
+        errors.value = tError.toList()
+    }
+
     @Composable
     fun TextGroup(label: String, text: MutableState<String>, keyboardType: KeyboardType = KeyboardType.Text, onTextChange: (value: String)-> Unit = { }, order: Int){
+
         val focusManager = LocalFocusManager.current
         val borderColor = if (errors.value[order])
                         SelectedItem
@@ -71,6 +78,12 @@ fun DialogRegistration(){
             Spacer(modifier = Modifier.height(8.dp))
             TextField(value = text.value, onValueChange = onTextChange,
                 Modifier
+                    .onFocusChanged {
+                        if (it.isFocused) {
+                            if (errors.value[order])
+                                changeError(order, false)
+                        }
+                    }
                     .border(1.dp, borderColor, RoundedCornerShape(16.dp))
                     .fillMaxWidth()
                     .focusRequester(focusRequesters[order])
@@ -198,9 +211,10 @@ fun DialogRegistration(){
                     }
                     Spacer(modifier = Modifier.width(4.dp))
                     TextButton(onClick = {
-                            val tError = errors.value.toMutableList()
+                            changeError(0, true)
+                            /*val tError = errors.value.toMutableList()
                             tError[0] = true
-                            errors.value = tError.toMutableList()
+                            errors.value = tError.toList()*/
                     }) {
                         Text(text = stringResource(id = R.string.btn_reg).uppercase(),
                             color = TextOrange
