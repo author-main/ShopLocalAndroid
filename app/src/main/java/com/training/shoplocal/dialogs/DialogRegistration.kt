@@ -1,24 +1,24 @@
 package com.training.shoplocal.dialogs
 
-import android.text.TextPaint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.Font
@@ -39,8 +39,9 @@ import com.training.shoplocal.ui.theme.*
 
 @Composable
 fun DialogRegistration(){
-
+    val errors = remember{ mutableStateOf(List(5){false})}
     //LocalConfiguration.current.screenWidthDp.dp
+    val focusRequesters = List(5) { FocusRequester() }
     val showChar  = remember{mutableStateOf(false)}
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
     val family    = remember{mutableStateOf("")}
@@ -50,19 +51,30 @@ fun DialogRegistration(){
     val password  = remember{mutableStateOf("")}
 
     @Composable
-    fun TextGroup(label: String, text: MutableState<String>, keyboardType: KeyboardType = KeyboardType.Text, onTextChange: (value: String)-> Unit = { }){
+    fun TextGroup(label: String, text: MutableState<String>, keyboardType: KeyboardType = KeyboardType.Text, onTextChange: (value: String)-> Unit = { }, order: Int){
+        val focusManager = LocalFocusManager.current
         val visualTransformation =
             if (keyboardType == KeyboardType.NumberPassword && !showChar.value)
                     PasswordVisualTransformation()
                 else
                     VisualTransformation.None
         Row(verticalAlignment = Alignment.CenterVertically){
-            Text(text = label, fontFamily = labelFont, modifier = Modifier.width(70.dp))
+            Text(text = label, fontFamily = labelFont,
+                modifier = Modifier.width(70.dp)
+            )
             //Spacer(modifier = Modifier.width(8.dp))
             TextField(value = text.value, onValueChange = onTextChange,
                 Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp),
+                    .padding(vertical = 8.dp)
+                    .focusRequester(focusRequesters[order])
+                    .focusProperties {
+                        val next = if (order < focusRequesters.size - 1)
+                            focusRequesters[order + 1]
+                        else
+                            focusRequesters[0]
+                        down = next
+                    },
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = TextFieldBg,
                     cursorColor = TextFieldFont,
@@ -78,7 +90,7 @@ fun DialogRegistration(){
                             R.drawable.ic_showsym_off
                         Image(
                             modifier = Modifier
-                                .clickable (
+                                .clickable(
                                     onClick = {
                                         showChar.value = !showChar.value
                                     }
@@ -90,9 +102,20 @@ fun DialogRegistration(){
                         )
                     }
                 },
+                //isError = true,
+                isError = errors.value[order],
                 singleLine = true,
                 visualTransformation = visualTransformation,
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done, keyboardType = keyboardType)
+                keyboardActions = KeyboardActions (
+                    onNext = {
+                        focusManager.moveFocus(FocusDirection.Down)
+                    }/*,
+                    onDone = {
+                        //keyboardController?.hide()
+                        //  focusManager.clearFocus()
+                    }*/
+                ),
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next, keyboardType = keyboardType)
             )
         }
     }
@@ -103,8 +126,7 @@ fun DialogRegistration(){
         /* Toast.makeText(appContext(), "Dialog dismissed!", Toast.LENGTH_SHORT)
              .show()*/
     }) {
-        /*  val focusManager = LocalFocusManager.current
-        val keyboardController = LocalSoftwareKeyboardController.current*/
+        //val keyboardController = LocalSoftwareKeyboardController.current
         Card(
             elevation = 8.dp,
             shape = RoundedCornerShape(12.dp),
@@ -120,9 +142,9 @@ fun DialogRegistration(){
                     modifier=Modifier.padding(bottom = 8.dp)
                 )
                 TextGroup(label = stringResource(id = R.string.text_family),    text = family,
-                    onTextChange = {value -> family.value = value})
+                    onTextChange = {value -> family.value = value}, order=0)
                 TextGroup(label = stringResource(id = R.string.text_name),      text = name,
-                    onTextChange = {value -> name.value = value})
+                    onTextChange = {value -> name.value = value}, order=1)
                 TextGroup(label = stringResource(id = R.string.text_phone),     text = phone, keyboardType = KeyboardType.Phone,
                     onTextChange = {
                         val firstCharValid = try {
@@ -143,15 +165,15 @@ fun DialogRegistration(){
                                 phone.value = it
                         }
 
-                    })
+                    }, order=2)
                 TextGroup(label = stringResource(id = R.string.text_email),     text = email, keyboardType = KeyboardType.Email,
-                    onTextChange = {value -> email.value = value})
+                    onTextChange = {value -> email.value = value},order=3)
                 TextGroup(label = stringResource(id = R.string.text_password),  text = password, keyboardType = KeyboardType.NumberPassword,
                     onTextChange = {value ->
                         val regExp = "\\d{0,5}".toRegex()
                         if (regExp.matches(value))
                             password.value = value
-                    })
+                    }, order=4)
                 Row(
                     horizontalArrangement = Arrangement.End,
                     modifier = Modifier
@@ -168,7 +190,9 @@ fun DialogRegistration(){
                     }
                     Spacer(modifier = Modifier.width(4.dp))
                     TextButton(onClick = {
-                            DialogRouter.reset()
+                            val tError = errors.value.toMutableList()
+                            tError[0] = true
+                            errors.value = tError.toMutableList()
                     }) {
                         Text(text = stringResource(id = R.string.btn_reg).uppercase(),
                             color = TextOrange
