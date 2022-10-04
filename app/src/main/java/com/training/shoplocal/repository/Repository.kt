@@ -35,8 +35,12 @@ class Repository: CrudInterface, AccessUserInterface {
        return false
     }
 
-    override fun onRegisterUser() {
-        TODO("Not yet implemented")
+    override fun onRegisterUser(vararg userdata: String) {
+        val firstName   = userdata[0]
+        val lastName    = userdata[1]
+        val phone       = userdata[2]
+        val email       = userdata[3]
+        val password    = userdata[4]
     }
 
     override fun onRestoreUser(email: String) {

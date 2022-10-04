@@ -34,11 +34,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.core.text.isDigitsOnly
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.DialogRouter
 import com.training.shoplocal.R
 import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.validateMail
+import com.training.shoplocal.viewmodel.RepositoryViewModel
 
 
 @Composable
@@ -148,6 +150,7 @@ fun DialogRegistration(){
         /* Toast.makeText(appContext(), "Dialog dismissed!", Toast.LENGTH_SHORT)
              .show()*/
     }) {
+        val viewModel: RepositoryViewModel = viewModel()
         //val keyboardController = LocalSoftwareKeyboardController.current
         Card(
             elevation = 8.dp,
@@ -244,8 +247,16 @@ fun DialogRegistration(){
                                     validate = false
                             }
 
-                            if (validate)
+                            if (validate) {
                                 DialogRouter.reset()
+                                viewModel.onRegisterUser(
+                                    dataUser[0].value,
+                                    dataUser[1].value,
+                                    dataUser[2].value,
+                                    dataUser[3].value,
+                                    dataUser[4].value
+                                )
+                            }
                             else
                                 errors.value = tErrors.toList()
 

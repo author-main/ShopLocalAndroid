@@ -14,4 +14,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     fun onRestoreUser(email: String) {
         repository.onRestoreUser(email)
     }
+
+    fun onRegisterUser(vararg userdata: String) {
+        repository.onRegisterUser(*userdata)
+    }
 }
