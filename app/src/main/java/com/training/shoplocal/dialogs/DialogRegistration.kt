@@ -242,10 +242,10 @@ fun DialogRegistration(){
                                 tErrors[2] = true*/
 
                             var validate = true
-                            tErrors.forEach {value ->
+                            tErrors.forEach foreach@{value ->
                                 if (value) {
                                     validate = false
-                                    return@forEach
+                                    return@foreach // возврат по метке, можно заменить на return@forEach
                                 }
                             }
 
