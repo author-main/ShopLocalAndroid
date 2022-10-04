@@ -64,6 +64,25 @@ fun DialogRegistration(){
     @Composable
     fun TextGroup(label: String, text: MutableState<String>, keyboardType: KeyboardType = KeyboardType.Text, onTextChange: (value: String)-> Unit = { }, order: Int){
 
+        val trailingIcon = @Composable {
+                val idDrawable = if (showChar.value)
+                    R.drawable.ic_showsym_on
+                else
+                    R.drawable.ic_showsym_off
+                Image(
+                    modifier = Modifier
+                        .clickable(
+                            onClick = {
+                                showChar.value = !showChar.value
+                            }
+                        )
+                        .size(24.dp, 24.dp),
+                    imageVector = ImageVector.vectorResource(idDrawable),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colors.secondary),
+                    contentDescription = null
+                )
+        }
+
         val focusManager = LocalFocusManager.current
         val borderColor = if (errors.value[order])
                         SelectedItem
@@ -104,7 +123,9 @@ fun DialogRegistration(){
                     unfocusedIndicatorColor = Color.Transparent
                 ),
                 shape = RoundedCornerShape(16.dp),
-                trailingIcon = {
+                trailingIcon = if (keyboardType == KeyboardType.NumberPassword)
+                    trailingIcon else null
+                   /* {
                     if (keyboardType == KeyboardType.NumberPassword) {
                         val idDrawable = if (showChar.value)
                             R.drawable.ic_showsym_on
@@ -123,7 +144,7 @@ fun DialogRegistration(){
                             contentDescription = null
                         )
                     }
-                },
+                }*/,
                 //isError = true,
                 //isError = errors.value[order],
                 singleLine = true,
@@ -239,8 +260,17 @@ fun DialogRegistration(){
                             /*if (!Patterns.PHONE.matcher(dataUser[2].value).matches())
                                 tErrors[2] = true*/
 
+                            var validate = true
+                            tErrors.forEach {value ->
+                                if (value)
+                                    validate = false
+                            }
 
-                            errors.value = tErrors.toList()
+                            if (validate)
+                                DialogRouter.reset()
+                            else
+                                errors.value = tErrors.toList()
+
                     }) {
                         Text(text = stringResource(id = R.string.btn_reg).uppercase(),
                             color = TextOrange
