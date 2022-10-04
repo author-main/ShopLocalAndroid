@@ -135,8 +135,8 @@ fun DialogRestore(){
                             focusManager.clearFocus()
                         }
                         else {
-                            viewModel.onRestoreUser(email.value)
                             DialogRouter.reset()
+                            viewModel.onRestoreUser(email.value)
                         }
                     }) {
                         Text(text = stringResource(id = R.string.btn_send).uppercase(),
