@@ -243,8 +243,10 @@ fun DialogRegistration(){
 
                             var validate = true
                             tErrors.forEach {value ->
-                                if (value)
+                                if (value) {
                                     validate = false
+                                    return@forEach
+                                }
                             }
 
                             if (validate) {
