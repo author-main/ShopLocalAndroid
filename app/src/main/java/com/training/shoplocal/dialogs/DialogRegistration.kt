@@ -63,7 +63,6 @@ fun DialogRegistration(){
 
     @Composable
     fun TextGroup(label: String, text: MutableState<String>, keyboardType: KeyboardType = KeyboardType.Text, onTextChange: (value: String)-> Unit = { }, order: Int){
-
         val trailingIcon = @Composable {
                 val idDrawable = if (showChar.value)
                     R.drawable.ic_showsym_on
