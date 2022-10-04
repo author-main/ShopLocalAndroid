@@ -1,6 +1,8 @@
 package com.training.shoplocal.dialogs
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -53,6 +55,9 @@ fun DialogRegistration(){
     @Composable
     fun TextGroup(label: String, text: MutableState<String>, keyboardType: KeyboardType = KeyboardType.Text, onTextChange: (value: String)-> Unit = { }, order: Int){
         val focusManager = LocalFocusManager.current
+        val borderColor = if (errors.value[order])
+                        SelectedItem
+                    else Color.Transparent
         val visualTransformation =
             if (keyboardType == KeyboardType.NumberPassword && !showChar.value)
                     PasswordVisualTransformation()
@@ -62,11 +67,12 @@ fun DialogRegistration(){
             Text(text = label, fontFamily = labelFont,
                 modifier = Modifier.width(70.dp)
             )
-            //Spacer(modifier = Modifier.width(8.dp))
+            Column(){
+            Spacer(modifier = Modifier.height(8.dp))
             TextField(value = text.value, onValueChange = onTextChange,
                 Modifier
+                    .border(1.dp, borderColor, RoundedCornerShape(16.dp))
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp)
                     .focusRequester(focusRequesters[order])
                     .focusProperties {
                         val next = if (order < focusRequesters.size - 1)
@@ -103,7 +109,7 @@ fun DialogRegistration(){
                     }
                 },
                 //isError = true,
-                isError = errors.value[order],
+                //isError = errors.value[order],
                 singleLine = true,
                 visualTransformation = visualTransformation,
                 keyboardActions = KeyboardActions (
@@ -117,6 +123,8 @@ fun DialogRegistration(){
                 ),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next, keyboardType = keyboardType)
             )
+
+            }
         }
     }
 
