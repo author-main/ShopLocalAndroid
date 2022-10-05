@@ -32,7 +32,6 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
         super.onCreate(savedInstanceState)
 //        val context = LocalContext.current as FragmentActivity
         viewModel.getUserFingerPrint(this)
-        var service = ApiManager.getRetrofitService()
 //        val repository = AppShopLocal.appRepository();
 
         //val passwordState = PasswordViewState.getPasswordState()
