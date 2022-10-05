@@ -10,10 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -46,6 +43,12 @@ import com.training.shoplocal.viewmodel.RepositoryViewModel
 @Composable
 fun DialogRegistration(){
     val errors = remember{ mutableStateOf(List(5){false})}
+
+  /*  val error = remember {
+        mutableStateListOf(List(5){false})
+    }*/
+
+
     //LocalConfiguration.current.screenWidthDp.dp
     val focusRequesters = List(5) { FocusRequester() }
     val showChar  = remember{mutableStateOf(false)}
