@@ -49,7 +49,7 @@ class Repository: CrudInterface, AccessUserInterface {
             email       = userdata[3]
             setPassword(userdata[4])
         }
-        ApiManager.createUse(user, object: retrofit2.Callback<User>{
+        ApiManager.createUser(user, object: retrofit2.Callback<User>{
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 log("${response.body()?.phone}")
             }

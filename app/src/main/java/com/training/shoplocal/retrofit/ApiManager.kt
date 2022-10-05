@@ -21,7 +21,7 @@ object ApiManager {
 
     //fun getRetrofitService() = service
 
-    fun createUse(user: User, callback: Callback<User>) {
+    fun createUser(user: User, callback: Callback<User>) {
         val userCall: Call<User> = service!!.createUser(user)
         userCall.enqueue(callback)
     }
