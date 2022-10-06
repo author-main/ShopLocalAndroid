@@ -1,17 +1,18 @@
 package com.training.shoplocal.repository
 
 import android.content.Context
+import com.google.gson.Gson
 import com.training.shoplocal.isConnectedNet
 import com.training.shoplocal.log
-import com.training.shoplocal.userfingerprint.UserFingerPrint
-import com.training.shoplocal.userfingerprint.UserPasswordStorage
 import com.training.shoplocal.loginview.AccessUserInterface
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.retrofit.ApiManager
 import com.training.shoplocal.retrofit.User
+import com.training.shoplocal.userfingerprint.UserFingerPrint
+import com.training.shoplocal.userfingerprint.UserPasswordStorage
 import retrofit2.Call
 import retrofit2.Response
-import javax.security.auth.callback.Callback
+
 
 class Repository: CrudInterface, AccessUserInterface {
     private var userFingerPrint: UserFingerPrint? = null
@@ -52,6 +53,11 @@ class Repository: CrudInterface, AccessUserInterface {
                     email       = userdata[3],
                     password    = userdata[4]
             )
+
+        val gson = Gson()
+        val json = gson.toJson(user)
+        log(json)
+
 
         if (isConnectedNet())
             log("Connected")
