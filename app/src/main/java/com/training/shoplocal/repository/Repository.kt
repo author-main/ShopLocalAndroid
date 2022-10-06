@@ -54,9 +54,9 @@ class Repository: CrudInterface, AccessUserInterface {
                     password    = userdata[4]
             )
 
-        val gson = Gson()
+        /*val gson = Gson()
         val json = gson.toJson(user)
-        log(json)
+        log(json)*/
 
 
         if (isConnectedNet())
