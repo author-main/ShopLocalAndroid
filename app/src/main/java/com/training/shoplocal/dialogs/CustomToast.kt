@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 
 class CustomToast(context: Context) : Toast(context) {
@@ -17,6 +18,7 @@ class CustomToast(context: Context) : Toast(context) {
         contentAlignment: Alignment
     ) {
         val context = LocalContext.current
+        val views = ComposeView(context)
     }
 
 }
