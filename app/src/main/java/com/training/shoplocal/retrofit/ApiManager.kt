@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 object ApiManager {
-    //private const val url = "http://www.shop_local.ru"
+    //private const val url = "http://shop_local.ru"
     private const val url = "http://192.168.1.75"
     private var service: IUserApi? = null
     init{
