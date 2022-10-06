@@ -1,6 +1,19 @@
 package com.training.shoplocal.retrofit
 
-class User {
+import com.google.gson.annotations.SerializedName
+
+
+data class User (
+    @SerializedName("id")           val id: Int?,
+    @SerializedName("email")        val email: String?,
+    @SerializedName("firstname")    val firstname: String?,
+    @SerializedName("lastname")     val lastname: String?,
+    @SerializedName("phone")        val phone: String?,
+    @SerializedName("password")     val password: String?
+)
+
+
+/*class User {
     private var id: Int = 0
     var email: String = ""
     var firstName: String = ""
@@ -12,4 +25,4 @@ class User {
     fun setPassword(value: String) {
         password = value
     }
-}
+}*/

@@ -226,6 +226,22 @@ fun DialogRegistration(){
                     Spacer(modifier = Modifier.width(4.dp))
                     TextButton(onClick = {
                             focusManager.clearFocus()
+
+
+                            DialogRouter.reset()
+                            viewModel.onRegisterUser(
+                                "Сергей",
+                                "Мышанский",
+                                "89185046978",
+                                "myshansky@inbox.ru",
+                                "12345"
+                            )
+
+
+                            /*
+
+
+
                             val tErrors = MutableList(5){false}
                             for (i in 0..4)
                                 if (dataUser[i].value.isBlank())
@@ -263,7 +279,7 @@ fun DialogRegistration(){
                                 )
                             }
                             else
-                                errors.value = tErrors.toList()
+                                errors.value = tErrors.toList()*/
 
                     }) {
                         Text(text = stringResource(id = R.string.btn_reg).uppercase(),

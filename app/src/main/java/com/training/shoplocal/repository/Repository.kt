@@ -42,20 +42,23 @@ class Repository: CrudInterface, AccessUserInterface {
 
     override fun onRegisterUser(vararg userdata: String) {
         //val service = getRetrofitService()
-        val user = User().apply {
-            firstName   = userdata[0]
-            lastName    = userdata[1]
-            phone       = userdata[2]
-            email       = userdata[3]
-            setPassword(userdata[4])
-        }
+
+        val user = User(
+                    id          = null,
+                    firstname   = userdata[0],
+                    lastname    = userdata[1],
+                    phone       = userdata[2],
+                    email       = userdata[3],
+                    password    = userdata[4]
+            )
+
         ApiManager.createUser(user, object: retrofit2.Callback<User>{
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 log("${response.body()?.phone}")
             }
 
             override fun onFailure(call: Call<User>, t: Throwable) {
-
+                log(t.message?:"error")
             }
         })
     }

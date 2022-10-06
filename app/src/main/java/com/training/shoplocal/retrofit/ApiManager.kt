@@ -1,28 +1,31 @@
 package com.training.shoplocal.retrofit
 
-import retrofit2.Call
-import retrofit2.Callback
+import com.google.gson.GsonBuilder
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
 object ApiManager {
-    //private val apiManager: ApiManager? = null
-    private const val url = "http://shop_local.ru"
+    //private const val url = "http://www.shop_local.ru"
+    private const val url = "http://192.168.1.75"
     private var service: IUserApi? = null
-    //private val apiManager: ApiManager? = null
     init{
+        val gson = GsonBuilder()
+            .setLenient()
+            .create()
         val retrofit = Retrofit.Builder()
             .baseUrl(url)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            //.addConverterFactory(GsonConverterFactory.create())
             .build()
         service = retrofit.create(IUserApi::class.java)
     }
 
     //fun getRetrofitService() = service
 
-    fun createUser(user: User, callback: Callback<User>) {
-        val userCall: Call<User> = service!!.createUser(user)
+    fun createUser(user: User, callback: retrofit2.Callback<User>) {
+        val userCall: retrofit2.Call<User> = service!!.createUser(user)
         userCall.enqueue(callback)
     }
 
