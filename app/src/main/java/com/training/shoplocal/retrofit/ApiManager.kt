@@ -11,6 +11,7 @@ object ApiManager {
     private const val url = "http://192.168.1.75"
     private var service: IUserApi? = null
     init{
+//        val client = OkHttpClient.Builder().build()
         val gson = GsonBuilder()
             .setLenient()
             .create()
