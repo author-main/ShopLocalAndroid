@@ -1,6 +1,7 @@
 package com.training.shoplocal.repository
 
 import android.content.Context
+import com.training.shoplocal.isConnectedNet
 import com.training.shoplocal.log
 import com.training.shoplocal.userfingerprint.UserFingerPrint
 import com.training.shoplocal.userfingerprint.UserPasswordStorage
@@ -51,6 +52,9 @@ class Repository: CrudInterface, AccessUserInterface {
                     email       = userdata[3],
                     password    = userdata[4]
             )
+
+        if (isConnectedNet())
+            log("Connected")
 
         ApiManager.createUser(user, object: retrofit2.Callback<User>{
             override fun onResponse(call: Call<User>, response: Response<User>) {
