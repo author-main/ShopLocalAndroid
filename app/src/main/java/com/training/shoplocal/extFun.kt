@@ -5,6 +5,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.util.Log
 import android.util.Patterns
+import android.widget.Toast
 import androidx.annotation.StringRes
 import com.training.shoplocal.AppShopLocal.Companion.appContext
 
@@ -42,3 +43,7 @@ fun isConnectedNet(): Boolean{
         showToast(R.string.error_connected_internet)*/
     return connected
 }
+
+    fun mToast(value: String){
+        Toast.makeText(appContext(), value, Toast.LENGTH_LONG).show()
+    }
