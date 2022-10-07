@@ -229,7 +229,7 @@ fun DialogRegistration(){
 
 
                             //DialogRouter.reset()
-                            viewModel.onRegisterUser({result ->
+                           /* viewModel.onRegisterUser({result ->
                                 if (result)
                                     DialogRouter.reset()
                             },
@@ -238,10 +238,10 @@ fun DialogRegistration(){
                                 "89185046979",
                                 "myshansky@inbox.ru",
                                 "12345"
-                            )
+                            )*/
 
 
-                            /*
+
 
 
 
@@ -272,8 +272,11 @@ fun DialogRegistration(){
                             }
 
                             if (validate) {
-                                DialogRouter.reset()
-                                viewModel.onRegisterUser(
+
+                                viewModel.onRegisterUser({result ->
+                                    if (result)
+                                        DialogRouter.reset()
+                                },
                                     dataUser[0].value,
                                     dataUser[1].value,
                                     dataUser[2].value,
@@ -282,7 +285,7 @@ fun DialogRegistration(){
                                 )
                             }
                             else
-                                errors.value = tErrors.toList()*/
+                                errors.value = tErrors.toList()
 
                     }) {
                         Text(text = stringResource(id = R.string.btn_reg).uppercase(),
