@@ -49,7 +49,7 @@ class Repository: CrudInterface, AccessUserInterface {
 
     }
 
-    override fun onLogin(email: String, password: String, action: () -> Unit) {
+    override fun onLogin(email: String, password: String) {
         loginState.changePassword(password)
         loginState.showHomeScreen()
     }
