@@ -232,7 +232,7 @@ fun DialogRegistration(){
                             viewModel.onRegisterUser(
                                 "Сергей",
                                 "Мышанский",
-                                "89185046978",
+                                "89185046979",
                                 "myshansky@inbox.ru",
                                 "12345"
                             )
