@@ -10,9 +10,11 @@ import com.training.shoplocal.mToast
 import com.training.shoplocal.retrofit.ApiManager
 import com.training.shoplocal.retrofit.User
 import com.training.shoplocal.userfingerprint.UserFingerPrint
+import com.training.shoplocal.userfingerprint.UserFingerPrintListener
 import com.training.shoplocal.userfingerprint.UserPasswordStorage
 import retrofit2.Call
 import retrofit2.Response
+import javax.crypto.Cipher
 
 
 class Repository: CrudInterface, AccessUserInterface {
@@ -30,10 +32,19 @@ class Repository: CrudInterface, AccessUserInterface {
         loginState.getEmail()
 
     fun getUserFingerPrint(context: Context) {
-        userFingerPrint = if (UserFingerPrint.canAuthenticate())
-                                UserFingerPrint(context)/*.apply {
-                                    addPasswordStorage(UserPasswordStorage())
-                                }*/
+        userFingerPrint = if (UserFingerPrint.canAuthenticate()) {
+            UserFingerPrint(context).apply main@ {
+                userFingerPrintListener = object : UserFingerPrintListener {
+                    override fun onComplete(cipher: Cipher?) {
+                        cipher?.let {
+                            val password = this@main.getPassword(it) ?: ""
+                            log(password)
+                        }
+                    }
+                }
+                //addPasswordStorage(UserPasswordStorage())
+            }
+        }
                                 else
                                     null
 

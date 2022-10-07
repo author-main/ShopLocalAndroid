@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentActivity
 import com.training.shoplocal.AppShopLocal.Companion.appContext
 import com.training.shoplocal.R
 import com.training.shoplocal.getStringResource
+import javax.crypto.Cipher
 
 class UserFingerPrint(private val context: Context): UserFingerPrintInterface {
     //private  var userPasswordStorage: UserPasswordStorageInterface = UserPasswordStorage()//null
@@ -68,8 +69,7 @@ class UserFingerPrint(private val context: Context): UserFingerPrintInterface {
     /*fun existPasswordStore() =
         userPasswordStorage.existPasswordStore()*/
 
-    /*fun getPassword(value: String): String {
-        userPasswordStorage?.getPassword()
-    }*/
+    fun getPassword(cipher: Cipher) =
+        userPasswordStorage.getPassword(cipher)
 
 }
