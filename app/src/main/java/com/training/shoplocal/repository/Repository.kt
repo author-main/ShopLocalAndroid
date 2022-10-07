@@ -23,10 +23,10 @@ class Repository: CrudInterface, AccessUserInterface {
         loginState.addOnAccessUser(this)
     }
 
-    fun getPassword(): String =
+    fun getLoginPassword(): String =
         loginState.getPassword()
 
-    fun getEmail(): String =
+    fun getLoginEmail(): String =
         loginState.getEmail()
 
     fun getUserFingerPrint(context: Context) {
@@ -69,8 +69,10 @@ class Repository: CrudInterface, AccessUserInterface {
                 */
                 //val id = response.body()?.id ?: 0
                 val result = (response.body()?.id ?: 0) > 0
-                if (result)
+                if (result) {
+                    saveUserPassword(user.password!!)
                     user.saveUserData()
+                }
                 action?.invoke(result)
                 /*mToast("${response.body()?.id}")
                 log("${response.body()?.id}")*/
@@ -90,4 +92,9 @@ class Repository: CrudInterface, AccessUserInterface {
     override fun onFingerPrint(email: String) {
         userFingerPrint?.authenticate()
     }
+
+    fun saveUserPassword(value: String){
+        userFingerPrint?.putPassword(value)
+    }
+
 }
