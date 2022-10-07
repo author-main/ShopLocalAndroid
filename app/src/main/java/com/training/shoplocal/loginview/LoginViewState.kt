@@ -58,7 +58,7 @@ class LoginViewState {
 
     fun checkFingerButtonState(){
         enableFingerButton.value = canAuthenticate()
-        log(enableFingerButton.value.toString())
+        //log(enableFingerButton.toString())
     }
 
     fun isEnabledFingerButton() = enableFingerButton
@@ -115,14 +115,19 @@ class LoginViewState {
                 animated = true
                 password += value
                 if (password.length == 5) {
-                    if (onAccessUser?.onLogin(password) == true)
-                        ScreenRouter.navigateTo(ScreenItem.MainScreen)
-                    else {
+                    onAccessUser?.onLogin(email, password, action = {
+                        //ScreenRouter.navigateTo(ScreenItem.MainScreen)
+                    })
+                    /*if (onAccessUser?.onLogin(password) == true)
+                        ScreenRouter.navigateTo(ScreenItem.MainScreen)*/
+
+
+                   /* else {
                         CoroutineScope(Dispatchers.Main).launch {
                             delay(500)
                             password = ""
                         }
-                    }
+                    }*/
                     //onLogin?.invoke(password)
                 }
             }

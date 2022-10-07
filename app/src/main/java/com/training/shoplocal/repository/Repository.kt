@@ -37,8 +37,7 @@ class Repository: CrudInterface, AccessUserInterface {
                 userFingerPrintListener = object : UserFingerPrintListener {
                     override fun onComplete(cipher: Cipher?) {
                         cipher?.let {
-                            val password = this@main.getPassword(it) ?: ""
-                            log(password)
+                            onLogin(loginState.getEmail(), this@main.getPassword(it) ?: "")
                         }
                     }
                 }
@@ -50,8 +49,8 @@ class Repository: CrudInterface, AccessUserInterface {
 
     }
 
-    override fun onLogin(password: String): Boolean {
-       return false
+    override fun onLogin(email: String, password: String, action: () -> Unit) {
+        log("Login")
     }
 
     override fun onRegisterUser(action: ((result: Boolean) -> Unit)?, vararg userdata: String) {
