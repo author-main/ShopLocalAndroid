@@ -31,9 +31,9 @@ class Repository: CrudInterface, AccessUserInterface {
 
     fun getUserFingerPrint(context: Context) {
         userFingerPrint = if (UserFingerPrint.canAuthenticate())
-                                UserFingerPrint(context).apply {
+                                UserFingerPrint(context)/*.apply {
                                     addPasswordStorage(UserPasswordStorage())
-                                }
+                                }*/
                                 else
                                     null
 
@@ -74,8 +74,8 @@ class Repository: CrudInterface, AccessUserInterface {
                     user.saveUserData()
                 }
                 action?.invoke(result)
-                /*mToast("${response.body()?.id}")
-                log("${response.body()?.id}")*/
+                //mToast("${response.body()?.id}")
+                //log("${response.body()?.id}")*/
             }
 
             override fun onFailure(call: Call<User>, t: Throwable) {

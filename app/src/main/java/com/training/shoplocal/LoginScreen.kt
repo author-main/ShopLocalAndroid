@@ -47,7 +47,8 @@ fun BodyView(state: LoginViewState, modifier: Modifier){
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         LoginView(state)
             //Spacer(modifier = Modifier.height(8.dp))
-        ButtonPasswordPanel(state::changeChar)
+        //ButtonPasswordPanel(state::changeChar)
+        ButtonPasswordPanel(state)
     }
 }
 

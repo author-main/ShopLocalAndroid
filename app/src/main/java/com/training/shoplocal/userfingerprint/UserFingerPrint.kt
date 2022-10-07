@@ -11,17 +11,17 @@ import com.training.shoplocal.R
 import com.training.shoplocal.getStringResource
 
 class UserFingerPrint(private val context: Context): UserFingerPrintInterface {
-    private  var userPasswordStorage: UserPasswordStorageInterface? = null
+    //private  var userPasswordStorage: UserPasswordStorageInterface = UserPasswordStorage()//null
     override var userFingerPrintListener: UserFingerPrintListener? = null
-    fun addPasswordStorage(storage: UserPasswordStorageInterface){
+   /* fun addPasswordStorage(storage: UserPasswordStorageInterface){
         userPasswordStorage = storage
-    }
+    }*/
 
     //override fun authenticate(cryptoObject: Cipher?): Boolean {
     override fun authenticate(): Boolean {
         if (!canAuthenticate())
             return false
-        val cipher = userPasswordStorage?.getDecryptCipher() ?: return false
+        val cipher = userPasswordStorage.getDecryptCipher() ?: return false
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle(getStringResource(R.string.biometric_title))
             .setConfirmationRequired(false)
@@ -52,14 +52,21 @@ class UserFingerPrint(private val context: Context): UserFingerPrintInterface {
     }
 
     companion object {
+        private val userPasswordStorage: UserPasswordStorageInterface = UserPasswordStorage()//null
         fun canAuthenticate() =
             BiometricManager.from(appContext())
                 .canAuthenticate(BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS
+
+        fun existPasswordStore() =
+            userPasswordStorage.existPasswordStore()
     }
 
     fun putPassword(value: String) {
-        userPasswordStorage?.putPassword(value)
+        userPasswordStorage.putPassword(value)
     }
+
+    /*fun existPasswordStore() =
+        userPasswordStorage.existPasswordStore()*/
 
     /*fun getPassword(value: String): String {
         userPasswordStorage?.getPassword()

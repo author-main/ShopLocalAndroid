@@ -23,6 +23,7 @@ class UserPasswordStorage: UserPasswordStorageInterface {
     private val providerKeyStore: String = "AndroidKeyStore"
     private val alias = appContext().packageName
     init{
+        //sharedPrefs.edit().remove(keyPassword).apply()
         if (!initKeys())
             generateKeys()
     }

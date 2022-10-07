@@ -274,11 +274,13 @@ fun DialogRegistration(){
                             if (validate) {
 
                                 viewModel.onRegisterUser({result ->
-                                    if (result)
+                                    if (result) {
                                         DialogRouter.reset()
+                                        viewModel.getLoginState().checkFingerButtonState()
+                                    }
                                 },
-                                    dataUser[0].value,
                                     dataUser[1].value,
+                                    dataUser[0].value,
                                     dataUser[2].value,
                                     dataUser[3].value,
                                     dataUser[4].value

@@ -1,6 +1,7 @@
 package com.training.shoplocal.retrofit
 
 import com.google.gson.GsonBuilder
+import com.training.shoplocal.SERVER_URL
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -8,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiManager {
     //private const val url = "http://shop_local.ru"
-    private const val url = "http://192.168.1.10"
+    //private const val url = "http://192.168.1.10"
         //private const val url = "http://192.168.0.103"
 
     private var service: IUserApi? = null
@@ -18,7 +19,7 @@ object ApiManager {
             .setLenient()
             .create()
         val retrofit = Retrofit.Builder()
-            .baseUrl(url)
+            .baseUrl(SERVER_URL)
             .addConverterFactory(GsonConverterFactory.create(gson))
             //.addConverterFactory(GsonConverterFactory.create())
             .build()

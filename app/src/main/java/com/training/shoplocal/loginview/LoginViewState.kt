@@ -1,5 +1,6 @@
 package com.training.shoplocal.loginview
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -7,6 +8,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.training.shoplocal.ScreenItem
 import com.training.shoplocal.ScreenRouter
 import com.training.shoplocal.log
+import com.training.shoplocal.userfingerprint.UserFingerPrint
 import com.training.shoplocal.validateMail
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +22,8 @@ class LoginViewState {
     }
 
     private var email by mutableStateOf("")
+    private var enableFingerButton: MutableState<Boolean> = mutableStateOf(canAuthenticate())
+
     private var pressedButtons = false
     private var focused = false
     private var password by mutableStateOf("")
@@ -47,6 +51,17 @@ class LoginViewState {
 
     @JvmName("getPassword1")
     fun getPassword() = password
+
+
+    private fun canAuthenticate() =
+        UserFingerPrint.canAuthenticate() && UserFingerPrint.existPasswordStore()
+
+    fun checkFingerButtonState(){
+        enableFingerButton.value = canAuthenticate()
+        log(enableFingerButton.value.toString())
+    }
+
+    fun isEnabledFingerButton() = enableFingerButton
 
 
     fun setPressedButtons(value: Boolean) {
