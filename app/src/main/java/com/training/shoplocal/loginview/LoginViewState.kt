@@ -115,9 +115,7 @@ class LoginViewState {
                 animated = true
                 password += value
                 if (password.length == 5) {
-                    onAccessUser?.onLogin(email, password, action = {
-                        //ScreenRouter.navigateTo(ScreenItem.MainScreen)
-                    })
+                    onAccessUser?.onLogin(email, password)
                     /*if (onAccessUser?.onLogin(password) == true)
                         ScreenRouter.navigateTo(ScreenItem.MainScreen)*/
 
@@ -132,6 +130,16 @@ class LoginViewState {
                 }
             }
     }
+
+
+    fun showHomeScreen(){
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(500)
+            password = ""
+            ScreenRouter.navigateTo(ScreenItem.MainScreen)
+        }
+    }
+
 
     fun changePassword(value: String) {
        // animated =  value.length > password.length

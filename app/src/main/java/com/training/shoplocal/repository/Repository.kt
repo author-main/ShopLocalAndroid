@@ -50,7 +50,8 @@ class Repository: CrudInterface, AccessUserInterface {
     }
 
     override fun onLogin(email: String, password: String, action: () -> Unit) {
-        log("Login")
+        loginState.changePassword(password)
+        loginState.showHomeScreen()
     }
 
     override fun onRegisterUser(action: ((result: Boolean) -> Unit)?, vararg userdata: String) {
