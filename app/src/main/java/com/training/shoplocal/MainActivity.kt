@@ -17,6 +17,7 @@ import com.training.shoplocal.AppShopLocal.Companion.appRepository
 import com.training.shoplocal.dialogs.DialogRegistration
 import com.training.shoplocal.dialogs.DialogRestore
 import com.training.shoplocal.retrofit.ApiManager
+import com.training.shoplocal.retrofit.User.Companion.getUserData
 import com.training.shoplocal.ui.theme.ShopLocalTheme
 import com.training.shoplocal.viewmodel.FactoryViewModel
 import com.training.shoplocal.viewmodel.RepositoryViewModel
@@ -33,6 +34,7 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
 //        val context = LocalContext.current as FragmentActivity
         viewModel.getUserFingerPrint(this)
 //        val repository = AppShopLocal.appRepository();
+        val user = getUserData()
 
         //val passwordState = PasswordViewState.getPasswordState()
         setContent {

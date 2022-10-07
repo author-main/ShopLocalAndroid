@@ -10,6 +10,7 @@ import androidx.annotation.StringRes
 import com.training.shoplocal.AppShopLocal.Companion.appContext
 
 const val DEFAULT_RESOURCE_STR = ""
+const val FILE_PREFERENCES = "settings"
 
 fun getStringResource(@StringRes id: Int): String =
     try {

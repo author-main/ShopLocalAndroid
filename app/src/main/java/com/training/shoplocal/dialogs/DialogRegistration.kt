@@ -228,8 +228,11 @@ fun DialogRegistration(){
                             focusManager.clearFocus()
 
 
-                            DialogRouter.reset()
-                            viewModel.onRegisterUser(
+                            //DialogRouter.reset()
+                            viewModel.onRegisterUser({result ->
+                                if (result)
+                                    DialogRouter.reset()
+                            },
                                 "Сергей",
                                 "Мышанский",
                                 "89185046979",

@@ -7,6 +7,7 @@ import android.security.keystore.KeyProperties
 import android.security.keystore.KeyProperties.KEY_ALGORITHM_RSA
 import android.util.Base64
 import com.training.shoplocal.AppShopLocal.Companion.appContext
+import com.training.shoplocal.FILE_PREFERENCES
 import java.security.KeyPairGenerator
 import java.security.KeyStore
 import java.security.PrivateKey
@@ -15,10 +16,10 @@ import java.security.spec.AlgorithmParameterSpec
 import javax.crypto.Cipher
 
 class UserPasswordStorage: UserPasswordStorageInterface {
-    private val filePreferences = "settings"
+    //private val filePreferences = "settings"
     private val keyPassword     = "password"
     private val sharedPrefs: SharedPreferences =
-        appContext().getSharedPreferences(filePreferences, Context.MODE_PRIVATE)
+        appContext().getSharedPreferences(FILE_PREFERENCES, Context.MODE_PRIVATE)
     private val providerKeyStore: String = "AndroidKeyStore"
     private val alias = appContext().packageName
     init{

@@ -1,16 +1,46 @@
 package com.training.shoplocal.retrofit
 
+import android.content.Context
+import android.content.SharedPreferences
+import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
+import com.training.shoplocal.AppShopLocal
+import com.training.shoplocal.FILE_PREFERENCES
 
 
 data class User (
-    @SerializedName("id")           val id: Int?,
+    @SerializedName("id")           var id: Int?,
     @SerializedName("email")        val email: String?,
     @SerializedName("firstname")    val firstname: String?,
     @SerializedName("lastname")     val lastname: String?,
     @SerializedName("phone")        val phone: String?,
-    @SerializedName("password")     val password: String?
-)
+    @SerializedName("password")     var password: String?
+) {
+    /*private val sharedPrefs: SharedPreferences =
+        AppShopLocal.appContext().getSharedPreferences(FILE_PREFERENCES, Context.MODE_PRIVATE)*/
+
+    fun saveUserData(){
+        id          = null
+        password    = null
+        val gson = Gson()
+        val json = gson.toJson(this)
+        sharedPrefs.edit().putString("user", json).apply();
+    }
+
+    companion object {
+        private val sharedPrefs: SharedPreferences =
+            AppShopLocal.appContext().getSharedPreferences(FILE_PREFERENCES, Context.MODE_PRIVATE)
+        fun getUserData(): User? {
+            return try {
+                val gson = Gson()
+                val json: String? = sharedPrefs.getString("user", null)
+                gson.fromJson(json, User::class.java)
+            } catch (e: Exception) {
+                null
+            }
+        }
+    }
+}
 
 
 /*class User {

@@ -43,9 +43,7 @@ class Repository: CrudInterface, AccessUserInterface {
        return false
     }
 
-    override fun onRegisterUser(vararg userdata: String) {
-        //val service = getRetrofitService()
-
+    override fun onRegisterUser(action: ((result: Boolean) -> Unit)?, vararg userdata: String) {
         val user = User(
                     id          = null,
                     firstname   = userdata[0],
@@ -69,8 +67,13 @@ class Repository: CrudInterface, AccessUserInterface {
                     -2 - User data reuse
                     -3 - Registration error
                 */
-                mToast("${response.body()?.id}")
-                log("${response.body()?.id}")
+                //val id = response.body()?.id ?: 0
+                val result = (response.body()?.id ?: 0) > 0
+                if (result)
+                    user.saveUserData()
+                action?.invoke(result)
+                /*mToast("${response.body()?.id}")
+                log("${response.body()?.id}")*/
             }
 
             override fun onFailure(call: Call<User>, t: Throwable) {

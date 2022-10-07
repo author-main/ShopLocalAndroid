@@ -56,4 +56,13 @@ class UserFingerPrint(private val context: Context): UserFingerPrintInterface {
             BiometricManager.from(appContext())
                 .canAuthenticate(BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS
     }
+
+    fun putPassword(value: String) {
+        userPasswordStorage?.putPassword(value)
+    }
+
+    /*fun getPassword(value: String): String {
+        userPasswordStorage?.getPassword()
+    }*/
+
 }
