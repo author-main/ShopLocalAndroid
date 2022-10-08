@@ -34,7 +34,7 @@ class Repository: CrudInterface, AccessUserInterface {
                 userFingerPrintListener = object : UserFingerPrintListener {
                     override fun onComplete(cipher: Cipher?) {
                         cipher?.let {
-                            onLogin(loginState.getEmail(), this@main.getPassword(it) ?: "")
+                            onLogin(loginState.getEmail(), this@main.getPassword(it) ?: "", finger = true)
                         }
                     }
                 }
@@ -46,10 +46,7 @@ class Repository: CrudInterface, AccessUserInterface {
 
     }
 
-    override fun onLogin(email: String, password: String) {
-//        log("onlogin")
-
-
+    override fun onLogin(email: String, password: String, finger: Boolean) {
         if (isConnectedNet()) {
             val user = User(
                 id          = null,
@@ -73,7 +70,8 @@ class Repository: CrudInterface, AccessUserInterface {
                         saveUserPassword(password)
                         user.saveUserData()
                         log("$id")
-                        loginState.changePassword(password)
+                        if (finger)
+                            loginState.changePassword(password)
                         loginState.showHomeScreen()
                     }
                     //action?.invoke(result)
