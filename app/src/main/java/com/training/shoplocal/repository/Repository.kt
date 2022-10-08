@@ -47,6 +47,14 @@ class Repository: CrudInterface, AccessUserInterface {
     }
 
     override fun onLogin(email: String, password: String, finger: Boolean) {
+        fun clearLoginPassword(){
+            if (!finger)
+                loginState.clearPassword()
+        }
+        if (email.isBlank() || password.isBlank()) {
+            clearLoginPassword()
+            return
+        }
         if (isConnectedNet()) {
             val user = User(
                 id          = null,
@@ -69,21 +77,28 @@ class Repository: CrudInterface, AccessUserInterface {
                     if (id > 0) {
                         saveUserPassword(password)
                         user.saveUserData()
-                        log("$id")
+                       // log("$id")
                         if (finger)
                             loginState.changePassword(password)
                         loginState.showHomeScreen()
-                    }
+                    } else
+                        clearLoginPassword()
                     //action?.invoke(result)
                     //mToast("${response.body()?.id}")
                     //log("${response.body()?.id}")*/
                 }
 
                 override fun onFailure(call: Call<User>, t: Throwable) {
-                    log(t.message?:"error")
+                    clearLoginPassword()
                 }
             })
-        }
+        } else
+            clearLoginPassword()
+
+
+
+       /* if (!finger && !loggedUser)
+            loginState.clearPassword()*/
 
 
 
