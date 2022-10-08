@@ -29,9 +29,19 @@ object ApiManager {
     //fun getRetrofitService() = service
 
     fun createUser(user: User, callback: retrofit2.Callback<User>) {
-        val userCall: retrofit2.Call<User> = service!!.createUser(user)
+        val userCall: retrofit2.Call<User> = service!!.accessUser(user, "reg_user")
         userCall.enqueue(callback)
     }
+
+    fun loginUser(user: User, callback: retrofit2.Callback<User>) {
+        val userCall: retrofit2.Call<User> = service!!.accessUser(user, "login_user")
+        userCall.enqueue(callback)
+    }
+
+  /*  fun loginUser(user: User, callback: retrofit2.Callback<User>) {
+        val userCall: retrofit2.Call<User> = service!!.createUser(user)
+        userCall.enqueue(callback)
+    }*/
 
 
 }

@@ -48,8 +48,50 @@ class Repository: CrudInterface, AccessUserInterface {
 
     override fun onLogin(email: String, password: String) {
 //        log("onlogin")
-        loginState.changePassword(password)
-        loginState.showHomeScreen()
+
+
+        if (isConnectedNet()) {
+            val user = User(
+                id          = null,
+                firstname   = null,
+                lastname    = null,
+                phone       = null,
+                email       = email,
+                password    = password
+            )
+            ApiManager.loginUser(user, object: retrofit2.Callback<User>{
+                override fun onResponse(call: Call<User>, response: Response<User>) {
+                    /*
+                         0 - No access to the database
+                        -1 - User data error
+                        -2 - User data reuse
+                        -3 - Registration error
+                    */
+                    val id = response.body()?.id ?: 0
+                    //val result = (response.body()?.id ?: 0) > 0
+                    if (id > 0) {
+                        saveUserPassword(password)
+                        user.saveUserData()
+                        log("$id")
+                        loginState.changePassword(password)
+                        loginState.showHomeScreen()
+                    }
+                    //action?.invoke(result)
+                    //mToast("${response.body()?.id}")
+                    //log("${response.body()?.id}")*/
+                }
+
+                override fun onFailure(call: Call<User>, t: Throwable) {
+                    log(t.message?:"error")
+                }
+            })
+        }
+
+
+
+
+        /*loginState.changePassword(password)
+        loginState.showHomeScreen()*/
     }
 
     override fun onRegisterUser(action: ((result: Boolean) -> Unit)?, vararg userdata: String) {

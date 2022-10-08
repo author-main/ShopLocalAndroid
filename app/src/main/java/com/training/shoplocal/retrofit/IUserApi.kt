@@ -5,12 +5,11 @@ import retrofit2.http.Body
 import retrofit2.http.Headers
 
 import retrofit2.http.POST
-
-
+import retrofit2.http.Path
 
 
 interface IUserApi {
     @Headers("Content-Type: application/json")
-    @POST("/api/reg_user")
-    fun createUser(@Body user: User): Call<User>
+    @POST("/api/{php}")//reg_user")
+    fun accessUser(@Body user: User, @Path("php") php: String): Call<User>
 }
