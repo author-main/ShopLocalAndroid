@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.training.shoplocal.ScreenItem
 import com.training.shoplocal.ScreenRouter
 import com.training.shoplocal.log
+import com.training.shoplocal.retrofit.User
 import com.training.shoplocal.userfingerprint.UserFingerPrint
 import com.training.shoplocal.validateMail
 import kotlinx.coroutines.CoroutineScope
@@ -21,7 +22,8 @@ class LoginViewState {
         onAccessUser = value
     }
 
-    private var email by mutableStateOf("")
+    private val userEmail = User.getUserData()?.email ?: ""
+    private var email by mutableStateOf(userEmail)
     private var enableFingerButton: MutableState<Boolean> = mutableStateOf(canAuthenticate())
 
     private var pressedButtons = false
