@@ -32,6 +32,7 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        val context = LocalContext.current as FragmentActivity
+            //log("start app")
         viewModel.getUserFingerPrint(this)
 //        val repository = AppShopLocal.appRepository();
         val user = getUserData()
