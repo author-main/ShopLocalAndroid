@@ -3,6 +3,6 @@ package com.training.shoplocal.loginview
 interface AccessUserInterface {
     fun onLogin(email: String, password: String, finger: Boolean = false)
     fun onRegisterUser(action: ((result: Boolean) -> Unit)?, vararg userdata: String, )
-    fun onRestoreUser(email: String)
+    fun onRestoreUser(action: ((result: Boolean) -> Unit)?, email: String)
     fun onFingerPrint(email: String)
 }

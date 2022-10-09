@@ -150,9 +150,9 @@ class Repository: CrudInterface, AccessUserInterface {
         })
     }
 
-    override fun onRestoreUser(email: String) {
+    override fun onRestoreUser(action: ((result: Boolean) -> Unit)?, email: String) {
         loginState.setEmail(email, true)
-        //log(email)
+        action?.invoke(true)
     }
 
     override fun onFingerPrint(email: String) {

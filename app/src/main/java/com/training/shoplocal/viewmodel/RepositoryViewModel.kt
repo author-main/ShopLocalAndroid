@@ -11,8 +11,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     fun getUserFingerPrint(context: Context) =
         repository.getUserFingerPrint(context)
 
-    fun onRestoreUser(email: String) {
-        repository.onRestoreUser(email)
+    fun onRestoreUser(action: ((result: Boolean) -> Unit)?, email: String) {
+        repository.onRestoreUser(action, email)
     }
 
     fun onRegisterUser(action: ((result: Boolean) -> Unit)?, vararg userdata: String) {

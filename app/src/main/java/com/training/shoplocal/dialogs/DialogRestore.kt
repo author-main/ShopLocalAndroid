@@ -136,7 +136,12 @@ fun DialogRestore(){
                         }
                         else {
                             DialogRouter.reset()
-                            viewModel.onRestoreUser(email.value)
+                            viewModel.onRestoreUser(action = {result ->
+                                if (result) {
+                                    DialogRouter.reset()
+                                }
+                            },
+                                email.value)
                         }
                     }) {
                         Text(text = stringResource(id = R.string.btn_send).uppercase(),
