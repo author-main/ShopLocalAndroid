@@ -117,6 +117,7 @@ class LoginViewState {
         if (value == ' ') {
            /* if (!validateMail(email))
                 return*/
+            showProgress()
             onAccessUser?.onFingerPrint(email)
             return
         }

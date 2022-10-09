@@ -1,5 +1,6 @@
 package com.training.shoplocal.repository
 
+import android.annotation.SuppressLint
 import android.content.Context
 import com.training.shoplocal.isConnectedNet
 import com.training.shoplocal.log
