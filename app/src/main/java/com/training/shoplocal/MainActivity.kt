@@ -14,9 +14,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.FragmentActivity
 import com.training.shoplocal.AppShopLocal.Companion.appContext
 import com.training.shoplocal.AppShopLocal.Companion.appRepository
-import com.training.shoplocal.dialogs.DialogProgress
 import com.training.shoplocal.dialogs.DialogRegistration
 import com.training.shoplocal.dialogs.DialogRestore
+import com.training.shoplocal.dialogs.ShowProgress
 import com.training.shoplocal.retrofit.ApiManager
 import com.training.shoplocal.retrofit.User.Companion.getUserData
 import com.training.shoplocal.ui.theme.ShopLocalTheme
@@ -33,7 +33,7 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        val context = LocalContext.current as FragmentActivity
-        log("start app")
+//        log("start app")
         viewModel.getUserFingerPrint(this)
 //        val repository = AppShopLocal.appRepository();
         val user = getUserData()
@@ -72,9 +72,6 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
             }
             DialogItem.RestoreUserDialog -> {
                 DialogRestore()
-            }
-            DialogItem.ProgressDialog -> {
-                DialogProgress()
             }
         }
     }

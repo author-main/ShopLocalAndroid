@@ -22,6 +22,8 @@ class LoginViewState {
         onAccessUser = value
     }
 
+    private var progress by mutableStateOf(false)
+
     private val userEmail = User.getUserData()?.email ?: ""
     private var email by mutableStateOf(userEmail)
     private var enableFingerButton: MutableState<Boolean> = mutableStateOf(canAuthenticate())
@@ -49,6 +51,16 @@ class LoginViewState {
     @JvmName("setErrorEmail1")
     fun setErrorEmail(value: Boolean) {
         errorEmail = value
+    }
+
+    fun isProgress() = progress
+
+    fun showProgress(){
+        progress = true
+    }
+
+    fun hideProgress(){
+        progress = false
     }
 
     @JvmName("getPassword1")
@@ -117,6 +129,7 @@ class LoginViewState {
                 animated = true
                 password += value
                 if (password.length == 5) {
+                    showProgress()
                     onAccessUser?.onLogin(email, password)
                     /*if (onAccessUser?.onLogin(password) == true)
                         ScreenRouter.navigateTo(ScreenItem.MainScreen)*/

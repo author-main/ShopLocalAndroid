@@ -50,6 +50,7 @@ class Repository: CrudInterface, AccessUserInterface {
         fun clearLoginPassword(){
             if (!finger)
                 loginState.clearPassword()
+            loginState.hideProgress()
         }
         if (email.isBlank() || password.isBlank()) {
             clearLoginPassword()
@@ -143,7 +144,7 @@ class Repository: CrudInterface, AccessUserInterface {
             }
 
             override fun onFailure(call: Call<User>, t: Throwable) {
-                log(t.message?:"error")
+                action?.invoke(false)
             }
         })
     }

@@ -47,7 +47,9 @@ import com.training.shoplocal.viewmodel.RepositoryViewModel
 @Composable
 fun DialogRegistration(){
     val errors = remember{ mutableStateOf(List(5){false})}
-
+    var progress by remember {
+        mutableStateOf(false)
+    }
   /*  val error = remember {
         mutableStateListOf(List(5){false})
     }*/
@@ -286,12 +288,15 @@ fun DialogRegistration(){
                             }
 
                             if (validate) {
-
+                                //viewModel.getLoginState().showProgress()
+                                progress = true
                                 viewModel.onRegisterUser({result ->
+                                    progress = false
                                     if (result) {
                                         DialogRouter.reset()
                                         viewModel.getLoginState().checkFingerButtonState()
                                     }
+                                   // viewModel.getLoginState().hideProgress()
                                 },
                                     dataUser[1].value,
                                     dataUser[0].value,
@@ -310,7 +315,10 @@ fun DialogRegistration(){
                     }
                 }
             }
+            if (progress)
+                ShowProgress()
         }
+
     }
 
 }

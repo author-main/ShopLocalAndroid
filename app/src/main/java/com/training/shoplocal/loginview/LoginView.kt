@@ -28,6 +28,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.training.shoplocal.dialogs.ShowProgress
 import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.validateMail
@@ -68,6 +69,9 @@ fun LoginView(state: LoginViewState) {
 
    // log(stateFocused.value.toString())
 
+
+
+
     if (state.isPressedButtons() && state.isFocused()) {
 //    if (stateFocused.value){
         focusManager.clearFocus(true)
@@ -92,10 +96,11 @@ fun LoginView(state: LoginViewState) {
                 .onFocusChanged { focusState ->
                     state.setPressedButtons(!focusState.isFocused)
                     state.setFocus(focusState.isFocused)
-                    state.setErrorEmail(if (focusState.isFocused)
-                        false
-                    else
-                        !validateMail(state.getEmail())
+                    state.setErrorEmail(
+                        if (focusState.isFocused)
+                            false
+                        else
+                            !validateMail(state.getEmail())
                     )
 
                     /*if (focusState.isFocused)
@@ -177,6 +182,8 @@ fun LoginView(state: LoginViewState) {
                 }
             }
         }
+        if (state.isProgress())
+            ShowProgress()
     }
     SideEffect {
         visible.targetState = true
