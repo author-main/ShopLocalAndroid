@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -30,6 +31,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupProperties
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.DialogRouter
@@ -69,18 +73,27 @@ fun DialogRegistration(){
     @Composable
     fun TextGroup(label: String, text: MutableState<String>, keyboardType: KeyboardType = KeyboardType.Text, onTextChange: (value: String)-> Unit = { }, order: Int){
         val trailingIcon = @Composable {
+                val interactionSource = remember { MutableInteractionSource() }
                 val idDrawable = if (showChar.value)
                     R.drawable.ic_showsym_on
                 else
                     R.drawable.ic_showsym_off
                 Image(
-                    modifier = Modifier
+                   /* modifier = Modifier
                         .clickable(
                             onClick = {
                                 showChar.value = !showChar.value
                             }
                         )
-                        .size(24.dp, 24.dp),
+                        .size(24.dp, 24.dp),*/
+
+                    modifier = Modifier
+                        .clickable(
+                            interactionSource = interactionSource,
+                            indication = null
+                        ) {
+                            showChar.value = !showChar.value
+                        },
                     imageVector = ImageVector.vectorResource(idDrawable),
                     colorFilter = ColorFilter.tint(MaterialTheme.colors.secondary),
                     contentDescription = null
@@ -152,11 +165,12 @@ fun DialogRegistration(){
         DialogRouter.reset()
         /* Toast.makeText(appContext(), "Dialog dismissed!", Toast.LENGTH_SHORT)
              .show()*/
-    }) {
+    }
+    ) {
         val viewModel: RepositoryViewModel = viewModel()
         //val keyboardController = LocalSoftwareKeyboardController.current
         Card(
-            elevation = 8.dp,
+            elevation = 0.dp,
             shape = RoundedCornerShape(12.dp),
             backgroundColor = PrimaryDark,
             contentColor = TextLightGray

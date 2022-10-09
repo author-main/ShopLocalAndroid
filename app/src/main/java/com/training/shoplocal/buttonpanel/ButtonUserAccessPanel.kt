@@ -71,6 +71,7 @@ fun ButtonUserAccessPanel(state: LoginViewState){
         OutlinedButton(
             onClick = {
                 lostFocus()
+                //DialogRouter.navigateTo(DialogItem.ProgressDialog)
                 DialogRouter.navigateTo(DialogItem.RestoreUserDialog)
             },
             border = null,
