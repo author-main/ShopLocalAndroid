@@ -66,7 +66,7 @@ class Repository: CrudInterface, AccessUserInterface {
                 email       = email,
                 password    = password
             )
-            ApiManager.loginUser(user, object: retrofit2.Callback<User>{
+            ApiManager.queryUser(ApiManager.QUERY_LOGINUSER, user, object: retrofit2.Callback<User>{
                 override fun onResponse(call: Call<User>, response: Response<User>) {
                     /*
                          0 - No access to the database
@@ -125,7 +125,7 @@ class Repository: CrudInterface, AccessUserInterface {
 
 
         if (isConnectedNet())
-        ApiManager.createUser(user, object: retrofit2.Callback<User>{
+        ApiManager.queryUser(ApiManager.QUERY_REGUSER, user, object: retrofit2.Callback<User>{
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 /*
                      0 - No access to the database

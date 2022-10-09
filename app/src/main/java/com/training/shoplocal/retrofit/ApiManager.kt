@@ -8,6 +8,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 object ApiManager {
+    const val QUERY_REGUSER     = "reg_user"
+    const val QUERY_LOGINUSER   = "login_user"
+    const val QUERY_RESTOREUSER = "restore_user"
     //private const val url = "http://shop_local.ru"
     //private const val url = "http://192.168.1.10"
         //private const val url = "http://192.168.0.103"
@@ -28,15 +31,28 @@ object ApiManager {
 
     //fun getRetrofitService() = service
 
-    fun createUser(user: User, callback: retrofit2.Callback<User>) {
+
+    fun queryUser(query: String, user: User, callback: retrofit2.Callback<User>) {
+        val userCall: retrofit2.Call<User> = service!!.accessUser(user, query)
+        userCall.enqueue(callback)
+    }
+
+
+
+   /* fun createUser(user: User, callback: retrofit2.Callback<User>) {
         val userCall: retrofit2.Call<User> = service!!.accessUser(user, "reg_user")
+        userCall.enqueue(callback)
+    }
+
+    fun restoreUser(user: User, callback: retrofit2.Callback<User>) {
+        val userCall: retrofit2.Call<User> = service!!.accessUser(user, "restore_user")
         userCall.enqueue(callback)
     }
 
     fun loginUser(user: User, callback: retrofit2.Callback<User>) {
         val userCall: retrofit2.Call<User> = service!!.accessUser(user, "login_user")
         userCall.enqueue(callback)
-    }
+    }*/
 
   /*  fun loginUser(user: User, callback: retrofit2.Callback<User>) {
         val userCall: retrofit2.Call<User> = service!!.createUser(user)
