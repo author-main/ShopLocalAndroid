@@ -8,9 +8,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 object ApiManager {
-    const val QUERY_REGUSER     = "reg_user"
-    const val QUERY_LOGINUSER   = "login_user"
-    const val QUERY_RESTOREUSER = "restore_user"
+    private const val QUERY_REGUSER     = "reg_user"
+    private const val QUERY_LOGINUSER   = "login_user"
+    private const val QUERY_RESTOREUSER = "restore_user"
     //private const val url = "http://shop_local.ru"
     //private const val url = "http://192.168.1.10"
         //private const val url = "http://192.168.0.103"
@@ -32,10 +32,23 @@ object ApiManager {
     //fun getRetrofitService() = service
 
 
-    fun queryUser(query: String, user: User, callback: retrofit2.Callback<User>) {
+    private fun queryUser(query: String, user: User, callback: retrofit2.Callback<User>) {
         val userCall: retrofit2.Call<User> = service!!.accessUser(user, query)
         userCall.enqueue(callback)
     }
+
+    fun regUser(user: User, callback: retrofit2.Callback<User>){
+        queryUser(QUERY_REGUSER, user, callback)
+    }
+
+    fun loginUser(user: User, callback: retrofit2.Callback<User>){
+        queryUser(QUERY_LOGINUSER, user, callback)
+    }
+
+    fun restoreUser(user: User, callback: retrofit2.Callback<User>){
+        queryUser(QUERY_RESTOREUSER, user, callback)
+    }
+
 
 
 

@@ -1,9 +1,9 @@
 package com.training.shoplocal.repository
 
-import android.annotation.SuppressLint
+
+
 import android.content.Context
 import com.training.shoplocal.isConnectedNet
-import com.training.shoplocal.log
 import com.training.shoplocal.loginview.AccessUserInterface
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.retrofit.ApiManager
@@ -66,7 +66,7 @@ class Repository: CrudInterface, AccessUserInterface {
                 email       = email,
                 password    = password
             )
-            ApiManager.queryUser(ApiManager.QUERY_LOGINUSER, user, object: retrofit2.Callback<User>{
+            ApiManager.loginUser(user, object: retrofit2.Callback<User>{
                 override fun onResponse(call: Call<User>, response: Response<User>) {
                     /*
                          0 - No access to the database
@@ -125,7 +125,7 @@ class Repository: CrudInterface, AccessUserInterface {
 
 
         if (isConnectedNet())
-        ApiManager.queryUser(ApiManager.QUERY_REGUSER, user, object: retrofit2.Callback<User>{
+        ApiManager.regUser(user, object: retrofit2.Callback<User>{
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 /*
                      0 - No access to the database
