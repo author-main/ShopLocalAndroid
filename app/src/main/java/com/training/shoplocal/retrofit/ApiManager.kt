@@ -33,7 +33,7 @@ object ApiManager {
 
 
     private fun queryUser(query: String, user: User, callback: retrofit2.Callback<User>) {
-        val userCall: retrofit2.Call<User> = service!!.accessUser(user, query)
+        val userCall: retrofit2.Call<User> = service!!.queryUser(user, query)
         userCall.enqueue(callback)
     }
 
