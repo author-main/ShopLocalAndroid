@@ -16,10 +16,7 @@ import androidx.compose.material.*
 import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -104,6 +101,9 @@ fun DialogRestore() {
         /* Toast.makeText(appContext(), "Dialog dismissed!", Toast.LENGTH_SHORT)
             .show()*/
     }) {
+        var progress by remember {
+            mutableStateOf(false)
+        }
         //val focusRequester = FocusRequester()
         val focusManager = LocalFocusManager.current
         val keyboardController = LocalSoftwareKeyboardController.current
@@ -252,9 +252,10 @@ fun DialogRestore() {
                         errors[0] = !validateMail(email.value)
                         errors[1] = password.value.length < 5
                         if (!errors[0] && !errors[1]) {
-                            DialogRouter.reset()
+                            progress = true
                             viewModel.onRestoreUser(
                                 action = { result ->
+                                    progress = false
                                     if (result) {
                                         viewModel.setEmail(email.value)
                                         DialogRouter.reset()
@@ -273,6 +274,7 @@ fun DialogRestore() {
                 }
             }
         }
-
+        if (progress)
+            ShowProgress()
     }
 }

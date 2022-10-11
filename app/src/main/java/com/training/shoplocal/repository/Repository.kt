@@ -77,6 +77,7 @@ class Repository: CrudInterface, AccessUserInterface {
                         -3 - Registration error
                     */
                     val id = response.body()?.id ?: 0
+                    log("$id")
                     //val result = (response.body()?.id ?: 0) > 0
                     if (id > 0) {
                         saveUserPassword(password)
@@ -163,10 +164,36 @@ class Repository: CrudInterface, AccessUserInterface {
             password    = password
         )
 
+        if (isConnectedNet())
+            ApiManager.restoreUser(user, object: retrofit2.Callback<User>{
+                override fun onResponse(call: Call<User>, response: Response<User>) {
+                    val result = (response.body()?.id ?: 0) > 0
+                    if (result) {
+
+                    }
+                    action?.invoke(result)
+                }
+
+                override fun onFailure(call: Call<User>, t: Throwable) {
+                    action?.invoke(false)
+                }
+            })
+
+
+
+
+
+
+
+
+
+
+
+
+
        /*  val gson = Gson()
          val json = gson.toJson(user)
          log(json)*/
-        action?.invoke(true)
     }
 
     override fun onFingerPrint(email: String) {

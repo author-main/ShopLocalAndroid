@@ -55,7 +55,7 @@ class LoginViewState {
 
     fun isProgress() = progress
 
-    fun showProgress(){
+    private fun showProgress(){
         progress = true
     }
 
