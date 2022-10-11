@@ -3,7 +3,9 @@ package com.training.shoplocal.repository
 
 
 import android.content.Context
+import com.google.gson.Gson
 import com.training.shoplocal.isConnectedNet
+import com.training.shoplocal.log
 import com.training.shoplocal.loginview.AccessUserInterface
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.retrofit.ApiManager
@@ -151,6 +153,21 @@ class Repository: CrudInterface, AccessUserInterface {
     }
 
     override fun onRestoreUser(action: ((result: Boolean) -> Unit)?, email: String) {
+
+        val user = User(
+            id          = null,
+            firstname   = null,
+            lastname    = null,
+            phone       = null,
+            email       = email,
+            password    = null
+        )
+
+         val gson = Gson()
+         val json = gson.toJson(user)
+         log(json)
+
+
         loginState.setEmail(email, true)
         action?.invoke(true)
     }
