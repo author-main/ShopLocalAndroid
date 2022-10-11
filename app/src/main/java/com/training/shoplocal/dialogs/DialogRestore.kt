@@ -256,10 +256,12 @@ fun DialogRestore() {
                             viewModel.onRestoreUser(
                                 action = { result ->
                                     if (result) {
+                                        viewModel.setEmail(email.value)
                                         DialogRouter.reset()
                                     }
                                 },
-                                email.value
+                                email.value,
+                                password.value
                             )
                         }
                     }) {

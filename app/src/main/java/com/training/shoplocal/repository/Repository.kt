@@ -152,7 +152,7 @@ class Repository: CrudInterface, AccessUserInterface {
         })
     }
 
-    override fun onRestoreUser(action: ((result: Boolean) -> Unit)?, email: String) {
+    override fun onRestoreUser(action: ((result: Boolean) -> Unit)?, email: String, password: String) {
 
         val user = User(
             id          = null,
@@ -160,15 +160,12 @@ class Repository: CrudInterface, AccessUserInterface {
             lastname    = null,
             phone       = null,
             email       = email,
-            password    = null
+            password    = password
         )
 
-         val gson = Gson()
+       /*  val gson = Gson()
          val json = gson.toJson(user)
-         log(json)
-
-
-        loginState.setEmail(email, true)
+         log(json)*/
         action?.invoke(true)
     }
 
