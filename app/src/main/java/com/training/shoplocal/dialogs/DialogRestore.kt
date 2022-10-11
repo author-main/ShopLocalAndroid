@@ -2,7 +2,11 @@ package com.training.shoplocal.dialogs
 
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,26 +17,31 @@ import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.focus.*
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,25 +53,65 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.AppShopLocal.Companion.appContext
 import com.training.shoplocal.DialogRouter
 import com.training.shoplocal.R
+import com.training.shoplocal.log
+import com.training.shoplocal.retrofit.User
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.validateMail
 import com.training.shoplocal.viewmodel.RepositoryViewModel
+import kotlin.math.log
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun DialogRestore(){
+fun DialogRestore() {
+    val labelFont = FontFamily(Font(R.font.robotocondensed_light))
     val viewModel: RepositoryViewModel = viewModel()
-    val email = remember{mutableStateOf("")}
-    val error = remember {
-        mutableStateOf(true)
+    val usermail = User.getUserData()?.email ?: ""
+    val email = remember { mutableStateOf(usermail) }
+    val password = remember { mutableStateOf("") }
+    val showchar = remember { mutableStateOf(false) }
+    val errors = remember { mutableStateListOf<Boolean>(false, false) }
+    /*if (errors[0].contains(true))
+        log("ok")*/
+    /*val error = remember {
+        mutableStateOf(usermail.isEmpty())
+    }*/
+
+    val trailingIcon = @Composable {
+        val interactionSource = remember { MutableInteractionSource() }
+        val idDrawable = if (showchar.value)
+            R.drawable.ic_showsym_on
+        else
+            R.drawable.ic_showsym_off
+        Image(
+            modifier = Modifier
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null
+                ) {
+                    showchar.value = !showchar.value
+                },
+            imageVector = ImageVector.vectorResource(idDrawable),
+            colorFilter = ColorFilter.tint(MaterialTheme.colors.secondary),
+            contentDescription = null
+        )
     }
+
+
+
+
     Dialog(onDismissRequest = {
         DialogRouter.reset()
-       /* Toast.makeText(appContext(), "Dialog dismissed!", Toast.LENGTH_SHORT)
+        /* Toast.makeText(appContext(), "Dialog dismissed!", Toast.LENGTH_SHORT)
             .show()*/
     }) {
+        //val focusRequester = FocusRequester()
         val focusManager = LocalFocusManager.current
         val keyboardController = LocalSoftwareKeyboardController.current
+        val borderColor = arrayOf(Color.Transparent, Color.Transparent)
+        for (i in 0..1)
+            borderColor[i] = if (errors[i])
+                SelectedItem
+            else Color.Transparent
         Card(
             elevation = 8.dp,
             shape = RoundedCornerShape(12.dp),
@@ -70,7 +119,14 @@ fun DialogRestore(){
             contentColor = TextLightGray
         ) {
 
-            Column(modifier = Modifier.padding(8.dp)) {
+            Column(
+                modifier = Modifier.padding(
+                    top = 8.dp,
+                    bottom = 8.dp,
+                    start = 16.dp,
+                    end = 16.dp
+                )
+            ) {
                 Text(
                     text = stringResource(id = R.string.title_restore),
                     //fontWeight = FontWeight.Bold,
@@ -84,15 +140,24 @@ fun DialogRestore(){
                     onValueChange = {
                         email.value = it
                     },
-                    Modifier.onFocusChanged {
-                        if (it.isFocused)
-                            error.value = false
-                    }
+                    Modifier
+                        //.focusRequester(focusRequester)
+                        .border(1.dp, borderColor[0], RoundedCornerShape(16.dp))
+                        .onFocusChanged {
+                            if (it.isFocused || it.hasFocus)
+                                errors[0] = false
+                          /*  else {
+                                //log(it.toString())
+                                errors[0] = !validateMail(email.value)
+                            }*/
 
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp),
+                        }
+
+                        .fillMaxWidth(),
+                    //.padding(horizontal = 8.dp),
+
                     trailingIcon = {
-                        if (error.value)
+                        if (errors[0])
                             Icon(Icons.Filled.Email, contentDescription = "", tint = SelectedItem)
                         else
                             Icon(Icons.Filled.Email, contentDescription = "")
@@ -106,142 +171,106 @@ fun DialogRestore(){
                     ),
                     shape = RoundedCornerShape(16.dp),
                     singleLine = true,
-                    keyboardActions = KeyboardActions (
+                    /*keyboardActions = KeyboardActions (
                         onDone = {
                             keyboardController?.hide()
                             //  focusManager.clearFocus()
                           }
+                    ),*/
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Next,
+                        keyboardType = KeyboardType.Email
                     ),
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done, keyboardType = KeyboardType.Email),
                 )
+                Row(
+                    Modifier.padding(top = 8.dp, bottom = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.text_newpassword),
+                        fontFamily = labelFont
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    TextField(
+                        value = password.value,
+                        onValueChange = { value ->
+                            val regExp = "\\d{0,5}".toRegex()
+                            if (regExp.matches(value))
+                                password.value = value
+                        },
+                        modifier = Modifier
+                            .border(1.dp, borderColor[1], RoundedCornerShape(16.dp))
+                            .onFocusChanged {
+                                if (it.isFocused || it.hasFocus)
+                                    errors[1] = false
+                               /* else
+                                    errors[1] = password.value.length < 5*/
+
+                            },
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = TextFieldBg,
+                            cursorColor = TextFieldFont,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent
+                        ),
+                        trailingIcon = trailingIcon,
+                        shape = RoundedCornerShape(16.dp),
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Done,
+                            keyboardType = KeyboardType.NumberPassword
+                        ),
+                        visualTransformation = if (showchar.value)
+                            VisualTransformation.None
+                        else PasswordVisualTransformation(),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                keyboardController?.hide()
+                            }
+                        ),
+                    )
+
+                }
                 Row(
                     horizontalArrangement = Arrangement.End,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 8.dp)
+                        .padding(all = 8.dp)
 
                 ) {
                     TextButton(onClick = {
                         DialogRouter.reset()
                     }) {
-                        Text(text = stringResource(id = R.string.button_cancel).uppercase(),
+                        Text(
+                            text = stringResource(id = R.string.button_cancel).uppercase(),
                             color = TextOrange
                         )
                     }
                     Spacer(modifier = Modifier.width(4.dp))
                     TextButton(onClick = {
-                        if (!validateMail(email.value)) {
-                            error.value = true
-                            focusManager.clearFocus()
-                        }
-                        else {
+                        focusManager.clearFocus()
+                        errors[0] = !validateMail(email.value)
+                        errors[1] = password.value.length < 5
+                        if (!errors[0] && !errors[1]) {
                             DialogRouter.reset()
-                            viewModel.onRestoreUser(action = {result ->
-                                if (result) {
-                                    DialogRouter.reset()
-                                }
-                            },
-                                email.value)
+                            viewModel.onRestoreUser(
+                                action = { result ->
+                                    if (result) {
+                                        DialogRouter.reset()
+                                    }
+                                },
+                                email.value
+                            )
                         }
                     }) {
-                        Text(text = stringResource(id = R.string.btn_send).uppercase(),
+                        Text(
+                            text = stringResource(id = R.string.btn_send).uppercase(),
                             color = TextOrange
                         )
                     }
                 }
             }
         }
-        
+
     }
-    
-    
-    
-    
-    
-  /*  Dialog(onDismissRequest = { }) {
-        
-    }*/
-    
-    /*
-    AlertDialog(backgroundColor = Color.DarkGray,
-        contentColor = TextLightGray,//contentColorFor(backgroundColor),
-        shape = RoundedCornerShape(16.dp),
-        onDismissRequest = {
-           DialogRouter.reset()
-        },
-        title = { Text(text = stringResource(R.string.title_restore))},
-        text = {
-            Column(Modifier.fillMaxHeight()) {
-                //Spacer(modifier = Modifier.height(64.dp))
-                TextField(
-                    value = email.value,
-                    onValueChange = {
-                        email.value = it
-                    },
-                    Modifier
-                        .fillMaxWidth(),
-                    trailingIcon = {
-                        /*  if (errorEmail.value)
-                        Icon(Icons.Filled.Email, contentDescription = "", tint = SelectedItem)
-                    else
-                        Icon(Icons.Filled.Email, contentDescription = "")*/
-                    },
-                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
-                    colors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = TextFieldBg,
-                        cursorColor = TextFieldFont,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent
-                    ),
-                    shape = RoundedCornerShape(16.dp),
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                )
-
-
-
-            }
-        },
-        buttons = {
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
-                horizontalArrangement = Arrangement.End,
-            ) {
-                OutlinedButton(
-                    onClick = {
-                        DialogRouter.reset()
-                    },
-                    border = null,
-                    shape = CircleShape,
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
-
-                ) {
-                    Text( stringResource(id = R.string.button_cancel).uppercase(), color = TextOrange)
-                }
-                OutlinedButton(
-                    modifier = Modifier.padding(end = 16.dp),
-                    onClick = {
-                        val repository = viewModel.getRepository()
-                        val email = repository.getEmail()
-                        repository.onRestoreUser(email)
-                        DialogRouter.reset()
-                    },
-                    border = null,
-                    shape = CircleShape,
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
-                ) {
-                    Text(stringResource(id = R.string.btn_send).uppercase(), color = TextOrange)
-                }
-
-            }
-        }
-    )*/
 }
-
-/*@Preview(showBackground = true)
-@Composable
-fun DialogRestorePreview() {
-    DialogRestore()
-}*/
