@@ -127,7 +127,7 @@ class Repository: CrudInterface, AccessUserInterface {
         log(json)*/
 
 
-        if (isConnectedNet())
+        if (isConnectedNet()) {
         ApiManager.regUser(user, object: retrofit2.Callback<User>{
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 /*
@@ -151,6 +151,7 @@ class Repository: CrudInterface, AccessUserInterface {
                 action?.invoke(false)
             }
         })
+        }
     }
 
     override fun onRestoreUser(action: ((result: Boolean) -> Unit)?, email: String, password: String) {
