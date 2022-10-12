@@ -258,6 +258,8 @@ fun DialogRestore() {
                                     progress = false
                                     if (result) {
                                         viewModel.setEmail(email.value)
+                                        viewModel.removePassword()
+                                        viewModel.getLoginState().checkFingerButtonState()
                                         DialogRouter.reset()
                                     }
                                 },

@@ -94,7 +94,11 @@ class UserPasswordStorage: UserPasswordStorageInterface {
             encryptPassword?.let {
                 sharedPrefs.edit().putString(keyPassword, encryptPassword).apply()
             }
-        } catch (e: Exception){}
+        } catch (_: Exception){}
+    }
+
+    override fun removePassword() {
+        sharedPrefs.edit().remove(keyPassword).apply()
     }
 
     override fun getPassword(cipher: Cipher): String? {

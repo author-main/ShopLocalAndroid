@@ -72,4 +72,8 @@ class UserFingerPrint(private val context: Context): UserFingerPrintInterface {
     fun getPassword(cipher: Cipher) =
         userPasswordStorage.getPassword(cipher)
 
+    fun removePassword() {
+        userPasswordStorage.removePassword()
+    }
+
 }

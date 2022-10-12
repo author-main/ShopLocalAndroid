@@ -33,6 +33,11 @@ class Repository: CrudInterface, AccessUserInterface {
     fun getLoginEmail(): String =
         loginState.getEmail()*/
 
+
+    fun removePassword(){
+        userFingerPrint?.removePassword()
+    }
+
     fun getUserFingerPrint(context: Context) {
         userFingerPrint = if (UserFingerPrint.canAuthenticate()) {
             UserFingerPrint(context).apply main@ {

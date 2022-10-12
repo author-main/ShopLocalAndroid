@@ -8,6 +8,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     //fun getRepository() = repository
     fun getLoginState() = repository.loginState
     fun getPassword()   = repository.loginState.getPassword()
+    fun removePassword()   = repository.removePassword()
     fun setEmail(value: String)      = repository.loginState.setEmail(value)
     fun getUserFingerPrint(context: Context) =
         repository.getUserFingerPrint(context)
