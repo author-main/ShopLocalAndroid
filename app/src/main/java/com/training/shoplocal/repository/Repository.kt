@@ -3,6 +3,7 @@ package com.training.shoplocal.repository
 
 
 import android.content.Context
+import android.util.Log
 import com.google.gson.Gson
 import com.training.shoplocal.isConnectedNet
 import com.training.shoplocal.log
@@ -12,6 +13,7 @@ import com.training.shoplocal.retrofit.ApiManager
 import com.training.shoplocal.retrofit.User
 import com.training.shoplocal.userfingerprint.UserFingerPrint
 import com.training.shoplocal.userfingerprint.UserFingerPrintListener
+import com.training.shoplocal.validateMail
 import retrofit2.Call
 import retrofit2.Response
 import javax.crypto.Cipher
@@ -37,6 +39,7 @@ class Repository: CrudInterface, AccessUserInterface {
                 userFingerPrintListener = object : UserFingerPrintListener {
                     override fun onComplete(cipher: Cipher?) {
                         cipher?.let {
+                            loginState.showProgress()
                             onLogin(loginState.getEmail(), this@main.getPassword(it) ?: "", finger = true)
                         }
                     }
@@ -55,7 +58,10 @@ class Repository: CrudInterface, AccessUserInterface {
                 loginState.clearPassword()
             loginState.hideProgress()
         }
-        if (email.isBlank() || password.isBlank()) {
+
+        if (!validateMail(email)) {}
+
+        if (email.isBlank() || password.isBlank() || !validateMail(email)) {
             clearLoginPassword()
             return
         }
@@ -198,7 +204,8 @@ class Repository: CrudInterface, AccessUserInterface {
     }
 
     override fun onFingerPrint(email: String) {
-        userFingerPrint?.authenticate()
+        if (validateMail(email))
+            userFingerPrint?.authenticate()
     }
 
     fun saveUserPassword(value: String){

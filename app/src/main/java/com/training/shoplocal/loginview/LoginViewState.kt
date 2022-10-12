@@ -55,12 +55,13 @@ class LoginViewState {
 
     fun isProgress() = progress
 
-    private fun showProgress(){
+    fun showProgress(){
         progress = true
     }
 
     fun hideProgress(){
-        progress = false
+        if (progress)
+            progress = false
     }
 
     @JvmName("getPassword1")
@@ -117,7 +118,8 @@ class LoginViewState {
         if (value == ' ') {
            /* if (!validateMail(email))
                 return*/
-            showProgress()
+            //showProgress()
+            clearPassword()
             onAccessUser?.onFingerPrint(email)
             return
         }
