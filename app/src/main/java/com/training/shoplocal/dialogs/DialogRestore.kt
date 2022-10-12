@@ -55,6 +55,7 @@ import com.training.shoplocal.retrofit.User
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.validateMail
 import com.training.shoplocal.viewmodel.RepositoryViewModel
+import kotlinx.coroutines.launch
 import kotlin.math.log
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -101,6 +102,9 @@ fun DialogRestore() {
         /* Toast.makeText(appContext(), "Dialog dismissed!", Toast.LENGTH_SHORT)
             .show()*/
     }) {
+        /*val scope = rememberCoroutineScope()
+        val snackbarHostState = remember { mutableStateOf(SnackbarHostState()) }*/
+
         var progress by remember {
             mutableStateOf(false)
         }
@@ -112,6 +116,9 @@ fun DialogRestore() {
             borderColor[i] = if (errors[i])
                 SelectedItem
             else Color.Transparent
+
+        ShowMessage(message = "asdasdasd")
+
         Card(
             elevation = 8.dp,
             shape = RoundedCornerShape(12.dp),
@@ -248,6 +255,13 @@ fun DialogRestore() {
                     }
                     Spacer(modifier = Modifier.width(4.dp))
                     TextButton(onClick = {
+                        //ShowMessage(message = "asdasdasd")
+
+               /*         scope.launch {
+                            snackbarHostState.value.showSnackbar("Hello")
+                        }*/
+
+
                         focusManager.clearFocus()
                         errors[0] = !validateMail(email.value)
                         errors[1] = password.value.length < 5
@@ -256,6 +270,11 @@ fun DialogRestore() {
                             viewModel.onRestoreUser(
                                 action = { result ->
                                     progress = false
+
+/*                                    scope.launch {
+                                        snackbarHostState.value.showSnackbar("Hello")
+                                    }*/
+
                                     if (result) {
                                         viewModel.setEmail(email.value)
                                         viewModel.removePassword()
@@ -276,6 +295,7 @@ fun DialogRestore() {
                 }
             }
         }
+       // SnackbarHost(snackbarHostState.value)
         if (progress)
             ShowProgress()
     }
