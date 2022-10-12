@@ -181,7 +181,7 @@ class Repository: CrudInterface, AccessUserInterface {
                 override fun onResponse(call: Call<User>, response: Response<User>) {
                     val result = (response.body()?.id ?: 0) > 0
                     if (result) {
-
+                    // Отобразить snackbar об отправке на email уведомления о смене пароля
                     }
                     action?.invoke(result)
                 }
