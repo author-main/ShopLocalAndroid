@@ -119,8 +119,8 @@ class LoginViewState {
            /* if (!validateMail(email))
                 return*/
             //showProgress()
-            clearPassword()
             onAccessUser?.onFingerPrint(email)
+            clearPassword()
             return
         }
         if (value == '<') {
