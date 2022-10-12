@@ -146,7 +146,7 @@ fun DialogRestore() {
                         .onFocusChanged {
                             if (it.isFocused || it.hasFocus)
                                 errors[0] = false
-                          /*  else {
+                            /*  else {
                                 //log(it.toString())
                                 errors[0] = !validateMail(email.value)
                             }*/
@@ -203,7 +203,7 @@ fun DialogRestore() {
                             .onFocusChanged {
                                 if (it.isFocused || it.hasFocus)
                                     errors[1] = false
-                               /* else
+                                /* else
                                     errors[1] = password.value.length < 5*/
 
                             },

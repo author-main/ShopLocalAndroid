@@ -11,7 +11,13 @@ import com.training.shoplocal.AppShopLocal.Companion.appContext
 
 const val DEFAULT_RESOURCE_STR = ""
 const val FILE_PREFERENCES = "settings"
-const val SERVER_URL = "http://192.168.1.10"
+const val SERVER_URL = "http://192.168.0.10"
+
+enum class MESSAGE {
+    ERROR,
+    INFO,
+    WARNING
+}
 
 fun getStringResource(@StringRes id: Int): String =
     try {
