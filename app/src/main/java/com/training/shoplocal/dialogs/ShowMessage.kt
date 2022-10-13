@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun <T:ViewModel> ShowMessage(message: String, type: MESSAGE = MESSAGE.INFO, viewModel:T){
     //val scope = rememberCoroutineScope()
-   // val labelFont = FontFamily(Font(R.font.robotocondensed_light))
+    val labelFont = FontFamily(Font(R.font.robotocondensed_light))
     val snackbarHostState = remember { mutableStateOf(SnackbarHostState()) }
     var color = TextFieldBg
     when (type) {
@@ -78,10 +78,10 @@ fun <T:ViewModel> ShowMessage(message: String, type: MESSAGE = MESSAGE.INFO, vie
                         //.align(Alignment.BottomCenter)
 
                     ) {
-                        Column(
+                        Row(
                             modifier = Modifier.padding(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(4.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(modifier = Modifier.size(48.dp)
                                 .border(width = 2.dp, color = TextLightGray, CircleShape)
@@ -90,7 +90,7 @@ fun <T:ViewModel> ShowMessage(message: String, type: MESSAGE = MESSAGE.INFO, vie
                             )
                             Text(
                                 text = snackbarData.message,
-                                //fontFamily = labelFont,
+                                fontFamily = labelFont,
                                 textAlign = TextAlign.Center,
                                 fontSize = 13.sp
                             )
