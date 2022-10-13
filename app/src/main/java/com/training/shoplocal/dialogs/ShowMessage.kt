@@ -80,7 +80,7 @@ fun <T:ViewModel> ShowMessage(message: String, type: MESSAGE = MESSAGE.INFO, vie
                     ) {
                         Column(
                             modifier = Modifier.padding(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(4.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Icon(modifier = Modifier.size(48.dp)
