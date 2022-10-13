@@ -179,11 +179,11 @@ class Repository: CrudInterface, AccessUserInterface {
         if (isConnectedNet())
             ApiManager.restoreUser(user, object: retrofit2.Callback<User>{
                 override fun onResponse(call: Call<User>, response: Response<User>) {
-                    val result = (response.body()?.id ?: 0) > 0
+                    /*val result = (response.body()?.id ?: 0) > 0
                     if (result) {
                     // Отобразить snackbar об отправке на email уведомления о смене пароля
-                    }
-                    action?.invoke(result)
+                    }*/
+                    action?.invoke((response.body()?.id ?: 0) > 0)
                 }
 
                 override fun onFailure(call: Call<User>, t: Throwable) {

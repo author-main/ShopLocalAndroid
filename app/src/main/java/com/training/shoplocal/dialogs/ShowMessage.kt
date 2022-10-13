@@ -16,30 +16,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onPlaced
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import com.training.shoplocal.MESSAGE
+import com.training.shoplocal.R
 import com.training.shoplocal.log
+import com.training.shoplocal.ui.theme.SelectedItem
+import com.training.shoplocal.ui.theme.TextFieldBg
+import com.training.shoplocal.ui.theme.TextFieldFont
+import com.training.shoplocal.ui.theme.TextOrange
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 @Composable
 fun <T:ViewModel> ShowMessage(message: String, type: MESSAGE = MESSAGE.INFO, viewModel:T){
     //val scope = rememberCoroutineScope()
+   // val labelFont = FontFamily(Font(R.font.robotocondensed_light))
     val snackbarHostState = remember { mutableStateOf(SnackbarHostState()) }
+    var color = TextFieldBg
     when (type) {
         MESSAGE.INFO ->{
-            LaunchedEffect(null) {
-                when (snackbarHostState.value.showSnackbar(message)) {
-                    SnackbarResult.Dismissed -> {
-                        (viewModel as RepositoryViewModel).showSnackbar(false)
-                    }
-                    SnackbarResult.ActionPerformed -> {
-
-                    }
-                }
-            }
+            color = SelectedItem
         }
         MESSAGE.WARNING ->{
 
@@ -48,27 +51,46 @@ fun <T:ViewModel> ShowMessage(message: String, type: MESSAGE = MESSAGE.INFO, vie
 
         }
     }
+
+    LaunchedEffect(null) {
+        when (snackbarHostState.value.showSnackbar(message)) {
+            SnackbarResult.Dismissed -> {
+                (viewModel as RepositoryViewModel).showSnackbar(visible = false)
+            }
+            SnackbarResult.ActionPerformed -> {
+
+            }
+        }
+    }
+
+
         Box(Modifier.fillMaxSize()){
             SnackbarHost(
                 modifier = Modifier.align(Alignment.BottomCenter),
                 hostState = snackbarHostState.value,
                 snackbar = { snackbarData: SnackbarData ->
                     Card(
-                        shape = RoundedCornerShape(8.dp),
-                        //border = BorderStroke(2.dp, Color.White),
+                        shape = RoundedCornerShape(16.dp),
+                        //border = BorderStroke(1.dp, TextFieldFont),
+                        backgroundColor = color,//TextFieldBg,
                         modifier = Modifier
                             .padding(16.dp)
                             .wrapContentSize()
+                        //    .background(TextOrange)
                         //.align(Alignment.BottomCenter)
 
                     ) {
                         Column(
-                            modifier = Modifier.padding(8.dp),
-                            verticalArrangement = Arrangement.spacedBy(4.dp),
+                            modifier = Modifier.padding(16.dp),
+                          //  verticalArrangement = Arrangement.spacedBy(8.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Icon(imageVector = Icons.Default.Notifications, contentDescription = "")
-                            Text(text = snackbarData.message)
+                          //  Icon(imageVector = Icons.Default.Notifications, contentDescription = "")
+                            Text(text = snackbarData.message,
+                                //fontFamily = labelFont,
+                                textAlign = TextAlign.Center,
+                                fontSize = 13.sp
+                            )
                         }
                     }
                 }

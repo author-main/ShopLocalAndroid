@@ -1,5 +1,7 @@
-package com.training.shoplocal
+package com.training.shoplocal.screens
 
+
+import com.training.shoplocal.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -71,7 +73,7 @@ fun FooterView(state: LoginViewState, modifier: Modifier){
 @Composable
 fun LoginScreen(state: LoginViewState){
     val viewModel: RepositoryViewModel = viewModel()
-    val isShowSnackbar: Boolean by viewModel.snackbar.collectAsState()
+    val dataSnackbar: Pair<String, Boolean> by viewModel.snackbarData.collectAsState()
     ConstraintLayout {
         val (header, body, footer) = createRefs()
         HeaderView(modifier=Modifier.constrainAs(header){
@@ -88,6 +90,6 @@ fun LoginScreen(state: LoginViewState){
             centerHorizontallyTo(parent)
         })
     }
-    if (isShowSnackbar)
-        ShowMessage(message = "message", viewModel = viewModel)
+    if (dataSnackbar.second)
+        ShowMessage(message = dataSnackbar.first, viewModel = viewModel)
 }

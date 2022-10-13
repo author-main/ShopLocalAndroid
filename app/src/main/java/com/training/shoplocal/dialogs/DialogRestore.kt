@@ -242,10 +242,10 @@ fun DialogRestore() {
                         .padding(all = 8.dp)
 
                 ) {
+                    val message = stringResource(id = R.string.message_restore_email)
                     val scope = rememberCoroutineScope()
                     TextButton(onClick = {
                         DialogRouter.reset()
-                        viewModel.showSnackbar()
                     }) {
                         Text(
                             text = stringResource(id = R.string.button_cancel).uppercase(),
@@ -267,13 +267,14 @@ fun DialogRestore() {
                                         snackbarHostState.value.showSnackbar("Hello")
                                     }*/
 
-                                    viewModel.setEmail("жопа")
+                                    //viewModel.setEmail("жопа")
 
                                     if (result) {
                                         viewModel.setEmail(email.value)
                                         viewModel.removePassword()
                                         viewModel.getLoginState().checkFingerButtonState()
                                         DialogRouter.reset()
+                                        viewModel.showSnackbar(message)
                                     }
                                 },
                                 email.value,
