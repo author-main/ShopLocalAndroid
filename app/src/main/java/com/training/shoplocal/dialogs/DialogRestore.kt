@@ -94,9 +94,6 @@ fun DialogRestore() {
         )
     }
 
-
-
-
     Dialog(onDismissRequest = {
         DialogRouter.reset()
         /* Toast.makeText(appContext(), "Dialog dismissed!", Toast.LENGTH_SHORT)
@@ -245,9 +242,9 @@ fun DialogRestore() {
                         .padding(all = 8.dp)
 
                 ) {
+                    val scope = rememberCoroutineScope()
                     TextButton(onClick = {
                         DialogRouter.reset()
-                        //ShowMessage("message")
                         viewModel.showSnackbar()
                     }) {
                         Text(
@@ -257,13 +254,6 @@ fun DialogRestore() {
                     }
                     Spacer(modifier = Modifier.width(4.dp))
                     TextButton(onClick = {
-
-
-               /*         scope.launch {
-                            snackbarHostState.value.showSnackbar("Hello")
-                        }*/
-
-
                         focusManager.clearFocus()
                         errors[0] = !validateMail(email.value)
                         errors[1] = password.value.length < 5
