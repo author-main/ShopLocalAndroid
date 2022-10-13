@@ -102,8 +102,10 @@ fun DialogRestore() {
         /* Toast.makeText(appContext(), "Dialog dismissed!", Toast.LENGTH_SHORT)
             .show()*/
     }) {
-        /*val scope = rememberCoroutineScope()
-        val snackbarHostState = remember { mutableStateOf(SnackbarHostState()) }*/
+        //val scope = rememberCoroutineScope()
+        //val snackbarHostState = remember { mutableStateOf(SnackbarHostState()) }*/
+
+        //ShowMessage(message = "dfgdfggf")
 
         var progress by remember {
             mutableStateOf(false)
@@ -116,8 +118,6 @@ fun DialogRestore() {
             borderColor[i] = if (errors[i])
                 SelectedItem
             else Color.Transparent
-
-        ShowMessage(message = "asdasdasd")
 
         Card(
             elevation = 8.dp,
@@ -247,6 +247,8 @@ fun DialogRestore() {
                 ) {
                     TextButton(onClick = {
                         DialogRouter.reset()
+                        //ShowMessage("message")
+                        viewModel.showSnackbar()
                     }) {
                         Text(
                             text = stringResource(id = R.string.button_cancel).uppercase(),
@@ -255,7 +257,7 @@ fun DialogRestore() {
                     }
                     Spacer(modifier = Modifier.width(4.dp))
                     TextButton(onClick = {
-                        //ShowMessage(message = "asdasdasd")
+
 
                /*         scope.launch {
                             snackbarHostState.value.showSnackbar("Hello")
@@ -274,6 +276,8 @@ fun DialogRestore() {
 /*                                    scope.launch {
                                         snackbarHostState.value.showSnackbar("Hello")
                                     }*/
+
+                                    viewModel.setEmail("жопа")
 
                                     if (result) {
                                         viewModel.setEmail(email.value)

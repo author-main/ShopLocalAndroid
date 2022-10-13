@@ -71,7 +71,6 @@ fun LoginView(state: LoginViewState) {
 
 
 
-
     if (state.isPressedButtons() && state.isFocused()) {
 //    if (stateFocused.value){
         focusManager.clearFocus(true)

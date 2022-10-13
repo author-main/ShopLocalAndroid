@@ -3,9 +3,17 @@ package com.training.shoplocal.viewmodel
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.training.shoplocal.repository.Repository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     //fun getRepository() = repository
+    private val _snackbar = MutableStateFlow(false)
+    val snackbar = _snackbar.asStateFlow()
+    fun showSnackbar(value: Boolean = true){
+        _snackbar.value = value
+    }
+
     fun getLoginState() = repository.loginState
     fun getPassword()   = repository.loginState.getPassword()
     fun removePassword()   = repository.removePassword()
