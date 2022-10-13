@@ -39,7 +39,7 @@ fun ShowMessage(message: String, type: MESSAGE = MESSAGE.INFO){
         }
     }
         Box(Modifier.fillMaxSize()) {
-            SnackbarHost(
+           SnackbarHost(
                 modifier = Modifier.align(Alignment.BottomCenter),
                 hostState = snackbarHostState.value,
                 snackbar = { snackbarData: SnackbarData ->
