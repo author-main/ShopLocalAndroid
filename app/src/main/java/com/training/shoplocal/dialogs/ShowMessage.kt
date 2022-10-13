@@ -18,17 +18,27 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
 import com.training.shoplocal.MESSAGE
 import com.training.shoplocal.log
+import com.training.shoplocal.viewmodel.RepositoryViewModel
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 @Composable
-fun ShowMessage(message: String, type: MESSAGE = MESSAGE.INFO){
+fun <T:ViewModel> ShowMessage(message: String, type: MESSAGE = MESSAGE.INFO, viewModel:T){
     //val scope = rememberCoroutineScope()
     val snackbarHostState = remember { mutableStateOf(SnackbarHostState()) }
     when (type) {
         MESSAGE.INFO ->{
             LaunchedEffect(null) {
-                snackbarHostState.value.showSnackbar(message)
+                when (snackbarHostState.value.showSnackbar(message)) {
+                    SnackbarResult.Dismissed -> {
+                        (viewModel as RepositoryViewModel).showSnackbar(false)
+                    }
+                    SnackbarResult.ActionPerformed -> {
+
+                    }
+                }
             }
         }
         MESSAGE.WARNING ->{
@@ -38,8 +48,8 @@ fun ShowMessage(message: String, type: MESSAGE = MESSAGE.INFO){
 
         }
     }
-        Box(Modifier.fillMaxSize()) {
-           SnackbarHost(
+        Box(Modifier.fillMaxSize()){
+            SnackbarHost(
                 modifier = Modifier.align(Alignment.BottomCenter),
                 hostState = snackbarHostState.value,
                 snackbar = { snackbarData: SnackbarData ->

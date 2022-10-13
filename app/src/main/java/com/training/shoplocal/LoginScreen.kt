@@ -88,7 +88,6 @@ fun LoginScreen(state: LoginViewState){
             centerHorizontallyTo(parent)
         })
     }
-    if (isShowSnackbar) {
-        ShowMessage("message")
-    }
+    if (isShowSnackbar)
+        ShowMessage(message = "message", viewModel = viewModel)
 }
