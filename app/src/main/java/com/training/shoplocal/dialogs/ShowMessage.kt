@@ -40,7 +40,7 @@ fun <T:ViewModel> ShowMessage(message: String, type: MESSAGE = MESSAGE.INFO, vie
     var color = TextFieldBg
     when (type) {
         MESSAGE.INFO ->{
-            color = SelectedItem
+            color = SelectedItem//.copy(alpha = 0.7f)
         }
         MESSAGE.WARNING ->{
 
