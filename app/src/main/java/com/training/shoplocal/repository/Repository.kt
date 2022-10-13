@@ -190,19 +190,6 @@ class Repository: CrudInterface, AccessUserInterface {
                     action?.invoke(false)
                 }
             })
-
-
-
-
-
-
-
-
-
-
-
-
-
        /*  val gson = Gson()
          val json = gson.toJson(user)
          log(json)*/

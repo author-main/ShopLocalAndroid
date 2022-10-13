@@ -246,6 +246,7 @@ fun DialogRestore() {
                     val scope = rememberCoroutineScope()
                     TextButton(onClick = {
                         DialogRouter.reset()
+                        viewModel.showSnackbar(message)
                     }) {
                         Text(
                             text = stringResource(id = R.string.button_cancel).uppercase(),

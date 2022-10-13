@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -27,10 +28,7 @@ import androidx.lifecycle.ViewModel
 import com.training.shoplocal.MESSAGE
 import com.training.shoplocal.R
 import com.training.shoplocal.log
-import com.training.shoplocal.ui.theme.SelectedItem
-import com.training.shoplocal.ui.theme.TextFieldBg
-import com.training.shoplocal.ui.theme.TextFieldFont
-import com.training.shoplocal.ui.theme.TextOrange
+import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -82,11 +80,16 @@ fun <T:ViewModel> ShowMessage(message: String, type: MESSAGE = MESSAGE.INFO, vie
                     ) {
                         Column(
                             modifier = Modifier.padding(16.dp),
-                          //  verticalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                          //  Icon(imageVector = Icons.Default.Notifications, contentDescription = "")
-                            Text(text = snackbarData.message,
+                            Icon(modifier = Modifier.size(48.dp)
+                                .border(width = 2.dp, color = TextLightGray, CircleShape)
+                                .padding(8.dp),
+                                imageVector = Icons.Default.Notifications, contentDescription = ""
+                            )
+                            Text(
+                                text = snackbarData.message,
                                 //fontFamily = labelFont,
                                 textAlign = TextAlign.Center,
                                 fontSize = 13.sp
