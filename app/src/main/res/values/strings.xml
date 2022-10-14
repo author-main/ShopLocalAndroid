@@ -3,7 +3,7 @@
     <string name="text_auth">АВТОРИЗАЦИЯ</string>
     <string name="btn_reg">РЕГИСТРАЦИЯ</string>
     <string name="btn_rest">ЗАБЫЛИ ПАРОЛЬ?</string>
-    <string name="biometric_title">Вход в ShopLocal</string>
+    <string name="biometric_title">Добро пожаловать в ShopLocal</string>
     <string name="button_cancel">Отмена</string>
     <string name="title_restore">Восстановление доступа</string>
     <string name="title_reg">Регистрация</string>
@@ -15,4 +15,5 @@
     <string name="text_password">Пароль</string>
     <string name="text_newpassword">Новый\nпароль</string>
     <string name="message_restore_email">Вам отправлено письмо\nдля подтверждения изменения\nданных</string>
+    <string name="message_login_error">Данные пользователя неверны.\nВ доступе отказано</string>
 </resources>

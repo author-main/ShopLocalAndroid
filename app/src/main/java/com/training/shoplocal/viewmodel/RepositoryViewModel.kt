@@ -2,17 +2,48 @@ package com.training.shoplocal.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
+import com.training.shoplocal.MESSAGE
+import com.training.shoplocal.R
+import com.training.shoplocal.getStringResource
+import com.training.shoplocal.loginview.AccessUserInterface
 import com.training.shoplocal.repository.Repository
+import com.training.shoplocal.validateMail
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
-    private val _snackbarData = MutableStateFlow(Pair<String, Boolean>("", false))
+    private val _snackbarData = MutableStateFlow(Triple<String, Boolean, MESSAGE>("", false, MESSAGE.INFO))
     val snackbarData = _snackbarData.asStateFlow()
-    fun showSnackbar(message: String = "", visible: Boolean = true){
-        _snackbarData.value = Pair(message, visible)
+    fun showSnackbar(message: String = "", type: MESSAGE = MESSAGE.INFO, visible: Boolean = true){
+        _snackbarData.value = Triple(message, visible, type)
     }
+    /*init {
+        repository.loginState.addOnAccessUser(object: AccessUserInterface {
+            override fun onLogin(email: String, password: String, finger: Boolean) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onRegisterUser(
+                action: ((result: Boolean) -> Unit)?,
+                vararg userdata: String
+            ) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onRestoreUser(
+                action: ((result: Boolean) -> Unit)?,
+                email: String,
+                password: String
+            ) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onFingerPrint(email: String) {
+                TODO("Not yet implemented")
+            }
+        })
+    }*/
 
 
     //fun getRepository() = repository
@@ -35,5 +66,18 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     fun onRegisterUser(action: ((result: Boolean) -> Unit)?, vararg userdata: String) {
         repository.onRegisterUser(action, *userdata)
+    }
+
+
+
+    fun onLogin(email: String, password: String, finger: Boolean = false) {
+        repository.onLogin(action = { result ->
+            if (!result)
+                showSnackbar(message = getStringResource(R.string.message_login_error), type = MESSAGE.ERROR)
+        }, email, password, finger)
+    }
+
+    fun onFingerPrint(email: String) {
+        repository.onFingerPrint(email)
     }
 }

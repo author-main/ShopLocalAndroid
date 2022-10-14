@@ -27,7 +27,7 @@ import com.training.shoplocal.viewmodel.RepositoryViewModel
 @Composable
 //fun ButtonPasswordPanel(changeChar: (value: Char)-> Unit){
 fun ButtonPasswordPanel(state: LoginViewState){
-  //  val viewModel: RepositoryViewModel = viewModel()
+    val viewModel: RepositoryViewModel = viewModel()
     val canFingerPrint = remember{state.isEnabledFingerButton()}
     //log(canFingerPrint.toString())
     Column(horizontalAlignment = Alignment.CenterHorizontally){
@@ -58,8 +58,16 @@ fun ButtonPasswordPanel(state: LoginViewState){
                     OutlinedButton(
                         enabled = alpha == 1.0f,
                         onClick = {
-                            state.changeChar(char)
-                                  },
+                            if (char == ' ') {
+                                viewModel.onFingerPrint(state.getEmail())
+                                state.clearPassword()
+                            } else {
+                                state.changeChar(char)
+                                val password = state.getPassword()
+                                if (password.length == 5)
+                                    viewModel.onLogin(state.getEmail(), password)
+                            }
+                        },
                         modifier = Modifier.size(60.dp, 60.dp),
                         border = null,
                         shape = CircleShape,

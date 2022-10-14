@@ -23,9 +23,9 @@ class Repository: CrudInterface, AccessUserInterface {
     private var userFingerPrint: UserFingerPrint? = null
     val loginState = LoginViewState.getLoginState()
 
-    init {
+   /*init {
         loginState.addOnAccessUser(this)
-    }
+    }*/
 
     /*fun getLoginPassword(): String =
         loginState.getPassword()
@@ -45,7 +45,7 @@ class Repository: CrudInterface, AccessUserInterface {
                     override fun onComplete(cipher: Cipher?) {
                         cipher?.let {
                             loginState.showProgress()
-                            onLogin(loginState.getEmail(), this@main.getPassword(it) ?: "", finger = true)
+                            onLogin(action = {}, loginState.getEmail(), this@main.getPassword(it) ?: "", finger = true)
                         }
                     }
                 }
@@ -57,11 +57,17 @@ class Repository: CrudInterface, AccessUserInterface {
 
     }
 
-    override fun onLogin(email: String, password: String, finger: Boolean) {
+    override fun onLogin(
+        action: ((result: Boolean) -> Unit)?,
+        email: String,
+        password: String,
+        finger: Boolean
+    ) {
         fun clearLoginPassword(){
             if (!finger)
                 loginState.clearPassword()
             loginState.hideProgress()
+            action?.invoke(false)
         }
 
         if (!validateMail(email)) {}
@@ -88,9 +94,10 @@ class Repository: CrudInterface, AccessUserInterface {
                         -3 - Registration error
                     */
                     val id = response.body()?.id ?: 0
-                    log("$id")
+                    //log("$id")
                     //val result = (response.body()?.id ?: 0) > 0
                     if (id > 0) {
+                        action?.invoke(true)
                         saveUserPassword(password)
                         user.saveUserData()
                        // log("$id")

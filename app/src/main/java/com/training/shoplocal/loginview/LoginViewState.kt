@@ -17,10 +17,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class LoginViewState {
-    private var onAccessUser: AccessUserInterface? = null
+    /*private var onAccessUser: AccessUserInterface? = null
     fun addOnAccessUser(value: AccessUserInterface) {
         onAccessUser = value
-    }
+    }*/
 
     private var progress by mutableStateOf(false)
 
@@ -119,8 +119,8 @@ class LoginViewState {
            /* if (!validateMail(email))
                 return*/
             //showProgress()
-            onAccessUser?.onFingerPrint(email)
-            clearPassword()
+          //  onAccessUser?.onFingerPrint(email)
+            //clearPassword()
             return
         }
         if (value == '<') {
@@ -133,7 +133,7 @@ class LoginViewState {
                 password += value
                 if (password.length == 5) {
                     showProgress()
-                    onAccessUser?.onLogin(email, password)
+                  //  onAccessUser?.onLogin(email, password)
                     /*if (onAccessUser?.onLogin(password) == true)
                         ScreenRouter.navigateTo(ScreenItem.MainScreen)*/
 

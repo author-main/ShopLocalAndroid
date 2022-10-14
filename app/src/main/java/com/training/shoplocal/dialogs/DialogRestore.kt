@@ -47,13 +47,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.training.shoplocal.*
 import com.training.shoplocal.AppShopLocal.Companion.appContext
-import com.training.shoplocal.DialogRouter
 import com.training.shoplocal.R
-import com.training.shoplocal.log
 import com.training.shoplocal.retrofit.User
 import com.training.shoplocal.ui.theme.*
-import com.training.shoplocal.validateMail
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.launch
 import kotlin.math.log
@@ -246,7 +244,7 @@ fun DialogRestore() {
                     val scope = rememberCoroutineScope()
                     TextButton(onClick = {
                         DialogRouter.reset()
-                        viewModel.showSnackbar(message)
+                        //viewModel.showSnackbar(message)
                     }) {
                         Text(
                             text = stringResource(id = R.string.button_cancel).uppercase(),

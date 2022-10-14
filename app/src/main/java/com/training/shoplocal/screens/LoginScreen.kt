@@ -23,9 +23,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.training.shoplocal.MESSAGE
 import com.training.shoplocal.buttonpanel.ButtonPasswordPanel
 import com.training.shoplocal.buttonpanel.ButtonUserAccessPanel
 import com.training.shoplocal.dialogs.ShowMessage
+import com.training.shoplocal.log
 import com.training.shoplocal.loginview.LoginView
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.ui.theme.TextLightGray
@@ -43,11 +45,11 @@ fun HeaderView(modifier: Modifier){
             imageVector = ImageVector.vectorResource(R.drawable.ic_local_shop),
             contentDescription = null
         )
-        Spacer(modifier = Modifier.height(16.dp))
+       /* Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = stringResource(id = R.string.text_auth),
+            text  = stringResource(id = R.string.text_auth),
             color = TextLightGray
-        )
+        )*/
     }
 }
 
@@ -73,7 +75,7 @@ fun FooterView(state: LoginViewState, modifier: Modifier){
 @Composable
 fun LoginScreen(state: LoginViewState){
     val viewModel: RepositoryViewModel = viewModel()
-    val dataSnackbar: Pair<String, Boolean> by viewModel.snackbarData.collectAsState()
+    val dataSnackbar: Triple<String, Boolean, MESSAGE> by viewModel.snackbarData.collectAsState()
     ConstraintLayout {
         val (header, body, footer) = createRefs()
         HeaderView(modifier=Modifier.constrainAs(header){
@@ -90,6 +92,8 @@ fun LoginScreen(state: LoginViewState){
             centerHorizontallyTo(parent)
         })
     }
-    if (dataSnackbar.second)
-        ShowMessage(message = dataSnackbar.first, viewModel = viewModel)
+    if (dataSnackbar.second) {
+//        log("snackbar")
+        ShowMessage(message = dataSnackbar.first, viewModel = viewModel, type = dataSnackbar.third)//, type = MESSAGE.WARNING)
+    }
 }
