@@ -51,7 +51,7 @@ fun <T:ViewModel> ShowMessage(message: String, type: MESSAGE = MESSAGE.INFO, vie
     }
 
     LaunchedEffect(null) {
-        when (snackbarHostState.value.showSnackbar(message)) {
+        when (snackbarHostState.value.showSnackbar(message, duration = SnackbarDuration.Short)) {
             SnackbarResult.Dismissed -> {
                 (viewModel as RepositoryViewModel).showSnackbar(visible = false)
             }
