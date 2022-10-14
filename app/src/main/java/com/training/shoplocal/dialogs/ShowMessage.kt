@@ -10,13 +10,16 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onPlaced
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -38,15 +41,18 @@ fun <T:ViewModel> ShowMessage(message: String, type: MESSAGE = MESSAGE.INFO, vie
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
     val snackbarHostState = remember { mutableStateOf(SnackbarHostState()) }
     var color = TextFieldBg
+    var image = R.drawable.ic_notifications
     when (type) {
         MESSAGE.INFO ->{
-            color = SelectedItem//.copy(alpha = 0.7f)
+            //color = SelectedItem//.copy(alpha = 0.7f)
         }
         MESSAGE.WARNING ->{
-
+            //color = TextOrange
+            image = R.drawable.ic_warning
         }
         MESSAGE.ERROR ->{
-
+            color = SelectedItem//.copy(alpha = 0.7f)
+            image = R.drawable.ic_error
         }
     }
 
@@ -83,10 +89,12 @@ fun <T:ViewModel> ShowMessage(message: String, type: MESSAGE = MESSAGE.INFO, vie
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Icon(modifier = Modifier.size(48.dp)
-                                .border(width = 2.dp, color = TextLightGray, CircleShape)
-                                .padding(8.dp),
-                                imageVector = Icons.Default.Notifications, contentDescription = ""
+                            Icon(modifier = Modifier.size(48.dp),
+                                //.border(width = 2.dp, color = TextLightGray, CircleShape)
+                                //.padding(8.dp),
+                                //imageVector = Icons.Default.Notifications, contentDescription = ""
+                                imageVector = ImageVector.vectorResource(image),
+                                contentDescription = ""
                             )
                             Text(
                                 text = snackbarData.message,

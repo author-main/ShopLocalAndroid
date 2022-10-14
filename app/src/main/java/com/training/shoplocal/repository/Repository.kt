@@ -68,6 +68,7 @@ class Repository: CrudInterface, AccessUserInterface {
 
         if (email.isBlank() || password.isBlank() || !validateMail(email)) {
             clearLoginPassword()
+
             return
         }
         if (isConnectedNet()) {
@@ -88,7 +89,7 @@ class Repository: CrudInterface, AccessUserInterface {
                         -3 - Registration error
                     */
                     val id = response.body()?.id ?: 0
-                    log("$id")
+                    //log("$id")
                     //val result = (response.body()?.id ?: 0) > 0
                     if (id > 0) {
                         saveUserPassword(password)
