@@ -45,11 +45,11 @@ fun HeaderView(modifier: Modifier){
             imageVector = ImageVector.vectorResource(R.drawable.ic_local_shop),
             contentDescription = null
         )
-        Spacer(modifier = Modifier.height(16.dp))
+       /* Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = stringResource(id = R.string.text_auth),
+            text  = stringResource(id = R.string.text_auth),
             color = TextLightGray
-        )
+        )*/
     }
 }
 
