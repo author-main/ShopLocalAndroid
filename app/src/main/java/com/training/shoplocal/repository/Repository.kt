@@ -70,7 +70,7 @@ class Repository: CrudInterface, AccessUserInterface {
             action?.invoke(false)
         }
 
-        if (!validateMail(email)) {}
+      //  if (!validateMail(email)) {}
 
         if (email.isBlank() || password.isBlank() || !validateMail(email)) {
             clearLoginPassword()
