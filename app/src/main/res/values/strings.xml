@@ -15,5 +15,5 @@
     <string name="text_password">Пароль</string>
     <string name="text_newpassword">Новый\nпароль</string>
     <string name="message_restore_email">Вам отправлено письмо\nдля подтверждения изменения\nданных</string>
-    <string name="message_login_error">Данные пользователя неверны.\nВ доступе отказано</string>
+    <string name="message_login_error">Ошибка проверки данных клиента.\nВ доступе отказано</string>
 </resources>

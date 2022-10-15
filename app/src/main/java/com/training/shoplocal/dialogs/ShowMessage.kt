@@ -1,6 +1,7 @@
 package com.training.shoplocal.dialogs
 
 import android.content.Context
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -35,26 +36,12 @@ import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+
 @Composable
 fun <T:ViewModel> ShowMessage(message: String, type: MESSAGE = MESSAGE.INFO, viewModel:T){
     //val scope = rememberCoroutineScope()
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
     val snackbarHostState = remember { mutableStateOf(SnackbarHostState()) }
-    var color = TextFieldBg
-    var image = R.drawable.ic_notifications
-    when (type) {
-        MESSAGE.INFO ->{
-            //color = SelectedItem//.copy(alpha = 0.7f)
-        }
-        MESSAGE.WARNING ->{
-            //color = TextOrange
-            image = R.drawable.ic_warning
-        }
-        MESSAGE.ERROR ->{
-            color = SelectedItem//.copy(alpha = 0.7f)
-            image = R.drawable.ic_error
-        }
-    }
 
     LaunchedEffect(null) {
         when (snackbarHostState.value.showSnackbar(message, duration = SnackbarDuration.Short)) {
@@ -76,7 +63,7 @@ fun <T:ViewModel> ShowMessage(message: String, type: MESSAGE = MESSAGE.INFO, vie
                     Card(
                         shape = RoundedCornerShape(16.dp),
                         //border = BorderStroke(1.dp, TextFieldFont),
-                        backgroundColor = color,//TextFieldBg,
+                        backgroundColor = type.color,//TextFieldBg,
                         modifier = Modifier
                             .padding(16.dp)
                             .wrapContentSize()
@@ -93,7 +80,7 @@ fun <T:ViewModel> ShowMessage(message: String, type: MESSAGE = MESSAGE.INFO, vie
                                 //.border(width = 2.dp, color = TextLightGray, CircleShape)
                                 //.padding(8.dp),
                                 //imageVector = Icons.Default.Notifications, contentDescription = ""
-                                imageVector = ImageVector.vectorResource(image),
+                                imageVector = ImageVector.vectorResource(type.icon),
                                 contentDescription = ""
                             )
                             Text(

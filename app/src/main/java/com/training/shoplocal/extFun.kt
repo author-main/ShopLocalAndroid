@@ -6,17 +6,21 @@ import android.net.NetworkCapabilities
 import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.ui.graphics.Color
 import com.training.shoplocal.AppShopLocal.Companion.appContext
+import com.training.shoplocal.ui.theme.SelectedItem
+import com.training.shoplocal.ui.theme.TextFieldBg
 
 const val DEFAULT_RESOURCE_STR = ""
 const val FILE_PREFERENCES = "settings"
 const val SERVER_URL = "http://192.168.0.10"
 
-enum class MESSAGE {
-    ERROR,
-    INFO,
-    WARNING
+enum class MESSAGE(@DrawableRes val icon: Int, val color: Color) {
+    ERROR   (R.drawable.ic_error,           SelectedItem),
+    INFO    (R.drawable.ic_notifications,   TextFieldBg),
+    WARNING (R.drawable.ic_warning,         TextFieldBg)
 }
 
 fun getStringResource(@StringRes id: Int): String =
