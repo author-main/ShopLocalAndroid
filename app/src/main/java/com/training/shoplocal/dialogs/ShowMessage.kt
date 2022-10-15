@@ -1,6 +1,7 @@
 package com.training.shoplocal.dialogs
 
 import android.content.Context
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -35,6 +36,7 @@ import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+
 @Composable
 fun <T:ViewModel> ShowMessage(message: String, type: MESSAGE = MESSAGE.INFO, viewModel:T){
     //val scope = rememberCoroutineScope()
