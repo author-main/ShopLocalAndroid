@@ -28,17 +28,17 @@ fun MainScreen(){
 @Composable
 fun Navigation(navController: NavHostController) {
     NavHost(navController, startDestination = BottomNavigationItem.Main.route) {
-        composable(BottomNavigationItem.Main.data.text) {
-            //BooksScreen()
+        composable(BottomNavigationItem.Main.route) {
+
         }
         composable(BottomNavigationItem.Catalog.route) {
-            //DialogRouter.navigateTo(Dialog.Color)
-            //log("navigation search update")
+
         }
         composable(BottomNavigationItem.Cart.route) {
-            //DialogRouter.navigateTo(Dialog.InsertButtons)
+
         }
         composable(BottomNavigationItem.Profile.route) {
+
         }
     }
 }
