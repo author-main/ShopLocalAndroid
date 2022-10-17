@@ -70,7 +70,7 @@ class Repository: CrudInterface, AccessUserInterface {
         fun clearLoginPassword(){
             if (!finger) {
                 CoroutineScope(Dispatchers.Main).launch {
-                    delay(300)
+                    delay(400)
                     loginState.clearPassword()
                 }
                 //loginState.clearPassword()
@@ -112,7 +112,7 @@ class Repository: CrudInterface, AccessUserInterface {
                        // log("$id")
                         if (finger)
                             loginState.changePassword(password)
-                        loginState.showHomeScreen()
+                        loginState.showMainScreen()
                     } else
                         clearLoginPassword()
                     //action?.invoke(result)

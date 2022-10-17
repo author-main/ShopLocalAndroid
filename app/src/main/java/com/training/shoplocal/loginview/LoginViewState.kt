@@ -150,7 +150,7 @@ class LoginViewState {
     }
 
 
-    fun showHomeScreen(){
+    fun showMainScreen(){
         CoroutineScope(Dispatchers.Main).launch {
             delay(500)
             password = ""
