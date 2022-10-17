@@ -14,6 +14,10 @@ import com.training.shoplocal.retrofit.User
 import com.training.shoplocal.userfingerprint.UserFingerPrint
 import com.training.shoplocal.userfingerprint.UserFingerPrintListener
 import com.training.shoplocal.validateMail
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
 import javax.crypto.Cipher
@@ -64,8 +68,13 @@ class Repository: CrudInterface, AccessUserInterface {
         finger: Boolean
     ) {
         fun clearLoginPassword(){
-            if (!finger)
-                loginState.clearPassword()
+            if (!finger) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    delay(300)
+                    loginState.clearPassword()
+                }
+                //loginState.clearPassword()
+            }
             loginState.hideProgress()
             action?.invoke(false)
         }
