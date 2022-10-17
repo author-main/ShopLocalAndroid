@@ -13,9 +13,10 @@ import com.training.shoplocal.AppShopLocal.Companion.appContext
 import com.training.shoplocal.ui.theme.SelectedItem
 import com.training.shoplocal.ui.theme.TextFieldBg
 
-const val DEFAULT_RESOURCE_STR = ""
-const val FILE_PREFERENCES = "settings"
-const val SERVER_URL = "http://192.168.0.10"
+val TEXT_BOTTOMNAVIGATION: Array<String> = AppShopLocal.appContext().resources.getStringArray(R.array.bottom_navigation_items)
+const val DEFAULT_STRRESOURCE_VALUE  = ""
+const val FILE_PREFERENCES      = "settings"
+const val SERVER_URL            = "http://192.168.0.10"
 
 enum class MESSAGE(@DrawableRes val icon: Int, val color: Color) {
     ERROR   (R.drawable.ic_error,           SelectedItem),
@@ -28,7 +29,7 @@ fun getStringResource(@StringRes id: Int): String =
         AppShopLocal.appContext().getString(id)
     }
     catch (e: Exception){
-        DEFAULT_RESOURCE_STR
+        DEFAULT_STRRESOURCE_VALUE
     }
 
 fun log(value: String) {
@@ -51,8 +52,6 @@ fun isConnectedNet(): Boolean{
                 NetworkCapabilities.TRANSPORT_WIFI
             );
     }
-  /*  if (!connected && showToast)
-        showToast(R.string.error_connected_internet)*/
     return connected
 }
 

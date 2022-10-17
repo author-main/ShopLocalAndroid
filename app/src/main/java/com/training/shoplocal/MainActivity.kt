@@ -58,14 +58,15 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
 
     @Composable
     fun ShowScreen(){
-        when (ScreenRouter.current) {
+        MainScreen()
+        /*when (ScreenRouter.current) {
             ScreenItem.LoginScreen ->
                 LoginScreen(viewModel.getLoginState())
             ScreenItem.MainScreen -> {
                 MainScreen()
             }
             else -> {}
-        }
+        }*/
     }
 
     @Composable
