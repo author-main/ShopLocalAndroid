@@ -61,11 +61,12 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
 
     @Composable
     fun ShowScreen(){
-        val authorizedUser: Boolean by viewModel.authorizedUser.collectAsState()
+        AppScreen()
+        /*val authorizedUser: Boolean by viewModel.authorizedUser.collectAsState()
         if (authorizedUser)
             AppScreen()
         else
-            LoginScreen(viewModel.getLoginState())
+            LoginScreen(viewModel.getLoginState())*/
     }
 
     @Composable

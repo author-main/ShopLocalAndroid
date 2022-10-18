@@ -4,18 +4,16 @@ import androidx.annotation.DrawableRes
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.training.shoplocal.AppShopLocal
 import com.training.shoplocal.R
 import com.training.shoplocal.TEXT_BOTTOMNAVIGATION
-import com.training.shoplocal.log
+import com.training.shoplocal.ui.theme.TextFieldFont
+import com.training.shoplocal.ui.theme.TextOrange
 
 
 enum class BottomNavigationItemData(@DrawableRes var icon: Int, val iconOn: Int? = null, val text: String) {
@@ -49,13 +47,26 @@ fun BottomNavigationBar(navController: NavController) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
         bottomNavigationItems.forEach { item ->
+            val selected = currentRoute == item.route
+           /* val color = if (selected)
+                TextOrange
+            else
+                TextFieldFont*/
             BottomNavigationItem(
                 icon = {
-                    Icon(painterResource(id = item.data.icon), contentDescription = null)
+                    Icon(painterResource(id = item.data.icon),
+                        //    tint = color,
+                            contentDescription = null)
                 },
-                label = { Text(item.data.text) },
+                label = {
+                        Text(item.data.text,
+                        //color = color
+                    ) },
                 onClick = {},
-                selected = false
+                selected = selected,
+                selectedContentColor = TextOrange,
+                unselectedContentColor = TextFieldFont,
+                alwaysShowLabel = true
             )
         }
     }
