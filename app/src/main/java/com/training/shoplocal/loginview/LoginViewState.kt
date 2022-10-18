@@ -5,10 +5,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import com.training.shoplocal.ScreenItem
-import com.training.shoplocal.ScreenRouter
 import com.training.shoplocal.log
 import com.training.shoplocal.retrofit.User
+import com.training.shoplocal.screens.AppScreen
+import com.training.shoplocal.screens.ScreenItem
+import com.training.shoplocal.screens.ScreenRouter
 import com.training.shoplocal.userfingerprint.UserFingerPrint
 import com.training.shoplocal.validateMail
 import kotlinx.coroutines.CoroutineScope
@@ -150,13 +151,13 @@ class LoginViewState {
     }
 
 
-    fun showMainScreen(){
+    /*fun showAppScreen(){
         CoroutineScope(Dispatchers.Main).launch {
             delay(500)
             password = ""
-            ScreenRouter.navigateTo(ScreenItem.MainScreen)
+    //        ScreenRouter.navigateTo(ScreenItem.MainScreen)
         }
-    }
+    }*/
 
 
     fun changePassword(value: String) {

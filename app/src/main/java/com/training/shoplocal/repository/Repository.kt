@@ -68,13 +68,11 @@ class Repository: CrudInterface, AccessUserInterface {
         finger: Boolean
     ) {
         fun clearLoginPassword(){
-            if (!finger) {
+            if (!finger)
                 CoroutineScope(Dispatchers.Main).launch {
                     delay(400)
                     loginState.clearPassword()
                 }
-                //loginState.clearPassword()
-            }
             loginState.hideProgress()
             action?.invoke(false)
         }
@@ -112,7 +110,9 @@ class Repository: CrudInterface, AccessUserInterface {
                        // log("$id")
                         if (finger)
                             loginState.changePassword(password)
-                        loginState.showMainScreen()
+                        //clearPassword()
+                        loginState.clearPassword()
+                        //loginState.showAppScreen()
                     } else
                         clearLoginPassword()
                     //action?.invoke(result)

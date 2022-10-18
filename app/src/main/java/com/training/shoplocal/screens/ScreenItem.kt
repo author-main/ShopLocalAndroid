@@ -1,4 +1,4 @@
-package com.training.shoplocal
+package com.training.shoplocal.screens
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

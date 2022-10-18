@@ -13,10 +13,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
+    private val _authorizedUser = MutableStateFlow<Boolean>(false)
+    val authorizedUser = _authorizedUser.asStateFlow()
     private val _snackbarData = MutableStateFlow(Triple<String, Boolean, MESSAGE>("", false, MESSAGE.INFO))
     val snackbarData = _snackbarData.asStateFlow()
     fun showSnackbar(message: String = "", type: MESSAGE = MESSAGE.INFO, visible: Boolean = true){
         _snackbarData.value = Triple(message, visible, type)
+    }
+    private fun authorizeUser(){
+        _authorizedUser.value = true
     }
     /*init {
         repository.loginState.addOnAccessUser(object: AccessUserInterface {
@@ -72,7 +77,9 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     fun onLogin(email: String, password: String, finger: Boolean = false) {
         repository.onLogin(action = { result ->
-            if (!result)
+            if (result)
+                authorizeUser()
+            else
                 showSnackbar(message = getStringResource(R.string.message_login_error), type = MESSAGE.ERROR)
         }, email, password, finger)
     }

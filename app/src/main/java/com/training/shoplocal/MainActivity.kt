@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.FragmentActivity
@@ -19,6 +21,7 @@ import com.training.shoplocal.dialogs.DialogRestore
 import com.training.shoplocal.dialogs.ShowProgress
 import com.training.shoplocal.retrofit.ApiManager
 import com.training.shoplocal.retrofit.User.Companion.getUserData
+import com.training.shoplocal.screens.AppScreen
 import com.training.shoplocal.screens.LoginScreen
 import com.training.shoplocal.screens.MainScreen
 import com.training.shoplocal.ui.theme.ShopLocalTheme
@@ -58,15 +61,11 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
 
     @Composable
     fun ShowScreen(){
-        MainScreen()
-        /*when (ScreenRouter.current) {
-            ScreenItem.LoginScreen ->
-                LoginScreen(viewModel.getLoginState())
-            ScreenItem.MainScreen -> {
-                MainScreen()
-            }
-            else -> {}
-        }*/
+        val authorizedUser: Boolean by viewModel.authorizedUser.collectAsState()
+        if (authorizedUser)
+            AppScreen()
+        else
+            LoginScreen(viewModel.getLoginState())
     }
 
     @Composable

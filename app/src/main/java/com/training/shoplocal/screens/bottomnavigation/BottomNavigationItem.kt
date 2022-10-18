@@ -1,4 +1,4 @@
-package com.training.shoplocal.screens
+package com.training.shoplocal.screens.bottomnavigation
 
 import androidx.annotation.DrawableRes
 import androidx.compose.material.*
@@ -8,6 +8,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.training.shoplocal.AppShopLocal
 import com.training.shoplocal.R
@@ -54,6 +57,24 @@ fun BottomNavigationBar(navController: NavController) {
                 onClick = {},
                 selected = false
             )
+        }
+    }
+}
+
+@Composable
+fun Navigation(navController: NavHostController) {
+    NavHost(navController, startDestination = BottomNavigationItem.Main.route) {
+        composable(BottomNavigationItem.Main.route) {
+
+        }
+        composable(BottomNavigationItem.Catalog.route) {
+
+        }
+        composable(BottomNavigationItem.Cart.route) {
+
+        }
+        composable(BottomNavigationItem.Profile.route) {
+
         }
     }
 }

@@ -16,7 +16,7 @@ import com.training.shoplocal.ui.theme.TextFieldBg
 val TEXT_BOTTOMNAVIGATION: Array<String> = AppShopLocal.appContext().resources.getStringArray(R.array.bottom_navigation_items)
 const val DEFAULT_STRRESOURCE_VALUE  = ""
 const val FILE_PREFERENCES      = "settings"
-const val SERVER_URL            = "http://192.168.0.10"
+const val SERVER_URL            = "http://192.168.1.10"
 
 enum class MESSAGE(@DrawableRes val icon: Int, val color: Color) {
     ERROR   (R.drawable.ic_error,           SelectedItem),
