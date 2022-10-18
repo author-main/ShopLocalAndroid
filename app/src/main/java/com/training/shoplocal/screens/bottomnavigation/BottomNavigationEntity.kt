@@ -1,6 +1,8 @@
 package com.training.shoplocal.screens.bottomnavigation
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -46,6 +48,13 @@ fun BottomNavigationBar(navController: NavController) {
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
+      /*  Box(){
+            Row() {
+                bottomNavigationItems.forEach { item ->
+                    Text(item.data.text)
+                }
+            }
+        }*/
         bottomNavigationItems.forEach { item ->
             val selected = currentRoute == item.route
            /* val color = if (selected)
