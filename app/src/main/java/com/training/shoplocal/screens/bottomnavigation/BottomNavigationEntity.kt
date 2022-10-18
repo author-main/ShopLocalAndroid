@@ -41,7 +41,6 @@ sealed class BottomNavigationItem(val route: String, val data: BottomNavigationI
     object Profile:     BottomNavigationItem("route_profile", BottomNavigationItemData.PROFILE)
 }
 
-
 @Composable
 fun IconWithText(value: BottomNavigationItemData, selected: Boolean = false,
                  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
