@@ -62,7 +62,7 @@ class Repository: CrudInterface, AccessUserInterface {
     }
 
     override fun onLogin(
-        action: ((result: Boolean) -> Unit)?,
+        action: ((result: Int) -> Unit)?,
         email: String,
         password: String,
         finger: Boolean
@@ -74,7 +74,7 @@ class Repository: CrudInterface, AccessUserInterface {
                     loginState.clearPassword()
                 }
             loginState.hideProgress()
-            action?.invoke(false)
+            action?.invoke(-1)
         }
 
       //  if (!validateMail(email)) {}
@@ -104,7 +104,7 @@ class Repository: CrudInterface, AccessUserInterface {
                     //log("$id")
                     //val result = (response.body()?.id ?: 0) > 0
                     if (id > 0) {
-                        action?.invoke(true)
+                        action?.invoke(id)
                         saveUserPassword(password)
                         user.saveUserData()
                        // log("$id")

@@ -20,8 +20,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     fun showSnackbar(message: String = "", type: MESSAGE = MESSAGE.INFO, visible: Boolean = true){
         _snackbarData.value = Triple(message, visible, type)
     }
-    private fun authorizeUser(){
-        _authorizedUser.value = true
+    private fun authorizeUser(value: Boolean = true){
+        _authorizedUser.value = value
     }
     /*init {
         repository.loginState.addOnAccessUser(object: AccessUserInterface {
@@ -76,7 +76,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
 
     fun onLogin(email: String, password: String, finger: Boolean = false) {
-        repository.onLogin(action = { result ->
+        repository.onLogin(action = { id ->
+            val result = id > 0
             if (result)
                 authorizeUser()
             else

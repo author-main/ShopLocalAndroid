@@ -9,8 +9,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.training.shoplocal.ScreenItem
-import com.training.shoplocal.ScreenRouter
 import com.training.shoplocal.screens.bottomnavigation.BottomNavigationBar
 import com.training.shoplocal.screens.bottomnavigation.BottomNavigationItem
 import com.training.shoplocal.screens.bottomnavigation.Navigation
