@@ -75,11 +75,14 @@ fun IconWithText(value: BottomNavigationItemData, selected: Boolean = false,
     else
         1f*/
 
+    val scaleColumn = if (selected) animate.value else 1f
+
     Column(
         Modifier
             .fillMaxHeight()
             .padding(horizontal = 24.dp)
-            .graphicsLayer(scaleX = if (selected) animate.value else 1f, scaleY = if (selected) animate.value else 1f)
+            //.graphicsLayer(scaleX = if (selected) animate.value else 1f, scaleY = if (selected) animate.value else 1f)
+            .graphicsLayer(scaleX = scaleColumn, scaleY = scaleColumn)
             .clickable(
                 interactionSource = interactionSource,
                 indication = null
