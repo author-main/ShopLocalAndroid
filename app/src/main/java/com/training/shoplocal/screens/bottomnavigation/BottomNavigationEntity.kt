@@ -26,6 +26,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.training.shoplocal.R
 import com.training.shoplocal.TEXT_BOTTOMNAVIGATION
 import com.training.shoplocal.log
+import com.training.shoplocal.screens.MainScreen
 import com.training.shoplocal.ui.theme.TextFieldFont
 import com.training.shoplocal.ui.theme.TextOrange
 import kotlinx.coroutines.cancel
@@ -166,7 +167,7 @@ fun BottomNavigationBar(navController: NavController) {
 fun Navigation(navController: NavHostController) {
     NavHost(navController, startDestination = BottomNavigationItem.Main.route) {
         composable(BottomNavigationItem.Main.route) {
-
+            MainScreen()
         }
         composable(BottomNavigationItem.Catalog.route) {
 

@@ -23,12 +23,12 @@ fun AppScreen(){
     ) {
         Box(modifier = Modifier.padding(it)) {
             Navigation(navController)
-            when (ScreenRouter.current) {
+         /*   when (ScreenRouter.current) {
                 ScreenItem.MainScreen -> {
                     MainScreen()
                 }
                 else -> {}
-            }
+            }*/
         }
     }
 }
