@@ -8,10 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,8 +25,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.training.shoplocal.R
 import com.training.shoplocal.TEXT_BOTTOMNAVIGATION
+import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.TextFieldFont
 import com.training.shoplocal.ui.theme.TextOrange
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 
@@ -51,34 +50,60 @@ sealed class BottomNavigationItem(val route: String, val data: BottomNavigationI
 fun IconWithText(value: BottomNavigationItemData, selected: Boolean = false,
                  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
                  action: ()->Unit = {}){
+   /* val defaulScale = remember {
+        mutableStateOf(1.2f)
+    }*/
     val scope = rememberCoroutineScope()
-    val animate = remember{ Animatable(1f) }
+    val animate = remember{ Animatable(1.2f) }
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
+    /*val scale:Float = if (selected)
+                    animate.value
+                else
+                    1.0f*/
+
+    /*val valueScale by remember {
+        derivedStateOf {
+            if (!selected && animate.value != 1f)
+                1.7f
+            else
+                animate.value
+        }
+    }*/
+
+  /*  val scale = if (selected)
+        defaulScale.value
+    else
+        1f*/
+
     Column(
         Modifier
             .fillMaxHeight()
             .padding(horizontal = 24.dp)
-            .graphicsLayer (scaleX = animate.value, scaleY = animate.value )
+            .graphicsLayer(scaleX = if (selected) animate.value else 1f, scaleY = if (selected) animate.value else 1f)
             .clickable(
                 interactionSource = interactionSource,
                 indication = null
             ) {
-                if (!selected)
-                scope.launch {
-                    animate.animateTo(
-                        targetValue = 0.8f,
-                        animationSpec = tween(80)
-                    )
-                    animate.animateTo(
-                        targetValue = 1.4f,
-                        animationSpec = tween(150)
-                    )
-                    animate.animateTo(
-                        targetValue = 1.0f,
-                        animationSpec = tween(100)
-                    ) {
-                        action.invoke()
+                if (!selected) {
+
+                    scope.launch {
+                       /* animate.animateTo(
+                            targetValue = 0.9f,
+                            animationSpec = tween(80)
+                        )*/
+                        animate.animateTo(
+                            targetValue = 1.4f,
+                            animationSpec = tween(150)
+                        )
+                        animate.animateTo(
+                            targetValue = 1.2f,
+                            animationSpec = tween(100)
+                        ) {}/*{
+                            action.invoke()
+                        }*/
+                        //action.invoke()
                     }
+                    action.invoke()
                 }
 
             },
