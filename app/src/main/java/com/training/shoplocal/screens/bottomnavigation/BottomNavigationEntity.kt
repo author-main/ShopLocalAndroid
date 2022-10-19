@@ -70,6 +70,10 @@ fun IconWithText(value: BottomNavigationItemData, selected: Boolean = false,
                 if (!selected) {
                     scope.launch {
                         animate.animateTo(
+                            targetValue = 0.8f,
+                            animationSpec = tween(100)
+                        )
+                        animate.animateTo(
                             targetValue = 1.3f,
                             animationSpec = tween(150)
                         )
