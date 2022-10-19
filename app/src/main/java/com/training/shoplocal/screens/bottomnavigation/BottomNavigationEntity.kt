@@ -56,44 +56,18 @@ fun IconWithText(value: BottomNavigationItemData, selected: Boolean = false,
     val scope = rememberCoroutineScope()
     val animate = remember{ Animatable(1.2f) }
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
-    /*val scale:Float = if (selected)
-                    animate.value
-                else
-                    1.0f*/
-
-    /*val valueScale by remember {
-        derivedStateOf {
-            if (!selected && animate.value != 1f)
-                1.7f
-            else
-                animate.value
-        }
-    }*/
-
-  /*  val scale = if (selected)
-        defaulScale.value
-    else
-        1f*/
-
     val scaleColumn = if (selected) animate.value else 1f
-
     Column(
         Modifier
             .fillMaxHeight()
             .padding(horizontal = 24.dp)
-            //.graphicsLayer(scaleX = if (selected) animate.value else 1f, scaleY = if (selected) animate.value else 1f)
             .graphicsLayer(scaleX = scaleColumn, scaleY = scaleColumn)
             .clickable(
                 interactionSource = interactionSource,
                 indication = null
             ) {
                 if (!selected) {
-
                     scope.launch {
-                       /* animate.animateTo(
-                            targetValue = 0.9f,
-                            animationSpec = tween(80)
-                        )*/
                         animate.animateTo(
                             targetValue = 1.4f,
                             animationSpec = tween(150)
@@ -101,10 +75,7 @@ fun IconWithText(value: BottomNavigationItemData, selected: Boolean = false,
                         animate.animateTo(
                             targetValue = 1.2f,
                             animationSpec = tween(100)
-                        ) {}/*{
-                            action.invoke()
-                        }*/
-                        //action.invoke()
+                        )
                     }
                     action.invoke()
                 }
