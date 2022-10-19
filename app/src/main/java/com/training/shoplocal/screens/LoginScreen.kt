@@ -30,6 +30,7 @@ import com.training.shoplocal.dialogs.ShowMessage
 import com.training.shoplocal.log
 import com.training.shoplocal.loginview.LoginView
 import com.training.shoplocal.loginview.LoginViewState
+import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.ui.theme.TextLightGray
 import com.training.shoplocal.ui.theme.TextOrange
 import com.training.shoplocal.viewmodel.RepositoryViewModel
@@ -76,7 +77,7 @@ fun FooterView(state: LoginViewState, modifier: Modifier){
 fun LoginScreen(state: LoginViewState){
     val viewModel: RepositoryViewModel = viewModel()
     val dataSnackbar: Triple<String, Boolean, MESSAGE> by viewModel.snackbarData.collectAsState()
-    ConstraintLayout {
+    ConstraintLayout(modifier = Modifier.background(PrimaryDark)){
         val (header, body, footer) = createRefs()
         HeaderView(modifier=Modifier.constrainAs(header){
             top.linkTo(parent.top, margin = 32.dp)

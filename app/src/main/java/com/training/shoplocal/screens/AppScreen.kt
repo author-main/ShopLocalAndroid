@@ -1,5 +1,6 @@
 package com.training.shoplocal.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
@@ -12,16 +13,18 @@ import androidx.navigation.compose.rememberNavController
 import com.training.shoplocal.screens.bottomnavigation.BottomNavigationBar
 import com.training.shoplocal.screens.bottomnavigation.BottomNavigationItem
 import com.training.shoplocal.screens.bottomnavigation.Navigation
+import com.training.shoplocal.ui.theme.PrimaryDark
 
 @Composable
 fun AppScreen(){
     val navController = rememberNavController()
-    Scaffold(
-        bottomBar = {
+    Scaffold(bottomBar = {
             BottomNavigationBar(navController)
         }
     ) {
-        Box(modifier = Modifier.padding(it)) {
+        Box(modifier = Modifier
+            .padding(it)
+        ) {
             Navigation(navController)
          /*   when (ScreenRouter.current) {
                 ScreenItem.MainScreen -> {

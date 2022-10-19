@@ -3,6 +3,7 @@ package com.training.shoplocal.buttonpanel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -19,6 +20,7 @@ import com.training.shoplocal.DialogRouter
 import com.training.shoplocal.R
 import com.training.shoplocal.log
 import com.training.shoplocal.loginview.LoginViewState
+import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.ui.theme.TextLightGray
 import com.training.shoplocal.ui.theme.TextOrange
 
@@ -43,6 +45,7 @@ fun ButtonUserAccessPanel(state: LoginViewState){
          verticalAlignment = Alignment.CenterVertically
      ){
          OutlinedButton(
+             colors = ButtonDefaults.buttonColors(backgroundColor = PrimaryDark),
             onClick = {
                 lostFocus()
                 DialogRouter.navigateTo(DialogItem.RegUserDialog)
@@ -69,6 +72,7 @@ fun ButtonUserAccessPanel(state: LoginViewState){
         )
 
         OutlinedButton(
+            colors = ButtonDefaults.buttonColors(backgroundColor = PrimaryDark),
             onClick = {
                 lostFocus()
                 //DialogRouter.navigateTo(DialogItem.ProgressDialog)
