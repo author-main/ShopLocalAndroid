@@ -53,8 +53,9 @@ fun IconWithText(value: BottomNavigationItemData, selected: Boolean = false,
    /* val defaulScale = remember {
         mutableStateOf(1.2f)
     }*/
+    val DEFAULT_SELECTED_SCALE = 1.1f
     val scope = rememberCoroutineScope()
-    val animate = remember{ Animatable(1.2f) }
+    val animate = remember{ Animatable(DEFAULT_SELECTED_SCALE) }
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
     val scaleColumn = if (selected) animate.value else 1f
     Column(
@@ -69,11 +70,11 @@ fun IconWithText(value: BottomNavigationItemData, selected: Boolean = false,
                 if (!selected) {
                     scope.launch {
                         animate.animateTo(
-                            targetValue = 1.4f,
+                            targetValue = 1.3f,
                             animationSpec = tween(150)
                         )
                         animate.animateTo(
-                            targetValue = 1.2f,
+                            targetValue = DEFAULT_SELECTED_SCALE,
                             animationSpec = tween(100)
                         )
                     }
