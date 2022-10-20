@@ -26,7 +26,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.training.shoplocal.R
 import com.training.shoplocal.TEXT_BOTTOMNAVIGATION
 import com.training.shoplocal.log
+import com.training.shoplocal.screens.CartScreen
+import com.training.shoplocal.screens.CatalogScreen
 import com.training.shoplocal.screens.MainScreen
+import com.training.shoplocal.screens.ProfileScreen
 import com.training.shoplocal.ui.theme.TextFieldFont
 import com.training.shoplocal.ui.theme.TextOrange
 import kotlinx.coroutines.cancel
@@ -51,9 +54,6 @@ sealed class BottomNavigationItem(val route: String, val data: BottomNavigationI
 fun IconWithText(value: BottomNavigationItemData, selected: Boolean = false,
                  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
                  action: ()->Unit = {}){
-    /* val defaulScale = remember {
-         mutableStateOf(1.2f)
-     }*/
     val DEFAULT_SELECTED_SCALE = 1.1f
     val scope = rememberCoroutineScope()
     val animate = remember{ Animatable(DEFAULT_SELECTED_SCALE) }
@@ -131,35 +131,6 @@ fun BottomNavigationBar(navController: NavController) {
                 }
             })
         }
-        /*  Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically,
-              horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)) {
-              bottomNavigationItems.forEach { item ->
-                  Text(text = item.data.text)
-              }
-          }*/
-        /*bottomNavigationItems.forEach { item ->
-            val selected = currentRoute == item.route
-           /* val color = if (selected)
-                TextOrange
-            else
-                TextFieldFont*/
-            BottomNavigationItem(
-                icon = {
-                    Icon(painterResource(id = item.data.icon),
-                        //    tint = color,
-                            contentDescription = null)
-                },
-                label = {
-                        Text(item.data.text,
-                        //color = color
-                    ) },
-                onClick = {},
-                selected = selected,
-                selectedContentColor = TextOrange,
-                unselectedContentColor = TextFieldFont,
-                alwaysShowLabel = true
-            )
-        }*/
     }
 }
 
@@ -170,13 +141,13 @@ fun Navigation(navController: NavHostController) {
             MainScreen()
         }
         composable(BottomNavigationItem.Catalog.route) {
-
+            CatalogScreen()
         }
         composable(BottomNavigationItem.Cart.route) {
-
+            CartScreen()
         }
         composable(BottomNavigationItem.Profile.route) {
-
+            ProfileScreen()
         }
     }
 }

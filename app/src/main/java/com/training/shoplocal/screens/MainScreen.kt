@@ -16,7 +16,6 @@ import com.training.shoplocal.ui.theme.PrimaryDark
 
 @Composable
 fun MainScreen(){
-    log("MainScreen")
     Box(modifier = Modifier.fillMaxSize()
         .background(PrimaryDark))
 }

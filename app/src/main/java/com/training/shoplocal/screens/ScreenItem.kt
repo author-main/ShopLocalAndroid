@@ -7,7 +7,7 @@ import androidx.compose.runtime.setValue
 sealed class ScreenItem {
     //object None : ScreenItem()
     object LoginScreen : ScreenItem()
-    object MainScreen : ScreenItem()
+    //object MainScreen : ScreenItem()
 }
 
 object ScreenRouter {
