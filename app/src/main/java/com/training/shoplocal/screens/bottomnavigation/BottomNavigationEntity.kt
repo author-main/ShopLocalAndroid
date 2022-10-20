@@ -51,9 +51,9 @@ sealed class BottomNavigationItem(val route: String, val data: BottomNavigationI
 fun IconWithText(value: BottomNavigationItemData, selected: Boolean = false,
                  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
                  action: ()->Unit = {}){
-   /* val defaulScale = remember {
-        mutableStateOf(1.2f)
-    }*/
+    /* val defaulScale = remember {
+         mutableStateOf(1.2f)
+     }*/
     val DEFAULT_SELECTED_SCALE = 1.1f
     val scope = rememberCoroutineScope()
     val animate = remember{ Animatable(DEFAULT_SELECTED_SCALE) }
