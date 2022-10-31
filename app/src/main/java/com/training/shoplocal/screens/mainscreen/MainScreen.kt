@@ -1,4 +1,4 @@
-package com.training.shoplocal.screens
+package com.training.shoplocal.screens.mainscreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

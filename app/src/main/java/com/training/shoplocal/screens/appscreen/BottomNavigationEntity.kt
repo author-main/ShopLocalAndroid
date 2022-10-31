@@ -1,4 +1,4 @@
-package com.training.shoplocal.screens.bottomnavigation
+package com.training.shoplocal.screens.appscreen
 
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.Animatable
@@ -28,7 +28,7 @@ import com.training.shoplocal.TEXT_BOTTOMNAVIGATION
 import com.training.shoplocal.log
 import com.training.shoplocal.screens.CartScreen
 import com.training.shoplocal.screens.CatalogScreen
-import com.training.shoplocal.screens.MainScreen
+import com.training.shoplocal.screens.mainscreen.MainScreen
 import com.training.shoplocal.screens.ProfileScreen
 import com.training.shoplocal.ui.theme.TextFieldFont
 import com.training.shoplocal.ui.theme.TextOrange

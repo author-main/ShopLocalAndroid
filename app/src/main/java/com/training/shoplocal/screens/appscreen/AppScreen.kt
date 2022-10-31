@@ -1,4 +1,4 @@
-package com.training.shoplocal.screens
+package com.training.shoplocal.screens.appscreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -10,9 +10,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.training.shoplocal.screens.bottomnavigation.BottomNavigationBar
-import com.training.shoplocal.screens.bottomnavigation.BottomNavigationItem
-import com.training.shoplocal.screens.bottomnavigation.Navigation
+import com.training.shoplocal.screens.appscreen.BottomNavigationBar
+import com.training.shoplocal.screens.appscreen.BottomNavigationItem
+import com.training.shoplocal.screens.appscreen.Navigation
 import com.training.shoplocal.ui.theme.PrimaryDark
 
 @Composable

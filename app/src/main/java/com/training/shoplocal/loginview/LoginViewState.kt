@@ -7,7 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import com.training.shoplocal.log
 import com.training.shoplocal.retrofit.User
-import com.training.shoplocal.screens.AppScreen
+import com.training.shoplocal.screens.appscreen.AppScreen
 import com.training.shoplocal.screens.ScreenItem
 import com.training.shoplocal.screens.ScreenRouter
 import com.training.shoplocal.userfingerprint.UserFingerPrint
