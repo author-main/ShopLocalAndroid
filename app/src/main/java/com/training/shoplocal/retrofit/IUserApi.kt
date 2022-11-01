@@ -10,6 +10,6 @@ import retrofit2.http.Path
 
 interface IUserApi {
     @Headers("Content-Type: application/json")
-    @POST("/api/{php}")//reg_user")
-    fun queryUser(@Body user: User, @Path("php") php: String): Call<User>
+    @POST("/api/{script}")//reg_user")
+    fun queryUser(@Body user: User, @Path("script") phpScript: String): Call<User>
 }
