@@ -37,6 +37,18 @@ import java.text.DecimalFormat
 
 
 @Composable
+fun DiscountPanel(modifier: Modifier, percent: Int){
+    Card(modifier = modifier, backgroundColor = BgDiscount,
+    shape = RoundedCornerShape(6.dp)
+    ){
+        Text(modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp),
+            text = "-$percent%",
+            fontSize = 11.sp,
+            color = TextDiscount)
+    }
+}
+
+@Composable
 fun StarPanel(count: Float){
     val df = DecimalFormat("#.#")
     df.roundingMode = RoundingMode.HALF_EVEN
@@ -122,6 +134,9 @@ fun CardProduct(){
                             bitmap = it, contentDescription = null
                         )
                     }
+
+                    DiscountPanel(modifier = Modifier.align(Alignment.BottomStart), percent = 15)
+
                     //Text("asfgsdfgsf", modifier = Modifier.align(Alignment.BottomEnd))
 
                     /*if (imageBitmap != null)
@@ -162,7 +177,7 @@ fun CardProduct(){
                 overflow = TextOverflow.Ellipsis
             )
             // * >
-            StarPanel(3.4f)
+            StarPanel(2.6f)
         }
     }
 }
