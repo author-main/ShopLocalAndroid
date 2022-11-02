@@ -35,7 +35,8 @@ import java.io.IOException
 fun StarPanel(count: Int){
     val bm = BitmapFactory.decodeResource(appContext().resources, R.drawable.ic_star)
     Row(modifier = Modifier.padding(top = 2.dp),
-        horizontalArrangement = Arrangement.spacedBy(1.dp)) {
+    //    horizontalArrangement = Arrangement.spacedBy(1.dp)
+    ) {
         for (i in 0..4) {
             val color = if (i <= count - 1)
                 ImageStarOn
