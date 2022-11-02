@@ -17,6 +17,8 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -26,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.training.shoplocal.AppShopLocal.Companion.appContext
+import com.training.shoplocal.R
 import com.training.shoplocal.getPrice
 import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.TextBrand
@@ -37,6 +40,7 @@ import java.io.IOException
 @Composable
 fun CardProduct(){
     val context = LocalContext.current
+    val labelFont = FontFamily(Font(R.font.robotocondensed_light))
     Box(modifier = Modifier
         .width(150.dp) )
         {
@@ -104,6 +108,7 @@ fun CardProduct(){
             // * >
             // < * Text Description
             Text("Процессор Intel Core i3 10105, LGA 1200, OEM",
+                fontFamily = labelFont,
                 color = TextDescription,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
