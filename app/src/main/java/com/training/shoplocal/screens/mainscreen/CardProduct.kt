@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.training.shoplocal.AppShopLocal.Companion.appContext
+import com.training.shoplocal.getPrice
 import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.TextBrand
 import com.training.shoplocal.ui.theme.TextDescription
@@ -75,39 +76,39 @@ fun CardProduct(){
                     log("image loaded")*/
                 }
             }
-            // < Text Price
+            // < * Text Price
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(modifier = Modifier.padding(end = 8.dp),
-                    fontSize = 17.sp,
-                    text = "11 100P",
+                    fontSize = 18.sp,
+                    text = getPrice(11100f),
                     fontWeight = FontWeight.SemiBold,
                     color = TextPrice
                 )
                 Text(modifier = Modifier.padding(end = 8.dp),
                     fontSize = 14.sp,
-                    text = "11 260P",
+                    text = getPrice(11260f),
                     fontWeight = FontWeight.SemiBold,
                     style = TextStyle(textDecoration = TextDecoration.LineThrough),
                     color = TextPrice
                 )
             }
-            // < Text Promotion
+            // * >
+            // < * Text Promotion
             Text("Бестселлер",
                 fontSize = 14.sp,
                 color = TextPromotion)
-            // >
-            // >
-            // < Text Brend
+            // * >
+            // < * Text Brend
             Text("AMD",
                 color = TextBrand)
-            // >
-            // < Text Description
+            // * >
+            // < * Text Description
             Text("Процессор Intel Core i3 10105, LGA 1200, OEM",
                 color = TextDescription,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
-            // >
+            // * >
         }
     }
 }

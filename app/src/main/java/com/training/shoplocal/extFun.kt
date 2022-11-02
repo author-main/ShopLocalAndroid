@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import com.training.shoplocal.AppShopLocal.Companion.appContext
 import com.training.shoplocal.ui.theme.SelectedItem
 import com.training.shoplocal.ui.theme.TextFieldBg
+import java.text.DecimalFormat
 
 val TEXT_BOTTOMNAVIGATION: Array<String> = AppShopLocal.appContext().resources.getStringArray(R.array.bottom_navigation_items)
 const val DEFAULT_STRRESOURCE_VALUE  = ""
@@ -55,6 +56,11 @@ fun isConnectedNet(): Boolean{
     return connected
 }
 
-    fun mToast(value: String){
-        Toast.makeText(appContext(), value, Toast.LENGTH_LONG).show()
-    }
+fun mToast(value: String){
+    Toast.makeText(appContext(), value, Toast.LENGTH_LONG).show()
+}
+
+fun getPrice(value: Float): String{
+    val dec = DecimalFormat("#,###.##")
+    return dec.format(value) + "P"
+}
