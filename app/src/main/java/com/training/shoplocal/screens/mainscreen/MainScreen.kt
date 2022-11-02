@@ -10,12 +10,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.training.shoplocal.log
+import com.training.shoplocal.ui.theme.BgScreenDark
 import com.training.shoplocal.ui.theme.PrimaryDark
 
 @Composable
 fun MainScreen(){
     Box(modifier = Modifier.fillMaxSize()
-        .background(PrimaryDark)
-
-    )
+        .background(BgScreenDark)
+    ) {
+        CardProduct()
+    }
 }
