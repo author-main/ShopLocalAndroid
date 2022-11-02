@@ -1,10 +1,9 @@
 package com.training.shoplocal.screens.mainscreen
 
-import android.graphics.Bitmap
+import com.training.shoplocal.R
 import android.graphics.BitmapFactory
 import android.media.Image
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -13,29 +12,43 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.training.shoplocal.AppShopLocal.Companion.appContext
-import com.training.shoplocal.R
 import com.training.shoplocal.getPrice
-import com.training.shoplocal.log
-import com.training.shoplocal.ui.theme.TextBrand
-import com.training.shoplocal.ui.theme.TextDescription
-import com.training.shoplocal.ui.theme.TextPrice
-import com.training.shoplocal.ui.theme.TextPromotion
+import com.training.shoplocal.ui.theme.*
 import java.io.IOException
+
+
+@Composable
+fun StarPanel(count: Int){
+    val bm = BitmapFactory.decodeResource(appContext().resources, R.drawable.ic_star)
+    Row(modifier = Modifier.padding(top = 4.dp),
+        horizontalArrangement = Arrangement.spacedBy(1.dp)) {
+        for (i in 0..4) {
+            val color = if (i <= count - 1)
+                ImageStarOn
+            else
+                ImageStarOff
+            Image( modifier = Modifier.requiredSize(16.dp),
+                bitmap = bm.asImageBitmap(),
+                colorFilter = ColorFilter.tint(color),
+                contentDescription = null
+            )
+        }
+    }
+}
 
 @Composable
 fun CardProduct(){
@@ -53,7 +66,8 @@ fun CardProduct(){
                 backgroundColor = Color.White,
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Box(modifier = Modifier.fillMaxSize()
+                Box(modifier = Modifier
+                    .fillMaxSize()
                     .padding(8.dp),
                     contentAlignment = Alignment.Center
                     ) {
@@ -114,6 +128,7 @@ fun CardProduct(){
                 overflow = TextOverflow.Ellipsis
             )
             // * >
+            StarPanel(3)
         }
     }
 }
