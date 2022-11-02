@@ -1,5 +1,6 @@
 package com.training.shoplocal.screens.mainscreen
 
+import android.graphics.Bitmap
 import com.training.shoplocal.R
 import android.graphics.BitmapFactory
 import android.media.Image
@@ -14,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.StrokeCap.Companion.Round
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -27,26 +29,57 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.training.shoplocal.AppShopLocal.Companion.appContext
 import com.training.shoplocal.getPrice
+import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.*
 import java.io.IOException
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 
 @Composable
-fun StarPanel(count: Int){
+fun StarPanel(count: Float){
+    val df = DecimalFormat("#.#")
+    df.roundingMode = RoundingMode.HALF_EVEN
+    //val rounded = df.format(count)
+    val partNumber = df.format(count).split(",")
+    val intPart = partNumber[0].toInt()
+    val floatPart = if (partNumber.size == 2)
+        partNumber[1].toInt() else 0
+    val starPart = intPart + 1
+
     val bm = BitmapFactory.decodeResource(appContext().resources, R.drawable.ic_star)
     Row(modifier = Modifier.padding(top = 2.dp),
     //    horizontalArrangement = Arrangement.spacedBy(1.dp)
     ) {
         for (i in 0..4) {
-            val color = if (i <= count - 1)
+            val color = if (i <= intPart - 1)
                 ImageStarOn
             else
                 ImageStarOff
+            Box{
             Image( modifier = Modifier.requiredSize(12.dp),
                 bitmap = bm.asImageBitmap(),
                 colorFilter = ColorFilter.tint(color),
                 contentDescription = null
             )
+            // < * Отрисовка части звезды
+            if (i == starPart - 1 && floatPart > 0) {
+                val part       = bm.width / 10f
+                val center     = bm.width / 2f
+                val widthStar  = if (floatPart <= 5)
+                    center - (5 - floatPart) * part
+                else center + (floatPart - 5) * part
+                val bmPart: Bitmap = Bitmap.createBitmap(bm, 0, 0, widthStar.toInt(), bm.height)
+                Image(modifier = Modifier.height(12.dp),
+                    bitmap = bmPart.asImageBitmap(),
+                    colorFilter = ColorFilter.tint(ImageStarOn),
+                    contentDescription = null
+                )
+            }
+            // * >
+            }
+
+
         }
     }
 }
@@ -129,7 +162,7 @@ fun CardProduct(){
                 overflow = TextOverflow.Ellipsis
             )
             // * >
-            StarPanel(3)
+            StarPanel(3.4f)
         }
     }
 }
