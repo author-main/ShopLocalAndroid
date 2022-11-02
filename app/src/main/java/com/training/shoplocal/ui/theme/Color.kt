@@ -16,3 +16,11 @@ val TextFieldBg = Color(0xFF393E46)
 val TextFieldFont = Color(0xFFBEBEBE)
 val SelectedItem = Color(0xFFA10046)
 val BgScreenDark = Color(0xff181E26)
+
+// < Цветовая схема для CardProduct:
+val TextPrice           = Color(0xFF535961)
+val TextPromotion       = TextOrange
+val TextBrand           = Color(0xFF679BE9)
+val TextDescription     = Color.White
+val BgDiscount          = Color(0xFFF30F46)
+// >
