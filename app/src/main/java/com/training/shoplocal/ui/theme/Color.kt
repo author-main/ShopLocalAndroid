@@ -22,5 +22,7 @@ val TextPrice           = Color(0xFF535961)
 val TextPromotion       = TextOrange
 val TextBrand           = Color(0xFF679BE9)
 val TextDescription     = Color.White
+val TextDiscount        = Color.White
 val BgDiscount          = Color(0xFFF30F46)
+val ImageStar           = TextOrange
 // >
