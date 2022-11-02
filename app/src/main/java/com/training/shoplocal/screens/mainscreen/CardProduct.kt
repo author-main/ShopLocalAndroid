@@ -34,14 +34,14 @@ import java.io.IOException
 @Composable
 fun StarPanel(count: Int){
     val bm = BitmapFactory.decodeResource(appContext().resources, R.drawable.ic_star)
-    Row(modifier = Modifier.padding(top = 4.dp),
+    Row(modifier = Modifier.padding(top = 2.dp),
         horizontalArrangement = Arrangement.spacedBy(1.dp)) {
         for (i in 0..4) {
             val color = if (i <= count - 1)
                 ImageStarOn
             else
                 ImageStarOff
-            Image( modifier = Modifier.requiredSize(16.dp),
+            Image( modifier = Modifier.requiredSize(12.dp),
                 bitmap = bm.asImageBitmap(),
                 colorFilter = ColorFilter.tint(color),
                 contentDescription = null
