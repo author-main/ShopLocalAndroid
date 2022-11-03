@@ -123,7 +123,7 @@ fun CardProduct(){
                 .clip(CircleShape)
                 .border(1.dp, BorderButton, CircleShape)
                 .clickable {
-                    action.invoke()
+                    action()
                 }
         )
     }
@@ -142,7 +142,7 @@ fun CardProduct(){
                 .clickable/*(interactionSource = remember { MutableInteractionSource() },
                            indication = rememberRipple(radius = 16.dp)) */{
                     checked.value = !checked.value
-                    action.invoke()
+                    action()
                 }
         )
         Image(
