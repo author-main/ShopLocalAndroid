@@ -30,4 +30,6 @@ val ImageStarOn         = TextOrange
 val ImageStarOff        = TextPrice
 val BorderButton        = Color(0xFFAAAAAA)
 val ImageButton         = TextPrice
+val ImageFavoriteOff    = Color.White
+val ImageFavoriteOn     = BgDiscount
 // >

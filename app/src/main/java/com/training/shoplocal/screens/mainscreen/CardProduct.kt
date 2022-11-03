@@ -132,8 +132,8 @@ fun CardProduct(){
             painter = painterResource(R.drawable.ic_favorite),
             contentDescription = null,
             contentScale = ContentScale.None,
-            colorFilter = if (checked.value) ColorFilter.tint(ImageStarOn)
-            else ColorFilter.tint(Color.White),
+            colorFilter = if (checked.value) ColorFilter.tint(ImageFavoriteOn)
+            else ColorFilter.tint(ImageFavoriteOff),
             modifier = modifier
                 .size(24.dp)
                 .clickable {
