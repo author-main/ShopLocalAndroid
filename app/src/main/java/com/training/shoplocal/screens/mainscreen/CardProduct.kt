@@ -5,19 +5,29 @@ import com.training.shoplocal.R
 import android.graphics.BitmapFactory
 import android.media.Image
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.StrokeCap.Companion.Round
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -98,6 +108,52 @@ fun StarPanel(count: Float){
 
 @Composable
 fun CardProduct(){
+    @Composable
+    fun ButtonMore(modifier: Modifier, action: ()-> Unit){
+        Image(
+            painter = painterResource(R.drawable.ic_more),
+            contentDescription = null,
+            contentScale = ContentScale.None,
+            colorFilter = ColorFilter.tint(ImageButton),
+            modifier = modifier
+                .background(Color.White, CircleShape)
+                .size(24.dp)
+                .clip(CircleShape)
+                .border(1.dp, BorderButton, CircleShape)
+                .clickable {
+                    action.invoke()
+                }
+        )
+    }
+    @Composable
+    fun ButtonFavorite(modifier: Modifier, action: ()-> Unit){
+        val checked = remember{mutableStateOf(false)}
+        Image(
+            painter = painterResource(R.drawable.ic_favorite),
+            contentDescription = null,
+            contentScale = ContentScale.None,
+            colorFilter = if (checked.value) ColorFilter.tint(ImageStarOn)
+            else ColorFilter.tint(Color.White),
+            modifier = modifier
+                .size(24.dp)
+                .clickable {
+                    checked.value = !checked.value
+                    action.invoke()
+                }
+        )
+        if (!checked.value)
+        Image(
+            painter = painterResource(R.drawable.ic_favorite_border),
+            contentDescription = null,
+            contentScale = ContentScale.None,
+            colorFilter = ColorFilter.tint(BorderButton),
+            modifier = modifier
+                .size(24.dp)
+        )
+
+    }
+
+
     val context = LocalContext.current
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
     Box(modifier = Modifier
@@ -136,6 +192,15 @@ fun CardProduct(){
                     }
 
                     DiscountPanel(modifier = Modifier.align(Alignment.BottomStart), percent = 15)
+                    ButtonMore(modifier = Modifier.align(Alignment.BottomEnd)
+                    ) {
+                        log("click")
+                    }
+
+                    ButtonFavorite(modifier = Modifier.align(Alignment.TopEnd)
+                    ) {
+                        log("favorite")
+                    }
 
                     //Text("asfgsdfgsf", modifier = Modifier.align(Alignment.BottomEnd))
 

@@ -1,5 +1,6 @@
 package com.training.shoplocal.ui.theme
 
+import android.widget.ImageButton
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.core.content.ContextCompat
@@ -26,4 +27,6 @@ val TextDiscount        = Color.White
 val BgDiscount          = Color(0xFFF30F46)
 val ImageStarOn         = TextOrange
 val ImageStarOff        = TextPrice
+val BorderButton        = Color(0xFFAAAAAA)
+val ImageButton         = TextPrice
 // >
