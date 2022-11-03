@@ -8,11 +8,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -135,8 +137,10 @@ fun CardProduct(){
             colorFilter = if (checked.value) ColorFilter.tint(ImageFavoriteOn)
             else ColorFilter.tint(ImageFavoriteOff),
             modifier = modifier
+                .clip(CircleShape)
                 .size(24.dp)
-                .clickable {
+                .clickable/*(interactionSource = remember { MutableInteractionSource() },
+                           indication = rememberRipple(radius = 16.dp)) */{
                     checked.value = !checked.value
                     action.invoke()
                 }
