@@ -141,12 +141,12 @@ fun CardProduct(){
                     action.invoke()
                 }
         )
-        if (!checked.value)
         Image(
             painter = painterResource(R.drawable.ic_favorite_border),
             contentDescription = null,
             contentScale = ContentScale.None,
-            colorFilter = ColorFilter.tint(BorderButton),
+            colorFilter = if (!checked.value) ColorFilter.tint(BorderButton)
+            else ColorFilter.tint(BgCard),
             modifier = modifier
                 .size(24.dp)
         )
@@ -165,7 +165,7 @@ fun CardProduct(){
             Card(modifier = Modifier
                 .requiredSize(150.dp)
                 .padding(bottom = 8.dp),
-                backgroundColor = Color.White,
+                backgroundColor = BgCard,
                 shape = RoundedCornerShape(8.dp)
             ) {
                 Box(modifier = Modifier

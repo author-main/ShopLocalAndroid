@@ -19,6 +19,7 @@ val SelectedItem = Color(0xFFA10046)
 val BgScreenDark = Color(0xff181E26)
 
 // < Цветовая схема для CardProduct:
+val BgCard              = Color.White
 val TextPrice           = Color(0xFF535961)
 val TextPromotion       = TextOrange
 val TextBrand           = Color(0xFF679BE9)
