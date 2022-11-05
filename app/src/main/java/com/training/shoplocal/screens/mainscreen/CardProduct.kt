@@ -11,12 +11,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -50,7 +49,7 @@ import java.text.DecimalFormat
 private fun BottomSheetItem(@DrawableRes id: Int, text: String, action: ()->Unit){
     Row(modifier = Modifier
         .fillMaxWidth()
-        .clickable(onClick = {action()})
+        .clickable(onClick = { action() })
         .height(54.dp)
         .background(color = PrimaryDark)
         .padding(start = 15.dp), verticalAlignment = Alignment.CenterVertically){
@@ -68,8 +67,25 @@ fun BotomSheetItemPreview(){
 }
 
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun BottomSheetProduct(){
+fun BottomSheet(){
+    val modalBottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+    val scope = rememberCoroutineScope()
+    ModalBottomSheetLayout(
+        sheetContent = {
+            BottomSheetContent()
+        },
+        sheetState = modalBottomSheetState,
+        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+        sheetBackgroundColor = PrimaryDark
+    ) {
+        /* Add code later */
+    }
+}
+
+@Composable
+private fun BottomSheetContent(){
     val textItems = stringArrayResource(id = R.array.bottomsheet_product_items)
     BottomSheetItem(R.drawable.ic_brend_bs, textItems[0]){
 
