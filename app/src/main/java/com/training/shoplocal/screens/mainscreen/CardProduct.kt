@@ -80,7 +80,7 @@ private fun BottomSheetProduct(){
     BottomSheetItem(R.drawable.ic_product_bs, textItems[2]){
 
     }
-    BottomSheetItem(R.drawable.ic_cart, textItems[3]){
+    BottomSheetItem(R.drawable.ic_cancel_bs, textItems[3]){
 
     }
 }
