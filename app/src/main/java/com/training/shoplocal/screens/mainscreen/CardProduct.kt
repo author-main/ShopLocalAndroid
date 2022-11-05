@@ -61,11 +61,14 @@ private fun BottomSheetItem(@DrawableRes id: Int, text: String, divider: Boolean
                 .height(1.dp)
                 .background(Color.Red))*/
     }
-    if (divider)
-    Spacer(modifier = Modifier.fillMaxWidth()
-        .height(1.dp)
-        .padding(start = 49.dp)
-        .background(TextFieldBg))
+    if (divider) {
+        Spacer(
+            modifier = Modifier.fillMaxWidth()
+                .height(1.dp)
+                .padding(start = 49.dp)
+                .background(TextFieldBg)
+        )
+    }
 }
 
 /*@Preview(showBackground = true)
@@ -79,7 +82,7 @@ fun BotomSheetItemPreview(){
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun BottomSheet(){
+fun BottomSheet(content: @Composable ()-> Unit = {}){
     val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val scope = rememberCoroutineScope()
     ModalBottomSheetLayout(
@@ -91,7 +94,7 @@ fun BottomSheet(){
         sheetBackgroundColor = PrimaryDark,
         scrimColor = Color.Transparent
     ) {
-        ///* Add code later */
+        content()
         CardProduct(scope, state)
     }
 }

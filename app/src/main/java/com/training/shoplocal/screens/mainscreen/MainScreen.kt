@@ -15,9 +15,11 @@ import com.training.shoplocal.ui.theme.PrimaryDark
 
 @Composable
 fun MainScreen(){
-    Box(modifier = Modifier.fillMaxSize()
+    Box(modifier = Modifier
+        .fillMaxSize()
         .background(BgScreenDark)
     ) {
-        BottomSheet()
+        //BottomSheet()
+        //CardProduct(scope = , state = )
     }
 }
