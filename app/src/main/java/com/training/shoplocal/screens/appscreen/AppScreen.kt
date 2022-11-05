@@ -13,6 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import com.training.shoplocal.screens.appscreen.BottomNavigationBar
 import com.training.shoplocal.screens.appscreen.BottomNavigationItem
 import com.training.shoplocal.screens.appscreen.Navigation
+import com.training.shoplocal.screens.mainscreen.BottomSheet
 import com.training.shoplocal.ui.theme.PrimaryDark
 
 @Composable

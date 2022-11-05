@@ -40,47 +40,59 @@ import com.training.shoplocal.AppShopLocal.Companion.appContext
 import com.training.shoplocal.getPrice
 import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import java.io.IOException
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
 
 @Composable
-private fun BottomSheetItem(@DrawableRes id: Int, text: String, action: ()->Unit){
+private fun BottomSheetItem(@DrawableRes id: Int, text: String, divider: Boolean = true, action: ()->Unit){
     Row(modifier = Modifier
         .fillMaxWidth()
         .clickable(onClick = { action() })
-        .height(54.dp)
+        .height(48.dp)
         .background(color = PrimaryDark)
         .padding(start = 15.dp), verticalAlignment = Alignment.CenterVertically){
         Icon(painterResource(id = id), contentDescription = null, tint = TextFieldFont)
         Text(modifier = Modifier.padding(start = 16.dp), text = text, color = TextFieldFont)
+         /*   Spacer(modifier = Modifier.fillMaxWidth()
+                .height(1.dp)
+                .background(Color.Red))*/
     }
+    if (divider)
+    Spacer(modifier = Modifier.fillMaxWidth()
+        .height(1.dp)
+        .padding(start = 49.dp)
+        .background(TextFieldBg))
 }
 
-@Preview(showBackground = true)
+/*@Preview(showBackground = true)
 @Composable
 fun BotomSheetItemPreview(){
     BottomSheetItem(id = R.drawable.ic_product_bs, text = "checkit") {
 
     }
-}
+}*/
 
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BottomSheet(){
-    val modalBottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+    val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val scope = rememberCoroutineScope()
     ModalBottomSheetLayout(
         sheetContent = {
             BottomSheetContent()
         },
-        sheetState = modalBottomSheetState,
+        sheetState = state,
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-        sheetBackgroundColor = PrimaryDark
+        sheetBackgroundColor = PrimaryDark,
+        scrimColor = Color.Transparent
     ) {
-        /* Add code later */
+        ///* Add code later */
+        CardProduct(scope, state)
     }
 }
 
@@ -96,7 +108,7 @@ private fun BottomSheetContent(){
     BottomSheetItem(R.drawable.ic_product_bs, textItems[2]){
 
     }
-    BottomSheetItem(R.drawable.ic_cancel_bs, textItems[3]){
+    BottomSheetItem(R.drawable.ic_cancel_bs, textItems[3], divider = false){
 
     }
 }
@@ -161,8 +173,9 @@ fun StarPanel(count: Float){
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CardProduct(){
+fun CardProduct(scope: CoroutineScope, state: ModalBottomSheetState){
     @Composable
     fun ButtonMore(modifier: Modifier, action: ()-> Unit){
         Image(
@@ -176,7 +189,9 @@ fun CardProduct(){
                 .clip(CircleShape)
                 .border(1.dp, BorderButton, CircleShape)
                 .clickable {
-                    action()
+                    scope.launch {
+                        state.show()
+                    }
                 }
         )
     }
@@ -304,8 +319,9 @@ fun CardProduct(){
     }
 }
 
-@Preview(showBackground = true)
+/*@Preview(showBackground = true)
 @Composable
 fun CardProducttPreview() {
-    CardProduct()
-}
+    BottomSheet()
+    //CardProduct()
+}*/

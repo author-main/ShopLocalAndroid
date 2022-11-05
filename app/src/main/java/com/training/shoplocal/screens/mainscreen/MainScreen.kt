@@ -18,6 +18,6 @@ fun MainScreen(){
     Box(modifier = Modifier.fillMaxSize()
         .background(BgScreenDark)
     ) {
-        CardProduct()
+        BottomSheet()
     }
 }
