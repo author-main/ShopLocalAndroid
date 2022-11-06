@@ -23,6 +23,9 @@ import com.training.shoplocal.retrofit.ApiManager
 import com.training.shoplocal.retrofit.User.Companion.getUserData
 import com.training.shoplocal.screens.appscreen.AppScreen
 import com.training.shoplocal.screens.LoginScreen
+import com.training.shoplocal.screens.ScreenItem
+import com.training.shoplocal.screens.ScreenRouter
+import com.training.shoplocal.screens.appscreen.BottomNavigationItem
 import com.training.shoplocal.screens.mainscreen.MainScreen
 import com.training.shoplocal.ui.theme.ShopLocalTheme
 import com.training.shoplocal.viewmodel.FactoryViewModel
@@ -43,6 +46,7 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
 //        val repository = AppShopLocal.appRepository();
         val user = getUserData()
 
+
         //val passwordState = PasswordViewState.getPasswordState()
         setContent {
             ShopLocalTheme(true) {
@@ -61,10 +65,12 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
 
     @Composable
     fun ShowScreen(){
+        ScreenRouter.navigateTo(ScreenItem.MainScreen)
         AppScreen()
-       /* val authorizedUser: Boolean by viewModel.authorizedUser.collectAsState()
-        if (authorizedUser)
+        /*val authorizedUser: Boolean by viewModel.authorizedUser.collectAsState()
+        if (authorizedUser) {
             AppScreen()
+        }
         else
             LoginScreen(viewModel.getLoginState())*/
     }

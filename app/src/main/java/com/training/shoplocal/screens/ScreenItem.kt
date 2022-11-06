@@ -6,8 +6,11 @@ import androidx.compose.runtime.setValue
 
 sealed class ScreenItem {
     //object None : ScreenItem()
-    object LoginScreen : ScreenItem()
-    //object MainScreen : ScreenItem()
+    object LoginScreen      : ScreenItem()
+    object MainScreen       : ScreenItem()
+    object CatalogScreen    : ScreenItem()
+    object CartScreen       : ScreenItem()
+    object ProfileScreen    : ScreenItem()
 }
 
 object ScreenRouter {

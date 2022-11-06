@@ -26,10 +26,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.training.shoplocal.R
 import com.training.shoplocal.TEXT_BOTTOMNAVIGATION
 import com.training.shoplocal.log
-import com.training.shoplocal.screens.CartScreen
-import com.training.shoplocal.screens.CatalogScreen
+import com.training.shoplocal.screens.*
 import com.training.shoplocal.screens.mainscreen.MainScreen
-import com.training.shoplocal.screens.ProfileScreen
 import com.training.shoplocal.ui.theme.TextFieldFont
 import com.training.shoplocal.ui.theme.TextOrange
 import kotlinx.coroutines.cancel
@@ -138,16 +136,20 @@ fun BottomNavigationBar(navController: NavController) {
 fun Navigation(navController: NavHostController) {
     NavHost(navController, startDestination = BottomNavigationItem.Main.route) {
         composable(BottomNavigationItem.Main.route) {
-            MainScreen()
+            ScreenRouter.navigateTo(ScreenItem.MainScreen)
+            //MainScreen()
         }
         composable(BottomNavigationItem.Catalog.route) {
-            CatalogScreen()
+            ScreenRouter.navigateTo(ScreenItem.CatalogScreen)
+            //CatalogScreen()
         }
         composable(BottomNavigationItem.Cart.route) {
-            CartScreen()
+            ScreenRouter.navigateTo(ScreenItem.CartScreen)
+            //CartScreen()
         }
         composable(BottomNavigationItem.Profile.route) {
-            ProfileScreen()
+            ScreenRouter.navigateTo(ScreenItem.ProfileScreen)
+            //ProfileScreen()
         }
     }
 }

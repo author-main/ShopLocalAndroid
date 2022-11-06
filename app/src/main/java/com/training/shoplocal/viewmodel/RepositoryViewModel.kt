@@ -7,6 +7,8 @@ import com.training.shoplocal.R
 import com.training.shoplocal.getStringResource
 import com.training.shoplocal.loginview.AccessUserInterface
 import com.training.shoplocal.repository.Repository
+import com.training.shoplocal.screens.ScreenItem
+import com.training.shoplocal.screens.ScreenRouter
 import com.training.shoplocal.validateMail
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -78,8 +80,10 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     fun onLogin(email: String, password: String, finger: Boolean = false) {
         repository.onLogin(action = { id ->
             val result = id > 0
-            if (result)
+            if (result) {
+                ScreenRouter.navigateTo(ScreenItem.MainScreen)
                 authorizeUser()
+            }
             else
                 showSnackbar(message = getStringResource(R.string.message_login_error), type = MESSAGE.ERROR)
         }, email, password, finger)

@@ -46,76 +46,6 @@ import java.io.IOException
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
-
-@Composable
-private fun BottomSheetItem(@DrawableRes id: Int, text: String, divider: Boolean = true, action: ()->Unit){
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .clickable(onClick = { action() })
-        .height(48.dp)
-        .background(color = PrimaryDark)
-        .padding(start = 15.dp), verticalAlignment = Alignment.CenterVertically){
-        Icon(painterResource(id = id), contentDescription = null, tint = TextFieldFont)
-        Text(modifier = Modifier.padding(start = 16.dp), text = text, color = TextFieldFont)
-         /*   Spacer(modifier = Modifier.fillMaxWidth()
-                .height(1.dp)
-                .background(Color.Red))*/
-    }
-    if (divider) {
-        Spacer(
-            modifier = Modifier.fillMaxWidth()
-                .height(1.dp)
-                .padding(start = 49.dp)
-                .background(TextFieldBg)
-        )
-    }
-}
-
-/*@Preview(showBackground = true)
-@Composable
-fun BotomSheetItemPreview(){
-    BottomSheetItem(id = R.drawable.ic_product_bs, text = "checkit") {
-
-    }
-}*/
-
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun BottomSheet(content: @Composable ()-> Unit = {}){
-    val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
-    val scope = rememberCoroutineScope()
-    ModalBottomSheetLayout(
-        sheetContent = {
-            BottomSheetContent()
-        },
-        sheetState = state,
-        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-        sheetBackgroundColor = PrimaryDark,
-        scrimColor = Color.Transparent
-    ) {
-        content()
-        CardProduct(scope, state)
-    }
-}
-
-@Composable
-private fun BottomSheetContent(){
-    val textItems = stringArrayResource(id = R.array.bottomsheet_product_items)
-    BottomSheetItem(R.drawable.ic_brend_bs, textItems[0]){
-
-    }
-    BottomSheetItem(R.drawable.ic_favorite_bs, textItems[1]){
-
-    }
-    BottomSheetItem(R.drawable.ic_product_bs, textItems[2]){
-
-    }
-    BottomSheetItem(R.drawable.ic_cancel_bs, textItems[3], divider = false){
-
-    }
-}
-
 @Composable
 fun DiscountPanel(modifier: Modifier, percent: Int){
     Card(modifier = modifier, backgroundColor = BgDiscount,
@@ -178,7 +108,8 @@ fun StarPanel(count: Float){
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CardProduct(scope: CoroutineScope, state: ModalBottomSheetState){
+fun CardProduct(state: ModalBottomSheetState){//}, scope: CoroutineScope){
+    val scope = rememberCoroutineScope()
     @Composable
     fun ButtonMore(modifier: Modifier, action: ()-> Unit){
         Image(
@@ -227,7 +158,6 @@ fun CardProduct(scope: CoroutineScope, state: ModalBottomSheetState){
         )
 
     }
-
 
     val context = LocalContext.current
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
