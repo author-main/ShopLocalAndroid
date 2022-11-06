@@ -26,6 +26,6 @@ fun MainScreen(state: ModalBottomSheetState){
         .fillMaxSize()
         .background(BgScreenDark)
     ) {
-       CardProduct(state)
+       CardProduct(state = state)
     }
 }

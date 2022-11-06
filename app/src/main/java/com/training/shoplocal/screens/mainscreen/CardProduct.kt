@@ -37,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.training.shoplocal.AppShopLocal.Companion.appContext
+import com.training.shoplocal.classes.Product
 import com.training.shoplocal.getPrice
 import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.*
@@ -108,7 +109,7 @@ fun StarPanel(count: Float){
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CardProduct(state: ModalBottomSheetState){//}, scope: CoroutineScope){
+fun CardProduct(product: Product? = null, state: ModalBottomSheetState){//}, scope: CoroutineScope){
     val scope = rememberCoroutineScope()
     @Composable
     fun ButtonMore(modifier: Modifier, action: ()-> Unit){

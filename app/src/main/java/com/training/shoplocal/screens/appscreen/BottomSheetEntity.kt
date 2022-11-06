@@ -89,7 +89,7 @@ fun BottomSheet(state: ModalBottomSheetState, content: @Composable ()-> Unit = {
 @Composable
 private fun BottomSheetContent(state: ModalBottomSheetState){
     val scope = rememberCoroutineScope()
-    fun hideBottomSheet(){
+    fun hide(){
         scope.launch {
             delay(150)
             state.hide()
@@ -106,6 +106,6 @@ private fun BottomSheetContent(state: ModalBottomSheetState){
 
     }
     BottomSheetItem(R.drawable.ic_cancel_bs, textItems[3], divider = false){
-        hideBottomSheet()
+        hide()
     }
 }
