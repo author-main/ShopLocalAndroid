@@ -138,7 +138,8 @@ fun CardProduct(product: Product? = null, state: ModalBottomSheetState){//}, sco
     }
     @Composable
     fun ButtonFavorite(modifier: Modifier, action: ()-> Unit){
-        val checked = remember{mutableStateOf(false)}
+        val favorite: Byte = product?.favorite ?: 0
+        val checked = remember{mutableStateOf(favorite > 0)}
         Image(
             painter = painterResource(R.drawable.ic_favorite),
             contentDescription = null,
@@ -211,7 +212,7 @@ fun CardProduct(product: Product? = null, state: ModalBottomSheetState){//}, sco
 
                     ButtonFavorite(modifier = Modifier.align(Alignment.TopEnd)
                     ) {
-                        log("favorite")
+
                     }
 
                     //Text("asfgsdfgsf", modifier = Modifier.align(Alignment.BottomEnd))

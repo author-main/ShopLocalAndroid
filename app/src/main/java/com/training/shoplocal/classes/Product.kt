@@ -7,6 +7,7 @@ data class Product(val id: Int,
     val instock:        Int = 1,
     val price:          Float,
     val star:           Byte? = 1,
+    var favorite:       Byte? = 0,
     val brand:          Short? = null,
     val image:          String
     ) {
