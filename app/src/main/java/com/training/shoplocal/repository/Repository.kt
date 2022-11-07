@@ -5,6 +5,7 @@ package com.training.shoplocal.repository
 import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
+import com.training.shoplocal.classes.Product
 import com.training.shoplocal.isConnectedNet
 import com.training.shoplocal.log
 import com.training.shoplocal.loginview.AccessUserInterface
@@ -220,4 +221,7 @@ class Repository: CrudInterface, AccessUserInterface {
         userFingerPrint?.putPassword(value)
     }
 
+    override fun getProducts(): MutableList<Product> {
+        TODO("Not yet implemented")
+    }
 }
