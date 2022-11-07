@@ -1,5 +1,7 @@
 package com.training.shoplocal.classes
 
+import com.training.shoplocal.log
+
 /**
   Класс для выборки данных (product) из БД (таблица products),
  * определяет тип сортировки и фильтр выборки по параметрам продукта
@@ -44,6 +46,12 @@ data class FilterData(
         fun isFiltered() : Boolean {
             return brend != ANY_VALUE || favorite != ANY_VALUE || category != ANY_VALUE || priceRange.second != 0.00f
         }
+        fun default() {
+             brend           = ANY_VALUE
+             favorite        = ANY_VALUE
+             priceRange      = 0.00f to 0.00f
+             category        = ANY_VALUE
+        }
 }
 
 interface FilterDataBuilder {
@@ -53,60 +61,64 @@ interface FilterDataBuilder {
     fun addFavorite(favorite: Int):                     FilterDataBuilder
     fun addPriceRange(from: Float, to: Float):          FilterDataBuilder
     fun addCategory(category: Int):                     FilterDataBuilder
-    fun default():                                      FilterDataBuilder
     fun build():                                        FilterData
 }
 
 class ProductBuilder: FilterDataBuilder {
+    private var sortType: SORT_TYPE             = SORT_TYPE.ASCENDING
+    private var sortProperty: SORT_PROPERTY     = SORT_PROPERTY.PRICE
+    private var brend: Int                      = ANY_VALUE
+    private var favorite: Int                   = ANY_VALUE
+    private var priceRange: Pair<Float, Float>
+            = 0.00f to 0.00f
+    private var category: Int                   = ANY_VALUE
  /*   init {
         instance = ProductBuilder()
     }*/
-    private val filterdata = FilterData()
+    //private val filterdata = FilterData()
     override fun addSortType(sortType: SORT_TYPE): FilterDataBuilder {
-        filterdata.setSortType(sortType)
+        this.sortType = sortType
         return this
     }
 
     override fun addSortProperty(sortProperty: SORT_PROPERTY): FilterDataBuilder {
-        filterdata.setSortProperty(sortProperty)
+        this.sortProperty = sortProperty
         return this
     }
 
     override fun addBrend(brend: Int): FilterDataBuilder {
-        filterdata.setBrend(brend)
+        this.brend = brend
         return this
     }
 
     override fun addFavorite(favorite: Int): FilterDataBuilder {
-        filterdata.setFavorite(favorite)
+        this.favorite = favorite
         return this
     }
 
     override fun addPriceRange(from: Float, to: Float): FilterDataBuilder {
-        filterdata.setPriceRange(Pair(from, to))
+        this.priceRange= Pair(from, to)
         return this
     }
 
     override fun addCategory(category: Int): FilterDataBuilder {
-        filterdata.setCategory(category)
+        this.category = category
         return this
     }
-
-    override fun default(): FilterDataBuilder {
-        with(filterdata){
-            /*setSortType(SORT_TYPE.ASCENDING)
-            setSortProperty(SORT_PROPERTY.PRICE)*/
-            setBrend(ANY_VALUE)
-            setFavorite(ANY_VALUE)
-            setPriceRange(0.00f to 0.00f)
-            setCategory(ANY_VALUE)
-        }
-        return this
-    }
-
-    override fun build() = filterdata
+    override fun build() = FilterData(
+        sortType,
+        sortProperty,
+        brend,
+        favorite,
+        priceRange,
+        category
+    )
 }
 
-/*class EasyTest(){
-    val filterProduct = ProductBuilder().addBrend(2).build()
-}*/
+class EasyTest(){
+    private val filterProduct = ProductBuilder().addBrend(2).build()
+    init{
+        log(filterProduct.getBrend().toString())
+    }
+
+}
