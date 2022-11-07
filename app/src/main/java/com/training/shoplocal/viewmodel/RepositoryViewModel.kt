@@ -3,6 +3,7 @@ package com.training.shoplocal.viewmodel
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.training.shoplocal.*
+import com.training.shoplocal.classes.Product
 import com.training.shoplocal.classes.SORT_PROPERTY
 import com.training.shoplocal.classes.SORT_TYPE
 import com.training.shoplocal.loginview.AccessUserInterface
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.first
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     /*private val sortData = SortData()
     private val filterData = FilterData()*/
+    //val activeProduct = Product()
     private val _authorizedUser = MutableStateFlow<Boolean>(false)
     val authorizedUser = _authorizedUser.asStateFlow()
     private val _snackbarData = MutableStateFlow(Triple<String, Boolean, MESSAGE>("", false, MESSAGE.INFO))

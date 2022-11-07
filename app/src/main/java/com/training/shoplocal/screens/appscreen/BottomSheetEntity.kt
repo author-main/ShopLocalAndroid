@@ -1,5 +1,6 @@
 package com.training.shoplocal.screens.appscreen
 
+import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -7,6 +8,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,18 +17,29 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.R
+import com.training.shoplocal.classes.Product
 import com.training.shoplocal.log
 import com.training.shoplocal.screens.*
 import com.training.shoplocal.screens.mainscreen.MainScreen
 import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.ui.theme.TextFieldBg
 import com.training.shoplocal.ui.theme.TextFieldFont
+import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+
+//val LocalActiveProduct = compositionLocalOf<Product> { Product() }
+
 @Composable
 private fun BottomSheetItem(@DrawableRes id: Int, text: String, divider: Boolean = true, action: ()->Unit){
+/*    CompositionLocalProvider(LocalActiveProduct provides (viewModel() as RepositoryViewModel).activeProduct) {
+
+    }*/
+
+
     Row(modifier = Modifier
         .fillMaxWidth()
         .clickable(onClick = { action() })
