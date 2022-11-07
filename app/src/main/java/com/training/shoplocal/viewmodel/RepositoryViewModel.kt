@@ -2,19 +2,20 @@ package com.training.shoplocal.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import com.training.shoplocal.MESSAGE
-import com.training.shoplocal.R
-import com.training.shoplocal.getStringResource
+import com.training.shoplocal.*
+import com.training.shoplocal.classes.SORT_PROPERTY
+import com.training.shoplocal.classes.SORT_TYPE
 import com.training.shoplocal.loginview.AccessUserInterface
 import com.training.shoplocal.repository.Repository
 import com.training.shoplocal.screens.ScreenItem
 import com.training.shoplocal.screens.ScreenRouter
-import com.training.shoplocal.validateMail
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
+    /*private val sortData = SortData()
+    private val filterData = FilterData()*/
     private val _authorizedUser = MutableStateFlow<Boolean>(false)
     val authorizedUser = _authorizedUser.asStateFlow()
     private val _snackbarData = MutableStateFlow(Triple<String, Boolean, MESSAGE>("", false, MESSAGE.INFO))
@@ -25,40 +26,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private fun authorizeUser(value: Boolean = true){
         _authorizedUser.value = value
     }
-    /*init {
-        repository.loginState.addOnAccessUser(object: AccessUserInterface {
-            override fun onLogin(email: String, password: String, finger: Boolean) {
-                TODO("Not yet implemented")
-            }
 
-            override fun onRegisterUser(
-                action: ((result: Boolean) -> Unit)?,
-                vararg userdata: String
-            ) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onRestoreUser(
-                action: ((result: Boolean) -> Unit)?,
-                email: String,
-                password: String
-            ) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onFingerPrint(email: String) {
-                TODO("Not yet implemented")
-            }
-        })
-    }*/
-
-
-    //fun getRepository() = repository
-    /*private val _snackbar = MutableStateFlow(false)
-    val snackbar = _snackbar.asStateFlow()
-    fun showSnackbar(value: Boolean = true){
-        _snackbar.value = value
-    }*/
 
     fun getLoginState() = repository.loginState
     fun getPassword()   = repository.loginState.getPassword()
@@ -91,5 +59,29 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     fun onFingerPrint(email: String) {
         repository.onFingerPrint(email)
+    }
+
+    fun getDataDisplay(field: Field_Filter): Any{
+        val dataDisplay = repository.getDataDisplay()
+        return when (field) {
+            Field_Filter.SORT_TYPE     -> dataDisplay.getSortType()
+            Field_Filter.SORT_PROPERTY -> dataDisplay.getSortProperty()
+            Field_Filter.BREND         -> dataDisplay.getBrend()
+            Field_Filter.CATEGORY      -> dataDisplay.getCategory()
+            Field_Filter.FAVORITE      -> dataDisplay.getFavorite()
+            Field_Filter.PRICE_RANGE   -> dataDisplay.getPriceRange()
+        }
+    }
+
+    fun<T> setDataDisplay(field: Field_Filter, value: T){
+        val dataDisplay = repository.getDataDisplay()
+        when (field) {
+            Field_Filter.SORT_TYPE     -> dataDisplay.setSortType(value as SORT_TYPE)
+            Field_Filter.SORT_PROPERTY -> dataDisplay.setSortProperty(value as SORT_PROPERTY)
+            Field_Filter.BREND         -> dataDisplay.setBrend(value as Int)
+            Field_Filter.CATEGORY      -> dataDisplay.setCategory(value as Int)
+            Field_Filter.FAVORITE      -> dataDisplay.setFavorite(value as Int)
+            Field_Filter.PRICE_RANGE   -> dataDisplay.setPriceRange(value as Pair<Float, Float>)
+        }
     }
 }

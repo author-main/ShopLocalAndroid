@@ -14,6 +14,15 @@ import com.training.shoplocal.ui.theme.SelectedItem
 import com.training.shoplocal.ui.theme.TextFieldBg
 import java.text.DecimalFormat
 
+enum class Field_Filter {
+    SORT_TYPE,
+    SORT_PROPERTY,
+    BREND,
+    CATEGORY,
+    FAVORITE,
+    PRICE_RANGE
+}
+
 val TEXT_BOTTOMNAVIGATION: Array<String> = AppShopLocal.appContext().resources.getStringArray(R.array.bottom_navigation_items)
 const val DEFAULT_STRRESOURCE_VALUE  = ""
 const val FILE_PREFERENCES      = "settings"

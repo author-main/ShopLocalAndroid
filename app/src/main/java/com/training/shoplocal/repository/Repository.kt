@@ -5,6 +5,7 @@ package com.training.shoplocal.repository
 import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
+import com.training.shoplocal.classes.DataDisplay
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.isConnectedNet
 import com.training.shoplocal.log
@@ -26,7 +27,10 @@ import javax.crypto.Cipher
 
 class Repository: CrudInterface, AccessUserInterface {
     private var userFingerPrint: UserFingerPrint? = null
+    private val dataDisplay = DataDisplay()
     val loginState = LoginViewState.getLoginState()
+
+    fun getDataDisplay() = dataDisplay
 
    /*init {
         loginState.addOnAccessUser(this)
