@@ -72,10 +72,7 @@ class ProductBuilder: FilterDataBuilder {
     private var priceRange: Pair<Float, Float>
             = 0.00f to 0.00f
     private var category: Int                   = ANY_VALUE
- /*   init {
-        instance = ProductBuilder()
-    }*/
-    //private val filterdata = FilterData()
+
     override fun addSortType(sortType: SORT_TYPE): FilterDataBuilder {
         this.sortType = sortType
         return this
