@@ -48,6 +48,12 @@ import java.math.RoundingMode
 import java.text.DecimalFormat
 
 @Composable
+private fun BottomSheetProduct(){
+
+}
+
+
+@Composable
 fun DiscountPanel(modifier: Modifier, percent: Int){
     Card(modifier = modifier, backgroundColor = BgDiscount,
     shape = RoundedCornerShape(6.dp)
