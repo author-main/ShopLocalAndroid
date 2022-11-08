@@ -86,4 +86,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             Field_Filter.PRICE_RANGE   -> dataDisplay.setPriceRange(value as Pair<Float, Float>)
         }
     }
+
+    fun getProducts(): MutableList<Product>? {
+        return repository.getProducts()
+    }
 }

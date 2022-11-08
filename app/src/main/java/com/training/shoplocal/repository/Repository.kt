@@ -225,7 +225,10 @@ class Repository: CrudInterface, AccessUserInterface {
         userFingerPrint?.putPassword(value)
     }
 
-    override fun getProducts(): MutableList<Product> {
-        TODO("Not yet implemented")
+    /**
+     * fun getProducts()
+     */
+    override fun getProducts(): MutableList<Product>? {
+        return null
     }
 }
