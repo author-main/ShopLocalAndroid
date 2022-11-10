@@ -1,6 +1,15 @@
 package com.training.shoplocal.classes
 
-data class Category(val id: Int){
+import android.graphics.Bitmap
+
+data class Category(val id: Int, val name: String, val link_image: String){
+    private var image: Bitmap? = null
+    fun getImage(action: (image: Bitmap?) -> Unit = {}) {
+        if (image == null) {
+
+        }
+        action(image)
+    }
 /*  // Структура таблицы CATEGORY //
  *  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
  *  `name` VARCHAR(30) NOT NULL,

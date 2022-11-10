@@ -3,6 +3,7 @@ package com.training.shoplocal.repository
 
 
 import android.content.Context
+import com.training.shoplocal.classes.Category
 import com.training.shoplocal.classes.DataDisplay
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.loginview.LoginViewState
@@ -20,6 +21,8 @@ class Repository: DAOinterface {
     override var accessUser: AccessUserInterface = AccessUser().apply {
         this.updateViewWhen(loginState)
     }
+
+    override var databaseCRUD: DatabaseCRUDInterface = DatabaseCRUD()
 
     /** Context типа FragmentActivity главной активити приходится тянуть для отображения
      *  BiometricPrompt - диалог сканирования отпечатка
@@ -43,10 +46,23 @@ class Repository: DAOinterface {
         accessUser.onRemoveUserPassword()
     }
 
-
     fun getDataDisplay() = dataDisplay
 
-    override fun getProducts(): MutableList<Product>? {
-        return null
+    /**
+     *  Реализация методов для получения данных из базы данных MySQL
+     */
+    fun getPromotionProduct(): List<Product> {
+        return databaseCRUD.getPromotionProduct()
     }
+
+    fun getCategories(): List<Category> {
+        return databaseCRUD.getCategories()
+    }
+
+    fun getImagesProduct(id: Int): List<String> {
+        return databaseCRUD.getImagesProduct(id)
+    }
+
+
+
 }
