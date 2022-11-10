@@ -40,8 +40,6 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     fun getPassword()   = repository.loginState.getPassword()
     fun removePassword()   = repository.removePassword()
     fun setEmail(value: String)      = repository.loginState.setEmail(value)
-    /*fun getUserFingerPrint(context: Context) =
-        repository.getUserFingerPrint(context)*/
 
     fun onRestoreUser(action: ((result: Boolean) -> Unit)?, email: String, password: String) {
         repository.onRestoreUser(action, email, password)

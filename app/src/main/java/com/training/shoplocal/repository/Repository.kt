@@ -11,7 +11,6 @@ import com.training.shoplocal.loginview.LoginViewState
 class Repository: DAOinterface {
     private val dataDisplay = DataDisplay()
     val loginState = LoginViewState.getLoginState()
-
     /**
      *  Реализация методов для получения доступа (регистрация, вход по паролю,
      *  восстановление, вход по отпечатку)
@@ -40,15 +39,13 @@ class Repository: DAOinterface {
     fun onFingerPrint(action: ((result: Int) -> Unit)?, email: String) {
         accessUser.onFingerPrint(action, email)
     }
-
-    /** В случае восстановления пароля, старый пароль необходимо удалить.
-     *  Необходимо для реализации входа по отпечатку
-     */
-     fun removePassword(){
+    fun removePassword(){
         accessUser.onRemoveUserPassword()
     }
 
+
     fun getDataDisplay() = dataDisplay
+
     override fun getProducts(): MutableList<Product>? {
         return null
     }
