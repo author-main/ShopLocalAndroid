@@ -3,12 +3,9 @@ package com.training.shoplocal.repository
 
 
 import android.content.Context
-import android.util.Log
-import com.google.gson.Gson
 import com.training.shoplocal.classes.DataDisplay
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.isConnectedNet
-import com.training.shoplocal.log
 import com.training.shoplocal.loginview.AccessUserInterface
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.retrofit.ApiManager
@@ -25,7 +22,7 @@ import retrofit2.Response
 import javax.crypto.Cipher
 
 
-class Repository: CrudInterface, AccessUserInterface {
+class Repository: DAOinterface, AccessUserInterface {
     private var userFingerPrint: UserFingerPrint? = null
     private val dataDisplay = DataDisplay()
     val loginState = LoginViewState.getLoginState()
