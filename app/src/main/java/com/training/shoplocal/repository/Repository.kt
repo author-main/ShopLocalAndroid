@@ -62,7 +62,4 @@ class Repository: DAOinterface {
     fun getImagesProduct(id: Int): List<String> {
         return databaseCRUD.getImagesProduct(id)
     }
-
-
-
 }
