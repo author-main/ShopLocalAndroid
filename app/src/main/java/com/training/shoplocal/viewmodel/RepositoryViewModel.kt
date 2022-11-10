@@ -88,9 +88,4 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         repository.setContextFingerPrint(context)
     }
 
-    fun getProducts(): MutableList<Product>? {
-        return repository.getProducts()
-    }
-
-
-}
+ }
