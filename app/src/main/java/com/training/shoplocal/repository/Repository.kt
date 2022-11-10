@@ -23,6 +23,7 @@ import javax.crypto.Cipher
 
 
 class Repository: DAOinterface, AccessUserInterface {
+    //override var accesUser: AccessUser? = AccessUser()
     private var userFingerPrint: UserFingerPrint? = null
     private val dataDisplay = DataDisplay()
     val loginState = LoginViewState.getLoginState()
