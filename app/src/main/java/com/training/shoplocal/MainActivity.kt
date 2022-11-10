@@ -42,7 +42,7 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
         super.onCreate(savedInstanceState)
 //        val context = LocalContext.current as FragmentActivity
 //        log("start app")
-        viewModel.getUserFingerPrint(this)
+        viewModel.passContextFingerPrint(this)
 //        val repository = AppShopLocal.appRepository();
         val user = getUserData()
 
@@ -65,14 +65,14 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
 
     @Composable
     fun ShowScreen(){
-        ScreenRouter.navigateTo(ScreenItem.MainScreen)
-        AppScreen()
-        /*val authorizedUser: Boolean by viewModel.authorizedUser.collectAsState()
+        /*ScreenRouter.navigateTo(ScreenItem.MainScreen)
+        AppScreen()*/
+        val authorizedUser: Boolean by viewModel.authorizedUser.collectAsState()
         if (authorizedUser) {
             AppScreen()
         }
         else
-            LoginScreen(viewModel.getLoginState())*/
+            LoginScreen(viewModel.getLoginState())
     }
 
     @Composable

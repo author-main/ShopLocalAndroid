@@ -113,17 +113,9 @@ class LoginViewState {
 
     fun changeChar(value: Char){
         pressedButtons = true
-      /*  if (focused)
-            focused = false*/
-        animated = false
-        if (value == ' ') {
-           /* if (!validateMail(email))
-                return*/
-            //showProgress()
-          //  onAccessUser?.onFingerPrint(email)
-            //clearPassword()
-            return
-        }
+         animated = false
+        if (value == ' ')
+          return
         if (value == '<') {
             if (password.isNotEmpty()){
                 password = password.dropLast(1)
@@ -132,36 +124,12 @@ class LoginViewState {
             if (password.length < 5) {
                 animated = true
                 password += value
-                if (password.length == 5) {
+                if (password.length == 5)
                     showProgress()
-                  //  onAccessUser?.onLogin(email, password)
-                    /*if (onAccessUser?.onLogin(password) == true)
-                        ScreenRouter.navigateTo(ScreenItem.MainScreen)*/
-
-
-                   /* else {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            delay(500)
-                            password = ""
-                        }
-                    }*/
-                    //onLogin?.invoke(password)
-                }
             }
     }
 
-
-    /*fun showAppScreen(){
-        CoroutineScope(Dispatchers.Main).launch {
-            delay(500)
-            password = ""
-    //        ScreenRouter.navigateTo(ScreenItem.MainScreen)
-        }
-    }*/
-
-
     fun changePassword(value: String) {
-       // animated =  value.length > password.length
         password = value
     }
 

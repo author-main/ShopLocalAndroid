@@ -55,8 +55,8 @@ class UserPasswordStorage: UserPasswordStorageInterface {
                     KeyPairGenerator.getInstance(KEY_ALGORITHM_RSA, providerKeyStore)
                 kpGenerator.initialize(spec)
                 kpGenerator.generateKeyPair()
-            } catch (e: Exception){}
-        } catch (e: Exception) {}
+            } catch (_: Exception){}
+        } catch (_: Exception) {}
     }
 
     private fun getKeyStore(): KeyStore?{

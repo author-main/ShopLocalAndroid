@@ -6,18 +6,26 @@ import com.training.shoplocal.*
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.classes.SORT_PROPERTY
 import com.training.shoplocal.classes.SORT_TYPE
-import com.training.shoplocal.loginview.AccessUserInterface
 import com.training.shoplocal.repository.Repository
 import com.training.shoplocal.screens.ScreenItem
 import com.training.shoplocal.screens.ScreenRouter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     /*private val sortData = SortData()
     private val filterData = FilterData()*/
     //val activeProduct = Product()
+
+    private val actionLogin: (result: Int) -> Unit = {
+        val result = it > 0
+        if (result) {
+            ScreenRouter.navigateTo(ScreenItem.MainScreen)
+            authorizeUser()
+        }
+        else
+            showSnackbar(message = getStringResource(R.string.message_login_error), type = MESSAGE.ERROR)
+    }
     private val _authorizedUser = MutableStateFlow<Boolean>(false)
     val authorizedUser = _authorizedUser.asStateFlow()
     private val _snackbarData = MutableStateFlow(Triple<String, Boolean, MESSAGE>("", false, MESSAGE.INFO))
@@ -28,14 +36,12 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private fun authorizeUser(value: Boolean = true){
         _authorizedUser.value = value
     }
-
-
     fun getLoginState() = repository.loginState
     fun getPassword()   = repository.loginState.getPassword()
     fun removePassword()   = repository.removePassword()
     fun setEmail(value: String)      = repository.loginState.setEmail(value)
-    fun getUserFingerPrint(context: Context) =
-        repository.getUserFingerPrint(context)
+    /*fun getUserFingerPrint(context: Context) =
+        repository.getUserFingerPrint(context)*/
 
     fun onRestoreUser(action: ((result: Boolean) -> Unit)?, email: String, password: String) {
         repository.onRestoreUser(action, email, password)
@@ -44,23 +50,16 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     fun onRegisterUser(action: ((result: Boolean) -> Unit)?, vararg userdata: String) {
         repository.onRegisterUser(action, *userdata)
     }
-
-
-
     fun onLogin(email: String, password: String, finger: Boolean = false) {
-        repository.onLogin(action = { id ->
-            val result = id > 0
-            if (result) {
-                ScreenRouter.navigateTo(ScreenItem.MainScreen)
-                authorizeUser()
-            }
-            else
-                showSnackbar(message = getStringResource(R.string.message_login_error), type = MESSAGE.ERROR)
+        repository.onLogin({ result ->
+            actionLogin(result)
+
         }, email, password, finger)
+
     }
 
     fun onFingerPrint(email: String) {
-        repository.onFingerPrint(email)
+        repository.onFingerPrint(actionLogin, email)
     }
 
     fun getDataDisplay(field: Field_Filter): Any{
@@ -87,7 +86,13 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
+    fun passContextFingerPrint(context: Context) {
+        repository.setContextFingerPrint(context)
+    }
+
     fun getProducts(): MutableList<Product>? {
         return repository.getProducts()
     }
+
+
 }

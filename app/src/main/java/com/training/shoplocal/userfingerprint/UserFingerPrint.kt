@@ -12,13 +12,7 @@ import com.training.shoplocal.getStringResource
 import javax.crypto.Cipher
 
 class UserFingerPrint(private val context: Context): UserFingerPrintInterface {
-    //private  var userPasswordStorage: UserPasswordStorageInterface = UserPasswordStorage()//null
     override var userFingerPrintListener: UserFingerPrintListener? = null
-   /* fun addPasswordStorage(storage: UserPasswordStorageInterface){
-        userPasswordStorage = storage
-    }*/
-
-    //override fun authenticate(cryptoObject: Cipher?): Boolean {
     override fun authenticate(): Boolean {
         if (!canAuthenticate())
             return false
@@ -65,9 +59,6 @@ class UserFingerPrint(private val context: Context): UserFingerPrintInterface {
     fun putPassword(value: String) {
         userPasswordStorage.putPassword(value)
     }
-
-    /*fun existPasswordStore() =
-        userPasswordStorage.existPasswordStore()*/
 
     fun getPassword(cipher: Cipher) =
         userPasswordStorage.getPassword(cipher)
