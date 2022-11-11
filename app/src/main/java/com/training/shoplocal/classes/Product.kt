@@ -1,5 +1,8 @@
 package com.training.shoplocal.classes
 
+import android.graphics.Bitmap
+import com.training.shoplocal.Error
+
 data class Product(val id: Int,
     val name:           String,
     val category:       Int? = null,
@@ -9,7 +12,7 @@ data class Product(val id: Int,
     val star:           Byte? = 1,
     var favorite:       Byte? = 0,
     val brand:          Short? = null,
-    val image:          String
+    val linkImages:     MutableList<String>? = null
     ) {
 /**
  * // Структура таблицы PRODUCTS //
@@ -25,4 +28,20 @@ data class Product(val id: Int,
  * FOREIGN KEY (`category`) REFERENCES `shop_local`.`category` (`id`)
  * FOREIGN KEY (`brand`) REFERENCES `shop_local`.`brands` (`id`)
  */
+    private var mainImage: Bitmap? = null
+    fun getImage(action: (image: Bitmap?) -> Unit = {}) {
+        if (mainImage == null) {
+            if (!linkImages.isNullOrEmpty()) {
+                ImageLinkLoader().getLinkImage(linkImages[0], object : Callback {
+                        override fun onComplete(image: Bitmap) {
+                            mainImage = image
+                            action(image)
+                        }
+                        override fun onFailure(error: Error) {
+                        }
+                    })
+                }
+        } else
+        action(mainImage)
+    }
 }

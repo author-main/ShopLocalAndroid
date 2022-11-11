@@ -14,6 +14,13 @@ import com.training.shoplocal.ui.theme.SelectedItem
 import com.training.shoplocal.ui.theme.TextFieldBg
 import java.text.DecimalFormat
 
+
+enum class Error {
+    NO_CONNECTION,
+    IMAGE_NOTLOADED
+}
+
+
 enum class Field_Filter {
     SORT_TYPE,
     SORT_PROPERTY,
@@ -26,7 +33,7 @@ enum class Field_Filter {
 val TEXT_BOTTOMNAVIGATION: Array<String> = AppShopLocal.appContext().resources.getStringArray(R.array.bottom_navigation_items)
 const val DEFAULT_STRRESOURCE_VALUE  = ""
 const val FILE_PREFERENCES      = "settings"
-const val SERVER_URL            = "http://192.168.0.10"
+const val SERVER_URL            = "http://192.168.1.10"
 
 enum class MESSAGE(@DrawableRes val icon: Int, val color: Color) {
     ERROR   (R.drawable.ic_error,           SelectedItem),

@@ -2,7 +2,7 @@ package com.training.shoplocal.classes
 
 import android.graphics.Bitmap
 
-data class Category(val id: Int, val name: String, val link_image: String){
+data class Category(val id: Int, val name: String, val linkImage: String){
     private var image: Bitmap? = null
     fun getImage(action: (image: Bitmap?) -> Unit = {}) {
         if (image == null) {
