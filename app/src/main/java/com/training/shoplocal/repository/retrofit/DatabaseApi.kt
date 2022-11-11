@@ -1,13 +1,13 @@
-package com.training.shoplocal.retrofit
+package com.training.shoplocal.repository.retrofit
 
 import com.google.gson.GsonBuilder
 import com.training.shoplocal.SERVER_URL
-import okhttp3.OkHttpClient
+import com.training.shoplocal.classes.User
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-object ApiManager {
+object DatabaseApi {
     private const val QUERY_REGUSER     = "reg_user"
     private const val QUERY_LOGINUSER   = "login_user"
     private const val QUERY_RESTOREUSER = "restore_user"
@@ -15,7 +15,7 @@ object ApiManager {
     //private const val url = "http://192.168.1.10"
         //private const val url = "http://192.168.0.103"
 
-    private var service: IUserApi? = null
+    private var service: DatabaseApiInterface? = null
     init{
 //        val client = OkHttpClient.Builder().build()
         val gson = GsonBuilder()
@@ -26,7 +26,7 @@ object ApiManager {
             .addConverterFactory(GsonConverterFactory.create(gson))
             //.addConverterFactory(GsonConverterFactory.create())
             .build()
-        service = retrofit.create(IUserApi::class.java)
+        service = retrofit.create(DatabaseApiInterface::class.java)
     }
 
     //fun getRetrofitService() = service

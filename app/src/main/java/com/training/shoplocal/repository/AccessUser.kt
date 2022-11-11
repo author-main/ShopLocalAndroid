@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.fragment.app.FragmentActivity
 import com.training.shoplocal.isConnectedNet
 import com.training.shoplocal.loginview.LoginViewState
-import com.training.shoplocal.retrofit.ApiManager
-import com.training.shoplocal.retrofit.User
+import com.training.shoplocal.repository.retrofit.DatabaseApi
+import com.training.shoplocal.classes.User
 import com.training.shoplocal.userfingerprint.UserFingerPrint
 import com.training.shoplocal.userfingerprint.UserFingerPrintListener
 import com.training.shoplocal.validateMail
@@ -60,7 +60,7 @@ class AccessUser(): AccessUserInterface {
                 email       = email,
                 password    = password
             )
-            ApiManager.loginUser(user, object: retrofit2.Callback<User>{
+            DatabaseApi.loginUser(user, object: retrofit2.Callback<User>{
                 override fun onResponse(call: Call<User>, response: Response<User>) {
                     /*
                          0 - No access to the database
@@ -105,7 +105,7 @@ class AccessUser(): AccessUserInterface {
 
 
         if (isConnectedNet()) {
-            ApiManager.regUser(user, object: retrofit2.Callback<User>{
+            DatabaseApi.regUser(user, object: retrofit2.Callback<User>{
                 override fun onResponse(call: Call<User>, response: Response<User>) {
                     /*
                          0 - No access to the database
@@ -141,7 +141,7 @@ class AccessUser(): AccessUserInterface {
         )
 
         if (isConnectedNet())
-            ApiManager.restoreUser(user, object: retrofit2.Callback<User>{
+            DatabaseApi.restoreUser(user, object: retrofit2.Callback<User>{
                 override fun onResponse(call: Call<User>, response: Response<User>) {
                     action?.invoke((response.body()?.id ?: 0) > 0)
                 }

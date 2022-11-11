@@ -4,18 +4,9 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
-import com.training.shoplocal.log
-import com.training.shoplocal.retrofit.User
-import com.training.shoplocal.screens.appscreen.AppScreen
-import com.training.shoplocal.screens.ScreenItem
-import com.training.shoplocal.screens.ScreenRouter
+import com.training.shoplocal.classes.User
 import com.training.shoplocal.userfingerprint.UserFingerPrint
 import com.training.shoplocal.validateMail
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class LoginViewState {
     /*private var onAccessUser: AccessUserInterface? = null

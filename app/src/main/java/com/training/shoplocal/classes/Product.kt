@@ -8,6 +8,7 @@ data class Product(val id: Int,
     val category:       Int? = null,
     val description:    String,
     val instock:        Int = 1,
+    val discount:       Float,
     val price:          Float,
     val star:           Byte? = 1,
     var favorite:       Byte? = 0,
@@ -28,6 +29,7 @@ data class Product(val id: Int,
  * FOREIGN KEY (`category`) REFERENCES `shop_local`.`category` (`id`)
  * FOREIGN KEY (`brand`) REFERENCES `shop_local`.`brands` (`id`)
  */
+
     private var mainImage: Bitmap? = null
     fun getImage(action: (image: Bitmap?) -> Unit = {}) {
         if (mainImage == null) {

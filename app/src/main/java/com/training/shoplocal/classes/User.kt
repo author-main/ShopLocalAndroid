@@ -1,4 +1,4 @@
-package com.training.shoplocal.retrofit
+package com.training.shoplocal.classes
 
 import android.content.Context
 import android.content.SharedPreferences

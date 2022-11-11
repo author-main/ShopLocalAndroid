@@ -1,18 +1,15 @@
 package com.training.shoplocal.buttonpanel
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -21,11 +18,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.ui.theme.TextLightGray
 import com.training.shoplocal.R
-import com.training.shoplocal.log
 import com.training.shoplocal.loginview.LoginViewState
-import com.training.shoplocal.retrofit.User
 import com.training.shoplocal.ui.theme.PrimaryDark
-import com.training.shoplocal.userfingerprint.UserFingerPrint
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 
 @Composable
