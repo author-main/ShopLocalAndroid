@@ -2,19 +2,6 @@ package com.training.shoplocal.classes
 
 import android.graphics.Bitmap
 import com.training.shoplocal.Error
-
-data class Product(val id: Int,
-    val name:           String,
-    val category:       Int? = null,
-    val description:    String,
-    val instock:        Int = 1,
-    val discount:       Float,
-    val price:          Float,
-    val star:           Byte? = 1,
-    var favorite:       Byte? = 0,
-    val brand:          Short? = null,
-    val linkImages:     MutableList<String>? = null
-    ) {
 /**
  * // Структура таблицы PRODUCTS //
  * `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -29,6 +16,18 @@ data class Product(val id: Int,
  * FOREIGN KEY (`category`) REFERENCES `shop_local`.`category` (`id`)
  * FOREIGN KEY (`brand`) REFERENCES `shop_local`.`brands` (`id`)
  */
+data class Product(val id: Int,
+    val name:           String,
+    val category:       Int? = null,
+    val description:    String,
+    val instock:        Int = 1,
+    val discount:       Float,
+    val price:          Float,
+    val star:           Byte? = 1,
+    var favorite:       Byte? = 0,
+    val brand:          Short? = null,
+    val linkImages:     MutableList<String>? = null
+    ) {
 
     private var mainImage: Bitmap? = null
     fun getImage(action: (image: Bitmap?) -> Unit = {}) {
