@@ -1,19 +1,30 @@
 package com.training.shoplocal.classes
 
 import android.graphics.Bitmap
+import com.google.gson.annotations.SerializedName
 import com.training.shoplocal.Error
 
 data class Product(val id: Int,
+    @SerializedName("id")
     val name:           String,
+    @SerializedName("category")
     val category:       Int? = null,
+    @SerializedName("description")
     val description:    String,
+    @SerializedName("instock")
     val instock:        Int = 1,
+    @SerializedName("discount")
     val discount:       Float,
+    @SerializedName("price")
     val price:          Float,
+    @SerializedName("star")
     val star:           Byte? = 1,
+    @SerializedName("favorite")
     var favorite:       Byte? = 0,
+    @SerializedName("ibrand")
     val brand:          Short? = null,
-    val linkImages:     MutableList<String>? = null
+    @SerializedName("linkimages")
+    val linkimages:     MutableList<String>? = null
     ) {
 /**
  * // Структура таблицы PRODUCTS //
@@ -33,8 +44,8 @@ data class Product(val id: Int,
     private var mainImage: Bitmap? = null
     fun getImage(action: (image: Bitmap?) -> Unit = {}) {
         if (mainImage == null) {
-            if (!linkImages.isNullOrEmpty()) {
-                ImageLinkLoader().getLinkImage(linkImages[0], object : Callback {
+            if (!linkimages.isNullOrEmpty()) {
+                ImageLinkLoader().getLinkImage(linkimages[0], object : Callback {
                         override fun onComplete(image: Bitmap) {
                             mainImage = image
                             action(image)

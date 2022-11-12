@@ -10,7 +10,7 @@ import com.training.shoplocal.FILE_PREFERENCES
 
 data class User (
     @SerializedName("id")           var id: Int?,
-    @SerializedName("email")        val email: String?,
+    @SerializedName("eemail")        val email: String?,
     @SerializedName("firstname")    val firstname: String?,
     @SerializedName("lastname")     val lastname: String?,
     @SerializedName("phone")        val phone: String?,
