@@ -44,7 +44,7 @@ data class Product(val id: Int,
     private var mainImage: Bitmap? = null
     fun getImage(action: (image: Bitmap?) -> Unit = {}) {
         if (mainImage == null) {
-            if (!linkimages.isNullOrEmpty()) {
+            if (!linkimages.isNullOrEmpty())
                 ImageLinkLoader().getLinkImage(linkimages[0], object : Callback {
                         override fun onComplete(image: Bitmap) {
                             mainImage = image
@@ -53,8 +53,8 @@ data class Product(val id: Int,
                         override fun onFailure(error: Error) {
                         }
                     })
-                }
-        } else
-        action(mainImage)
+         }
+        else
+            action(mainImage)
     }
 }
