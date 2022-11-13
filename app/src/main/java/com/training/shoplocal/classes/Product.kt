@@ -1,7 +1,31 @@
 package com.training.shoplocal.classes
 
 import android.graphics.Bitmap
+import com.google.gson.annotations.SerializedName
 import com.training.shoplocal.Error
+
+data class Product(val id: Int,
+    @SerializedName("id")
+    val name:           String,
+    @SerializedName("category")
+    val category:       Int? = null,
+    @SerializedName("description")
+    val description:    String,
+    @SerializedName("instock")
+    val instock:        Int = 1,
+    @SerializedName("discount")
+    val discount:       Float,
+    @SerializedName("price")
+    val price:          Float,
+    @SerializedName("star")
+    val star:           Byte? = 1,
+    @SerializedName("favorite")
+    var favorite:       Byte? = 0,
+    @SerializedName("ibrand")
+    val brand:          Short? = null,
+    @SerializedName("linkimages")
+    val linkimages:     MutableList<String>? = null
+    ) {
 /**
  * // Структура таблицы PRODUCTS //
  * `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -16,24 +40,12 @@ import com.training.shoplocal.Error
  * FOREIGN KEY (`category`) REFERENCES `shop_local`.`category` (`id`)
  * FOREIGN KEY (`brand`) REFERENCES `shop_local`.`brands` (`id`)
  */
-data class Product(val id: Int,
-    val name:           String,
-    val category:       Int? = null,
-    val description:    String,
-    val instock:        Int = 1,
-    val discount:       Float,
-    val price:          Float,
-    val star:           Byte? = 1,
-    var favorite:       Byte? = 0,
-    val brand:          Short? = null,
-    val linkImages:     MutableList<String>? = null
-    ) {
 
     private var mainImage: Bitmap? = null
     fun getImage(action: (image: Bitmap?) -> Unit = {}) {
         if (mainImage == null) {
-            if (!linkImages.isNullOrEmpty()) {
-                ImageLinkLoader().getLinkImage(linkImages[0], object : Callback {
+            if (!linkimages.isNullOrEmpty())
+                ImageLinkLoader().getLinkImage(linkimages[0], object : Callback {
                         override fun onComplete(image: Bitmap) {
                             mainImage = image
                             action(image)
@@ -41,8 +53,8 @@ data class Product(val id: Int,
                         override fun onFailure(error: Error) {
                         }
                     })
-                }
-        } else
-        action(mainImage)
+         }
+        else
+            action(mainImage)
     }
 }
