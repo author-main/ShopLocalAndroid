@@ -16,10 +16,10 @@ import java.text.DecimalFormat
 
 
 enum class Error {
-    NO_CONNECTION,
-    IMAGE_NOTLOADED
+    NO_CONNECTION,      // нет соединения
+    IMAGE_NOTFOUND,     // файл изображения не найден
+    IMAGE_NOTLOADED     // ошибка в процессе загрузки
 }
-
 
 enum class Field_Filter {
     SORT_TYPE,
