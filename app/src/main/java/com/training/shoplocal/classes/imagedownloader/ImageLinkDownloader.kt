@@ -16,13 +16,14 @@ interface Callback {
 class ImageLinkDownloader private constructor(){
 
     fun md5(url: String): String{
+        val HASH_LENGTH = 32
         try {
             val md = MessageDigest.getInstance("MD5")
             val messageDigest = md.digest(url.toByteArray())
             val hashbi = BigInteger(1, messageDigest)
             var hashtext = hashbi.toString(16)
             try {
-                hashtext = "0".repeat(32 - hashtext.length) + hashtext
+                hashtext = "0".repeat(HASH_LENGTH - hashtext.length) + hashtext
             } catch (_: java.lang.IllegalArgumentException){}
             /*while (hashtext.length < 32) {
                 hashtext = "0$hashtext"
@@ -40,6 +41,7 @@ class ImageLinkDownloader private constructor(){
         else
             callback.onFailure(Error.NO_CONNECTION)
     }
+
     companion object {
         private var instance: ImageLinkDownloader? = null
         private fun getInstance(): ImageLinkDownloader =
