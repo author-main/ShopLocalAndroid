@@ -1,6 +1,8 @@
 package com.training.shoplocal.classes.downloader
 
+import android.content.Context
 import android.graphics.Bitmap
+import com.training.shoplocal.AppShopLocal.Companion.appContext
 import com.training.shoplocal.Error
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -12,7 +14,34 @@ interface Callback {
 }
 
 class ImageLinkDownloader private constructor(){
-    fun md5(link: String): String? {
+    class DiskCache private constructor(val cacheDir: String): ImageCache {
+        override fun get(hash: String): Bitmap? {
+            TODO("Not yet implemented")
+        }
+
+        override fun put(hash: String, image: Bitmap) {
+            TODO("Not yet implemented")
+        }
+
+        override fun remove(hash: String) {
+            TODO("Not yet implemented")
+        }
+
+        override fun clear() {
+            TODO("Not yet implemented")
+        }
+
+        companion object {
+            private var instance: ImageCache? = null
+            fun getInstance(cacheDir: String): ImageCache =
+                instance ?: DiskCache(cacheDir)
+
+            fun getImageFromCache(md5: String): Bitmap? {
+                return instance?.get(md5)
+            }
+        }
+    }
+    fun md5(link: String): String {
         val HASH_LENGTH = 32
         try {
         val md = MessageDigest.getInstance("MD5")
@@ -39,10 +68,19 @@ class ImageLinkDownloader private constructor(){
         else
             callback.onFailure(Error.NO_CONNECTION)
     }
+
+    fun setCacheDirectory(dir: String){
+        DiskCache.getInstance(dir)
+    }
+
     companion object {
         private var instance: ImageLinkDownloader? = null
         private fun getInstance(): ImageLinkDownloader =
             instance ?: ImageLinkDownloader()
+
+        fun setCacheDirectory(dir: String){
+            getInstance().setCacheDirectory(dir)
+        }
 
         fun download(url: String, callback: Callback) {
             getInstance().downloadLinkImage(url, callback)
