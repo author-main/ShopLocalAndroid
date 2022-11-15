@@ -3,15 +3,22 @@ package com.training.shoplocal.repository
 
 
 import android.content.Context
+import com.training.shoplocal.AppShopLocal.Companion.appContext
 import com.training.shoplocal.classes.Category
 import com.training.shoplocal.classes.DataDisplay
 import com.training.shoplocal.classes.Product
+import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 import com.training.shoplocal.loginview.LoginViewState
+import java.io.File
 
 
 class Repository: DAOinterface {
     private val dataDisplay = DataDisplay()
     val loginState = LoginViewState.getLoginState()
+    init {
+        ImageLinkDownloader.setCacheDirectory(appContext().applicationInfo.dataDir + File.separator)
+    }
+
     /**
      *  Реализация методов для получения доступа (регистрация, вход по паролю,
      *  восстановление, вход по отпечатку)
