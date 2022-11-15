@@ -13,34 +13,36 @@ interface Callback {
     fun onFailure(error: Error)
 }
 
-class ImageLinkDownloader private constructor(){
-    class DiskCache private constructor(val cacheDir: String): ImageCache {
-        override fun get(hash: String): Bitmap? {
-            TODO("Not yet implemented")
-        }
-
-        override fun put(hash: String, image: Bitmap) {
-            TODO("Not yet implemented")
-        }
-
-        override fun remove(hash: String) {
-            TODO("Not yet implemented")
-        }
-
-        override fun clear() {
-            TODO("Not yet implemented")
-        }
-
-        companion object {
-            private var instance: ImageCache? = null
-            fun getInstance(cacheDir: String): ImageCache =
-                instance ?: DiskCache(cacheDir)
-
-            fun getImageFromCache(md5: String): Bitmap? {
-                return instance?.get(md5)
-            }
-        }
+class DiskCache(val cacheDir: String): ImageCache {
+    override fun get(hash: String): Bitmap? {
+        TODO("Not yet implemented")
     }
+
+    override fun put(hash: String, image: Bitmap) {
+        TODO("Not yet implemented")
+    }
+
+    override fun remove(hash: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun clear() {
+        TODO("Not yet implemented")
+    }
+
+  /*  companion object {
+        private var instance: ImageCache? = null
+        fun getInstance(cacheDir: String): ImageCache =
+            instance ?: DiskCache(cacheDir)
+
+        /*fun get(md5: String): Bitmap? {
+            return instance?.get(md5)
+        }*/
+    }*/
+}
+
+class ImageLinkDownloader private constructor(){
+    private var cacheStorage: ImageCache? = null
     fun md5(link: String): String {
         val HASH_LENGTH = 32
         try {
@@ -69,8 +71,9 @@ class ImageLinkDownloader private constructor(){
             callback.onFailure(Error.NO_CONNECTION)
     }
 
-    fun setCacheDirectory(dir: String){
-        DiskCache.getInstance(dir)
+    private fun setCacheDirectory(dir: String){
+        if (cacheStorage == null)
+            cacheStorage = DiskCache(dir)
     }
 
     companion object {
