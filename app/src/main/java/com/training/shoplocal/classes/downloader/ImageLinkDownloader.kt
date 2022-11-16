@@ -16,10 +16,11 @@ interface Callback {
 }
 
 class DiskCache(private val cacheDir: String): ImageCache {
-    private var existsCacheStorage = false
-    init{
-        val dir: File = File(cacheDir)
-        existsCacheStorage = if (!dir.exists()) {
+    private var existsCacheStorage = createDirectory(cacheDir)
+
+    private fun createDirectory(value: String): Boolean {
+        val dir: File = File(value)
+        return if (!dir.exists()) {
             try {
                 dir.mkdirs()
             } catch (_: IOException) {
@@ -28,6 +29,7 @@ class DiskCache(private val cacheDir: String): ImageCache {
         } else
             true
     }
+
     override fun get(hash: String): Bitmap? {
         TODO("Not yet implemented")
     }
