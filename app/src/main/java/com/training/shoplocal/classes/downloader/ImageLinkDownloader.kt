@@ -2,6 +2,7 @@ package com.training.shoplocal.classes.downloader
 
 import android.graphics.Bitmap
 import com.training.shoplocal.Error
+import com.training.shoplocal.log
 import java.io.File
 import java.io.IOException
 import java.math.BigInteger
@@ -12,6 +13,7 @@ interface Callback {
     fun onComplete(image: Bitmap)
     fun onFailure(error: Error)
 }
+
 
 class DiskCache(private val cacheDir: String): ImageCache {
     private val entries = LinkedHashMap<String, Map.Entry<*, *>>(0, 0.75f, true)
@@ -129,22 +131,19 @@ class DiskCache(private val cacheDir: String): ImageCache {
 }
 
 class ImageLinkDownloader private constructor(){
+
     private var cacheStorage: ImageCache? = null
     fun md5(link: String): String {
         val HASH_LENGTH = 32
         try {
         val md = MessageDigest.getInstance("MD5")
         val messageDigest = md.digest(link.toByteArray())
-        val hashbi = BigInteger(1, messageDigest)
-        var hashtext = hashbi.toString(16)
-        try {
+        var hashtext = BigInteger(1, messageDigest).toString(16)
+        /*try {
             hashtext = "0".repeat(HASH_LENGTH - hashtext.length) + hashtext
-        } catch (e: IllegalArgumentException) {
-                throw RuntimeException(e)
-        }
-        /*while (hashtext.length < 32) {
+        } catch (_: IllegalArgumentException) {}*/
+        while (hashtext.length < 32)
             hashtext = "0$hashtext"
-        }*/
         return hashtext
     } catch (e: NoSuchAlgorithmException) {
         throw RuntimeException(e)
