@@ -1,8 +1,6 @@
 package com.training.shoplocal.classes.downloader
 
-import android.content.Context
 import android.graphics.Bitmap
-import com.training.shoplocal.AppShopLocal.Companion.appContext
 import com.training.shoplocal.Error
 import java.io.File
 import java.io.IOException
@@ -16,12 +14,70 @@ interface Callback {
 }
 
 class DiskCache(private val cacheDir: String): ImageCache {
+    private val entries = LinkedHashMap<String, Map.Entry<*, *>>(0, 0.75f, true)
     private val JOURNAL_FILENAME        = "journal"
     private val JOURNAL_FILENAME_TMP    = "journal.tmp"
+    private val JOURNAL_FILENAME_BACKUP = "journal.bkp"
     private val EXTFILE_SAVED           = ".s"
     private val EXTFILE_PROGRESS        = ".p"
 
+    private var fileJournal: File? = null
+    private var fileJournalTmp: File? = null
+    private var fileJournalBackup: File? = null
     private var existsCacheStorage = createDirectory(cacheDir)
+
+    init {
+        if (existsCacheStorage) {
+            fileJournal         = File(cacheDir + JOURNAL_FILENAME)
+            fileJournalTmp      = File(cacheDir + JOURNAL_FILENAME_TMP)
+            fileJournalBackup   = File(cacheDir + JOURNAL_FILENAME_BACKUP)
+            if (!emptyCacheStorage()) {
+                deleteFile(fileJournalTmp!!)
+                val existsFileJournal       = fileJournal?.exists()         ?: false
+                val existsFileJournalBackup = fileJournalBackup?.exists()   ?: false
+                if (!existsFileJournal) {
+                    if (existsFileJournalBackup)
+                        renameFile(fileJournalBackup!!, fileJournal!!)
+                    else
+                        clear()
+                }
+            }
+        }
+    }
+
+
+    private fun rebuildCacheJournal(){
+
+    }
+
+
+    private fun renameFile(source: String, dest: String){
+        renameFile(File(source), File(dest))
+    }
+
+    private fun renameFile(source: File, dest: File){
+        try {
+            if (source.exists()) {
+                deleteFile(dest)
+                source.renameTo(dest)
+            }
+        } catch (_:IOException){}
+    }
+
+    private fun deleteFile(filename: String) {
+        deleteFile(File(filename))
+    }
+
+    private fun deleteFile(file: File) {
+        try {
+            file.delete()
+        } catch (_:IOException){}
+    }
+
+    private fun emptyCacheStorage(): Boolean {
+        return (File(cacheDir).listFiles()?.size ?: 0) == 0
+    }
+
     private fun createDirectory(value: String): Boolean {
         val dir: File = File(value)
         return if (!dir.exists()) {
@@ -47,7 +103,13 @@ class DiskCache(private val cacheDir: String): ImageCache {
     }
 
     override fun clear() {
-        TODO("Not yet implemented")
+        entries.clear()
+        if (existsCacheStorage) {
+            val files = File(cacheDir).listFiles()
+            files?.forEach {file ->
+                file.delete()
+            }
+        }
     }
 
   /*  companion object {
