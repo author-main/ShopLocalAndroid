@@ -16,8 +16,12 @@ interface Callback {
 }
 
 class DiskCache(private val cacheDir: String): ImageCache {
-    private var existsCacheStorage = createDirectory(cacheDir)
+    private val JOURNAL_FILENAME        = "journal"
+    private val JOURNAL_FILENAME_TMP    = "journal.tmp"
+    private val EXTFILE_SAVED           = ".s"
+    private val EXTFILE_PROGRESS        = ".p"
 
+    private var existsCacheStorage = createDirectory(cacheDir)
     private fun createDirectory(value: String): Boolean {
         val dir: File = File(value)
         return if (!dir.exists()) {
