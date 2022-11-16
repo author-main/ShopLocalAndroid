@@ -137,11 +137,11 @@ class ImageLinkDownloader private constructor(){
         val messageDigest = md.digest(link.toByteArray())
         val hashbi = BigInteger(1, messageDigest)
         var hashtext = hashbi.toString(16)
-            try {
-                hashtext = "0".repeat(HASH_LENGTH - hashtext.length) + hashtext
-            } catch (e: IllegalArgumentException) {
+        try {
+            hashtext = "0".repeat(HASH_LENGTH - hashtext.length) + hashtext
+        } catch (e: IllegalArgumentException) {
                 throw RuntimeException(e)
-            }
+        }
         /*while (hashtext.length < 32) {
             hashtext = "0$hashtext"
         }*/
