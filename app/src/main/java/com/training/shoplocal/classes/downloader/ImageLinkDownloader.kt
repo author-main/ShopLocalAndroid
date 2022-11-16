@@ -47,6 +47,9 @@ class DiskCache(private val cacheDir: String): ImageCache {
         }
     }
 
+    private fun rebuildJournal(){
+
+    }
 
     private fun rebuildEntries(){
         entries.clear()
