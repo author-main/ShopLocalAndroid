@@ -4,6 +4,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import com.training.shoplocal.AppShopLocal.Companion.appContext
 import com.training.shoplocal.Error
+import java.io.File
+import java.io.IOException
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
@@ -13,7 +15,19 @@ interface Callback {
     fun onFailure(error: Error)
 }
 
-class DiskCache(val cacheDir: String): ImageCache {
+class DiskCache(private val cacheDir: String): ImageCache {
+    private var existsCacheStorage = false
+    init{
+        val dir: File = File(cacheDir)
+        existsCacheStorage = if (!dir.exists()) {
+            try {
+                dir.mkdirs()
+            } catch (_: IOException) {
+                false
+            }
+        } else
+            true
+    }
     override fun get(hash: String): Bitmap? {
         TODO("Not yet implemented")
     }
