@@ -60,27 +60,27 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         repository.onFingerPrint(actionLogin, email)
     }
 
-    fun getDataDisplay(field: Field_Filter): Any{
+    fun getDataDisplay(field: FieldFilter): Any{
         val dataDisplay = repository.getDataDisplay()
         return when (field) {
-            Field_Filter.SORT_TYPE     -> dataDisplay.getSortType()
-            Field_Filter.SORT_PROPERTY -> dataDisplay.getSortProperty()
-            Field_Filter.BREND         -> dataDisplay.getBrend()
-            Field_Filter.CATEGORY      -> dataDisplay.getCategory()
-            Field_Filter.FAVORITE      -> dataDisplay.getFavorite()
-            Field_Filter.PRICE_RANGE   -> dataDisplay.getPriceRange()
+            FieldFilter.SORT_TYPE     -> dataDisplay.getSortType()
+            FieldFilter.SORT_PROPERTY -> dataDisplay.getSortProperty()
+            FieldFilter.BREND         -> dataDisplay.getBrend()
+            FieldFilter.CATEGORY      -> dataDisplay.getCategory()
+            FieldFilter.FAVORITE      -> dataDisplay.getFavorite()
+            FieldFilter.PRICE_RANGE   -> dataDisplay.getPriceRange()
         }
     }
 
-    fun<T> setDataDisplay(field: Field_Filter, value: T){
+    fun<T> setDataDisplay(field: FieldFilter, value: T){
         val dataDisplay = repository.getDataDisplay()
         when (field) {
-            Field_Filter.SORT_TYPE     -> dataDisplay.setSortType(value as SORT_TYPE)
-            Field_Filter.SORT_PROPERTY -> dataDisplay.setSortProperty(value as SORT_PROPERTY)
-            Field_Filter.BREND         -> dataDisplay.setBrend(value as Int)
-            Field_Filter.CATEGORY      -> dataDisplay.setCategory(value as Int)
-            Field_Filter.FAVORITE      -> dataDisplay.setFavorite(value as Int)
-            Field_Filter.PRICE_RANGE   -> dataDisplay.setPriceRange(value as Pair<Float, Float>)
+            FieldFilter.SORT_TYPE     -> dataDisplay.setSortType(value as SORT_TYPE)
+            FieldFilter.SORT_PROPERTY -> dataDisplay.setSortProperty(value as SORT_PROPERTY)
+            FieldFilter.BREND         -> dataDisplay.setBrend(value as Int)
+            FieldFilter.CATEGORY      -> dataDisplay.setCategory(value as Int)
+            FieldFilter.FAVORITE      -> dataDisplay.setFavorite(value as Int)
+            FieldFilter.PRICE_RANGE   -> dataDisplay.setPriceRange(value as Pair<Float, Float>)
         }
     }
 

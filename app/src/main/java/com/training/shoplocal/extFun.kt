@@ -15,13 +15,13 @@ import com.training.shoplocal.ui.theme.TextFieldBg
 import java.text.DecimalFormat
 
 
-enum class Error {
+/*enum class Error {
     NO_CONNECTION,      // нет соединения
     IMAGE_NOTFOUND,     // файл изображения не найден
     IMAGE_NOTLOADED     // ошибка в процессе загрузки
-}
+}*/
 
-enum class Field_Filter {
+enum class FieldFilter {
     SORT_TYPE,
     SORT_PROPERTY,
     BREND,

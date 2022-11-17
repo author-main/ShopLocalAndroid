@@ -4,8 +4,8 @@ import android.graphics.Bitmap
 
 interface ImageCache {
     //val cacheDir: String
-    fun get(link: String): Bitmap?
-    fun put(link: String, image: Bitmap)
+    fun get(link: String, time: Long): Bitmap?
+    fun put(link: String, image: Bitmap, time: Long)
     fun remove(hash: String)
     fun clear()
 }

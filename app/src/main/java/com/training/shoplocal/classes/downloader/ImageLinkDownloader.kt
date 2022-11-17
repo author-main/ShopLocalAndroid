@@ -1,7 +1,6 @@
 package com.training.shoplocal.classes.downloader
 
 import android.graphics.Bitmap
-import com.training.shoplocal.Error
 import com.training.shoplocal.log
 import java.io.File
 import java.io.IOException
@@ -13,7 +12,7 @@ import java.security.NoSuchAlgorithmException
 
 interface Callback {
     fun onComplete(image: Bitmap)
-    fun onFailure(error: Error)
+    fun onFailure()
 }
 
 
@@ -124,12 +123,12 @@ class DiskCache(private val cacheDir: String): ImageCache {
         md5(link)
 
 
-    override fun get(link: String): Bitmap? {
+    override fun get(link: String, time: Long): Bitmap? {
         val hash = getLinkHash(link)
         return null
     }
 
-    override fun put(link: String, image: Bitmap) {
+    override fun put(link: String, image: Bitmap, time: Long) {
         val hash = getLinkHash(link)
     }
 
@@ -168,7 +167,7 @@ class ImageLinkDownloader private constructor(){
         if (image != null)
             callback.onComplete(image)
         else
-            callback.onFailure(Error.NO_CONNECTION)
+            callback.onFailure()
     }
 
     private fun setCacheDirectory(dir: String){
