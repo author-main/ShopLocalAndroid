@@ -171,6 +171,28 @@ class ImageLinkDownloader private constructor(){
         listDownloadTask[link] = executorService.submit(task)
     }
 
+    fun cancelTask(link: String){
+        synchronized(this){
+            listDownloadTask.forEach {
+                if (it.key == link &&  !it.value.isDone)
+                    it.value.cancel(true)
+            }
+        }
+    }
+
+    fun cancelAll() {
+        if (listDownloadTask.isEmpty()) return
+        synchronized (this) {
+            listDownloadTask.forEach{
+                if ( !it.value.isDone)
+                    it.value.cancel(true)
+            }
+            listDownloadTask.clear()
+        }
+    }
+
+
+
     private fun setCacheDirectory(dir: String){
         if (cacheStorage == null)
             cacheStorage = DiskCache(dir)
@@ -185,8 +207,8 @@ class ImageLinkDownloader private constructor(){
             getInstance().setCacheDirectory(dir)
         }
 
-        fun download(url: String, callback: Callback) {
-            getInstance().downloadLinkImage(url, callback)
+        fun downloadImage(link: String, callback: Callback) {
+            getInstance().downloadLinkImage(link, callback)
         }
     }
 }
