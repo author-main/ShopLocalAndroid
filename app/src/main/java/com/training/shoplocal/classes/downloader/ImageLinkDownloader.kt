@@ -56,7 +56,7 @@ class DiskCache(private val cacheDir: String): ImageCache {
         }
     }
 
-    fun md5(link: String): String {
+    private fun md5(link: String): String {
         val HASH_LENGTH = 32
         try {
             val md = MessageDigest.getInstance("MD5")
