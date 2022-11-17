@@ -9,6 +9,8 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
+import java.util.concurrent.Executors
+import java.util.concurrent.Future
 
 interface Callback {
     fun onComplete(image: Bitmap)
@@ -161,13 +163,12 @@ class DiskCache(private val cacheDir: String): ImageCache {
 class ImageLinkDownloader private constructor(){
 
     private var cacheStorage: ImageCache? = null
+    private val executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
+    private val listDownloadTask:HashMap<String, Future<Bitmap?>> = hashMapOf()
 
     fun downloadLinkImage(link: String, callback: Callback){
-        val image = Bitmap.createBitmap(100,100,Bitmap.Config.ALPHA_8)
-        if (image != null)
-            callback.onComplete(image)
-        else
-            callback.onFailure()
+        val task = DownloadImageTask(link, cacheStorage, callback)
+        listDownloadTask[link] = executorService.submit(task)
     }
 
     private fun setCacheDirectory(dir: String){

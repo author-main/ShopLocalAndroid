@@ -8,7 +8,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class DownloadImageTask(private val link: String,
-                        private val cache: DiskCache,
+                        private val cache: ImageCache?,
                         private val callback: Callback): DownloadTask<Bitmap?>
 {
     private val uiHandler = Handler(Looper.getMainLooper())
@@ -17,10 +17,10 @@ class DownloadImageTask(private val link: String,
             val conn = URL(link).openConnection() as HttpURLConnection
             conn.requestMethod = "HEAD"
             val timestamp = conn.lastModified
-            var bitmap = cache.get(link, timestamp)
+            var bitmap = cache?.get(link, timestamp)
             if (bitmap == null) {
                 bitmap = BitmapFactory.decodeStream(conn.inputStream)
-                cache.put(link, bitmap, timestamp)
+                cache?.put(link, bitmap, timestamp)
             }
             conn.disconnect()
             bitmap
