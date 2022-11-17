@@ -148,16 +148,6 @@ class DiskCache(private val cacheDir: String): ImageCache {
             }
         }
     }
-
-  /*  companion object {
-        private var instance: ImageCache? = null
-        fun getInstance(cacheDir: String): ImageCache =
-            instance ?: DiskCache(cacheDir)
-
-        /*fun get(md5: String): Bitmap? {
-            return instance?.get(md5)
-        }*/
-    }*/
 }
 
 class ImageLinkDownloader private constructor(){
