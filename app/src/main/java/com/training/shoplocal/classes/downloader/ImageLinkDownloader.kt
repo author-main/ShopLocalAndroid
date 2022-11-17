@@ -6,6 +6,8 @@ import com.training.shoplocal.log
 import java.io.File
 import java.io.IOException
 import java.math.BigInteger
+import java.net.HttpURLConnection
+import java.net.URL
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
@@ -16,7 +18,11 @@ interface Callback {
 
 
 class DiskCache(private val cacheDir: String): ImageCache {
-    private val entries = LinkedHashMap<String, Map.Entry<*, *>>(0, 0.75f, true)
+    class CacheEntry(val hash: String) {
+        val length = LongArray(2) // старый и новый размер файла
+        var involved: Boolean = false   // файл задействован чтение/запись
+    }
+    private val entries = LinkedHashMap<String, CacheEntry>(0, 0.75f, true)
     private val JOURNAL_FILENAME        = "journal"
     private val JOURNAL_FILENAME_TMP    = "journal.tmp"
     private val JOURNAL_FILENAME_BACKUP = "journal.bkp"
@@ -176,3 +182,16 @@ class ImageLinkDownloader private constructor(){
         }
     }
 }
+
+/*
+fun getUrlFileLength(url: String): Long {
+    return try {
+        val urlConnection = URL(url).openConnection() as HttpURLConnection
+        urlConnection.requestMethod = "HEAD"
+        //Last-Modified
+        urlConnection.getHeaderField("content-length")?.toLongOrNull()?.coerceAtLeast(-1L)
+            ?: -1L
+    } catch (ignored: Exception) {
+        -1L
+    }
+}*/
