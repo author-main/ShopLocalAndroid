@@ -39,11 +39,11 @@ class DiskCache(private val cacheDir: String): ImageCache {
         if (existsCacheStorage) {
             if (!emptyCacheStorage()) {
                 deleteFile(fileJournalTmp!!)
-                val existsFileJournal       = fileJournal?.exists()         ?: false
-                val existsFileJournalBackup = fileJournalBackup?.exists()   ?: false
+                val existsFileJournal       = fileJournal.exists()         ?: false
+                val existsFileJournalBackup = fileJournalBackup.exists()   ?: false
                 if (!existsFileJournal) {
                     if (existsFileJournalBackup) {
-                        renameFile(fileJournalBackup!!, fileJournal!!)
+                        renameFile(fileJournalBackup, fileJournal)
                         rebuildEntries()
                     }
                     else
