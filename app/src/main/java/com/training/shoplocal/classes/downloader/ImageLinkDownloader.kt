@@ -142,7 +142,7 @@ class ImageLinkDownloader private constructor(){
         /*try {
             hashtext = "0".repeat(HASH_LENGTH - hashtext.length) + hashtext
         } catch (_: IllegalArgumentException) {}*/
-        while (hashtext.length < 32)
+        while (hashtext.length < HASH_LENGTH)
             hashtext = "0$hashtext"
         return hashtext
     } catch (e: NoSuchAlgorithmException) {
