@@ -55,6 +55,23 @@ class DiskCache(private val cacheDir: String): ImageCache {
         }
     }
 
+    fun md5(link: String): String {
+        val HASH_LENGTH = 32
+        try {
+            val md = MessageDigest.getInstance("MD5")
+            val messageDigest = md.digest(link.toByteArray())
+            var hashtext = BigInteger(1, messageDigest).toString(16)
+            /*try {
+                hashtext = "0".repeat(HASH_LENGTH - hashtext.length) + hashtext
+            } catch (_: IllegalArgumentException) {}*/
+            while (hashtext.length < HASH_LENGTH)
+                hashtext = "0$hashtext"
+            return hashtext
+        } catch (e: NoSuchAlgorithmException) {
+            throw RuntimeException(e)
+        }
+    }
+
     private fun rebuildJournal(){
 
     }
@@ -103,15 +120,21 @@ class DiskCache(private val cacheDir: String): ImageCache {
             true
     }
 
-    override fun get(hash: String): Bitmap? {
-        TODO("Not yet implemented")
+    private fun getLinkHash(link: String): String =
+        md5(link)
+
+
+    override fun get(link: String): Bitmap? {
+        val hash = getLinkHash(link)
+        return null
     }
 
-    override fun put(hash: String, image: Bitmap) {
-        TODO("Not yet implemented")
+    override fun put(link: String, image: Bitmap) {
+        val hash = getLinkHash(link)
     }
 
     override fun remove(hash: String) {
+
         TODO("Not yet implemented")
     }
 
@@ -139,22 +162,7 @@ class DiskCache(private val cacheDir: String): ImageCache {
 class ImageLinkDownloader private constructor(){
 
     private var cacheStorage: ImageCache? = null
-    fun md5(link: String): String {
-        val HASH_LENGTH = 32
-        try {
-        val md = MessageDigest.getInstance("MD5")
-        val messageDigest = md.digest(link.toByteArray())
-        var hashtext = BigInteger(1, messageDigest).toString(16)
-        /*try {
-            hashtext = "0".repeat(HASH_LENGTH - hashtext.length) + hashtext
-        } catch (_: IllegalArgumentException) {}*/
-        while (hashtext.length < HASH_LENGTH)
-            hashtext = "0$hashtext"
-        return hashtext
-    } catch (e: NoSuchAlgorithmException) {
-        throw RuntimeException(e)
-    }
-    }
+
     fun downloadLinkImage(link: String, callback: Callback){
         val image = Bitmap.createBitmap(100,100,Bitmap.Config.ALPHA_8)
         if (image != null)
