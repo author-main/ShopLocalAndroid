@@ -30,16 +30,13 @@ class DiskCache(private val cacheDir: String): ImageCache {
     private val EXTFILE_SAVED           = ".s"
     private val EXTFILE_PROGRESS        = ".p"
 
-    private var fileJournal: File? = null
-    private var fileJournalTmp: File? = null
-    private var fileJournalBackup: File? = null
-    private var existsCacheStorage = createDirectory(cacheDir)
+    private val existsCacheStorage  = createDirectory(cacheDir)
+    private val fileJournal         = File(cacheDir + JOURNAL_FILENAME)
+    private val fileJournalTmp      = File(cacheDir + JOURNAL_FILENAME_TMP)
+    private val fileJournalBackup   = File(cacheDir + JOURNAL_FILENAME_BACKUP)
 
     init {
         if (existsCacheStorage) {
-            fileJournal         = File(cacheDir + JOURNAL_FILENAME)
-            fileJournalTmp      = File(cacheDir + JOURNAL_FILENAME_TMP)
-            fileJournalBackup   = File(cacheDir + JOURNAL_FILENAME_BACKUP)
             if (!emptyCacheStorage()) {
                 deleteFile(fileJournalTmp!!)
                 val existsFileJournal       = fileJournal?.exists()         ?: false
