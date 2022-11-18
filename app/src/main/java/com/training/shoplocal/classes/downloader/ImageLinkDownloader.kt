@@ -65,11 +65,13 @@ class DiskCache(private val cacheDir: String): ImageCache {
             throw RuntimeException(e)
         }
     }
-
+    @Synchronized
     private fun rebuildJournal(){
-        val writer = BufferedWriter(FileWriter(fileJournal, false))
-        writer.flush()
-        writer.close()
+        val writer = BufferedWriter(FileWriter(fileJournal))
+        writer.use {
+            it.write("sdfsd\n")
+            it.flush()
+        }
     }
 
     private fun rebuildEntries(){
