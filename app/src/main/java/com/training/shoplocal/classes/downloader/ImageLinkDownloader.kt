@@ -1,12 +1,8 @@
 package com.training.shoplocal.classes.downloader
 
 import android.graphics.Bitmap
-import com.training.shoplocal.log
-import java.io.File
-import java.io.IOException
+import java.io.*
 import java.math.BigInteger
-import java.net.HttpURLConnection
-import java.net.URL
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.util.concurrent.Executors
@@ -71,7 +67,9 @@ class DiskCache(private val cacheDir: String): ImageCache {
     }
 
     private fun rebuildJournal(){
-
+        val writer = BufferedWriter(FileWriter(fileJournal, false))
+        writer.flush()
+        writer.close()
     }
 
     private fun rebuildEntries(){

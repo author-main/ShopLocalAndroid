@@ -19,6 +19,7 @@ class DownloadImageTask(private val link: String,
             val timestamp = conn.lastModified
             var bitmap = cache?.get(link, timestamp)
             if (bitmap == null) {
+                conn.requestMethod = "GET"
                 bitmap = BitmapFactory.decodeStream(conn.inputStream)
                 cache?.put(link, bitmap, timestamp)
             }
