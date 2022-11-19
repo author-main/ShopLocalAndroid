@@ -36,14 +36,10 @@ class DiskCache(private val cacheDir: String): ImageCache {
     init {
         if (existsCacheStorage) {
             if (!emptyCacheStorage()) {
-                deleteFile(fileJournalTmp!!)
-                val existsFileJournal       = fileJournal.exists()         ?: false
-                val existsFileJournalBackup = fileJournalBackup.exists()   ?: false
-                if (!existsFileJournal) {
-                    if (existsFileJournalBackup) {
-                        renameFile(fileJournalBackup, fileJournal)
+                deleteFile(fileJournalTmp)
+                if (!fileJournal.exists()) {
+                    if (backupJournal())
                         rebuildEntries()
-                    }
                     else
                         clear()
                 }
@@ -79,16 +75,13 @@ class DiskCache(private val cacheDir: String): ImageCache {
         renameFile(fileJournalTmp, fileJournal)
     }
 
-    /*private fun backupJournal(): Boolean{
-        var existJournal = true
-        if (!fileJournal.exists()) {
-            if (fileJournalBackup.exists())
+    private fun backupJournal(): Boolean{
+        return if (fileJournalBackup.exists()) {
                 renameFile(fileJournalBackup, fileJournal)
-            else
-                existJournal = false
-        }
-        return existJournal
-    }*/
+                true
+            } else
+                false
+    }
 
     @Synchronized
     private fun replaceEntry(hash: String, time: Long, involved: Boolean){
@@ -96,13 +89,9 @@ class DiskCache(private val cacheDir: String): ImageCache {
             this.time     = time
             this.involved = involved
         }
-        var existJournal = true
-        if (!fileJournal.exists()) {
-            if (fileJournalBackup.exists())
-                renameFile(fileJournalBackup, fileJournal)
-            else
-                existJournal = false
-        }
+        var existJournal = fileJournal.exists()
+        if (!existJournal)
+            existJournal = backupJournal()
         val text: StringBuffer = StringBuffer()
         if (existJournal) {
             BufferedReader(FileReader(fileJournal)).use {
