@@ -122,9 +122,9 @@ class DiskCache(private val cacheDir: String): ImageCache {
         entries.clear()
         val reader = BufferedReader(FileReader(fileJournal)).use{
             it.lineSequence().forEach { line ->
-                val state = StateEntry.valueOf(line.substring(0, 6).trim())
-                val hash = line.substring(7, 7 + HASH_LENGTH)
-                val time = line.substring(HASH_LENGTH + 8).toLong()
+                val state = StateEntry.valueOf( line.substring(0, 6).trim())
+                val hash =                      line.substring(7, 7 + HASH_LENGTH)
+                val time =                      line.substring(HASH_LENGTH + 8).toLong()
                 entries[hash] = CacheEntry(hash).apply {
                     this.time   = time
                     this.state  = state
@@ -231,8 +231,6 @@ class ImageLinkDownloader private constructor(){
             listDownloadTask.clear()
         }
     }
-
-
 
     private fun setCacheDirectory(dir: String){
         if (cacheStorage == null)
