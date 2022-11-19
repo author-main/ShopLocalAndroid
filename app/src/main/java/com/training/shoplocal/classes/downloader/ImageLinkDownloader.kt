@@ -31,7 +31,7 @@ class DiskCache(private val cacheDir: String): ImageCache {
     private val JOURNAL_FILENAME        = "journal"         // файл журнала
     private val JOURNAL_FILENAME_TMP    = "journal.tmp"     // темп файл журнала
     private val JOURNAL_FILENAME_BACKUP = "journal.bkp"     // резервная копия журнала
-    private val EXT_DOWNLOADEDFILE      = ".s"
+    private val EXT_CACHETEMPFILE      = ".t"
     private val existsCacheStorage  = initCache()
     private val fileJournal         = File(cacheDir + JOURNAL_FILENAME)
     private val fileJournalTmp      = File(cacheDir + JOURNAL_FILENAME_TMP)
@@ -98,18 +98,26 @@ class DiskCache(private val cacheDir: String): ImageCache {
         var deleted = false
         BufferedReader(FileReader(fileJournal)).use{
             it.lineSequence().forEach { line ->
+                text.append("$line\n")
                 if (!deleted) {
                     if (line.contains(hash)) {
                         if (deletefile)
-                            deleteFile(hash)
+                            deleteFile(hash + EXT_CACHETEMPFILE)
+                        text.setLength(text.length - line.length)
                         deleted = true
                     }
                 }
-                /*else
-                    text.append(line)*/
             }
         }
-
+        renameFile(fileJournal, fileJournalBackup)
+        if (text.isNotEmpty()) {
+            FileOutputStream(fileJournalTmp).use {
+                it.write(text.toString().toByteArray())
+            }
+            text.setLength(0)
+            renameFile(fileJournalTmp, fileJournal)
+        } else
+            fileJournal.createNewFile()
     }
 
 
