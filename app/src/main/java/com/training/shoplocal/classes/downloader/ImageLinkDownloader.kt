@@ -16,18 +16,21 @@ interface Callback {
 
 
 class DiskCache(private val cacheDir: String): ImageCache {
+    private enum class StateEntry(val value: String){
+        CLEAN   ("CLEAN "),
+        DIRTY   ("DIRTY "),
+        REMOVE  ("REMOVE")
+    }
     private val HASH_LENGTH = 32
     private class CacheEntry(val hash: String) {
-        var time:     Long = 0          // дата создания/изменения файла кеша
-        var involved: Boolean = false   // файл задействован чтение/запись
+        var time:     Long = 0                          // дата создания/изменения файла кеша
+        var state:    StateEntry = StateEntry.CLEAN     // состояние файла
     }
     private val entries = LinkedHashMap<String, CacheEntry>(0, 0.75f, true)
     private val JOURNAL_FILENAME        = "journal"
     private val JOURNAL_FILENAME_TMP    = "journal.tmp"
     private val JOURNAL_FILENAME_BACKUP = "journal.bkp"
-    private val EXTFILE_SAVED           = ".s"
-    private val EXTFILE_PROGRESS        = ".p"
-
+    private val EXT_DOWNLOADEDFILE      = ".s"
     private val existsCacheStorage  = createDirectory(cacheDir)
     private val fileJournal         = File(cacheDir + JOURNAL_FILENAME)
     private val fileJournalTmp      = File(cacheDir + JOURNAL_FILENAME_TMP)
@@ -84,10 +87,10 @@ class DiskCache(private val cacheDir: String): ImageCache {
     }
 
     @Synchronized
-    private fun replaceEntry(hash: String, time: Long, involved: Boolean){
+    private fun replaceEntry(hash: String, time: Long, state: StateEntry){
         entries[hash] = CacheEntry(hash).apply {
             this.time     = time
-            this.involved = involved
+            this.state    = state
         }
         var existJournal = fileJournal.exists()
         if (!existJournal)
@@ -97,14 +100,14 @@ class DiskCache(private val cacheDir: String): ImageCache {
             BufferedReader(FileReader(fileJournal)).use {
                 it.lineSequence().forEach { line ->
                     if (line.contains(hash)) {
-                        text.append("$hash $time\n")
+                        text.append("${state.value} $hash $time\n")
                     } else
                         text.append("$line\n")
                 }
             }
         } else
             entries.forEach{entity ->
-                text.append("${entity.value.hash} ${entity.value.time}\n")
+                text.append("${entity.value.state.value} ${entity.value.hash} ${entity.value.time}\n")
             }
 
         FileOutputStream(fileJournalTmp).use{
@@ -119,19 +122,12 @@ class DiskCache(private val cacheDir: String): ImageCache {
         entries.clear()
         val reader = BufferedReader(FileReader(fileJournal)).use{
             it.lineSequence().forEach { line ->
-                val index = line.indexOf(' ')
-                val hash = line.substring(0 until HASH_LENGTH)
-                val time = try {
-                    if (index != -1)
-                        line.substring(HASH_LENGTH + 1).toLong()
-                    else
-                        0
-                } catch (_: java.lang.NumberFormatException){
-                    0
-                }
+                val state = StateEntry.valueOf(line.substring(0, 6).trim())
+                val hash = line.substring(7, 7 + HASH_LENGTH)
+                val time = line.substring(HASH_LENGTH + 8).toLong()
                 entries[hash] = CacheEntry(hash).apply {
                     this.time   = time
-                    involved    = false
+                    this.state  = state
                 }
             }
         }
@@ -207,7 +203,6 @@ class DiskCache(private val cacheDir: String): ImageCache {
 }
 
 class ImageLinkDownloader private constructor(){
-
     private var cacheStorage: ImageCache? = null
     private val executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
     private val listDownloadTask:HashMap<String, Future<Bitmap?>> = hashMapOf()
@@ -250,6 +245,8 @@ class ImageLinkDownloader private constructor(){
             instance ?: ImageLinkDownloader()
 
         fun setCacheDirectory(dir: String){
+            /*val str = "REMOVE"
+            log(str.substring(0,6))*/
             getInstance().setCacheDirectory(dir)
         }
 
