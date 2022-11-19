@@ -67,19 +67,32 @@ class DiskCache(private val cacheDir: String): ImageCache {
         }
     }
 
+    private fun createJournalBackup(text: StringBuffer) {
+        if (text.isEmpty())
+            return
+        FileOutputStream(fileJournalBackup).use{
+            it.write(text.toString().toByteArray())
+        }
+    }
+
     /**
      *   Полная перезапись файла журнала из entries
      */
     @Synchronized
     private fun rebuildJournal(){
-        val writer = BufferedWriter(FileWriter(fileJournalTmp))
-        writer.use {
-            for (entry: CacheEntry in entries.values) {
-                it.write("${entry.state.value} ${entry.hash} ${entry.time}\n")
-            }
-            it.flush()
+        val text = StringBuffer()
+        for (entry: CacheEntry in entries.values) {
+            text.append("${entry.state.value} ${entry.hash} ${entry.time}\n")
         }
-        renameFile(fileJournal, fileJournalBackup)
+        FileOutputStream(fileJournalTmp).use{
+            it.write(text.toString().toByteArray())
+        }
+        val existJournal = fileJournal.exists()
+        if (existJournal)
+            renameFile(fileJournal, fileJournalBackup)
+        else
+            createJournalBackup(text)
+        text.setLength(0)
         renameFile(fileJournalTmp, fileJournal)
     }
 
@@ -123,17 +136,12 @@ class DiskCache(private val cacheDir: String): ImageCache {
 
         FileOutputStream(fileJournalTmp).use{
             it.write(text.toString().toByteArray())
-            it.flush()
         }
 
         if (existJournal)
             renameFile(fileJournal, fileJournalBackup)
         else
-            FileOutputStream(fileJournalBackup).use{
-                it.write(text.toString().toByteArray())
-                it.flush()
-            }
-
+            createJournalBackup(text)
         text.setLength(0)
         renameFile(fileJournalTmp, fileJournal)
     }
