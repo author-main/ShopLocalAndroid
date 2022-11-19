@@ -75,6 +75,20 @@ class DiskCache(private val cacheDir: String): ImageCache {
         }
     }
 
+    @Synchronized
+    private fun createJournalBackup() {
+        if (entries.isEmpty())
+            return
+        val text = StringBuffer()
+        for (entry: CacheEntry in entries.values) {
+            text.append("${entry.state.value} ${entry.hash} ${entry.time}\n")
+        }
+        FileOutputStream(fileJournalBackup).use{
+            it.write(text.toString().toByteArray())
+        }
+        text.setLength(0)
+    }
+
     /**
      *   Полная перезапись файла журнала из entries
      */
