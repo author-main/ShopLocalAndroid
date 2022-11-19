@@ -16,22 +16,23 @@ interface Callback {
 
 
 class DiskCache(private val cacheDir: String): ImageCache {
+    private var size = 0L // Размер файлов кэша
     private enum class StateEntry(val value: String){
-        CLEAN   ("CLEAN "),
-        DIRTY   ("DIRTY "),
-        REMOVE  ("REMOVE")
+        CLEAN   ("CLEAN "), // файл кэша свободен
+        DIRTY   ("DIRTY "), // файл кэша занят, чтение/запись
+        REMOVE  ("REMOVE")  // удалить сведения, файл из кэша
     }
-    private val HASH_LENGTH = 32
+    private val HASH_LENGTH = 32 // длина хэша файла
     private class CacheEntry(val hash: String) {
         var time:     Long = 0                          // дата создания/изменения файла кеша
         var state:    StateEntry = StateEntry.CLEAN     // состояние файла
     }
     private val entries = LinkedHashMap<String, CacheEntry>(0, 0.75f, true)
-    private val JOURNAL_FILENAME        = "journal"
-    private val JOURNAL_FILENAME_TMP    = "journal.tmp"
-    private val JOURNAL_FILENAME_BACKUP = "journal.bkp"
+    private val JOURNAL_FILENAME        = "journal"         // файл журнала
+    private val JOURNAL_FILENAME_TMP    = "journal.tmp"     // темп файл журнала
+    private val JOURNAL_FILENAME_BACKUP = "journal.bkp"     // резервная копия журнала
     private val EXT_DOWNLOADEDFILE      = ".s"
-    private val existsCacheStorage  = createDirectory(cacheDir)
+    private val existsCacheStorage  = initCache()
     private val fileJournal         = File(cacheDir + JOURNAL_FILENAME)
     private val fileJournalTmp      = File(cacheDir + JOURNAL_FILENAME_TMP)
     private val fileJournalBackup   = File(cacheDir + JOURNAL_FILENAME_BACKUP)
@@ -65,6 +66,10 @@ class DiskCache(private val cacheDir: String): ImageCache {
             throw RuntimeException(e)
         }
     }
+
+    /**
+     *   Полная перезапись файла журнала из entries
+     */
     @Synchronized
     private fun rebuildJournal(){
         val writer = BufferedWriter(FileWriter(fileJournalTmp))
@@ -78,6 +83,9 @@ class DiskCache(private val cacheDir: String): ImageCache {
         renameFile(fileJournalTmp, fileJournal)
     }
 
+    /**
+     *  Восстановление файла журнала из backup
+     */
     private fun backupJournal(): Boolean{
         return if (fileJournalBackup.exists()) {
                 renameFile(fileJournalBackup, fileJournal)
@@ -86,6 +94,9 @@ class DiskCache(private val cacheDir: String): ImageCache {
                 false
     }
 
+    /**
+     *  Перезапись данных entry[hash] в файле журнала
+     */
     @Synchronized
     private fun replaceEntry(hash: String, time: Long, state: StateEntry){
         entries[hash] = CacheEntry(hash).apply {
@@ -114,10 +125,22 @@ class DiskCache(private val cacheDir: String): ImageCache {
             it.write(text.toString().toByteArray())
             it.flush()
         }
-        renameFile(fileJournal, fileJournalBackup)
+
+        if (existJournal)
+            renameFile(fileJournal, fileJournalBackup)
+        else
+            FileOutputStream(fileJournalBackup).use{
+                it.write(text.toString().toByteArray())
+                it.flush()
+            }
+
+        text.setLength(0)
         renameFile(fileJournalTmp, fileJournal)
     }
 
+    /**
+     *  Полное пересоздание entries из файла журнала
+     */
     private fun rebuildEntries(){
         entries.clear()
         val reader = BufferedReader(FileReader(fileJournal)).use{
@@ -159,6 +182,25 @@ class DiskCache(private val cacheDir: String): ImageCache {
 
     private fun emptyCacheStorage(): Boolean {
         return (File(cacheDir).listFiles()?.size ?: 0) == 0
+    }
+
+    private fun getCacheSize(): Long {
+        var size: Long = 0
+        File(cacheDir).listFiles()?.forEach { file ->
+            size += file.length()
+        }
+        return size
+    }
+
+    /**
+     *  Инициализация кэша, создание папки для хранения,
+     *  подсчет размера кэша size
+     */
+
+    private fun initCache(): Boolean{
+        val result = createDirectory(cacheDir)
+        size = getCacheSize()
+        return result
     }
 
     private fun createDirectory(value: String): Boolean {
