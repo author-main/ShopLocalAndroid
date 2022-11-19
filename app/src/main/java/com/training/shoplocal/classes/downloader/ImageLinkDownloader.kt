@@ -75,7 +75,7 @@ class DiskCache(private val cacheDir: String): ImageCache {
         val writer = BufferedWriter(FileWriter(fileJournalTmp))
         writer.use {
             for (entry: CacheEntry in entries.values) {
-                it.write("${entry.hash} ${entry.time}\n")
+                it.write("${entry.state.value} ${entry.hash} ${entry.time}\n")
             }
             it.flush()
         }
