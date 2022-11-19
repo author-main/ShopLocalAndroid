@@ -102,7 +102,7 @@ class DiskCache(private val cacheDir: String): ImageCache {
                 if (!deleted) {
                     if (line.contains(hash)) {
                         if (deletefile)
-                            deleteFile(hash + EXT_CACHETEMPFILE)
+                            deleteFile(cacheDir + hash)
                         text.setLength(text.length - line.length)
                         deleted = true
                     }
