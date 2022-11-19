@@ -2,7 +2,6 @@ package com.training.shoplocal.classes
 
 import android.graphics.Bitmap
 import com.google.gson.annotations.SerializedName
-import com.training.shoplocal.Error
 import com.training.shoplocal.classes.downloader.Callback
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 
@@ -49,11 +48,11 @@ data class Product(val id: Int,
     // index = 0, основное изображение для CardProduct
     fun getImage(index: Int = 0, action: (image: Bitmap?) -> Unit = {}) {
         if (!linkimages.isNullOrEmpty() && index < linkimages.size)
-            ImageLinkDownloader.download(linkimages[0], object : Callback {
+            ImageLinkDownloader.downloadImage(linkimages[0], object : Callback {
                     override fun onComplete(image: Bitmap) {
                         action(image)
                     }
-                    override fun onFailure(error: Error) {
+                    override fun onFailure() {
                         action(null)
                     }
                 })

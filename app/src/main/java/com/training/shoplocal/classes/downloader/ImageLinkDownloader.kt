@@ -79,6 +79,53 @@ class DiskCache(private val cacheDir: String): ImageCache {
         renameFile(fileJournalTmp, fileJournal)
     }
 
+    /*private fun backupJournal(): Boolean{
+        var existJournal = true
+        if (!fileJournal.exists()) {
+            if (fileJournalBackup.exists())
+                renameFile(fileJournalBackup, fileJournal)
+            else
+                existJournal = false
+        }
+        return existJournal
+    }*/
+
+    @Synchronized
+    private fun replaceEntry(hash: String, time: Long, involved: Boolean){
+        entries[hash] = CacheEntry(hash).apply {
+            this.time     = time
+            this.involved = involved
+        }
+        var existJournal = true
+        if (!fileJournal.exists()) {
+            if (fileJournalBackup.exists())
+                renameFile(fileJournalBackup, fileJournal)
+            else
+                existJournal = false
+        }
+        val text: StringBuffer = StringBuffer()
+        if (existJournal) {
+            BufferedReader(FileReader(fileJournal)).use {
+                it.lineSequence().forEach { line ->
+                    if (line.contains(hash)) {
+                        text.append("$hash $time\n")
+                    } else
+                        text.append("$line\n")
+                }
+            }
+        } else
+            entries.forEach{entity ->
+                text.append("${entity.value.hash} ${entity.value.time}\n")
+            }
+
+        FileOutputStream(fileJournalTmp).use{
+            it.write(text.toString().toByteArray())
+            it.flush()
+        }
+        renameFile(fileJournal, fileJournalBackup)
+        renameFile(fileJournalTmp, fileJournal)
+    }
+
     private fun rebuildEntries(){
         entries.clear()
         val reader = BufferedReader(FileReader(fileJournal)).use{

@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -48,13 +50,16 @@ fun ButtonPasswordPanel(state: LoginViewState){
                     }
                     else st.toString()[0]
 
+
                     val alpha  =    if (st==10 && !canFingerPrint.value)
-                                        0.3f
+                                        0.2f
                                     else
                                         1.0f
 
                     OutlinedButton(
-                        colors = ButtonDefaults.buttonColors(backgroundColor = PrimaryDark),
+                        colors = //ButtonDefaults.buttonColors(PrimaryDark),
+                        ButtonDefaults.buttonColors(backgroundColor = PrimaryDark,
+                        disabledBackgroundColor = Color.Transparent),
                         enabled = alpha == 1.0f,
                         onClick = {
                             if (char == ' ') {
