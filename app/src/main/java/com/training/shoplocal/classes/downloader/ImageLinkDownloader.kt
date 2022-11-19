@@ -67,6 +67,9 @@ class DiskCache(private val cacheDir: String): ImageCache {
         }
     }
 
+    /**
+     *  Создание файла резервной копии если отсутвует
+     */
     private fun createJournalBackup(text: StringBuffer) {
         if (text.isEmpty())
             return
@@ -75,7 +78,7 @@ class DiskCache(private val cacheDir: String): ImageCache {
         }
     }
 
-    @Synchronized
+    /*@Synchronized
     private fun createJournalBackup() {
         if (entries.isEmpty())
             return
@@ -87,7 +90,28 @@ class DiskCache(private val cacheDir: String): ImageCache {
             it.write(text.toString().toByteArray())
         }
         text.setLength(0)
+    }*/
+
+    @Synchronized
+    private fun removeEntry(hash: String, deletefile: Boolean = false) {
+        val text = StringBuffer()
+        var deleted = false
+        BufferedReader(FileReader(fileJournal)).use{
+            it.lineSequence().forEach { line ->
+                if (!deleted) {
+                    if (line.contains(hash)) {
+                        if (deletefile)
+                            deleteFile(hash)
+                        deleted = true
+                    }
+                }
+                /*else
+                    text.append(line)*/
+            }
+        }
+
     }
+
 
     /**
      *   Полная перезапись файла журнала из entries
