@@ -1,6 +1,7 @@
 package com.training.shoplocal.classes.downloader
 
 import android.graphics.Bitmap
+import com.training.shoplocal.log
 import java.io.*
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -15,8 +16,9 @@ interface Callback {
 
 
 class DiskCache(private val cacheDir: String): ImageCache {
-    class CacheEntry(val hash: String) {
-        val length = LongArray(2) // старый и новый размер файла
+    private val HASH_LENGTH = 32
+    private class CacheEntry(val hash: String) {
+        var time:     Long = 0          // дата создания/изменения файла кеша
         var involved: Boolean = false   // файл задействован чтение/запись
     }
     private val entries = LinkedHashMap<String, CacheEntry>(0, 0.75f, true)
@@ -50,7 +52,6 @@ class DiskCache(private val cacheDir: String): ImageCache {
     }
 
     private fun md5(link: String): String {
-        val HASH_LENGTH = 32
         try {
             val md = MessageDigest.getInstance("MD5")
             val messageDigest = md.digest(link.toByteArray())
@@ -67,15 +68,37 @@ class DiskCache(private val cacheDir: String): ImageCache {
     }
     @Synchronized
     private fun rebuildJournal(){
-        val writer = BufferedWriter(FileWriter(fileJournal))
+        val writer = BufferedWriter(FileWriter(fileJournalTmp))
         writer.use {
-            it.write("sdfsd\n")
+            for (entry: CacheEntry in entries.values) {
+                it.write("${entry.hash} ${entry.time}\n")
+            }
             it.flush()
         }
+        renameFile(fileJournal, fileJournalBackup)
+        renameFile(fileJournalTmp, fileJournal)
     }
 
     private fun rebuildEntries(){
         entries.clear()
+        val reader = BufferedReader(FileReader(fileJournal)).use{
+            it.lineSequence().forEach { line ->
+                val index = line.indexOf(' ')
+                val hash = line.substring(0 until HASH_LENGTH)
+                val time = try {
+                    if (index != -1)
+                        line.substring(HASH_LENGTH + 1).toLong()
+                    else
+                        0
+                } catch (_: java.lang.NumberFormatException){
+                    0
+                }
+                entries[hash] = CacheEntry(hash).apply {
+                    this.time   = time
+                    involved    = false
+                }
+            }
+        }
     }
 
 
