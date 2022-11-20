@@ -7,6 +7,6 @@ package com.training.shoplocal.classes.downloader
  *  соответсвенно, файлы в кэше hash, hash.t
  *  @param hash уникальное имя(хэш) файла
  */
-interface OnInvalidJournalEntry {
-    fun onInvalid(hash: String)
+interface OnDeleteCacheFile {
+    fun deleteCacheFile(hash: String)
 }

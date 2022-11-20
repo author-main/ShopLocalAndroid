@@ -11,7 +11,7 @@ import java.io.FileOutputStream
 import java.io.FileReader
 
 class Journal private constructor(private val cacheDir: String) {
-    private var onInvaidEntry: OnInvalidJournalEntry? = null
+    private var onDeleteCacheFile: OnDeleteCacheFile? = null
     private var size = 0L // Размер файлов кэша
     private data class CacheEntry(val hash: String) {
         var time:     Long = 0                          // дата создания/изменения файла кеша
@@ -61,7 +61,7 @@ class Journal private constructor(private val cacheDir: String) {
                                 stringEntry.replace(StateEntry.DIRTY.value, StateEntry.CLEAN.value)
                             } else {
                                 //deleteChacheFile(hash)
-                                onInvaidEntry?.onInvalid(hash)
+                                onDeleteCacheFile?.deleteCacheFile(hash)
                             }
                         }
                         if (state == StateEntry.CLEAN) {
@@ -74,7 +74,7 @@ class Journal private constructor(private val cacheDir: String) {
                         }
                     } else {
                         journalChanged = true
-                        onInvaidEntry?.onInvalid(hash)
+                        onDeleteCacheFile?.deleteCacheFile(hash)
                         //deleteChacheFile(hash)
                     }
                 }
@@ -139,6 +139,7 @@ class Journal private constructor(private val cacheDir: String) {
     @Synchronized
     fun remove(hashlist: MutableList<String>){
         hashlist.forEach {hash ->
+            onDeleteCacheFile?.deleteCacheFile(hash)
             entries.remove(hash)
         }
         removeJournal(hashlist)
@@ -148,6 +149,7 @@ class Journal private constructor(private val cacheDir: String) {
     fun remove(hash: String, fromJournal: Boolean = false) {
         if (fromJournal) {
             entries.remove(hash)
+            onDeleteCacheFile?.deleteCacheFile(hash)
             removeJournal(hash)
             return
         }
@@ -259,8 +261,8 @@ class Journal private constructor(private val cacheDir: String) {
         return entry?.length ?: 0L
     }
 
-    fun addOnInvalidEntry(value: OnInvalidJournalEntry) {
-        onInvaidEntry = value
+    fun addOnDeleteCacheFile(value: OnDeleteCacheFile) {
+        onDeleteCacheFile = value
     }
 
     companion object {
@@ -272,12 +274,12 @@ class Journal private constructor(private val cacheDir: String) {
         }
         private var instance: Journal? = null
         @JvmName("getInstance1")
-        fun getInstance(cacheDir: String, onInvalidJournalEntry: OnInvalidJournalEntry? = null): Journal {
+        fun getInstance(cacheDir: String, onDeleteCacheFile: OnDeleteCacheFile? = null): Journal {
             if (instance == null)
                 instance = Journal(cacheDir)
 
-            if (onInvalidJournalEntry != null)
-                instance?.addOnInvalidEntry(onInvalidJournalEntry)
+            if (onDeleteCacheFile != null)
+                instance?.addOnDeleteCacheFile(onDeleteCacheFile)
 
             return instance!!
         }

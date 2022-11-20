@@ -18,8 +18,8 @@ interface Callback {
 class DiskCache(private val cacheDir: String): ImageCache {
     private val existsCacheStorage = createDirectory(cacheDir)
     private var size = getCacheSize()
-    private val journal = Journal.getInstance(cacheDir, object: OnInvalidJournalEntry{
-        override fun onInvalid(hash: String) {
+    private val journal = Journal.getInstance(cacheDir, object: OnDeleteCacheFile{
+        override fun deleteCacheFile(hash: String) {
             deleteChacheFile(hash)
         }
     })
