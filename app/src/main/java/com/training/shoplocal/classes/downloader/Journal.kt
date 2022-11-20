@@ -58,7 +58,7 @@ class Journal private constructor(private val cacheDir: String) {
                             if (length > 0) {
                                 journalChanged = true
                                 state = StateEntry.CLEAN
-                                stringEntry.replace(StateEntry.DIRTY.value, StateEntry.CLEAN.value)
+                                stringEntry = line.replace(StateEntry.DIRTY.value, StateEntry.CLEAN.value)
                             } else {
                                 //deleteChacheFile(hash)
                                 onDeleteCacheFile?.deleteCacheFile(hash)
@@ -66,8 +66,8 @@ class Journal private constructor(private val cacheDir: String) {
                         }
                         if (state == StateEntry.CLEAN) {
                             entries[hash] = CacheEntry(hash).apply {
-                                this.state = state
-                                this.time = time
+                                this.state  = state
+                                this.time   = time
                                 this.length = length
                             }
                             text.append(stringEntry + "\n")
