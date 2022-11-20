@@ -18,7 +18,11 @@ interface Callback {
 class DiskCache(private val cacheDir: String): ImageCache {
     private val existsCacheStorage = createDirectory(cacheDir)
     private var size = getCacheSize()
-    private val journal = Journal.getInstance(cacheDir)
+    private val journal = Journal.getInstance(cacheDir, object: OnInvalidJournalEntry{
+        override fun onInvalid(hash: String) {
+            deleteChacheFile(hash)
+        }
+    })
 
     /**
      *  Изменение размера кэша в соответствии с максимальным размером кэша CACHE_SIZE
@@ -46,6 +50,14 @@ class DiskCache(private val cacheDir: String): ImageCache {
         }
         return placed
     }
+
+    @Synchronized
+    private fun deleteChacheFile(hash: String){
+        val filename = cacheDir + hash
+        deleteFile(filename)
+        deleteFile("filename.${Journal.EXT_CACHETEMPFILE}")
+    }
+
 
     private fun md5(link: String): String {
         try {

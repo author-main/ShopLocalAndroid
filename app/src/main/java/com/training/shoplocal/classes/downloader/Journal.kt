@@ -1,12 +1,17 @@
 package com.training.shoplocal.classes.downloader
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.training.shoplocal.*
+import org.junit.Test
+//import org.junit.jupiter.api.DisplayName
+import org.junit.runner.RunWith
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileOutputStream
 import java.io.FileReader
 
 class Journal private constructor(private val cacheDir: String) {
+    private var onInvaidEntry: OnInvalidJournalEntry? = null
     private var size = 0L // Размер файлов кэша
     private data class CacheEntry(val hash: String) {
         var time:     Long = 0                          // дата создания/изменения файла кеша
@@ -38,20 +43,66 @@ class Journal private constructor(private val cacheDir: String) {
             }
         }
         if (!skip) {
+            val text = StringBuffer()
+            var journalChanged = false
             BufferedReader(FileReader(fileJournal)).use{
                 it.lineSequence().forEach { line ->
-                    val state = StateEntry.valueOf(line.substring(0, 6).trim())
-                    val hash  = line.substring(7, 7 + HASH_LENGTH)
-                    val time  = line.substring(HASH_LENGTH + 8).toLong()
-                    val lastindex = line.lastIndexOf(' ')
-                    entries[hash] = CacheEntry(hash).apply {
-                        this.time   = time
-                        this.state  = state
+                    val hash    = line.substring(7, 7 + HASH_LENGTH)
+                    var state = StateEntry.valueOf(line.substring(0, 6).trim())
+                    if (state != StateEntry.REMOVE) {
+                        val data = (line.substring(HASH_LENGTH + 8)).split(' ')
+                        val time = data[0].toLong()
+                        val length = data[1].toLong()
+                        var stringEntry = line
+                        if (state == StateEntry.DIRTY){
+                            if (length > 0) {
+                                journalChanged = true
+                                state = StateEntry.CLEAN
+                                stringEntry.replace(StateEntry.DIRTY.value, StateEntry.CLEAN.value)
+                            } else {
+                                //deleteChacheFile(hash)
+                                onInvaidEntry?.onInvalid(hash)
+                            }
+                        }
+                        if (state == StateEntry.CLEAN) {
+                            entries[hash] = CacheEntry(hash).apply {
+                                this.state = state
+                                this.time = time
+                                this.length = length
+                            }
+                            text.append(stringEntry + "\n")
+                        }
+                    } else {
+                        journalChanged = true
+                        onInvaidEntry?.onInvalid(hash)
+                        //deleteChacheFile(hash)
                     }
+                }
+            }
+
+            if (journalChanged) {
+                if (text.isNotEmpty()) {
+                    FileOutputStream(fileJournalTmp).use {
+                        it.write(text.toString().toByteArray())
+                    }
+                    updateJournalFiles()
                 }
             }
         }
     }
+
+/*    private fun getEntryFromLine(line: String): Unit{//CacheEntry?{
+         try {
+            val hash = line.substring(7, 7 + HASH_LENGTH)
+            CacheEntry(hash).apply {
+                this.state = StateEntry.valueOf(line.substring(0, 6).trim())
+                val data = (line.substring(HASH_LENGTH + 8)).split(' ')
+                this.time = data[0].toLong()
+                this.length = data[1].toLong()
+            }
+        } catch (_: Exception) {
+        }
+    }*/
 
     private fun updateJournalFiles(){//restoreFromTemp: Boolean = false){
         renameFile(fileJournal, fileJournalBackup)
@@ -208,7 +259,9 @@ class Journal private constructor(private val cacheDir: String) {
         return entry?.length ?: 0L
     }
 
-
+    fun addOnInvalidEntry(value: OnInvalidJournalEntry) {
+        onInvaidEntry = value
+    }
 
     companion object {
         const val EXT_CACHETEMPFILE = "t"
@@ -219,8 +272,15 @@ class Journal private constructor(private val cacheDir: String) {
         }
         private var instance: Journal? = null
         @JvmName("getInstance1")
-        fun getInstance(cacheDir: String): Journal =
-            instance ?: Journal(cacheDir)
+        fun getInstance(cacheDir: String, onInvalidJournalEntry: OnInvalidJournalEntry? = null): Journal {
+            if (instance == null)
+                instance = Journal(cacheDir)
+
+            if (onInvalidJournalEntry != null)
+                instance?.addOnInvalidEntry(onInvalidJournalEntry)
+
+            return instance!!
+        }
 
     }
 }
