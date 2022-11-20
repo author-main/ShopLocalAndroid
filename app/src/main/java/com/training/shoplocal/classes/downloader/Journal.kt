@@ -250,7 +250,8 @@ class Journal private constructor(private val cacheDir: String) {
     fun getHashList(): List<String>{
         val list = mutableListOf<String>()
         for (entry in entries) {
-            if (entry.value.state == StateEntry.CLEAN || entry.value.state == StateEntry.REMOVE)
+            if (entry.value.state != StateEntry.DIRTY)
+            //if (entry.value.state == StateEntry.CLEAN || entry.value.state == StateEntry.REMOVE)
                 list.add(entry.value.hash)
         }
         return list
