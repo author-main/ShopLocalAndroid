@@ -1,7 +1,7 @@
 package com.training.shoplocal.classes.downloader
 
 import android.graphics.Bitmap
-import com.training.shoplocal.log
+import com.training.shoplocal.*
 import java.io.*
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -16,39 +16,35 @@ interface Callback {
 
 
 class DiskCache(private val cacheDir: String): ImageCache {
-    private var size = 0L // Размер файлов кэша
-    private enum class StateEntry(val value: String){
-        CLEAN   ("CLEAN "), // файл кэша свободен
-        DIRTY   ("DIRTY "), // файл кэша занят, чтение/запись
-        REMOVE  ("REMOVE")  // удалить сведения, файл из кэша
-    }
-    private val HASH_LENGTH = 32 // длина хэша файла
-    private class CacheEntry(val hash: String) {
-        var time:     Long = 0                          // дата создания/изменения файла кеша
-        var state:    StateEntry = StateEntry.CLEAN     // состояние файла
-    }
-    private val entries = LinkedHashMap<String, CacheEntry>(0, 0.75f, true)
-    private val JOURNAL_FILENAME        = "journal"         // файл журнала
-    private val JOURNAL_FILENAME_TMP    = "journal.tmp"     // темп файл журнала
-    private val JOURNAL_FILENAME_BACKUP = "journal.bkp"     // резервная копия журнала
-    private val EXT_CACHETEMPFILE      = ".t"
-    private val existsCacheStorage  = initCache()
-    private val fileJournal         = File(cacheDir + JOURNAL_FILENAME)
-    private val fileJournalTmp      = File(cacheDir + JOURNAL_FILENAME_TMP)
-    private val fileJournalBackup   = File(cacheDir + JOURNAL_FILENAME_BACKUP)
+    private val existsCacheStorage = createDirectory(cacheDir)
+    private var size = getCacheSize()
+    private val journal = Journal.getInstance(cacheDir)
 
-    init {
-        if (existsCacheStorage) {
-            if (!emptyCacheStorage()) {
-                deleteFile(fileJournalTmp)
-                if (!fileJournal.exists()) {
-                    if (backupJournal())
-                        rebuildEntries()
-                    else
-                        clear()
-                }
+    /**
+     *  Изменение размера кэша в соответствии с максимальным размером кэша CACHE_SIZE
+     *  @param insize размер нового файла, помещаемого в кэш
+     *  @return Boolean - true файл может быть размещен в кэше
+     */
+    @Synchronized
+    private fun trimCache(insize: Long): Boolean{
+        if (size + insize < CACHE_SIZE)
+            return true
+        val limit = CACHE_SIZE - insize
+        val hashList = journal.getHashList()
+        val outHashList = mutableListOf<String>()
+        var placed = false
+        var calcSize = size
+        for (hash in hashList) {
+            calcSize -= journal.getEntrySize(hash)
+            outHashList.add(hash)
+            if (calcSize <= limit) {
+                placed = true
+                size = calcSize
+                journal.remove(outHashList)
+                break
             }
         }
+        return placed
     }
 
     private fun md5(link: String): String {
@@ -67,206 +63,12 @@ class DiskCache(private val cacheDir: String): ImageCache {
         }
     }
 
-    /**
-     *  Создание файла резервной копии если отсутвует
-     */
-    private fun createJournalBackup(text: StringBuffer) {
-        if (text.isEmpty())
-            return
-        FileOutputStream(fileJournalBackup).use{
-            it.write(text.toString().toByteArray())
-        }
-    }
-
-    /*@Synchronized
-    private fun createJournalBackup() {
-        if (entries.isEmpty())
-            return
-        val text = StringBuffer()
-        for (entry: CacheEntry in entries.values) {
-            text.append("${entry.state.value} ${entry.hash} ${entry.time}\n")
-        }
-        FileOutputStream(fileJournalBackup).use{
-            it.write(text.toString().toByteArray())
-        }
-        text.setLength(0)
-    }*/
-
-    @Synchronized
-    private fun removeEntry(hash: String, deletefile: Boolean = false) {
-        val text = StringBuffer()
-        var deleted = false
-        BufferedReader(FileReader(fileJournal)).use{
-            it.lineSequence().forEach { line ->
-                text.append("$line\n")
-                if (!deleted) {
-                    if (line.contains(hash)) {
-                        if (deletefile)
-                            deleteFile(cacheDir + hash)
-                        text.setLength(text.length - line.length)
-                        deleted = true
-                    }
-                }
-            }
-        }
-        renameFile(fileJournal, fileJournalBackup)
-        if (text.isNotEmpty()) {
-            FileOutputStream(fileJournalTmp).use {
-                it.write(text.toString().toByteArray())
-            }
-            text.setLength(0)
-            renameFile(fileJournalTmp, fileJournal)
-        } else
-            fileJournal.createNewFile()
-    }
-
-
-    /**
-     *   Полная перезапись файла журнала из entries
-     */
-    @Synchronized
-    private fun rebuildJournal(){
-        val text = StringBuffer()
-        for (entry: CacheEntry in entries.values) {
-            text.append("${entry.state.value} ${entry.hash} ${entry.time}\n")
-        }
-        FileOutputStream(fileJournalTmp).use{
-            it.write(text.toString().toByteArray())
-        }
-        val existJournal = fileJournal.exists()
-        if (existJournal)
-            renameFile(fileJournal, fileJournalBackup)
-        else
-            createJournalBackup(text)
-        text.setLength(0)
-        renameFile(fileJournalTmp, fileJournal)
-    }
-
-    /**
-     *  Восстановление файла журнала из backup
-     */
-    private fun backupJournal(): Boolean{
-        return if (fileJournalBackup.exists()) {
-                renameFile(fileJournalBackup, fileJournal)
-                true
-            } else
-                false
-    }
-
-    /**
-     *  Перезапись данных entry[hash] в файле журнала
-     */
-    @Synchronized
-    private fun replaceEntry(hash: String, time: Long, state: StateEntry){
-        entries[hash] = CacheEntry(hash).apply {
-            this.time     = time
-            this.state    = state
-        }
-        var existJournal = fileJournal.exists()
-        if (!existJournal)
-            existJournal = backupJournal()
-        val text: StringBuffer = StringBuffer()
-        if (existJournal) {
-            BufferedReader(FileReader(fileJournal)).use {
-                it.lineSequence().forEach { line ->
-                    if (line.contains(hash)) {
-                        text.append("${state.value} $hash $time\n")
-                    } else
-                        text.append("$line\n")
-                }
-            }
-        } else
-            entries.forEach{entity ->
-                text.append("${entity.value.state.value} ${entity.value.hash} ${entity.value.time}\n")
-            }
-
-        FileOutputStream(fileJournalTmp).use{
-            it.write(text.toString().toByteArray())
-        }
-
-        if (existJournal)
-            renameFile(fileJournal, fileJournalBackup)
-        else
-            createJournalBackup(text)
-        text.setLength(0)
-        renameFile(fileJournalTmp, fileJournal)
-    }
-
-    /**
-     *  Полное пересоздание entries из файла журнала
-     */
-    private fun rebuildEntries(){
-        entries.clear()
-        val reader = BufferedReader(FileReader(fileJournal)).use{
-            it.lineSequence().forEach { line ->
-                val state = StateEntry.valueOf( line.substring(0, 6).trim())
-                val hash =                      line.substring(7, 7 + HASH_LENGTH)
-                val time =                      line.substring(HASH_LENGTH + 8).toLong()
-                entries[hash] = CacheEntry(hash).apply {
-                    this.time   = time
-                    this.state  = state
-                }
-            }
-        }
-    }
-
-
-    private fun renameFile(source: String, dest: String){
-        renameFile(File(source), File(dest))
-    }
-
-    private fun renameFile(source: File, dest: File){
-        try {
-            if (source.exists()) {
-                deleteFile(dest)
-                source.renameTo(dest)
-            }
-        } catch (_:IOException){}
-    }
-
-    private fun deleteFile(filename: String) {
-        deleteFile(File(filename))
-    }
-
-    private fun deleteFile(file: File) {
-        try {
-            file.delete()
-        } catch (_:IOException){}
-    }
-
-    private fun emptyCacheStorage(): Boolean {
-        return (File(cacheDir).listFiles()?.size ?: 0) == 0
-    }
-
     private fun getCacheSize(): Long {
         var size: Long = 0
-        File(cacheDir).listFiles()?.forEach { file ->
+        File(cacheDir).listFiles(FileFilter { it.extension != Journal.EXT_CACHETEMPFILE} )?.forEach { file ->
             size += file.length()
         }
         return size
-    }
-
-    /**
-     *  Инициализация кэша, создание папки для хранения,
-     *  подсчет размера кэша size
-     */
-
-    private fun initCache(): Boolean{
-        val result = createDirectory(cacheDir)
-        size = getCacheSize()
-        return result
-    }
-
-    private fun createDirectory(value: String): Boolean {
-        val dir: File = File(value)
-        return if (!dir.exists()) {
-            try {
-                dir.mkdirs()
-            } catch (_: IOException) {
-                false
-            }
-        } else
-            true
     }
 
     private fun getLinkHash(link: String): String =
@@ -283,18 +85,9 @@ class DiskCache(private val cacheDir: String): ImageCache {
     }
 
     override fun remove(hash: String) {
-
-        TODO("Not yet implemented")
     }
 
     override fun clear() {
-        entries.clear()
-        if (existsCacheStorage) {
-            val files = File(cacheDir).listFiles()
-            files?.forEach {file ->
-                file.delete()
-            }
-        }
     }
 }
 
@@ -339,8 +132,6 @@ class ImageLinkDownloader private constructor(){
             instance ?: ImageLinkDownloader()
 
         fun setCacheDirectory(dir: String){
-            /*val str = "REMOVE"
-            log(str.substring(0,6))*/
             getInstance().setCacheDirectory(dir)
         }
 
