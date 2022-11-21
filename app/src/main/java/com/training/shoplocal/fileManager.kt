@@ -62,3 +62,10 @@ fun createDirectory(value: String): Boolean {
     } else
         true
 }
+
+fun getCacheDirectory(): String =
+    AppShopLocal.appContext().applicationInfo.dataDir + "/cache/"
+
+
+fun getTempDirectory(): String =
+    AppShopLocal.appContext().applicationInfo.dataDir + "/temp/"

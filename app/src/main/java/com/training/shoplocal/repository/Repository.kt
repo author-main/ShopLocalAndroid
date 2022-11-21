@@ -8,6 +8,7 @@ import com.training.shoplocal.classes.Category
 import com.training.shoplocal.classes.DataDisplay
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
+import com.training.shoplocal.getCacheDirectory
 import com.training.shoplocal.log
 import com.training.shoplocal.loginview.LoginViewState
 import java.io.File
@@ -17,7 +18,7 @@ class Repository: DAOinterface {
     private val dataDisplay = DataDisplay()
     val loginState = LoginViewState.getLoginState()
     init {
-        ImageLinkDownloader.setCacheDirectory(appContext().applicationInfo.dataDir + "/cache/")
+        ImageLinkDownloader.setCacheDirectory(getCacheDirectory())
     }
 
     /**
