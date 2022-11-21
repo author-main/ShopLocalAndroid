@@ -10,7 +10,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.Future
 
 interface Callback {
-    fun onComplete(image: Bitmap)
+    fun onComplete(image: BitmapTime)
     fun onFailure()
 }
 
@@ -87,16 +87,17 @@ class DiskCache(private val cacheDir: String): ImageCache {
         md5(link)
 
 
-    override fun get(link: String, time: Long): Bitmap? {
+    override fun get(link: String): Bitmap? {
         val hash = getLinkHash(link)
         return null
     }
 
-    override fun put(link: String, image: Bitmap, time: Long) {
+    override fun put(link: String, image: BitmapTime){//}, time: Long) {
         val hash = getLinkHash(link)
     }
 
-    override fun remove(hash: String) {
+    override fun remove(link: String) {
+        val hash = getLinkHash(link)
     }
 
     override fun clear() {
@@ -109,7 +110,18 @@ class ImageLinkDownloader private constructor(){
     private val listDownloadTask:HashMap<String, Future<Bitmap?>> = hashMapOf()
 
     fun downloadLinkImage(link: String, callback: Callback){
-        val task = DownloadImageTask(link, cacheStorage, callback)
+        val task = DownloadImageTask(link)//, cacheStorage)
+        task.addDowmloadCallback(object: Callback {
+            override fun onComplete(image: BitmapTime) {
+                cacheStorage?.put(link, image)
+                callback.onComplete(image)
+            }
+
+            override fun onFailure() {
+                cacheStorage?.remove(link)
+                callback.onFailure()
+            }
+        })
         listDownloadTask[link] = executorService.submit(task)
     }
 
