@@ -59,21 +59,21 @@ class DiskCache(private val cacheDir: String): ImageCache {
     }
 
 
-    private fun md5(link: String): String {
+    /*private fun md5(link: String): String {
         try {
             val md = MessageDigest.getInstance("MD5")
             val messageDigest = md.digest(link.toByteArray())
             var hashtext = BigInteger(1, messageDigest).toString(16)
-            /*try {
+            *//*try {
                 hashtext = "0".repeat(HASH_LENGTH - hashtext.length) + hashtext
-            } catch (_: IllegalArgumentException) {}*/
+            } catch (_: IllegalArgumentException) {}*//*
             while (hashtext.length < HASH_LENGTH)
                 hashtext = "0$hashtext"
             return hashtext
         } catch (e: NoSuchAlgorithmException) {
             throw RuntimeException(e)
         }
-    }
+    }*/
 
     private fun getCacheSize(): Long {
         var size: Long = 0

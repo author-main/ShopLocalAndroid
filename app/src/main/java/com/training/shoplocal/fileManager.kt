@@ -3,9 +3,13 @@ package com.training.shoplocal
 import java.io.File
 import java.io.FileFilter
 import java.io.IOException
+import java.math.BigInteger
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 
 const val HASH_LENGTH = 32
 const val CACHE_SIZE  = 50 * 1024 * 1024  // 50Мб
+const val EXT_CACHETEMPFILE = "t"
 
 fun renameFile(source: String, dest: String){
     renameFile(File(source), File(dest))
@@ -69,3 +73,19 @@ fun getCacheDirectory(): String =
 
 fun getTempDirectory(): String =
     AppShopLocal.appContext().applicationInfo.dataDir + "/temp/"
+
+fun md5(link: String): String {
+    try {
+        val md = MessageDigest.getInstance("MD5")
+        val messageDigest = md.digest(link.toByteArray())
+        var hashtext = BigInteger(1, messageDigest).toString(16)
+        /*try {
+            hashtext = "0".repeat(HASH_LENGTH - hashtext.length) + hashtext
+        } catch (_: IllegalArgumentException) {}*/
+        while (hashtext.length < HASH_LENGTH)
+            hashtext = "0$hashtext"
+        return hashtext
+    } catch (e: NoSuchAlgorithmException) {
+        throw RuntimeException(e)
+    }
+}

@@ -2,8 +2,7 @@ package com.training.shoplocal.classes.downloader
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import com.training.shoplocal.createDirectory
-import com.training.shoplocal.getTempDirectory
+import com.training.shoplocal.*
 import java.io.FileOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
@@ -27,9 +26,8 @@ class DownloadImageTask(private val link: String): DownloadTask<Bitmap?>
             val timestamp = conn.lastModified
             conn.requestMethod = "GET"
 
-            val downloadDir = createDirectory(getTempDirectory())
+            val filename = getCacheDirectory() + md5(link) + ".$EXT_CACHETEMPFILE"
             val inputStream = conn.inputStream
-            val filename = getTempDirectory() + link
             val outputStream = FileOutputStream(filename);
             var bytesRead: Int = -1
             val buffer = ByteArray(BUFFER_SIZE)

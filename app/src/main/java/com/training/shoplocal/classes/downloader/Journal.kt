@@ -273,7 +273,6 @@ class Journal private constructor(private val cacheDir: String) {
     }
 
     companion object {
-        const val EXT_CACHETEMPFILE = "t"
         enum class StateEntry(val value: String){
             CLEAN   ("CLEAN "), // файл кэша свободен
             DIRTY   ("DIRTY "), // файл кэша занят, чтение/запись
