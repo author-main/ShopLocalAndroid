@@ -3,9 +3,6 @@ package com.training.shoplocal.classes.downloader
 import android.graphics.Bitmap
 import com.training.shoplocal.*
 import java.io.*
-import java.math.BigInteger
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
 
@@ -129,6 +126,12 @@ class ImageLinkDownloader private constructor(){
     private val listDownloadTask:HashMap<String, Future<Bitmap?>> = hashMapOf()
 
     fun downloadLinkImage(link: String, callback: Callback){
+
+        val iterator = listDownloadTask.iterator()
+        while (iterator.hasNext()) {
+            if (iterator.next().value.isDone) iterator.remove()
+        }
+
         val image: Bitmap? = cacheStorage?.get(link)
         image?.let{
             cacheStorage?.update(link, StateEntry.DIRTY)
@@ -154,16 +157,24 @@ class ImageLinkDownloader private constructor(){
 
     fun cancelTask(link: String){
         synchronized(this){
-            listDownloadTask.forEach {
-                if (it.key == link &&  !it.value.isDone)
-                    it.value.cancel(true)
+            listDownloadTask[link]?.let { task ->
+                if (!task.isDone)
+                    task.cancel(true)
             }
+            listDownloadTask.remove(link)
+            /*for (task in listDownloadTask) {
+           // listDownloadTask.forEach {
+                if (task.key == link &&  !task.value.isDone) {
+                    it.value.cancel(true)
+                }
+            }*/
         }
     }
 
     fun cancelAll() {
         if (listDownloadTask.isEmpty()) return
         synchronized (this) {
+            executorService.shutdownNow()
             listDownloadTask.forEach{
                 if ( !it.value.isDone)
                     it.value.cancel(true)
