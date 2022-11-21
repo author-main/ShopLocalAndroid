@@ -1,10 +1,6 @@
 package com.training.shoplocal.classes.downloader
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.training.shoplocal.*
-import org.junit.Test
-//import org.junit.jupiter.api.DisplayName
-import org.junit.runner.RunWith
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileOutputStream
