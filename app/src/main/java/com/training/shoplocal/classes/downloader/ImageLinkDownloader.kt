@@ -96,7 +96,7 @@ class DiskCache(private val cacheDir: String): ImageCache {
                 journal.add(hash, image)
             }
             else {
-                journal.remove(hash, false)
+                remove(link, false)
             }
         } else
             journal.add(hash)
