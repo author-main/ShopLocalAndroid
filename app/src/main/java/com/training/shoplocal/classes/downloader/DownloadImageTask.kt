@@ -2,8 +2,6 @@ package com.training.shoplocal.classes.downloader
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.os.Handler
-import android.os.Looper
 import com.training.shoplocal.createDirectory
 import com.training.shoplocal.getTempDirectory
 import java.io.FileOutputStream
@@ -43,12 +41,16 @@ class DownloadImageTask(private val link: String): DownloadTask<Bitmap?>
             outputStream.close()
             conn.disconnect()
 
-            val bitmap = BitmapFactory.decodeStream(conn.inputStream)
+            //val bitmap = BitmapFactory.decodeStream(conn.inputStream)
+            val option = BitmapFactory.Options()
+            option.inPreferredConfig = Bitmap.Config.ARGB_8888
+            val bitmap = BitmapFactory.decodeFile(filename, option)//decodeStream(conn.inputStream)
             bitmap?.let{
                 callback?.onComplete(BitmapTime(it, timestamp))
             } ?: callback?.onFailure()
             bitmap
         } catch (_: Exception) {
+            callback?.onFailure()
             null
         }
     }
