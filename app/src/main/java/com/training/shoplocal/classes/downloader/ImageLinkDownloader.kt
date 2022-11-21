@@ -92,8 +92,9 @@ class DiskCache(private val cacheDir: String): ImageCache {
         return null
     }
 
-    override fun put(link: String, image: BitmapTime){//}, time: Long) {
+    override fun put(link: String, image: BitmapTime?){//}, time: Long) {
         val hash = getLinkHash(link)
+        journal.add(hash, image?.time ?: 0)
     }
 
     override fun remove(link: String) {
@@ -110,6 +111,12 @@ class ImageLinkDownloader private constructor(){
     private val listDownloadTask:HashMap<String, Future<Bitmap?>> = hashMapOf()
 
     fun downloadLinkImage(link: String, callback: Callback){
+        val image: Bitmap? = cacheStorage?.get(link)
+        image?.let{
+            callback.onComplete(BitmapTime(it, 0))
+            return
+        }
+        cacheStorage?.put(link, null)
         val task = DownloadImageTask(link)//, cacheStorage)
         task.addDowmloadCallback(object: Callback {
             override fun onComplete(image: BitmapTime) {
