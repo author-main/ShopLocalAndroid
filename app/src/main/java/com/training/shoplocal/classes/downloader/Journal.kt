@@ -8,7 +8,7 @@ import java.io.FileReader
 
 class Journal private constructor(private val cacheDir: String) {
     private var onDeleteCacheFile: OnDeleteCacheFile? = null
-    private var size = 0L // Размер файлов кэша
+//    private var size = 0L // Размер файлов кэша
     private data class CacheEntry(val hash: String) {
         var time:     Long = 0                          // дата создания/изменения файла кеша
         var state:    StateEntry = StateEntry.CLEAN     // состояние файла
@@ -24,10 +24,10 @@ class Journal private constructor(private val cacheDir: String) {
     init {
         deleteFile(fileJournalTmp)
         deleteFiles(cacheDir, EXT_CACHETEMPFILE)
-        restoreJournal()
+        initEntriesJournal()
     }
 
-    private fun restoreJournal(){
+    private fun initEntriesJournal(){
         var skip = false
         if (!fileJournal.exists()) {
             if (fileJournalBackup.exists())
@@ -49,10 +49,12 @@ class Journal private constructor(private val cacheDir: String) {
                         val data = (line.substring(HASH_LENGTH + 8)).split(' ')
                         val time = data[0].toLong()
                         val length = data[1].toLong()
+
                         var stringEntry = line
                         if (state == StateEntry.DIRTY){
                             if (length > 0) {
                                 journalChanged = true
+                                //size += length
                                 state = StateEntry.CLEAN
                                 stringEntry = line.replace(StateEntry.DIRTY.value, StateEntry.CLEAN.value)
                             } else {
@@ -107,18 +109,17 @@ class Journal private constructor(private val cacheDir: String) {
     }
 
     @Synchronized
-    fun add(hash: String, timestamp: Long) {
+    fun add(hash: String, image: BitmapData? = null) {
+        val timestamp = image?.time ?: 0L
         entries[hash] = CacheEntry(hash).apply {
             if (timestamp == 0L) {
                 this.state = StateEntry.DIRTY
                 addJournal(this)
             }
             else {
-                val filename = "$cacheDir$hash"
-                renameFile("$filename.$EXT_CACHETEMPFILE", filename)
                 this.state  = StateEntry.CLEAN
                 this.time   = timestamp
-                this.length = getFileSize("$cacheDir$hash")
+                this.length = image?.length ?: 0L//getFileSize("$cacheDir$hash")
                 updateJournal(this)
             }
         }
@@ -152,18 +153,20 @@ class Journal private constructor(private val cacheDir: String) {
     }
 
     @Synchronized
-    fun remove(hash: String, fromJournal: Boolean = false) {
-        if (fromJournal) {
+    fun remove(hash: String, changeState: Boolean): Long {
+        if (!changeState) {
+            val length = entries[hash]?.length ?: 0L
             entries.remove(hash)
             onDeleteCacheFile?.deleteCacheFile(hash)
-            removeJournal(hash)
-            return
+            removeJournal(hash, false)
+            return length
         }
         entries[hash] = CacheEntry(hash).apply {
             this.state = StateEntry.REMOVE
             this.time  = 0
         }
         updateJournal(entries[hash]!!)
+        return 0L
     }
 
 
@@ -231,12 +234,24 @@ class Journal private constructor(private val cacheDir: String) {
         }
     }
 
-
-    private fun removeJournal(hash: String){
+    /**
+     *  Удалить запись из файла журнала
+     *  @param hash хэш файла кэша
+     *  @param onlyState true  - будут удалены только записи со state = REMOVE,
+     *                   false - будут удалены все записи с указанным хэшем
+     */
+    private fun removeJournal(hash: String, onlyState: Boolean = true){
         val text = StringBuffer()
         BufferedReader(FileReader(fileJournal)).use {
             it.lineSequence().forEach { line ->
-                val skip = line.contains(hash) && line.startsWith(StateEntry.REMOVE.value)
+                val skip = if (line.contains(hash)) {
+                               if (!onlyState)
+                                    true
+                               else {
+                                    line.startsWith(StateEntry.REMOVE.value)
+                               }
+                           } else
+                               false
                 if (!skip)
                     text.append(line + "\n")
             }
@@ -248,15 +263,17 @@ class Journal private constructor(private val cacheDir: String) {
             }
             updateJournalFiles()//restoreFromTemp = true)
         } else {
-            deleteFile(fileJournal)
+            deleteFiles(cacheDir)
+            //deleteFile(fileJournal)
             fileJournal.createNewFile()
         }
     }
 
-    fun getHashList(): List<String>{
+    fun getHashList(excludeHash: String? = null): List<String>{
         val list = mutableListOf<String>()
         for (entry in entries) {
-            if (entry.value.state != StateEntry.DIRTY)
+            val exclude = excludeHash != null && excludeHash == entry.key
+            if (!exclude && entry.value.state != StateEntry.DIRTY)
             //if (entry.value.state == StateEntry.CLEAN || entry.value.state == StateEntry.REMOVE)
                 list.add(entry.value.hash)
         }
@@ -273,11 +290,6 @@ class Journal private constructor(private val cacheDir: String) {
     }
 
     companion object {
-        enum class StateEntry(val value: String){
-            CLEAN   ("CLEAN "), // файл кэша свободен
-            DIRTY   ("DIRTY "), // файл кэша занят, чтение/запись
-            REMOVE  ("REMOVE")  // удалить сведения, файл из кэша
-        }
         private var instance: Journal? = null
         @JvmName("getInstance1")
         fun getInstance(cacheDir: String, onDeleteCacheFile: OnDeleteCacheFile? = null): Journal {
@@ -289,6 +301,36 @@ class Journal private constructor(private val cacheDir: String) {
 
             return instance!!
         }
+    }
 
+    fun getCacheSize(): Long =
+        entries.values.sumOf { it.length }
+
+    @Synchronized
+    fun clear() {
+        val text = StringBuffer()
+        val hashList = mutableListOf<String>()
+        entries.forEach { entity ->
+            if (entity.value.state == StateEntry.DIRTY)
+                hashList.add(entity.key)
+            else {
+                entity.value.state = StateEntry.REMOVE
+                text.append("${entity.value.state.value} ${entity.value.hash} ${entity.value.time} ${entity.value.length}\n")
+            }
+        }
+        hashList.forEach { hash ->
+            entries.remove(hash)
+            onDeleteCacheFile?.deleteCacheFile(hash)
+        }
+        if (text.isNotEmpty()) {
+            FileOutputStream(fileJournal).use {
+                it.write(text.toString().toByteArray())
+            }
+            text.setLength(0)
+        } else {
+            deleteFiles(cacheDir)
+            entries.clear()
+            fileJournal.createNewFile()
+        }
     }
 }

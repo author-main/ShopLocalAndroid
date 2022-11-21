@@ -10,6 +10,11 @@ import java.security.NoSuchAlgorithmException
 const val HASH_LENGTH = 32
 const val CACHE_SIZE  = 50 * 1024 * 1024  // 50Мб
 const val EXT_CACHETEMPFILE = "t"
+enum class StateEntry(val value: String){
+    CLEAN   ("CLEAN "), // файл кэша свободен
+    DIRTY   ("DIRTY "), // файл кэша занят, чтение/запись
+    REMOVE  ("REMOVE")  // удалить сведения, файл из кэша
+}
 
 fun renameFile(source: String, dest: String){
     renameFile(File(source), File(dest))

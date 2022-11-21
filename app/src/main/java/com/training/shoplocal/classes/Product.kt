@@ -2,7 +2,6 @@ package com.training.shoplocal.classes
 
 import android.graphics.Bitmap
 import com.google.gson.annotations.SerializedName
-import com.training.shoplocal.classes.downloader.BitmapTime
 import com.training.shoplocal.classes.downloader.Callback
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 
@@ -50,8 +49,8 @@ data class Product(val id: Int,
     fun getImage(index: Int = 0, action: (image: Bitmap?) -> Unit = {}) {
         if (!linkimages.isNullOrEmpty() && index < linkimages.size)
             ImageLinkDownloader.downloadImage(linkimages[0], object : Callback {
-                    override fun onComplete(image: BitmapTime) {
-                        action(image.bitmap)
+                    override fun onComplete(image: Bitmap) {
+                        action(image)
                     }
                     override fun onFailure() {
                         action(null)

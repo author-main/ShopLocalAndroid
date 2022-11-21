@@ -7,19 +7,14 @@ import java.io.FileOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
-class DownloadImageTask(private val link: String): DownloadTask<Bitmap?>
+class DownloadImageTask(private val link: String, val callback: (bitmap: BitmapData?) -> Unit): DownloadTask<Bitmap?>
 {
-    private var callback: Callback? = null
-   // private val uiHandler = Handler(Looper.getMainLooper())
-    fun addDownloadCallback(value: Callback) {
-        callback = value
-    }
     override fun download(link: String): Bitmap? {
         val BUFFER_SIZE = 4096
         return try {
             val conn = URL(link).openConnection() as HttpURLConnection
             if (conn.responseCode != HttpURLConnection.HTTP_OK) {
-                callback?.onFailure()
+                callback(null)
                 return null
             }
             conn.requestMethod = "HEAD"
@@ -44,11 +39,11 @@ class DownloadImageTask(private val link: String): DownloadTask<Bitmap?>
             option.inPreferredConfig = Bitmap.Config.ARGB_8888
             val bitmap = BitmapFactory.decodeFile(filename, option)//decodeStream(conn.inputStream)
             bitmap?.let{
-                callback?.onComplete(BitmapTime(it, timestamp))
-            } ?: callback?.onFailure()
+                callback(BitmapData(it, timestamp, getFileSize(filename)))
+            } ?: callback(null)
             bitmap
         } catch (_: Exception) {
-            callback?.onFailure()
+            callback(null)
             null
         }
     }

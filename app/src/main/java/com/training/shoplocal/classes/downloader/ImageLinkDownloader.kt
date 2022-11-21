@@ -9,32 +9,28 @@ import java.security.NoSuchAlgorithmException
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
 
-interface Callback {
-    fun onComplete(image: BitmapTime)
-    fun onFailure()
-}
-
-
 class DiskCache(private val cacheDir: String): ImageCache {
     private val existsCacheStorage = createDirectory(cacheDir)
-    private var size = getCacheSize()
     private val journal = Journal.getInstance(cacheDir, object: OnDeleteCacheFile{
         override fun deleteCacheFile(hash: String) {
-            deleteChacheFile(hash)
+            deleteCacheFiles(hash)
         }
     })
-
+    private var size = journal.getCacheSize()
     /**
      *  Изменение размера кэша в соответствии с максимальным размером кэша CACHE_SIZE
      *  @param insize размер нового файла, помещаемого в кэш
+     *  @param inhash хэш нового файла, помещаемого в кэш
      *  @return Boolean - true файл может быть размещен в кэше
      */
     @Synchronized
-    private fun trimCache(insize: Long): Boolean{
-        if (size + insize < CACHE_SIZE)
+    private fun trimCache(inhash: String, insize: Long): Boolean{
+        if (size + insize < CACHE_SIZE) {
+            size += insize
             return true
+        }
         val limit = CACHE_SIZE - insize
-        val hashList = journal.getHashList()
+        val hashList = journal.getHashList(excludeHash = inhash)
         val outHashList = mutableListOf<String>()
         var placed = false
         var calcSize = size
@@ -43,7 +39,7 @@ class DiskCache(private val cacheDir: String): ImageCache {
             outHashList.add(hash)
             if (calcSize <= limit) {
                 placed = true
-                size = calcSize
+                size = calcSize + insize
                 journal.remove(outHashList)
                 break
             }
@@ -51,11 +47,10 @@ class DiskCache(private val cacheDir: String): ImageCache {
         return placed
     }
 
-    @Synchronized
-    private fun deleteChacheFile(hash: String){
+    private fun deleteCacheFiles(hash: String){
         val filename = cacheDir + hash
         deleteFile(filename)
-        deleteFile("filename.${Journal.EXT_CACHETEMPFILE}")
+        deleteFile("filename.${EXT_CACHETEMPFILE}")
     }
 
 
@@ -75,13 +70,13 @@ class DiskCache(private val cacheDir: String): ImageCache {
         }
     }*/
 
-    private fun getCacheSize(): Long {
+    /*private fun getCacheSize(): Long {
         var size: Long = 0
-        File(cacheDir).listFiles(FileFilter { it.extension != Journal.EXT_CACHETEMPFILE} )?.forEach { file ->
+        File(cacheDir).listFiles(FileFilter { it.extension != EXT_CACHETEMPFILE} )?.forEach { file ->
             size += file.length()
         }
         return size
-    }
+    }*/
 
     private fun getLinkHash(link: String): String =
         md5(link)
@@ -92,15 +87,39 @@ class DiskCache(private val cacheDir: String): ImageCache {
         return null
     }
 
-    override fun put(link: String, image: BitmapTime?) {
-        journal.add(getLinkHash(link), image?.time ?: 0L)
+    override fun put(link: String, image: BitmapData?) {
+        val hash = md5(link)
+        val filecache = cacheDir + hash
+        if (image != null) {
+            if (trimCache(hash, image.length)) {
+                renameFile("$filecache.$EXT_CACHETEMPFILE", filecache)
+                journal.add(hash, image)
+            }
+            else {
+                journal.remove(hash, false)
+            }
+        } else
+            journal.add(hash)
     }
 
-    override fun remove(link: String) {
+    /**
+     *  Удаление записи из файла журнала
+     *  @param link имя файла
+     *  @param changeState true - запись в файле журнала будет помечена state = REMOVE,
+     *  false - запись журнала и файлы кэша будут удалены. По умолчанию: true
+     */
+    override fun remove(link: String, changeState: Boolean) {
         val hash = getLinkHash(link)
+        size -= journal.remove(hash, changeState)
+    }
+
+    override fun update(link: String, state: StateEntry) {
+        journal.update(getLinkHash(link), state)
     }
 
     override fun clear() {
+        size = 0L
+        journal.clear()
     }
 }
 
@@ -112,7 +131,8 @@ class ImageLinkDownloader private constructor(){
     fun downloadLinkImage(link: String, callback: Callback){
         val image: Bitmap? = cacheStorage?.get(link)
         image?.let{
-            callback.onComplete(BitmapTime(it, 0))
+            cacheStorage?.update(link, StateEntry.DIRTY)
+            callback.onComplete(it)
             return
         }
 
@@ -120,18 +140,15 @@ class ImageLinkDownloader private constructor(){
             return
 
         cacheStorage?.put(link)
-        val task = DownloadImageTask(link)//, cacheStorage)
-        task.addDownloadCallback(object: Callback {
-            override fun onComplete(image: BitmapTime) {
-                cacheStorage?.put(link, image)
-                callback.onComplete(image)
-            }
-
-            override fun onFailure() {
+        val task = DownloadImageTask(link){ bitmap ->
+            bitmap?.let {
+                cacheStorage?.put(link, it)
+                callback.onComplete(it.bitmap)
+            } ?: run {
                 cacheStorage?.remove(link)
                 callback.onFailure()
             }
-        })
+        }
         listDownloadTask[link] = executorService.submit(task)
     }
 
@@ -163,11 +180,9 @@ class ImageLinkDownloader private constructor(){
     companion object {
         private var instance: ImageLinkDownloader? = null
         private fun getInstance(): ImageLinkDownloader =
-            instance ?: ImageLinkDownloader()
-
-        fun setCacheDirectory(dir: String){
-            getInstance().setCacheDirectory(dir)
-        }
+            instance ?: ImageLinkDownloader().apply {
+                setCacheDirectory(getCacheDirectory())
+            }
 
         fun downloadImage(link: String, callback: Callback) {
             getInstance().downloadLinkImage(link, callback)

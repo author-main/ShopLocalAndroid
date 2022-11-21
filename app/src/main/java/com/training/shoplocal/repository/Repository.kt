@@ -17,9 +17,6 @@ import java.io.File
 class Repository: DAOinterface {
     private val dataDisplay = DataDisplay()
     val loginState = LoginViewState.getLoginState()
-    init {
-        ImageLinkDownloader.setCacheDirectory(getCacheDirectory())
-    }
 
     /**
      *  Реализация методов для получения доступа (регистрация, вход по паролю,
