@@ -115,6 +115,10 @@ class ImageLinkDownloader private constructor(){
             callback.onComplete(BitmapTime(it, 0))
             return
         }
+
+        if (listDownloadTask[link] != null) // если идет загрузка файла
+            return
+
         cacheStorage?.put(link)
         val task = DownloadImageTask(link)//, cacheStorage)
         task.addDownloadCallback(object: Callback {
