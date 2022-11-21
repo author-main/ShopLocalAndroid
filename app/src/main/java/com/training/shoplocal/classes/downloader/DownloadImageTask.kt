@@ -22,6 +22,24 @@ class DownloadImageTask(private val link: String): DownloadTask<Bitmap?>
             /*var bitmap = cache?.get(link, timestamp)
             if (bitmap == null) {*/
             conn.requestMethod = "GET"
+
+            /*
+            InputStream inputStream = httpConn.getInputStream();
+            String saveFilePath = saveDir + File.separator + fileName;
+
+            // opens an output stream to save into file
+            FileOutputStream outputStream = new FileOutputStream(saveFilePath);
+
+            int bytesRead = -1;
+            byte[] buffer = new byte[BUFFER_SIZE];
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+
+            outputStream.close();
+            inputStream.close();
+            */
+
             val bitmap = BitmapFactory.decodeStream(conn.inputStream)
            // }
             conn.disconnect()
