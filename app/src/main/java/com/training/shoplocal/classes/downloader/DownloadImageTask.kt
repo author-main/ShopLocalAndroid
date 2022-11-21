@@ -11,7 +11,7 @@ class DownloadImageTask(private val link: String): DownloadTask<Bitmap?>
 {
     private var callback: Callback? = null
    // private val uiHandler = Handler(Looper.getMainLooper())
-    fun addDowmloadCallback(value: Callback) {
+    fun addDownloadCallback(value: Callback) {
         callback = value
     }
     override fun download(link: String): Bitmap? {

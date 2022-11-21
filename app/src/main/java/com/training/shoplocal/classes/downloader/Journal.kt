@@ -107,12 +107,22 @@ class Journal private constructor(private val cacheDir: String) {
     }
 
     @Synchronized
-    fun add(hash: String, time: Long) {
+    fun add(hash: String, timestamp: Long) {
         entries[hash] = CacheEntry(hash).apply {
-            this.state =    StateEntry.DIRTY
-            this.time  =    time
+            if (timestamp == 0L) {
+                this.state = StateEntry.DIRTY
+                addJournal(this)
+            }
+            else {
+                val filename = "$cacheDir$hash"
+                renameFile("$filename.$EXT_CACHETEMPFILE", filename)
+                this.state  = StateEntry.CLEAN
+                this.time   = timestamp
+                this.length = getFileSize("$cacheDir$hash")
+                updateJournal(this)
+            }
         }
-        addJournal(entries[hash]!!)
+
     }
 
     /**
