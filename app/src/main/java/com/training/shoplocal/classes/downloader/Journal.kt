@@ -133,7 +133,7 @@ class Journal private constructor(private val cacheDir: String) {
     }
 
     @Synchronized
-    private fun saveEntriesToJournal(){
+    fun saveEntriesToJournal(){
         val text = StringBuffer()
         entries.forEach{entry ->
             text.append(getLineFromEntry(entry.value))

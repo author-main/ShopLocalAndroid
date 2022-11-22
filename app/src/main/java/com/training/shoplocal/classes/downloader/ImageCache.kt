@@ -8,5 +8,6 @@ interface ImageCache {
     fun put(link: String, image: BitmapTime? = null)
     fun remove(link: String, changeState: Boolean)
     fun update(link: String, state: StateEntry)
+    fun journal()
     fun clear()
 }

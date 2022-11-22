@@ -10,6 +10,13 @@ class DiskCache(private val cacheDir: String): ImageCache {
     private val journal = Journal.getInstance(cacheDir)
     private var size = journal.getCacheSize()
 
+    /**
+     *  Перезаписать журнал значениями из entries<String, CachEntry>
+     */
+    override fun journal() {
+        journal.saveEntriesToJournal()
+    }
+
     private fun getHashCacheFile(link: String): String =
         md5(link)
 
