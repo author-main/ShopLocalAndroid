@@ -151,7 +151,7 @@ class Journal private constructor(private val cacheDir: String) {
     /*private fun isRemoved(state: StateEntry) =
         state == StateEntry.REMOVE*/
 
-    private fun isRemoved(entry: CacheEntry?) =
+    private fun removed(entry: CacheEntry?) =
         entry?.let {
             it.state == StateEntry.REMOVE
         } ?: true
@@ -164,7 +164,7 @@ class Journal private constructor(private val cacheDir: String) {
        //entries.values.sumOf { it.length }
        var sum = 0L
        entries.forEach { entry ->
-           if (!isRemoved(entry.value))
+           if (!removed(entry.value))
            //if (entry.value.state != StateEntry.REMOVE)
                sum += entry.value.length
        }
@@ -178,7 +178,7 @@ class Journal private constructor(private val cacheDir: String) {
    fun getCacheFileSize(hash: String): Long =
        entries[hash]?.let{
            //if (it.state != StateEntry.REMOVE)
-           if (!isRemoved(it))
+           if (!removed(it))
                it.length
            else
                0L
@@ -190,7 +190,7 @@ class Journal private constructor(private val cacheDir: String) {
    fun getListCacheFiles(): List<String> {
        val list = mutableListOf<String>()
        entries.forEach {entry ->
-           if (!isRemoved(entry.value))
+           if (!removed(entry.value))
            //if (entry.value.state != StateEntry.REMOVE)
                list.add(entry.key)
        }
@@ -206,7 +206,6 @@ class Journal private constructor(private val cacheDir: String) {
 
    companion object {
        private var instance: Journal? = null
-
        @JvmName("getInstance1")
        fun getInstance(cacheDir: String): Journal =
            instance ?: Journal(cacheDir)
