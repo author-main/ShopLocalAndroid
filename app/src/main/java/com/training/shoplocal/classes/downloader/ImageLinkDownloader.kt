@@ -114,7 +114,7 @@ class ImageLinkDownloader private constructor(){
                     if (storage.placeFileInCache(filesize))
                         storage.put(link, it)
                     else
-                        storage.update(link, StateEntry.REMOVE)
+                        storage.remove(link, changeState = true)
                 }
                 callback.onComplete(it.bitmap)
                 normalizeJournal()
