@@ -87,6 +87,7 @@ class ImageLinkDownloader private constructor(){
         cacheStorage?.normalizeJournal()
     }
 
+    @Synchronized
     fun downloadLinkImage(link: String, callback: Callback){
         val iterator = listDownloadTask.iterator()
         while (iterator.hasNext()) {
