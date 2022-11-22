@@ -14,6 +14,7 @@ import com.training.shoplocal.ui.theme.SelectedItem
 import com.training.shoplocal.ui.theme.TextFieldBg
 import java.text.DecimalFormat
 
+const val SERVER_URL            = "http://192.168.1.10"
 
 /*enum class Error {
     NO_CONNECTION,      // нет соединения
@@ -33,8 +34,6 @@ enum class FieldFilter {
 val TEXT_BOTTOMNAVIGATION: Array<String> = AppShopLocal.appContext().resources.getStringArray(R.array.bottom_navigation_items)
 const val DEFAULT_STRRESOURCE_VALUE  = ""
 const val FILE_PREFERENCES      = "settings"
-const val SERVER_URL            = "http://192.168.1.10"
-
 enum class MESSAGE(@DrawableRes val icon: Int, val color: Color) {
     ERROR   (R.drawable.ic_error,           SelectedItem),
     INFO    (R.drawable.ic_notifications,   TextFieldBg),
