@@ -228,9 +228,9 @@ class Journal private constructor(private val cacheDir: String) {
                     list.add(entry.key)
             }
         }
-        list.forEach { hash ->
+        /*list.forEach { hash ->
             entries.remove(hash)
-        }
+        }*/
         return list
     }
 

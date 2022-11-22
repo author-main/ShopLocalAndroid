@@ -20,6 +20,7 @@ class DiskCache(private val cacheDir: String): ImageCache {
             return false
         listHash.forEach {hash ->
             deleteCacheFile(hash)
+            journal.remove(hash, changeState = false)
         }
         return true
     }
