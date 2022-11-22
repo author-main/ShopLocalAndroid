@@ -2,7 +2,6 @@ package com.training.shoplocal.classes.downloader
 
 import android.graphics.Bitmap
 import com.training.shoplocal.*
-import java.io.*
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
 
@@ -11,16 +10,27 @@ class DiskCache(private val cacheDir: String): ImageCache {
     private val journal = Journal.getInstance(cacheDir)
     private var size = journal.getCacheSize()
 
+    private fun getHashCacheFile(link: String): String =
+        md5(link)
+
     override fun get(link: String): Bitmap? {
         TODO("Not yet implemented")
     }
 
-    override fun put(link: String, image: BitmapData?) {
-        TODO("Not yet implemented")
+    override fun put(link: String, image: BitmapTime?) {
+        val state = if (image != null)
+                        StateEntry.CLEAN
+                    else
+                        StateEntry.DIRTY
+        val time = image?.time ?: 0L
+        journal.put(getHashCacheFile(link), state, time)
     }
 
     override fun remove(link: String, changeState: Boolean) {
-        TODO("Not yet implemented")
+        val hash = getHashCacheFile(link)
+        journal.remove(hash, changeState)
+        if (!changeState)
+            deleteCacheFile(hash)
     }
 
     override fun update(link: String, state: StateEntry) {
@@ -29,6 +39,15 @@ class DiskCache(private val cacheDir: String): ImageCache {
 
     override fun clear() {
         TODO("Not yet implemented")
+    }
+
+    private fun getFileNameFromHash(hash: String) =
+        "$cacheDir$hash"
+
+    private fun deleteCacheFile(hash: String){
+        val filename = getFileNameFromHash(hash)
+        deleteFile(filename)
+        deleteFile("${filename}.$EXT_CACHETEMPFILE")
     }
 }
 
@@ -59,7 +78,7 @@ class ImageLinkDownloader private constructor(){
                 cacheStorage?.put(link, it)
                 callback.onComplete(it.bitmap)
             } ?: run {
-                cacheStorage?.remove(link)
+                cacheStorage?.remove(link, changeState = true)
                 callback.onFailure()
             }
         }

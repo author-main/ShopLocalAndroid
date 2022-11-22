@@ -12,12 +12,12 @@ class Journal private constructor(private val cacheDir: String) {
         var state:    StateEntry = StateEntry.CLEAN     // состояние файла
         var time:     Long = 0                          // дата создания/изменения файла кеша
         var length:   Long = 0                          // размер файла кеша
-        override fun equals(other: Any?): Boolean {
+        /*override fun equals(other: Any?): Boolean {
             if (other == null || other !is CacheEntry)
                 return false
             return hash == other.hash && time == other.time
         }
-        override fun hashCode(): Int = hash.hashCode() + time.hashCode()
+        override fun hashCode(): Int = hash.hashCode() + time.hashCode()*/
     }
     private val JOURNAL_FILENAME        = "journal"         // файл журнала
     private val JOURNAL_FILENAME_TMP    = "journal.tmp"     // темп файл журнала
@@ -125,7 +125,7 @@ class Journal private constructor(private val cacheDir: String) {
      *  false: запись будет удалена
      */
     @Synchronized
-    fun remove(hash: String, changeState: Boolean = true) {
+    fun remove(hash: String, changeState: Boolean) {
         if (changeState)
             update(hash, StateEntry.REMOVE)
         else
@@ -148,33 +148,67 @@ class Journal private constructor(private val cacheDir: String) {
         }
     }
 
-    /**
-     *  Получить размер файлов кэша
-     */
-    @Synchronized
-    fun getCacheSize(): Long =
-        entries.values.sumOf { it.length }
+    /*private fun isRemoved(state: StateEntry) =
+        state == StateEntry.REMOVE*/
+
+    private fun isRemoved(entry: CacheEntry?) =
+        entry?.let {
+            it.state == StateEntry.REMOVE
+        } ?: true
 
     /**
-     *  Получить размер файла кэша
-     *  @param hash хэш (имя) файла кэша
-     */
-    @Synchronized
-    fun getCacheFileSize(hash: String): Long =
-        entries[hash]?.length ?: 0L
-
+    *  Получить размер файлов кэша
+    */
+   @Synchronized
+   fun getCacheSize(): Long {
+       //entries.values.sumOf { it.length }
+       var sum = 0L
+       entries.forEach { entry ->
+           if (!isRemoved(entry.value))
+           //if (entry.value.state != StateEntry.REMOVE)
+               sum += entry.value.length
+       }
+       return sum
+   }
     /**
-     *  Получить список файлов кэша
-     */
-    @Synchronized
-    fun getListCacheFiles(): List<String> =
-        entries.keys.toList()
+    *  Получить размер файла кэша
+    *  @param hash хэш (имя) файла кэша
+    */
+   @Synchronized
+   fun getCacheFileSize(hash: String): Long =
+       entries[hash]?.let{
+           //if (it.state != StateEntry.REMOVE)
+           if (!isRemoved(it))
+               it.length
+           else
+               0L
+       } ?: 0L
+    /**
+    *  Получить список файлов кэша
+    */
+   @Synchronized
+   fun getListCacheFiles(): List<String> {
+       val list = mutableListOf<String>()
+       entries.forEach {entry ->
+           if (!isRemoved(entry.value))
+           //if (entry.value.state != StateEntry.REMOVE)
+               list.add(entry.key)
+       }
+       return list
+       //entries.keys.toList()
+   }
 
-    companion object {
-        private var instance: Journal? = null
-        @JvmName("getInstance1")
-        fun getInstance(cacheDir: String): Journal =
-            instance ?: Journal(cacheDir)
-    }
+   @Synchronized
+   fun equals(hash: String, time: Long): Boolean =
+       entries[hash]?.let{entry ->
+           entry.time == time
+       } ?: false
 
+   companion object {
+       private var instance: Journal? = null
+
+       @JvmName("getInstance1")
+       fun getInstance(cacheDir: String): Journal =
+           instance ?: Journal(cacheDir)
+   }
 }

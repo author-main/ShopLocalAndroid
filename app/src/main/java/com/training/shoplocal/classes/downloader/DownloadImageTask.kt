@@ -7,7 +7,7 @@ import java.io.FileOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
-class DownloadImageTask(private val link: String, val callback: (bitmap: BitmapData?) -> Unit): DownloadTask<Bitmap?>
+class DownloadImageTask(private val link: String, val callback: (bitmap: BitmapTime?) -> Unit): DownloadTask<Bitmap?>
 {
     override fun download(link: String): Bitmap? {
         val BUFFER_SIZE = 4096
@@ -39,7 +39,7 @@ class DownloadImageTask(private val link: String, val callback: (bitmap: BitmapD
             option.inPreferredConfig = Bitmap.Config.ARGB_8888
             val bitmap = BitmapFactory.decodeFile(filename, option)//decodeStream(conn.inputStream)
             bitmap?.let{
-                callback(BitmapData(it, timestamp, getFileSize(filename)))
+                callback(BitmapTime(it, timestamp))
             } ?: callback(null)
             bitmap
         } catch (_: Exception) {

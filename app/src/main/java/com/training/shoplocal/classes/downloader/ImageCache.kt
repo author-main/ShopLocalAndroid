@@ -5,8 +5,8 @@ import com.training.shoplocal.StateEntry
 
 interface ImageCache {
     fun get(link: String): Bitmap?
-    fun put(link: String, image: BitmapData? = null)
-    fun remove(link: String, changeState: Boolean = true)
+    fun put(link: String, image: BitmapTime? = null)
+    fun remove(link: String, changeState: Boolean)
     fun update(link: String, state: StateEntry)
     fun clear()
 }
