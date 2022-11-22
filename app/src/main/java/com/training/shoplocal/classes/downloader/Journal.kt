@@ -3,16 +3,21 @@ package com.training.shoplocal.classes.downloader
 import com.training.shoplocal.*
 import java.io.BufferedReader
 import java.io.File
+import java.io.FileFilter
 import java.io.FileOutputStream
 import java.io.FileReader
 
 class Journal private constructor(private val cacheDir: String) {
-    private var onDeleteCacheFile: OnDeleteCacheFile? = null
-//    private var size = 0L // Размер файлов кэша
     private data class CacheEntry(val hash: String) {
-        var time:     Long = 0                          // дата создания/изменения файла кеша
         var state:    StateEntry = StateEntry.CLEAN     // состояние файла
+        var time:     Long = 0                          // дата создания/изменения файла кеша
         var length:   Long = 0                          // размер файла кеша
+        override fun equals(other: Any?): Boolean {
+            if (other == null || other !is CacheEntry)
+                return false
+            return hash == other.hash && time == other.time
+        }
+        override fun hashCode(): Int = hash.hashCode() + time.hashCode()
     }
     private val JOURNAL_FILENAME        = "journal"         // файл журнала
     private val JOURNAL_FILENAME_TMP    = "journal.tmp"     // темп файл журнала
@@ -24,313 +29,152 @@ class Journal private constructor(private val cacheDir: String) {
     init {
         deleteFile(fileJournalTmp)
         deleteFiles(cacheDir, EXT_CACHETEMPFILE)
-        initEntriesJournal()
+        getEntriesFromJournal()
     }
 
-    private fun initEntriesJournal(){
-        var skip = false
-        if (!fileJournal.exists()) {
-            if (fileJournalBackup.exists())
-                renameFile(fileJournalBackup, fileJournal)
-            else {
-                skip = true
-                deleteFiles(cacheDir)
-                fileJournal.createNewFile()
-            }
+    private fun getFilenameCacheFile(hash: String) =
+        "$cacheDir$hash"
+
+    private fun getLineFromEntry(entry: CacheEntry, LF: Boolean = true): String {
+        val lf = if (LF) "\n" else ""
+        return "${entry.state.value} ${entry.hash} ${entry.time}$lf"
+    }
+
+    private fun getEntryFromLine(line: String): CacheEntry? {
+        return try {
+            val state = StateEntry.valueOf(line.substring(0, 6).trim())
+            val hash = line.substring(7, 7 + HASH_LENGTH)
+            val entry = CacheEntry(hash)
+            if (state != StateEntry.REMOVE)
+                entry.time = line.substring(HASH_LENGTH + 8).toLong()
+            entry
+        } catch (_: Exception){
+            null
         }
-        if (!skip) {
+    }
+
+    private fun getEntriesFromJournal() {
+        var existsJournal = true
+        if (!fileJournal.exists()) {
+            if (fileJournalBackup.exists()) {
+                renameFile(fileJournalBackup, fileJournal)
+            } else
+                existsJournal = false
+        }
+
+        if (existsJournal) {
+            loadEntriesFromJournal()
+        } else {
             val text = StringBuffer()
-            var journalChanged = false
-            BufferedReader(FileReader(fileJournal)).use{
-                it.lineSequence().forEach { line ->
-                    val hash    = line.substring(7, 7 + HASH_LENGTH)
-                    var state = StateEntry.valueOf(line.substring(0, 6).trim())
-                    if (state != StateEntry.REMOVE) {
-                        val data = (line.substring(HASH_LENGTH + 8)).split(' ')
-                        val time = data[0].toLong()
-                        val length = data[1].toLong()
-
-                        var stringEntry = line
-                        if (state == StateEntry.DIRTY){
-                            if (length > 0) {
-                                journalChanged = true
-                                //size += length
-                                state = StateEntry.CLEAN
-                                stringEntry = line.replace(StateEntry.DIRTY.value, StateEntry.CLEAN.value)
-                            } else {
-                                //deleteChacheFile(hash)
-                                onDeleteCacheFile?.deleteCacheFile(hash)
-                            }
-                        }
-                        if (state == StateEntry.CLEAN) {
-                            entries[hash] = CacheEntry(hash).apply {
-                                this.state  = state
-                                this.time   = time
-                                this.length = length
-                            }
-                            text.append(stringEntry + "\n")
-                        }
-                    } else {
-                        journalChanged = true
-                        onDeleteCacheFile?.deleteCacheFile(hash)
-                        //deleteChacheFile(hash)
-                    }
+            try {
+                val files = File(cacheDir).listFiles(FileFilter { filename ->
+                    filename.name.length == HASH_LENGTH
+                })
+                files?.forEach {file ->
+                    val hash = file.name
+                    entries[hash] = CacheEntry(hash).apply {length = file.length()}
+                    text.append(getLineFromEntry(entries[hash]!!))
                 }
-            }
-
-            if (journalChanged) {
                 if (text.isNotEmpty()) {
-                    FileOutputStream(fileJournalTmp).use {
+                    FileOutputStream(fileJournal).use{
                         it.write(text.toString().toByteArray())
                     }
-                    updateJournalFiles()
+                    text.setLength(0)
+                }
+            } catch (_: Exception) {
+            }
+        }
+    }
+
+    @Synchronized
+    fun loadEntriesFromJournal(){
+        entries.clear()
+        BufferedReader(FileReader(fileJournal)).use{
+            it.lineSequence().forEach {line ->
+                val entry = getEntryFromLine(line)
+                entry?.let{ data ->
+                    data.length = getFileSize(getFilenameCacheFile(data.hash))
+                    entries[data.hash] = data
                 }
             }
         }
     }
 
-/*    private fun getEntryFromLine(line: String): Unit{//CacheEntry?{
-         try {
-            val hash = line.substring(7, 7 + HASH_LENGTH)
-            CacheEntry(hash).apply {
-                this.state = StateEntry.valueOf(line.substring(0, 6).trim())
-                val data = (line.substring(HASH_LENGTH + 8)).split(' ')
-                this.time = data[0].toLong()
-                this.length = data[1].toLong()
-            }
-        } catch (_: Exception) {
-        }
-    }*/
-
-    private fun updateJournalFiles(){//restoreFromTemp: Boolean = false){
-        renameFile(fileJournal, fileJournalBackup)
-        //if (restoreFromTemp)
-        renameFile(fileJournalTmp, fileJournal)
-    }
-
     @Synchronized
-    fun add(hash: String, image: BitmapData? = null) {
-        val timestamp = image?.time ?: 0L
+    fun put(hash: String, state: StateEntry, time: Long) {
         entries[hash] = CacheEntry(hash).apply {
-            if (timestamp == 0L) {
-                this.state = StateEntry.DIRTY
-                addJournal(this)
-            }
-            else {
-                this.state  = StateEntry.CLEAN
-                this.time   = timestamp
-                this.length = image?.length ?: 0L//getFileSize("$cacheDir$hash")
-                updateJournal(this)
-            }
+            this.state = state
+            this.time  = time
+            if (state != StateEntry.REMOVE)
+                length = getFileSize(getFilenameCacheFile(hash))
         }
-
-    }
-
-    /**
-     *  Обновление информации о файле кэша, обновление информации в файле журнала
-     *  @param hash хэш файла
-     *  @param state состояние файла DIRTY: чтение или запись, CLEAN: файл свободен
-     */
-    @Synchronized
-    fun update(hash: String, state: StateEntry) {
-        val time = entries[hash]?.time ?: 0
-        entries[hash] = CacheEntry(hash).apply {
-            this.state  = state
-            this.time   = time
-            this.length = getFileSize(cacheDir + hash)
-        }
-        updateJournal(entries[hash]!!)
-    }
-
-
-    @Synchronized
-    fun remove(hashlist: MutableList<String>){
-        hashlist.forEach {hash ->
-            onDeleteCacheFile?.deleteCacheFile(hash)
-            entries.remove(hash)
-        }
-        removeJournal(hashlist)
     }
 
     @Synchronized
-    fun remove(hash: String, changeState: Boolean): Long {
-        if (!changeState) {
-            val length = entries[hash]?.length ?: 0L
-            entries.remove(hash)
-            onDeleteCacheFile?.deleteCacheFile(hash)
-            removeJournal(hash, false)
-            return length
-        }
-        entries[hash] = CacheEntry(hash).apply {
-            this.state = StateEntry.REMOVE
-            this.time  = 0
-        }
-        updateJournal(entries[hash]!!)
-        return 0L
-    }
-
-
-    private fun removeJournal(hashlist: MutableList<String>){
-        val text = StringBuffer()
-        BufferedReader(FileReader(fileJournal)).use {
-            it.lineSequence().forEach { line ->
-                var skip = false
-                for ( i in hashlist.indices ) {
-                    if (line.contains(hashlist[i])) {
-                        skip = true
-                        hashlist.removeAt(i)
-                        break
-                    }
-                }
-                if (!skip)
-                    text.append(line + "\n")
-            }
-        }
-
-        if (text.isNotEmpty()) {
-            FileOutputStream(fileJournalTmp).use {
-                it.write(text.toString().toByteArray())
-            }
-            updateJournalFiles()//restoreFromTemp = true)
-        } else {
-            deleteFile(fileJournal)
-            fileJournal.createNewFile()
-        }
-    }
-
-
-    private fun addJournal(entity: CacheEntry){
-        val text = StringBuffer()
-        BufferedReader(FileReader(fileJournal)).use {
-            it.lineSequence().forEach { line ->
-                text.append(line + "\n")
-            }
-            text.append("${entity.state.value} ${entity.hash} ${entity.time} ${entity.length}\n")
-        }
-        if (text.isNotEmpty()) {
-            FileOutputStream(fileJournalTmp).use {
-                it.write(text.toString().toByteArray())
-            }
-            updateJournalFiles()//restoreFromTemp = true)
-        }
-    }
-
-
-    private fun updateJournal(entity: CacheEntry){
-        val text = StringBuffer()
-        BufferedReader(FileReader(fileJournal)).use {
-            it.lineSequence().forEach { line ->
-                if (line.contains(entity.hash)) {
-                    text.append("${entity.state.value} ${entity.hash} ${entity.time} ${entity.length}\n")
-                } else
-                    text.append(line + "\n")
-            }
-        }
-        if (text.isNotEmpty()) {
-            FileOutputStream(fileJournalTmp).use {
-                it.write(text.toString().toByteArray())
-            }
-            updateJournalFiles()//restoreFromTemp = true)
+    fun update(hash: String, state: StateEntry, time: Long = 0) {
+        entries[hash]?.let{
+            it.state = state
+            it.time  = time
         }
     }
 
     /**
-     *  Удалить запись из файла журнала
-     *  @param hash хэш файла кэша
-     *  @param onlyState true  - будут удалены только записи со state = REMOVE,
-     *                   false - будут удалены все записи с указанным хэшем
+     *  Удалить/изменить state запись файла журнала
+     *  @param hash хэш (имя) файла кэша
+     *  @param changeState true: будет изменен state на REMOVE,
+     *  false: запись будет удалена
      */
-    private fun removeJournal(hash: String, onlyState: Boolean = true){
-        val text = StringBuffer()
-        BufferedReader(FileReader(fileJournal)).use {
-            it.lineSequence().forEach { line ->
-                val skip = if (line.contains(hash)) {
-                               if (!onlyState)
-                                    true
-                               else {
-                                    line.startsWith(StateEntry.REMOVE.value)
-                               }
-                           } else
-                               false
-                if (!skip)
-                    text.append(line + "\n")
-            }
-        }
+    @Synchronized
+    fun remove(hash: String, changeState: Boolean = true) {
+        if (changeState)
+            update(hash, StateEntry.REMOVE)
+        else
+            entries.remove(hash)
+    }
 
+    @Synchronized
+    private fun saveEntriesToJournal(){
+        val text = StringBuffer()
+        entries.forEach{entry ->
+            text.append(getLineFromEntry(entry.value))
+        }
         if (text.isNotEmpty()) {
-            FileOutputStream(fileJournalTmp).use {
+            FileOutputStream(fileJournalTmp).use{
                 it.write(text.toString().toByteArray())
             }
-            updateJournalFiles()//restoreFromTemp = true)
-        } else {
-            deleteFiles(cacheDir)
-            //deleteFile(fileJournal)
-            fileJournal.createNewFile()
+            text.setLength(0)
+            renameFile(fileJournal, fileJournalBackup)
+            renameFile(fileJournalTmp, fileJournal)
         }
     }
 
-    fun getHashList(excludeHash: String? = null): List<String>{
-        val list = mutableListOf<String>()
-        for (entry in entries) {
-            val exclude = excludeHash != null && excludeHash == entry.key
-            if (!exclude && entry.value.state != StateEntry.DIRTY)
-            //if (entry.value.state == StateEntry.CLEAN || entry.value.state == StateEntry.REMOVE)
-                list.add(entry.value.hash)
-        }
-        return list
-    }
+    /**
+     *  Получить размер файлов кэша
+     */
+    @Synchronized
+    fun getCacheSize(): Long =
+        entries.values.sumOf { it.length }
 
-    fun getEntrySize(hash: String): Long {
-        val entry = entries[hash]
-        return entry?.length ?: 0L
-    }
+    /**
+     *  Получить размер файла кэша
+     *  @param hash хэш (имя) файла кэша
+     */
+    @Synchronized
+    fun getCacheFileSize(hash: String): Long =
+        entries[hash]?.length ?: 0L
 
-    fun addOnDeleteCacheFile(value: OnDeleteCacheFile) {
-        onDeleteCacheFile = value
-    }
+    /**
+     *  Получить список файлов кэша
+     */
+    @Synchronized
+    fun getListCacheFiles(): List<String> =
+        entries.keys.toList()
 
     companion object {
         private var instance: Journal? = null
         @JvmName("getInstance1")
-        fun getInstance(cacheDir: String, onDeleteCacheFile: OnDeleteCacheFile? = null): Journal {
-            if (instance == null)
-                instance = Journal(cacheDir)
-
-            if (onDeleteCacheFile != null)
-                instance?.addOnDeleteCacheFile(onDeleteCacheFile)
-
-            return instance!!
-        }
+        fun getInstance(cacheDir: String): Journal =
+            instance ?: Journal(cacheDir)
     }
 
-    fun getCacheSize(): Long =
-        entries.values.sumOf { it.length }
-
-    @Synchronized
-    fun clear() {
-        val text = StringBuffer()
-        val hashList = mutableListOf<String>()
-        entries.forEach { entity ->
-            if (entity.value.state == StateEntry.DIRTY)
-                hashList.add(entity.key)
-            else {
-                entity.value.state = StateEntry.REMOVE
-                text.append("${entity.value.state.value} ${entity.value.hash} ${entity.value.time} ${entity.value.length}\n")
-            }
-        }
-        hashList.forEach { hash ->
-            entries.remove(hash)
-            onDeleteCacheFile?.deleteCacheFile(hash)
-        }
-        if (text.isNotEmpty()) {
-            FileOutputStream(fileJournal).use {
-                it.write(text.toString().toByteArray())
-            }
-            text.setLength(0)
-        } else {
-            deleteFiles(cacheDir)
-            entries.clear()
-            fileJournal.createNewFile()
-        }
-    }
 }
