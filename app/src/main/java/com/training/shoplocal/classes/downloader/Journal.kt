@@ -87,6 +87,15 @@ class Journal private constructor(private val cacheDir: String) {
     }
 
     @Synchronized
+    fun clear(){
+        entries.clear()
+        deleteFile(fileJournal)
+        deleteFile(fileJournalTmp)
+        deleteFile(fileJournalBackup)
+        fileJournal.createNewFile()
+    }
+
+    @Synchronized
     fun loadEntriesFromJournal(){
         entries.clear()
         BufferedReader(FileReader(fileJournal)).use{
@@ -102,10 +111,20 @@ class Journal private constructor(private val cacheDir: String) {
 
     @Synchronized
     fun put(hash: String, state: StateEntry, time: Long) {
+        /*val entry = entries[hash]
+        entry?.let{
+            if (time != 0L)
+                it.length = getFileSize(getFilenameCacheFile(hash))
+        } ?: run {
+            entries[hash] = CacheEntry(hash).apply {
+                this.state = state
+                this.time  = time
+            }
+        }*/
         entries[hash] = CacheEntry(hash).apply {
             this.state = state
             this.time  = time
-            if (state != StateEntry.REMOVE)
+            if (time != 0L)
                 length = getFileSize(getFilenameCacheFile(hash))
         }
     }
@@ -132,11 +151,19 @@ class Journal private constructor(private val cacheDir: String) {
             entries.remove(hash)
     }
 
+    /**
+     *  Сохранение entries state != REMOVE в файл журнала
+     *  @return список хэш файлов, которые необходимо удалить
+     */
     @Synchronized
-    fun saveEntriesToJournal(){
+    fun saveEntriesToJournal(): List<String>{
+        val listRemoved = mutableListOf<String>()
         val text = StringBuffer()
         entries.forEach{entry ->
-            text.append(getLineFromEntry(entry.value))
+            if (!removed(entry.value))
+                text.append(getLineFromEntry(entry.value))
+            else
+                listRemoved.add(entry.key)
         }
         if (text.isNotEmpty()) {
             FileOutputStream(fileJournalTmp).use{
@@ -146,6 +173,7 @@ class Journal private constructor(private val cacheDir: String) {
             renameFile(fileJournal, fileJournalBackup)
             renameFile(fileJournalTmp, fileJournal)
         }
+        return listRemoved
     }
 
     /*private fun isRemoved(state: StateEntry) =
@@ -186,6 +214,27 @@ class Journal private constructor(private val cacheDir: String) {
            else
                0L
        } ?: 0L
+
+    fun leavingCacheFiles(limit: Long): List<String> {
+        val size = getCacheSize()
+        val list = mutableListOf<String>()
+        var sum = 0L
+        for (entry in entries) {
+            if (entry.value.state == StateEntry.CLEAN) {
+                sum += entry.value.length
+                if (size - sum <= limit)
+                    break
+                else
+                    list.add(entry.key)
+            }
+        }
+        list.forEach { hash ->
+            entries.remove(hash)
+        }
+        return list
+    }
+
+    /*
     /**
     *  Получить список файлов кэша
     */
@@ -199,7 +248,7 @@ class Journal private constructor(private val cacheDir: String) {
        }
        return list
        //entries.keys.toList()
-   }
+   }*/
 
    @Synchronized
    fun equals(hash: String, time: Long): Boolean =

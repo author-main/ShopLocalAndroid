@@ -1,5 +1,7 @@
 package com.training.shoplocal
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import java.io.File
 import java.io.FileFilter
 import java.io.IOException
@@ -94,3 +96,14 @@ fun md5(link: String): String {
         throw RuntimeException(e)
     }
 }
+
+fun loadBitmap(filename: String): Bitmap?{
+    return try {
+        val option = BitmapFactory.Options()
+        option.inPreferredConfig = Bitmap.Config.ARGB_8888
+        BitmapFactory.decodeFile(filename, option)
+    } catch(_:Exception){
+        null
+    }
+}
+

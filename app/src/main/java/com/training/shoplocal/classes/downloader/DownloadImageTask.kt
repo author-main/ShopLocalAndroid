@@ -21,9 +21,10 @@ class DownloadImageTask(private val link: String, val callback: (bitmap: BitmapT
             val timestamp = conn.lastModified
             conn.requestMethod = "GET"
 
-            val filename = getCacheDirectory() + md5(link) + ".$EXT_CACHETEMPFILE"
+            val filename    = getCacheDirectory() + md5(link)
+            val filenameTmp = "$filename.$EXT_CACHETEMPFILE"
             val inputStream = conn.inputStream
-            val outputStream = FileOutputStream(filename);
+            val outputStream = FileOutputStream(filenameTmp);
             var bytesRead: Int = -1
             val buffer = ByteArray(BUFFER_SIZE)
             var count: Int
@@ -33,12 +34,9 @@ class DownloadImageTask(private val link: String, val callback: (bitmap: BitmapT
             inputStream.close()
             outputStream.close()
             conn.disconnect()
-
-            //val bitmap = BitmapFactory.decodeStream(conn.inputStream)
-            val option = BitmapFactory.Options()
-            option.inPreferredConfig = Bitmap.Config.ARGB_8888
-            val bitmap = BitmapFactory.decodeFile(filename, option)//decodeStream(conn.inputStream)
+            val bitmap = loadBitmap(filenameTmp)//decodeStream(conn.inputStream)
             bitmap?.let{
+                renameFile(filenameTmp, filename)
                 callback(BitmapTime(it, timestamp))
             } ?: callback(null)
             bitmap

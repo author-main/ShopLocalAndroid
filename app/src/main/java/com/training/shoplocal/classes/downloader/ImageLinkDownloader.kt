@@ -8,21 +8,38 @@ import java.util.concurrent.Future
 class DiskCache(private val cacheDir: String): ImageCache {
     private val existsCacheStorage = createDirectory(cacheDir)
     private val journal = Journal.getInstance(cacheDir)
-    private var size = journal.getCacheSize()
+
+    @Synchronized
+    override fun placeFileInCache(filesize: Long): Boolean{
+        if (journal.getCacheSize() + filesize < CACHE_SIZE)
+            return true
+        if (filesize > CACHE_SIZE)
+            return false
+        val listHash = journal.leavingCacheFiles(CACHE_SIZE - filesize)
+        if (listHash.isEmpty())
+            return false
+        listHash.forEach {hash ->
+            deleteCacheFile(hash)
+        }
+        return true
+    }
 
     /**
      *  Перезаписать журнал значениями из entries<String, CachEntry>
      */
-    override fun journal() {
-        journal.saveEntriesToJournal()
+    override fun normalizeJournal() {
+        val listHashForDelete = journal.saveEntriesToJournal()
+        listHashForDelete.forEach {hash ->
+            deleteCacheFile(hash)
+        }
     }
+
 
     private fun getHashCacheFile(link: String): String =
         md5(link)
 
-    override fun get(link: String): Bitmap? {
-        TODO("Not yet implemented")
-    }
+    override fun get(link: String): Bitmap? =
+        loadBitmap(getFileNameFromHash(getHashCacheFile(link)))
 
     override fun put(link: String, image: BitmapTime?) {
         val state = if (image != null)
@@ -41,11 +58,13 @@ class DiskCache(private val cacheDir: String): ImageCache {
     }
 
     override fun update(link: String, state: StateEntry) {
-        TODO("Not yet implemented")
+        val hash = getHashCacheFile(link)
+        journal.update(link, StateEntry.DIRTY)
     }
 
     override fun clear() {
-        TODO("Not yet implemented")
+        deleteFiles(cacheDir)
+        journal.clear()
     }
 
     private fun getFileNameFromHash(hash: String) =
@@ -63,6 +82,11 @@ class ImageLinkDownloader private constructor(){
     private val executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
     private val listDownloadTask:HashMap<String, Future<Bitmap?>> = hashMapOf()
 
+    @Synchronized
+    private fun normalizeJournal(){
+        cacheStorage?.normalizeJournal()
+    }
+
     fun downloadLinkImage(link: String, callback: Callback){
         val iterator = listDownloadTask.iterator()
         while (iterator.hasNext()) {
@@ -73,7 +97,10 @@ class ImageLinkDownloader private constructor(){
         image?.let{
             cacheStorage?.update(link, StateEntry.DIRTY)
             callback.onComplete(it)
+            cacheStorage?.update(link, StateEntry.CLEAN)
             return
+        } ?: run {
+            cacheStorage?.remove(link, changeState = true)
         }
 
         if (listDownloadTask[link] != null) // если идет загрузка файла
@@ -82,11 +109,19 @@ class ImageLinkDownloader private constructor(){
         cacheStorage?.put(link)
         val task = DownloadImageTask(link){ bitmap ->
             bitmap?.let {
-                cacheStorage?.put(link, it)
+                val filesize = getFileSize("$cacheStorage${md5(link)}")
+                cacheStorage?.let{ storage ->
+                    if (storage.placeFileInCache(filesize))
+                        storage.put(link, it)
+                    else
+                        storage.update(link, StateEntry.REMOVE)
+                }
                 callback.onComplete(it.bitmap)
+                normalizeJournal()
             } ?: run {
                 cacheStorage?.remove(link, changeState = true)
                 callback.onFailure()
+                normalizeJournal()
             }
         }
         listDownloadTask[link] = executorService.submit(task)
@@ -95,8 +130,10 @@ class ImageLinkDownloader private constructor(){
     fun cancelTask(link: String){
         synchronized(this){
             listDownloadTask[link]?.let { task ->
-                if (!task.isDone)
+                if (!task.isDone) {
+                    cacheStorage?.remove(link, changeState = true)
                     task.cancel(true)
+                }
             }
             listDownloadTask.remove(link)
         }
@@ -107,8 +144,10 @@ class ImageLinkDownloader private constructor(){
         synchronized (this) {
             executorService.shutdownNow()
             listDownloadTask.forEach{
-                if ( !it.value.isDone)
+                if ( !it.value.isDone) {
                     it.value.cancel(true)
+                    cacheStorage?.remove(it.key, changeState = true)
+                }
             }
             listDownloadTask.clear()
         }
