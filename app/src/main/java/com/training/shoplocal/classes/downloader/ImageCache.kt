@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import com.training.shoplocal.StateEntry
 
 interface ImageCache {
-    fun placeFileInCache(filesize: Long): Boolean
+    fun placed(filesize: Long): Boolean
     fun get(link: String): Bitmap?
     fun put(link: String, image: BitmapTime? = null)
     fun remove(link: String, changeState: Boolean)

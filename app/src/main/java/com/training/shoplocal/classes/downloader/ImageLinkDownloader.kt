@@ -10,7 +10,7 @@ class DiskCache(private val cacheDir: String): ImageCache {
     private val journal = Journal.getInstance(cacheDir)
 
     @Synchronized
-    override fun placeFileInCache(filesize: Long): Boolean{
+    override fun placed(filesize: Long): Boolean{
         if (journal.getCacheSize() + filesize < CACHE_SIZE)
             return true
         if (filesize > CACHE_SIZE)
@@ -111,7 +111,7 @@ class ImageLinkDownloader private constructor(){
             bitmap?.let {
                 val filesize = getFileSize("$cacheStorage${md5(link)}")
                 cacheStorage?.let{ storage ->
-                    if (storage.placeFileInCache(filesize))
+                    if (storage.placed(filesize))
                         storage.put(link, it)
                     else
                         storage.remove(link, changeState = true)
