@@ -151,6 +151,9 @@ class Journal private constructor(private val cacheDir: String) {
     /*private fun isRemoved(state: StateEntry) =
         state == StateEntry.REMOVE*/
 
+    /**
+     *  Проверяем, помечена ли запись на удаление StateEntry.REMOVE
+     */
     private fun removed(entry: CacheEntry?) =
         entry?.let {
             it.state == StateEntry.REMOVE
