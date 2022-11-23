@@ -43,6 +43,7 @@ class DiskCache(private val cacheDir: String): ImageCache {
 
     override fun get(link: String, timestamp: Long): Bitmap? {
         val hash = getHashCacheFile(link)
+        journal.update(hash, StateEntry.DIRTY)
         var bitmap: Bitmap? = null
         if (timestamp > 0L) {
             if  (journal.equals(hash, timestamp)) {
@@ -56,10 +57,10 @@ class DiskCache(private val cacheDir: String): ImageCache {
     }
 
     override fun put(link: String, time: Long) {
-        val state = if (time != 0L)
-                        StateEntry.CLEAN
-                    else
+        val state = if (time == 0L)
                         StateEntry.DIRTY
+                    else
+                        StateEntry.CLEAN
         journal.put(getHashCacheFile(link), state, time)
     }
 
@@ -116,7 +117,6 @@ class ImageLinkDownloader private constructor(){
         conn.disconnect()
         val image: Bitmap? = cacheStorage?.get(link, timestamp)
         image?.let{
-            cacheStorage?.update(link, StateEntry.DIRTY)
             callback.onComplete(it)
             cacheStorage?.update(link, StateEntry.CLEAN)
             return
