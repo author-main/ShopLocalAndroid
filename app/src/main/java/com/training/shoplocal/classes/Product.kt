@@ -6,8 +6,10 @@ import com.training.shoplocal.classes.downloader.Callback
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 import com.training.shoplocal.log
 
-data class Product(val id: Int,
+data class Product(
     @SerializedName("id")
+    val id: Int,
+    @SerializedName("name")
     val name:           String,
     @SerializedName("category")
     val category:       Int? = null,
@@ -26,7 +28,7 @@ data class Product(val id: Int,
     @SerializedName("brand")
     val brand:          Short? = null,
     @SerializedName("linkimages")
-    val linkimages:     MutableList<String>? = null
+    val linkimages:     List<String>? = null
     ) {
 /**
  * // Структура таблицы PRODUCTS //

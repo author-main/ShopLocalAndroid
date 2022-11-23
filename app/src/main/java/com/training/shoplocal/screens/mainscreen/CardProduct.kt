@@ -37,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.training.shoplocal.AppShopLocal.Companion.appContext
+import com.training.shoplocal.DECIMAL_CEPARATOR
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.getPrice
 import com.training.shoplocal.log
@@ -46,6 +47,7 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 import java.math.RoundingMode
 import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 
 @Composable
 fun DiscountPanel(modifier: Modifier, percent: Int){
@@ -61,10 +63,11 @@ fun DiscountPanel(modifier: Modifier, percent: Int){
 
 @Composable
 fun StarPanel(count: Float){
+
     val df = DecimalFormat("#.#")
     df.roundingMode = RoundingMode.HALF_EVEN
     //val rounded = df.format(count)
-    val partNumber = df.format(count).split(",")
+    val partNumber = df.format(count).split(DECIMAL_CEPARATOR)
     val intPart = partNumber[0].toInt()
     val floatPart = if (partNumber.size == 2)
         partNumber[1].toInt() else 0

@@ -115,8 +115,13 @@ class ImageLinkDownloader private constructor(){
                         } else
                             0L
         conn.disconnect()
+
+        val hash = md5(link)
+        log( "***** $hash, timestamp = $timestamp *****")
+
         val image: Bitmap? = cacheStorage?.get(link, timestamp)
         image?.let{
+            log( "$hash, loaded from cache")
             callback.onComplete(it)
             cacheStorage?.update(link, StateEntry.CLEAN)
             return
@@ -131,6 +136,7 @@ class ImageLinkDownloader private constructor(){
         cacheStorage?.put(link)
         val task = DownloadImageTask(link){ bitmap ->
             bitmap?.let {
+                log("$hash, loaded from Internet")
                 val filesize = getFileSize("$cacheStorage${md5(link)}")
                 cacheStorage?.let{ storage ->
                     if (storage.placed(filesize))

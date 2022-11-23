@@ -2,9 +2,9 @@ package com.training.shoplocal.repository
 
 import com.training.shoplocal.classes.Category
 import com.training.shoplocal.classes.Product
+import com.training.shoplocal.classes.Products
 
 interface DatabaseCRUDInterface {
-    fun getCategories(): List<Category>
-    fun getPromotionProduct(): List<Product>
-    fun getImagesProduct(id: Int): List<String>
+    fun getCategories()
+    fun getPromotionProduct( action: (product: Product) -> Unit = {})
 }

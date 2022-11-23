@@ -17,9 +17,13 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private val filterData = FilterData()*/
     //val activeProduct = Product()
 
+    private val _products = MutableStateFlow<MutableList<Product>>(mutableListOf<Product>())
+    val products = _products.asStateFlow()
+
     private val actionLogin: (result: Int) -> Unit = {
         val result = it > 0
         if (result) {
+            getPromotionProducts()
             ScreenRouter.navigateTo(ScreenItem.MainScreen)
             authorizeUser()
         }
@@ -86,6 +90,14 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     fun passContextFingerPrint(context: Context) {
         repository.setContextFingerPrint(context)
+    }
+
+
+    private fun getPromotionProducts(){
+        repository.getPromotionProduct { product ->
+            log(product.toString())
+            //_products.value = products.toMutableList()
+        }
     }
 
  }
