@@ -98,6 +98,8 @@ fun md5(link: String): String {
 }
 
 fun loadBitmap(filename: String): Bitmap?{
+    if (!File(filename).exists())
+        return null
     return try {
         val option = BitmapFactory.Options()
         option.inPreferredConfig = Bitmap.Config.ARGB_8888

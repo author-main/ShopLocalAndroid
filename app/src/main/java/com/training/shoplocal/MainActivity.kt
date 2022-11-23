@@ -36,7 +36,6 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
 //        val repository = AppShopLocal.appRepository();
         val user = getUserData()
 
-
         //val passwordState = PasswordViewState.getPasswordState()
         setContent {
             ShopLocalTheme(true) {

@@ -2,6 +2,8 @@ package com.training.shoplocal.classes.downloader
 
 import android.graphics.Bitmap
 import com.training.shoplocal.*
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
 
@@ -9,7 +11,6 @@ class DiskCache(private val cacheDir: String): ImageCache {
     private val existsCacheStorage = createDirectory(cacheDir)
     private val journal = Journal.getInstance(cacheDir)
 
-    @Synchronized
     override fun placed(filesize: Long): Boolean{
         if (journal.getCacheSize() + filesize < CACHE_SIZE)
             return true
@@ -39,15 +40,26 @@ class DiskCache(private val cacheDir: String): ImageCache {
     private fun getHashCacheFile(link: String): String =
         md5(link)
 
-    override fun get(link: String): Bitmap? =
-        loadBitmap(getFileNameFromHash(getHashCacheFile(link)))
 
-    override fun put(link: String, image: BitmapTime?) {
-        val state = if (image != null)
+    override fun get(link: String, timestamp: Long): Bitmap? {
+        val hash = getHashCacheFile(link)
+        var bitmap: Bitmap? = null
+        if (timestamp > 0L) {
+            if  (journal.equals(hash, timestamp)) {
+                bitmap = loadBitmap(getFileNameFromHash(hash))
+            } /*else
+                journal.remove(hash, changeState = true)*/
+        } else {
+            bitmap = loadBitmap(getFileNameFromHash(hash))
+        }
+        return bitmap
+    }
+
+    override fun put(link: String, time: Long) {
+        val state = if (time != 0L)
                         StateEntry.CLEAN
                     else
                         StateEntry.DIRTY
-        val time = image?.time ?: 0L
         journal.put(getHashCacheFile(link), state, time)
     }
 
@@ -95,7 +107,14 @@ class ImageLinkDownloader private constructor(){
             if (iterator.next().value.isDone) iterator.remove()
         }
 
-        val image: Bitmap? = cacheStorage?.get(link)
+        val conn = URL(link).openConnection() as HttpURLConnection
+        val timestamp = if (conn.responseCode != HttpURLConnection.HTTP_OK) {
+                            conn.requestMethod = "HEAD"
+                            conn.lastModified
+                        } else
+                            0L
+        conn.disconnect()
+        val image: Bitmap? = cacheStorage?.get(link, timestamp)
         image?.let{
             cacheStorage?.update(link, StateEntry.DIRTY)
             callback.onComplete(it)
@@ -105,7 +124,8 @@ class ImageLinkDownloader private constructor(){
             cacheStorage?.remove(link, changeState = true)
         }
 
-        if (listDownloadTask[link] != null) // если идет загрузка файла
+        // если идет загрузка файла или соединение не установлено
+        if (listDownloadTask[link] != null || timestamp == 0L)
             return
 
         cacheStorage?.put(link)
@@ -114,11 +134,11 @@ class ImageLinkDownloader private constructor(){
                 val filesize = getFileSize("$cacheStorage${md5(link)}")
                 cacheStorage?.let{ storage ->
                     if (storage.placed(filesize))
-                        storage.put(link, it)
+                        storage.put(link, timestamp)
                     else
                         storage.remove(link, changeState = true)
                 }
-                callback.onComplete(it.bitmap)
+                callback.onComplete(it)
                 normalizeJournal()
             } ?: run {
                 cacheStorage?.remove(link, changeState = true)

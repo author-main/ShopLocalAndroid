@@ -7,7 +7,7 @@ import java.io.FileOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
-class DownloadImageTask(private val link: String, val callback: (bitmap: BitmapTime?) -> Unit): DownloadTask<Bitmap?>
+class DownloadImageTask(private val link: String, val callback: (bitmap: Bitmap?) -> Unit): DownloadTask<Bitmap?>
 {
     override fun download(link: String): Bitmap? {
         val BUFFER_SIZE = 4096
@@ -17,15 +17,13 @@ class DownloadImageTask(private val link: String, val callback: (bitmap: BitmapT
                 callback(null)
                 return null
             }
-            conn.requestMethod = "HEAD"
+            /*conn.requestMethod = "HEAD"
             val timestamp = conn.lastModified
-            conn.requestMethod = "GET"
-
+            conn.requestMethod = "GET"*/
             val filename    = getCacheDirectory() + md5(link)
             val filenameTmp = "$filename.$EXT_CACHETEMPFILE"
             val inputStream = conn.inputStream
             val outputStream = FileOutputStream(filenameTmp);
-            var bytesRead: Int = -1
             val buffer = ByteArray(BUFFER_SIZE)
             var count: Int
             while (inputStream.read(buffer).also { count = it } > 0) {
@@ -37,7 +35,7 @@ class DownloadImageTask(private val link: String, val callback: (bitmap: BitmapT
             val bitmap = loadBitmap(filenameTmp)//decodeStream(conn.inputStream)
             bitmap?.let{
                 renameFile(filenameTmp, filename)
-                callback(BitmapTime(it, timestamp))
+                callback(bitmap)
             } ?: callback(null)
             bitmap
         } catch (_: Exception) {
