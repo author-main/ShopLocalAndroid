@@ -13,5 +13,5 @@ interface DatabaseApiInterface {
     fun queryUser(@Body user: User, @Path("script") phpScript: String): Call<User>
 
     @GET("/api/get_product")///get_promo_products")
-    fun getPromotionProducts(@Query("id") id: Int): Call<Product>
+    fun getProduct(@Query("id") id: Int): Call<Product>
 }

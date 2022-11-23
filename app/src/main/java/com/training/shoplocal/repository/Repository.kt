@@ -57,8 +57,8 @@ class Repository: DAOinterface {
     /**
      *  Реализация методов для получения данных из базы данных MySQL
      */
-    fun getPromotionProduct(action: (list: Product) -> Unit){
-        databaseCRUD.getPromotionProduct(action)
+    fun getProduct(id: Int, action: (product: Product) -> Unit){
+        databaseCRUD.getProduct(id, action)
     }
 
     fun getCategories() {

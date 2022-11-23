@@ -23,7 +23,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private val actionLogin: (result: Int) -> Unit = {
         val result = it > 0
         if (result) {
-            getPromotionProducts()
+            getProduct(33)
             ScreenRouter.navigateTo(ScreenItem.MainScreen)
             authorizeUser()
         }
@@ -93,8 +93,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     }
 
 
-    private fun getPromotionProducts(){
-        repository.getPromotionProduct { product ->
+    private fun getProduct(id: Int){
+        repository.getProduct(id) { product ->
             log(product.toString())
             //_products.value = products.toMutableList()
         }

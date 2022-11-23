@@ -10,9 +10,9 @@ import retrofit2.Call
 import retrofit2.Response
 
 class DatabaseCRUD: DatabaseCRUDInterface {
-    override fun getPromotionProduct(action: (product: Product) -> Unit ){
+    override fun getProduct(id: Int, action: (product: Product) -> Unit ){
        // log("getPromotionProduct")
-        DatabaseApi.getPromotionProduct(object: retrofit2.Callback<Product> {
+        DatabaseApi.getProduct(id, object: retrofit2.Callback<Product> {
 
             override fun onResponse(call: Call<Product>, response: Response<Product>) {
                 response.body()?.let {

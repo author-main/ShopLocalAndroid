@@ -6,5 +6,5 @@ import com.training.shoplocal.classes.Products
 
 interface DatabaseCRUDInterface {
     fun getCategories()
-    fun getPromotionProduct( action: (product: Product) -> Unit = {})
+    fun getProduct( id: Int, action: (product: Product) -> Unit = {})
 }

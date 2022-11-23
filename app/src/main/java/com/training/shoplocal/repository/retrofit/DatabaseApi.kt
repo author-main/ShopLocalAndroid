@@ -52,9 +52,9 @@ object DatabaseApi {
         queryUser(QUERY_RESTOREUSER, user, callback)
     }
 
-    fun getPromotionProduct(callback: retrofit2.Callback<Product>){
+    fun getProduct(id: Int, callback: retrofit2.Callback<Product>){
         try {
-            val callPromoProducts: retrofit2.Call<Product> = service!!.getPromotionProducts(33)
+            val callPromoProducts: retrofit2.Call<Product> = service!!.getProduct(id)
             callPromoProducts.enqueue(callback)
         } catch(e: Exception){
             log(e.message ?: "error")
