@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import com.google.gson.annotations.SerializedName
 import com.training.shoplocal.classes.downloader.Callback
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
+import com.training.shoplocal.log
 
 data class Product(val id: Int,
     @SerializedName("id")
@@ -22,7 +23,7 @@ data class Product(val id: Int,
     val star:           Byte? = 1,
     @SerializedName("favorite")
     var favorite:       Byte? = 0,
-    @SerializedName("ibrand")
+    @SerializedName("brand")
     val brand:          Short? = null,
     @SerializedName("linkimages")
     val linkimages:     MutableList<String>? = null
@@ -50,9 +51,11 @@ data class Product(val id: Int,
         if (!linkimages.isNullOrEmpty() && index < linkimages.size)
             ImageLinkDownloader.downloadImage(linkimages[0], object : Callback {
                     override fun onComplete(image: Bitmap) {
+                        log("Loaded")
                         action(image)
                     }
                     override fun onFailure() {
+                        log("Not loaded")
                         action(null)
                     }
                 })
