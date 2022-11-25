@@ -1,9 +1,10 @@
-package com.training.shoplocal.classes
+package com.training.shoplocal.repository.retrofit.response_classes
 
 import com.google.gson.annotations.SerializedName
+import com.training.shoplocal.classes.Product
 
 class Products {
-    @SerializedName("list")
+    @SerializedName("products")
     private var items: List<Product>? = null
     fun getItems() =
         items
@@ -12,9 +13,9 @@ class Products {
         items = list
     }
 
-    fun isEmpty() =
-        items?.isEmpty() ?: true
+    /*fun isEmpty() =
+        items?.isEmpty() ?: true*/
 
     fun isNotEmpty() =
-        items?.isNotEmpty() ?: true
+        items?.isNotEmpty() ?: false
 }

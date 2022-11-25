@@ -15,7 +15,7 @@ import com.training.shoplocal.ui.theme.TextFieldBg
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 
-const val SERVER_URL            = "http://192.168.0.10"
+const val SERVER_URL            = "http://192.168.1.10"
 val DECIMAL_CEPARATOR           = DecimalFormatSymbols().decimalSeparator
 
 /*enum class Error {

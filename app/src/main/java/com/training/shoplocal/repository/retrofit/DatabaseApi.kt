@@ -3,9 +3,9 @@ package com.training.shoplocal.repository.retrofit
 import com.google.gson.GsonBuilder
 import com.training.shoplocal.SERVER_URL
 import com.training.shoplocal.classes.Product
-import com.training.shoplocal.classes.Products
 import com.training.shoplocal.classes.User
 import com.training.shoplocal.log
+import com.training.shoplocal.repository.retrofit.response_classes.Products
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -54,8 +54,17 @@ object DatabaseApi {
 
     fun getProduct(id: Int, callback: retrofit2.Callback<Product>){
         try {
-            val callPromoProducts: retrofit2.Call<Product> = service!!.getProduct(id)
-            callPromoProducts.enqueue(callback)
+            val call: retrofit2.Call<Product> = service!!.getProduct(id)
+            call.enqueue(callback)
+        } catch(e: Exception){
+            log(e.message ?: "error")
+        }
+    }
+
+    fun getPromoProducts(callback: retrofit2.Callback<Products>){
+        try {
+            val call: retrofit2.Call<Products> = service!!.getPromoProducts()
+            call.enqueue(callback)
         } catch(e: Exception){
             log(e.message ?: "error")
         }

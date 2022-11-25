@@ -1,8 +1,9 @@
 package com.training.shoplocal.repository.retrofit
 
+import com.google.gson.annotations.SerializedName
 import com.training.shoplocal.classes.Product
-import com.training.shoplocal.classes.Products
 import com.training.shoplocal.classes.User
+import com.training.shoplocal.repository.retrofit.response_classes.Products
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -14,4 +15,7 @@ interface DatabaseApiInterface {
 
     @GET("/api/get_product")///get_promo_products")
     fun getProduct(@Query("id") id: Int): Call<Product>
+
+    @GET("/api/get_promo_products")
+    fun getPromoProducts(): Call<Products>
 }
