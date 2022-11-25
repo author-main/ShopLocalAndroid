@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -220,19 +221,30 @@ fun CardProduct(product: Product? = null, state: ModalBottomSheetState){//}, sco
             }
             // < * Text Price
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(modifier = Modifier.padding(end = 8.dp),
+                Card(
+                    backgroundColor = BgTextPrice,
+                    shape = RoundedCornerShape(6.dp)
+                ){
+                    Text(modifier = Modifier.padding(horizontal = 4.dp),
+                        fontSize = 17.sp,
+                        text = getPrice(11100f),
+                        fontWeight = FontWeight.SemiBold,
+                        color = TextPrice)
+                }
+
+               /* Text(modifier = Modifier.padding(end = 8.dp),
                     fontSize = 18.sp,
                     text = getPrice(11100f),
                     fontWeight = FontWeight.SemiBold,
                     color = TextPrice
-                )
-                Text(modifier = Modifier.padding(end = 8.dp),
+                )*/
+                Text(modifier = Modifier.padding(start = 8.dp),
                     fontSize = 14.sp,
                     text = getPrice(11260f),
                     fontWeight = FontWeight.SemiBold,
                     style = TextStyle(textDecoration = TextDecoration.LineThrough),
-                    color = TextPrice
-                )
+                    color = TextPriceDiscount)
+
             }
             // * >
             // < * Text Promotion
