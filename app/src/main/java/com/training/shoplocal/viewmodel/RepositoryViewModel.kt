@@ -103,7 +103,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private fun getPromoProducts(){
         repository.getPromoProducts() { products ->
             log("$products")
-            //_products.value = products.toMutableList()
+            _products.value = products.toMutableList()
         }
     }
 
