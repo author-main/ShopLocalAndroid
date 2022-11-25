@@ -221,9 +221,9 @@ fun CardProduct(product: Product? = null, state: ModalBottomSheetState){//}, sco
             }
             // < * Text Price
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Card(
+                Card(modifier=Modifier.padding(vertical = 4.dp),
                     backgroundColor = BgTextPrice,
-                    shape = RoundedCornerShape(6.dp)
+                    shape = RoundedCornerShape(6.dp),
                 ){
                     Text(modifier = Modifier.padding(horizontal = 4.dp),
                         fontSize = 17.sp,
