@@ -173,6 +173,26 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
     val context = LocalContext.current
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
 
+
+    val imageLink: String = product.linkimages?.let{
+        if (it.isNotEmpty())
+            it[0]
+        else
+            ""
+    } ?: ""
+    log("$SERVER_URL/images/$imageLink")
+    var bitmap: Bitmap? = null
+    ImageLinkDownloader.downloadImage("$SERVER_URL/images/$imageLink", object: Callback{
+        override fun onComplete(image: Bitmap) {
+            bitmap = image
+        }
+        override fun onFailure() {
+            log("error download image")
+        }
+    })
+
+
+
     Box(modifier = Modifier
         .width(150.dp) )
         {
@@ -208,14 +228,14 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
                         )
                     }*/
 
-                    val imageLink: String = product.linkimages?.let{
+                   /* val imageLink: String = product.linkimages?.let{
                         if (it.isNotEmpty())
                             it[0]
                         else
                             ""
                     } ?: ""
                     log(imageLink)
-                /*    Image(
+                   Image(
                         ImageLinkDownloader.downloadImage(imageLink, object: Callback(){
                             override fun onComplete(image: Bitmap) {
                                 bitmap = image
