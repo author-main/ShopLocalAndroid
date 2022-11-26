@@ -19,10 +19,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.node.modifierElementOf
 import androidx.compose.ui.platform.LocalContext
@@ -173,18 +170,16 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
     val context = LocalContext.current
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
 
-
     val imageLink: String = product.linkimages?.let{
-        if (it.isNotEmpty())
-            it[0]
-        else
-            ""
+        if (it.isNotEmpty()) it[0] else ""
     } ?: ""
     //log("$SERVER_URL/images/$imageLink")
-    var bitmap: Bitmap? = null
+    val bitmap = remember{mutableStateOf(ImageBitmap(5, 5,
+                                         hasAlpha = false, config = ImageBitmapConfig.Argb8888))}
     ImageLinkDownloader.downloadImage("$SERVER_URL/images/$imageLink", object: Callback{
         override fun onComplete(image: Bitmap) {
-            bitmap = image
+            val loadimage = image.asImageBitmap()
+            bitmap.value = loadimage
         }
         override fun onFailure() {
             log("error download image")
@@ -210,43 +205,11 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
                     .padding(8.dp),
                     contentAlignment = Alignment.Center
                     ) {
-                    /*val bitmap =
-                        try {
-                            with(appContext().assets.open("images/cpu_rayzen.jpg")) {
-                                BitmapFactory.decodeStream(this)
-                            }
-                        } catch (e: IOException) {
-                            null
-                        }
-                    val imageBitmap: ImageBitmap? =
-                        bitmap?.asImageBitmap()
-
-                    imageBitmap?.let {
-                        Image(
-                            //alignment = Alignment.BottomEnd,
-                            bitmap = it, contentDescription = null
-                        )
-                    }*/
-
-                   /* val imageLink: String = product.linkimages?.let{
-                        if (it.isNotEmpty())
-                            it[0]
-                        else
-                            ""
-                    } ?: ""
-                    log(imageLink)
-                   Image(
-                        ImageLinkDownloader.downloadImage(imageLink, object: Callback(){
-                            override fun onComplete(image: Bitmap) {
-                                bitmap = image
-                            }
-
-                            override fun onFailure() {
-                                null
-                            }
-                        }),
+                       Image(modifier = Modifier.fillMaxSize()
+                           .padding(all = 8.dp),
+                        bitmap = bitmap.value,
                         contentDescription = null
-                    )*/
+                        )
 
                     DiscountPanel(modifier = Modifier.align(Alignment.BottomStart), percent = product.discount)
                     ButtonMore(modifier = Modifier.align(Alignment.BottomEnd)
