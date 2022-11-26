@@ -180,7 +180,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
         else
             ""
     } ?: ""
-    log("$SERVER_URL/images/$imageLink")
+    //log("$SERVER_URL/images/$imageLink")
     var bitmap: Bitmap? = null
     ImageLinkDownloader.downloadImage("$SERVER_URL/images/$imageLink", object: Callback{
         override fun onComplete(image: Bitmap) {

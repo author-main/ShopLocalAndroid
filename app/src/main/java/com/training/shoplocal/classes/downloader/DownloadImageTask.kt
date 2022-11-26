@@ -7,41 +7,50 @@ import java.io.FileOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
-class DownloadImageTask(private val link: String, val callback: (bitmap: Bitmap?) -> Unit): DownloadTask<Bitmap?>
+class DownloadImageTask(private val link: String, val callback: (bitmap: Bitmap?, timestamp: Long) -> Unit): DownloadTask<Bitmap?>
 {
+    private var cacheTimestamp: Long = 0L
+    fun setCacheTimestamp(timestamp: Long){
+        cacheTimestamp   = timestamp
+    }
     override fun download(link: String): Bitmap? {
         val BUFFER_SIZE = 4096
-        return try {
-            val conn = URL(link).openConnection() as HttpURLConnection
-            if (conn.responseCode != HttpURLConnection.HTTP_OK) {
-                callback(null)
-                return null
+        var bitmap: Bitmap? = null
+        val filename    = getCacheDirectory() + md5(link)
+        val filenameTmp = "$filename.$EXT_CACHETEMPFILE"
+        val conn = URL(link).openConnection() as HttpURLConnection
+        var fileTimestamp = cacheTimestamp
+        try {
+            conn.connect()
+            if (conn.responseCode == HttpURLConnection.HTTP_OK) {
+                conn.requestMethod = "HEAD"
+                val timestamp = conn.lastModified
+                if (timestamp != cacheTimestamp) {
+                    //df67318f8d0816b3b2ea29505075262a 1666444506000
+                    conn.requestMethod = "GET"
+                    val inputStream = conn.inputStream
+                    val outputStream = FileOutputStream(filenameTmp);
+                    val buffer = ByteArray(BUFFER_SIZE)
+                    var count: Int
+                    while (inputStream.read(buffer).also { count = it } > 0) {
+                        outputStream.write(buffer, 0, count)
+                    }
+                    inputStream.close()
+                    outputStream.close()
+                    conn.disconnect()
+                    bitmap = loadBitmap(filenameTmp)//decodeStream(conn.inputStream)
+                    renameFile(filenameTmp, filename)
+                    fileTimestamp = timestamp
+                    log("$filename - загружено из Инет")
+                }
             }
-            /*conn.requestMethod = "HEAD"
-            val timestamp = conn.lastModified
-            conn.requestMethod = "GET"*/
-            val filename    = getCacheDirectory() + md5(link)
-            val filenameTmp = "$filename.$EXT_CACHETEMPFILE"
-            val inputStream = conn.inputStream
-            val outputStream = FileOutputStream(filenameTmp);
-            val buffer = ByteArray(BUFFER_SIZE)
-            var count: Int
-            while (inputStream.read(buffer).also { count = it } > 0) {
-                outputStream.write(buffer, 0, count)
-            }
-            inputStream.close()
-            outputStream.close()
-            conn.disconnect()
-            val bitmap = loadBitmap(filenameTmp)//decodeStream(conn.inputStream)
-            bitmap?.let{
-                renameFile(filenameTmp, filename)
-                callback(bitmap)
-            } ?: callback(null)
-            bitmap
-        } catch (_: Exception) {
-            callback(null)
-            null
+        } catch (_: Exception) {}
+        if (bitmap == null) {
+            log("$filename - загружено из кэша")
+            bitmap = loadBitmap(filename)
         }
+        callback(bitmap, fileTimestamp)
+        return bitmap
     }
 
     override fun call(): Bitmap? {

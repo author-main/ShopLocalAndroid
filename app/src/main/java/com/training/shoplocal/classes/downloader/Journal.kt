@@ -110,22 +110,13 @@ class Journal private constructor(private val cacheDir: String) {
     }
 
     @Synchronized
-    fun put(hash: String, state: StateEntry, time: Long) {
-        /*val entry = entries[hash]
-        entry?.let{
-            if (time != 0L)
-                it.length = getFileSize(getFilenameCacheFile(hash))
-        } ?: run {
-            entries[hash] = CacheEntry(hash).apply {
-                this.state = state
-                this.time  = time
-            }
-        }*/
+    fun put(hash: String, time: Long) {
+        if (entries[hash] != null)
+            return
         entries[hash] = CacheEntry(hash).apply {
-            this.state = state
+            this.state = StateEntry.DIRTY
             this.time  = time
-            if (time != 0L)
-                length = getFileSize(getFilenameCacheFile(hash))
+            length = getFileSize(getFilenameCacheFile(hash))
         }
     }
 
@@ -255,6 +246,11 @@ class Journal private constructor(private val cacheDir: String) {
        entries[hash]?.let{entry ->
            entry.time == time
        } ?: false
+
+    @Synchronized
+    fun getTimestamp(hash: String): Long =
+        entries[hash]?.time ?: 0L
+
 
    companion object {
        private var instance: Journal? = null

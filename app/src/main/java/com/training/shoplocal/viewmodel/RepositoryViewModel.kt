@@ -12,6 +12,8 @@ import com.training.shoplocal.screens.ScreenItem
 import com.training.shoplocal.screens.ScreenRouter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.net.HttpURLConnection
+import java.net.URL
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     /*private val sortData = SortData()
