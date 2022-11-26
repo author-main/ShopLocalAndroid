@@ -2,6 +2,7 @@ package com.training.shoplocal.repository
 
 import com.training.shoplocal.classes.Brand
 import com.training.shoplocal.classes.Product
+import com.training.shoplocal.classes.Products
 import com.training.shoplocal.log
 import com.training.shoplocal.repository.retrofit.DatabaseApi
 import retrofit2.Call
@@ -27,8 +28,8 @@ class DatabaseCRUD: DatabaseCRUDInterface {
     }
 
     override fun getPromoProducts(action: (products: List<Product>) -> Unit) {
-        DatabaseApi.getPromoProducts(object: retrofit2.Callback<Product.Products>{
-            override fun onResponse(call: Call<Product.Products>, response: Response<Product.Products>) {
+        DatabaseApi.getPromoProducts(object: retrofit2.Callback<Products>{
+            override fun onResponse(call: Call<Products>, response: Response<Products>) {
                 response.body()?.let {
                     if (it.isNotEmpty()) {
                         val outlist = it.getItems()
@@ -38,7 +39,7 @@ class DatabaseCRUD: DatabaseCRUDInterface {
                 }
             }
 
-            override fun onFailure(call: Call<Product.Products>, t: Throwable) {
+            override fun onFailure(call: Call<Products>, t: Throwable) {
                 log(t.message ?: "ошибка")
             }
         })

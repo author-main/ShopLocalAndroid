@@ -172,6 +172,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
 
     val context = LocalContext.current
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
+
     Box(modifier = Modifier
         .width(150.dp) )
         {
@@ -207,12 +208,14 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
                         )
                     }*/
 
-                    val imageLink = product.linkimages?.let{
+                    val imageLink: String = product.linkimages?.let{
                         if (it.isNotEmpty())
                             it[0]
+                        else
+                            ""
                     } ?: ""
-
-                    Image(
+                    log(imageLink)
+                /*    Image(
                         ImageLinkDownloader.downloadImage(imageLink, object: Callback(){
                             override fun onComplete(image: Bitmap) {
                                 bitmap = image
@@ -223,7 +226,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
                             }
                         }),
                         contentDescription = null
-                    )
+                    )*/
 
                     DiscountPanel(modifier = Modifier.align(Alignment.BottomStart), percent = product.discount)
                     ButtonMore(modifier = Modifier.align(Alignment.BottomEnd)

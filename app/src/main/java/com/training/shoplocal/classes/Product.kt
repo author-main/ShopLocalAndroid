@@ -44,11 +44,10 @@ data class Product(
  * FOREIGN KEY (`category`) REFERENCES `shop_local`.`category` (`id`)
  * FOREIGN KEY (`brand`) REFERENCES `shop_local`.`brands` (`id`)
  */
-
-
-    }
+ }
 
     class Products {
+
         @SerializedName("products")
         private var items: List<Product>? = null
         fun getItems() =
@@ -65,4 +64,4 @@ data class Product(
             items?.isNotEmpty() ?: false
     }
 
-}
+
