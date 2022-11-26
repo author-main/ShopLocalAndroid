@@ -205,8 +205,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
                     .padding(8.dp),
                     contentAlignment = Alignment.Center
                     ) {
-                       Image(modifier = Modifier.fillMaxSize()
-                           .padding(all = 8.dp),
+                       Image(modifier = Modifier.fillMaxSize(),
                         bitmap = bitmap.value,
                         contentDescription = null
                         )
