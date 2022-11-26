@@ -1,7 +1,6 @@
 package com.training.shoplocal.screens.mainscreen
 
 import android.graphics.Bitmap
-import com.training.shoplocal.R
 import android.graphics.BitmapFactory
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
@@ -25,6 +24,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.node.modifierElementOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
@@ -37,12 +37,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.training.shoplocal.*
 import com.training.shoplocal.AppShopLocal.Companion.appContext
-import com.training.shoplocal.DECIMAL_CEPARATOR
+import com.training.shoplocal.R
 import com.training.shoplocal.classes.Product
-import com.training.shoplocal.getPrice
-import com.training.shoplocal.log
+import com.training.shoplocal.classes.downloader.Callback
+import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 import com.training.shoplocal.ui.theme.*
+import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -113,7 +116,9 @@ fun StarPanel(count: Float){
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CardProduct(product: Product? = null, state: ModalBottomSheetState){//}, scope: CoroutineScope){
+fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: CoroutineScope){
+    val viewModel: RepositoryViewModel = viewModel()
+    val brand: String = product.brand?.let { viewModel.getBrand(it) } ?: ""
     val scope = rememberCoroutineScope()
     @Composable
     fun ButtonMore(modifier: Modifier, action: ()-> Unit){
@@ -184,7 +189,7 @@ fun CardProduct(product: Product? = null, state: ModalBottomSheetState){//}, sco
                     .padding(8.dp),
                     contentAlignment = Alignment.Center
                     ) {
-                    val bitmap =
+                    /*val bitmap =
                         try {
                             with(appContext().assets.open("images/cpu_rayzen.jpg")) {
                                 BitmapFactory.decodeStream(this)
@@ -200,9 +205,27 @@ fun CardProduct(product: Product? = null, state: ModalBottomSheetState){//}, sco
                             //alignment = Alignment.BottomEnd,
                             bitmap = it, contentDescription = null
                         )
-                    }
+                    }*/
 
-                    DiscountPanel(modifier = Modifier.align(Alignment.BottomStart), percent = 15)
+                    val imageLink = product.linkimages?.let{
+                        if (it.isNotEmpty())
+                            it[0]
+                    } ?: ""
+
+                    Image(
+                        ImageLinkDownloader.downloadImage(imageLink, object: Callback(){
+                            override fun onComplete(image: Bitmap) {
+                                bitmap = image
+                            }
+
+                            override fun onFailure() {
+                                null
+                            }
+                        }),
+                        contentDescription = null
+                    )
+
+                    DiscountPanel(modifier = Modifier.align(Alignment.BottomStart), percent = product.discount)
                     ButtonMore(modifier = Modifier.align(Alignment.BottomEnd)
                     ) {
                         log("click")
@@ -220,14 +243,15 @@ fun CardProduct(product: Product? = null, state: ModalBottomSheetState){//}, sco
                 }
             }
             // < * Text Price
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            //Row(verticalAlignment = Alignment.CenterVertically) {
                 Card(
+                    modifier = Modifier.padding(top = 4.dp),
                     backgroundColor = BgTextPrice,
                     shape = RoundedCornerShape(6.dp)
                 ){
                     Text(modifier = Modifier.padding(horizontal = 4.dp),
                         fontSize = 17.sp,
-                        text = getPrice(11100f),
+                        text = getSalePrice(product.price, product.discount),
                         fontWeight = FontWeight.SemiBold,
                         color = TextPrice)
                 }
@@ -238,33 +262,42 @@ fun CardProduct(product: Product? = null, state: ModalBottomSheetState){//}, sco
                     fontWeight = FontWeight.SemiBold,
                     color = TextPrice
                 )*/
-                Text(modifier = Modifier.padding(start = 8.dp),
+                Text(modifier = Modifier.padding(top = 4.dp),
                     fontSize = 14.sp,
-                    text = getPrice(11260f),
+                    text = getFormattedPrice(product.price),
                     fontWeight = FontWeight.SemiBold,
                     style = TextStyle(textDecoration = TextDecoration.LineThrough),
                     color = TextPriceDiscount)
 
-            }
+        //    }
             // * >
             // < * Text Promotion
-            Text("Бестселлер",
-                fontSize = 14.sp,
-                color = TextPromotion)
-            // * >
-            // < * Text Brend
-            Text("AMD",
+
+            val promostr: String =
+                if (product.star > 4)
+                    getStringResource(R.string.text_bestseller)
+                else if (product.discount > 0)
+                    getStringResource(R.string.text_action)
+                else
+                    ""
+            if (promostr.isNotEmpty())
+                Text(promostr,
+                    fontSize = 14.sp,
+                    color = TextPromotion)
+
+            if (brand.isNotEmpty())
+            Text(brand,
                 color = TextBrand)
             // * >
             // < * Text Description
-            Text("Процессор Intel Core i3 10105, LGA 1200, OEM",
+            Text(product.name,
                 fontFamily = labelFont,
                 color = TextDescription,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
             // * >
-            StarPanel(2.6f)
+            StarPanel(product.star)
         }
     }
 }

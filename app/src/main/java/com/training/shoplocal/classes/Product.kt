@@ -18,15 +18,15 @@ data class Product(
     @SerializedName("instock")
     val instock:        Int = 1,
     @SerializedName("discount")
-    val discount:       Float,
+    val discount:       Int,
     @SerializedName("price")
     val price:          Float,
     @SerializedName("star")
-    val star:           Byte? = 1,
+    val star:           Float = 1.0f,
     @SerializedName("favorite")
     var favorite:       Byte? = 0,
     @SerializedName("brand")
-    val brand:          Short? = null,
+    val brand:          Int? = null,
     @SerializedName("linkimages")
     val linkimages:     List<String>? = null
     ) {
@@ -45,21 +45,24 @@ data class Product(
  * FOREIGN KEY (`brand`) REFERENCES `shop_local`.`brands` (`id`)
  */
 
-    fun getCountImages(): Int =
-        linkimages?.size ?: 0
 
-    // index = 0, основное изображение для CardProduct
-    fun getImage(index: Int = 0, action: (image: Bitmap?) -> Unit = {}) {
-        if (!linkimages.isNullOrEmpty() && index < linkimages.size)
-            ImageLinkDownloader.downloadImage(linkimages[0], object : Callback {
-                    override fun onComplete(image: Bitmap) {
-                        log("Loaded")
-                        action(image)
-                    }
-                    override fun onFailure() {
-                        log("Not loaded")
-                        action(null)
-                    }
-                })
     }
+
+    class Products {
+        @SerializedName("products")
+        private var items: List<Product>? = null
+        fun getItems() =
+            items
+
+        fun setItems(list: List<Product>) {
+            items = list
+        }
+
+        /*fun isEmpty() =
+            items?.isEmpty() ?: true*/
+
+        fun isNotEmpty() =
+            items?.isNotEmpty() ?: false
+    }
+
 }

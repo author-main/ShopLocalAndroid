@@ -1,10 +1,13 @@
 package com.training.shoplocal.classes
 
-data class Brand(val id: Int) {
-/**
- *  // Структура таблицы BRANDS //
- *  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
- *   `name` VARCHAR(45) NOT NULL,
- *   `link_img` VARCHAR(45) NULL
-*/
-}
+import com.google.gson.annotations.SerializedName
+
+data class Brand(
+    @SerializedName("id")
+    val id: Int,
+    @SerializedName("name")
+    val name: String,
+    @SerializedName("link_img")
+    val link_img: String
+)
+

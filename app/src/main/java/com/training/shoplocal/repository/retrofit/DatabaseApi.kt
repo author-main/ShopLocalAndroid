@@ -2,10 +2,10 @@ package com.training.shoplocal.repository.retrofit
 
 import com.google.gson.GsonBuilder
 import com.training.shoplocal.SERVER_URL
+import com.training.shoplocal.classes.Brand
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.classes.User
 import com.training.shoplocal.log
-import com.training.shoplocal.repository.retrofit.response_classes.Products
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -61,9 +61,18 @@ object DatabaseApi {
         }
     }
 
-    fun getPromoProducts(callback: retrofit2.Callback<Products>){
+    fun getPromoProducts(callback: retrofit2.Callback<Product.Products>){
         try {
-            val call: retrofit2.Call<Products> = service!!.getPromoProducts()
+            val call: retrofit2.Call<Product.Products> = service!!.getPromoProducts()
+            call.enqueue(callback)
+        } catch(e: Exception){
+            log(e.message ?: "error")
+        }
+    }
+
+    fun getBrands(callback: retrofit2.Callback<List<Brand>>){
+        try {
+            val call: retrofit2.Call<List<Brand>> = service!!.getBrands()
             call.enqueue(callback)
         } catch(e: Exception){
             log(e.message ?: "error")

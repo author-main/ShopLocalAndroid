@@ -12,8 +12,10 @@ import androidx.compose.ui.graphics.Color
 import com.training.shoplocal.AppShopLocal.Companion.appContext
 import com.training.shoplocal.ui.theme.SelectedItem
 import com.training.shoplocal.ui.theme.TextFieldBg
+import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
+import kotlin.math.roundToInt
 
 const val SERVER_URL            = "http://192.168.1.10"
 val DECIMAL_CEPARATOR           = DecimalFormatSymbols().decimalSeparator
@@ -77,7 +79,14 @@ fun mToast(value: String){
     Toast.makeText(appContext(), value, Toast.LENGTH_LONG).show()
 }
 
-fun getPrice(value: Float): String{
-    val dec = DecimalFormat("#,###.##")
-    return dec.format(value) + "P"
+fun getFormattedPrice(value: Float): String{
+    val result = value.roundToInt()
+    val dec = DecimalFormat("#,###.00")
+    dec.roundingMode = RoundingMode.HALF_EVEN
+    return dec.format(result) + "P"
+}
+
+fun getSalePrice(price: Float, discount: Int): String{
+    val result = price - (price * discount/100f)
+    return getFormattedPrice(result)
 }

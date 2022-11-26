@@ -1,16 +1,34 @@
 package com.training.shoplocal.repository
 
+import com.training.shoplocal.classes.Brand
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.log
 import com.training.shoplocal.repository.retrofit.DatabaseApi
-import com.training.shoplocal.repository.retrofit.response_classes.Products
 import retrofit2.Call
 import retrofit2.Response
 
 class DatabaseCRUD: DatabaseCRUDInterface {
+
+    override fun getBrands(action: (brands: List<Brand>) -> Unit) {
+        DatabaseApi.getBrands(object: retrofit2.Callback<List<Brand>>{
+            override fun onResponse(call: Call<List<Brand>>, response: Response<List<Brand>>) {
+                response.body()?.let {
+                    if (it.isNotEmpty()) {
+                        val outlist = it
+                        action.invoke(outlist)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<List<Brand>>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+        })
+    }
+
     override fun getPromoProducts(action: (products: List<Product>) -> Unit) {
-        DatabaseApi.getPromoProducts(object: retrofit2.Callback<Products>{
-            override fun onResponse(call: Call<Products>, response: Response<Products>) {
+        DatabaseApi.getPromoProducts(object: retrofit2.Callback<Product.Products>{
+            override fun onResponse(call: Call<Product.Products>, response: Response<Product.Products>) {
                 response.body()?.let {
                     if (it.isNotEmpty()) {
                         val outlist = it.getItems()
@@ -20,7 +38,7 @@ class DatabaseCRUD: DatabaseCRUDInterface {
                 }
             }
 
-            override fun onFailure(call: Call<Products>, t: Throwable) {
+            override fun onFailure(call: Call<Product.Products>, t: Throwable) {
                 log(t.message ?: "ошибка")
             }
         })
