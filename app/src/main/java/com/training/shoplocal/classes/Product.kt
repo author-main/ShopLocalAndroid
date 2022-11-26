@@ -45,23 +45,3 @@ data class Product(
  * FOREIGN KEY (`brand`) REFERENCES `shop_local`.`brands` (`id`)
  */
  }
-
-    class Products {
-
-        @SerializedName("products")
-        private var items: List<Product>? = null
-        fun getItems() =
-            items
-
-        fun setItems(list: List<Product>) {
-            items = list
-        }
-
-        /*fun isEmpty() =
-            items?.isEmpty() ?: true*/
-
-        fun isNotEmpty() =
-            items?.isNotEmpty() ?: false
-    }
-
-

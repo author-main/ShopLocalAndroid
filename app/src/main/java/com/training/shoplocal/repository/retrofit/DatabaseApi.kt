@@ -4,7 +4,6 @@ import com.google.gson.GsonBuilder
 import com.training.shoplocal.SERVER_URL
 import com.training.shoplocal.classes.Brand
 import com.training.shoplocal.classes.Product
-import com.training.shoplocal.classes.Products
 import com.training.shoplocal.classes.User
 import com.training.shoplocal.log
 import retrofit2.Retrofit
@@ -62,9 +61,9 @@ object DatabaseApi {
         }
     }
 
-    fun getPromoProducts(callback: retrofit2.Callback<Products>){
+    fun getPromoProducts(callback: retrofit2.Callback<List<Product>>){
         try {
-            val call: retrofit2.Call<Products> = service!!.getPromoProducts()
+            val call: retrofit2.Call<List<Product>> = service!!.getPromoProducts()
             call.enqueue(callback)
         } catch(e: Exception){
             log(e.message ?: "error")

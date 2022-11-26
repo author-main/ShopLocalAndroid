@@ -66,7 +66,7 @@ class Repository: DAOinterface {
         databaseCRUD.getPromoProducts(action)
     }
 
-    fun getBrands(action: (products: List<Brand>) -> Unit){
+    fun getBrands(action: (brands: List<Brand>) -> Unit){
         databaseCRUD.getBrands(action)
     }
 
