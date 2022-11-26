@@ -29,9 +29,9 @@ val TextDescription     = TextLightGray
 val TextDiscount        = Color.White
 val BgDiscount          = Color(0xFFF30F46)
 val ImageStarOn         = TextOrange
-val ImageStarOff        = TextPrice
+val ImageStarOff        = Color(0xFF393E46)
 val BorderButton        = Color(0xFFAAAAAA)
-val ImageButton         = TextPrice
+val ImageButton         = Color(0xFF393E46)
 val ImageFavoriteOff    = Color.White
 val ImageFavoriteOn     = BgDiscount
 // >

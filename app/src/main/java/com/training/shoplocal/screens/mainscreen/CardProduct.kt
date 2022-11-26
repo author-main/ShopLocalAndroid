@@ -12,10 +12,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.SnackbarDefaults.backgroundColor
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -173,18 +170,20 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
     val imageLink: String = product.linkimages?.let{
         if (it.isNotEmpty()) it[0] else ""
     } ?: ""
-    //log("$SERVER_URL/images/$imageLink")
     val bitmap = remember{mutableStateOf(ImageBitmap(5, 5,
-                                         hasAlpha = false, config = ImageBitmapConfig.Argb8888))}
-    ImageLinkDownloader.downloadImage("$SERVER_URL/images/$imageLink", object: Callback{
-        override fun onComplete(image: Bitmap) {
-            val loadimage = image.asImageBitmap()
-            bitmap.value = loadimage
-        }
-        override fun onFailure() {
-            log("error download image")
-        }
-    })
+                                         hasAlpha = true, config = ImageBitmapConfig.Argb8888))}
+    LaunchedEffect(true) {
+        ImageLinkDownloader.downloadImage("$SERVER_URL/images/$imageLink", object : Callback {
+            override fun onComplete(image: Bitmap) {
+                val loadimage = image.asImageBitmap()
+                bitmap.value = loadimage
+            }
+
+            override fun onFailure() {
+                log("error download image")
+            }
+        })
+    }
 
 
 
@@ -205,7 +204,8 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
                     .padding(8.dp),
                     contentAlignment = Alignment.Center
                     ) {
-                       Image(modifier = Modifier.fillMaxSize(),
+                       Image(modifier = Modifier.fillMaxSize()
+                           .padding(all = 8.dp),
                         bitmap = bitmap.value,
                         contentDescription = null
                         )
