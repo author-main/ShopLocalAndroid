@@ -3,6 +3,7 @@ package com.training.shoplocal.viewmodel
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.training.shoplocal.*
+import com.training.shoplocal.classes.Brand
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.classes.SORT_PROPERTY
 import com.training.shoplocal.classes.SORT_TYPE
@@ -17,12 +18,15 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private val filterData = FilterData()*/
     //val activeProduct = Product()
 
+    private var brands = listOf<Brand>()
+
     private val _products = MutableStateFlow<MutableList<Product>>(mutableListOf<Product>())
     val products = _products.asStateFlow()
 
     private val actionLogin: (result: Int) -> Unit = {
         val result = it > 0
         if (result) {
+            getBrands()
             getPromoProducts()//Product(33)
             ScreenRouter.navigateTo(ScreenItem.MainScreen)
             authorizeUser()
@@ -102,9 +106,17 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     private fun getPromoProducts(){
         repository.getPromoProducts() { products ->
-            log("$products")
             _products.value = products.toMutableList()
         }
     }
+
+    private fun getBrands(){
+        repository.getBrands() { it ->
+            brands = it
+        }
+    }
+
+    fun getBrand(id: Int) =
+        brands.find {it.id == id}?.name ?: ""
 
  }

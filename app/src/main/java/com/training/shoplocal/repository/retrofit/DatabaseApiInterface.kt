@@ -1,9 +1,10 @@
 package com.training.shoplocal.repository.retrofit
 
 import com.google.gson.annotations.SerializedName
+import com.training.shoplocal.classes.Brand
 import com.training.shoplocal.classes.Product
+import com.training.shoplocal.classes.Products
 import com.training.shoplocal.classes.User
-import com.training.shoplocal.repository.retrofit.response_classes.Products
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -18,4 +19,9 @@ interface DatabaseApiInterface {
 
     @GET("/api/get_promo_products")
     fun getPromoProducts(): Call<Products>
+
+    @GET("/api/get_brands")
+    fun getBrands(): Call<List<Brand>>
+
+
 }

@@ -4,6 +4,7 @@ package com.training.shoplocal.repository
 
 import android.content.Context
 import com.training.shoplocal.AppShopLocal.Companion.appContext
+import com.training.shoplocal.classes.Brand
 import com.training.shoplocal.classes.Category
 import com.training.shoplocal.classes.DataDisplay
 import com.training.shoplocal.classes.Product
@@ -63,6 +64,10 @@ class Repository: DAOinterface {
 
     fun getPromoProducts(action: (products: List<Product>) -> Unit){
         databaseCRUD.getPromoProducts(action)
+    }
+
+    fun getBrands(action: (products: List<Brand>) -> Unit){
+        databaseCRUD.getBrands(action)
     }
 
     fun getCategories() {

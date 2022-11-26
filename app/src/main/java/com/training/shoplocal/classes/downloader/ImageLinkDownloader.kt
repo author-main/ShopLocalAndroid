@@ -108,7 +108,9 @@ class ImageLinkDownloader private constructor(){
             if (iterator.next().value.isDone) iterator.remove()
         }
 
-        val conn = URL(link).openConnection() as HttpURLConnection
+        val http_link = "$SERVER_URL/api/get_product"
+        //val conn = URL(link).openConnection() as HttpURLConnection
+        val conn = URL(http_link).openConnection() as HttpURLConnection
         val timestamp = if (conn.responseCode != HttpURLConnection.HTTP_OK) {
                             conn.requestMethod = "HEAD"
                             conn.lastModified
