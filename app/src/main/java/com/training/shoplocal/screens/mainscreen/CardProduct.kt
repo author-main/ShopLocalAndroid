@@ -62,15 +62,10 @@ import java.text.DecimalFormatSymbols
 
 @Composable
 fun AnimateLinkDownload(componentSize: Size) {
-   /* val rSize = remember {
-        mutableStateOf( componentSize )
-    }
-    log("animatelink")*/
     if (componentSize.width > 0) {
         val dpSize = LocalDensity.current.run {
             componentSize.toDpSize()
         }
-
         val padding = LocalDensity.current.run {
             16.dp.toPx()
         }
@@ -95,10 +90,6 @@ fun AnimateLinkDownload(componentSize: Size) {
             rotate(degrees = 45f) {
                 translate(animatedPos, -100f) {
                     drawRect(
-                        /*brush = Brush.linearGradient(
-                            colors = listOf(Color.White, Teal200),
-                            tileMode = TileMode.Mirror
-                        )*/
                         brush = Brush.horizontalGradient(
                             colors = listOf(
                                 Color.White,
@@ -108,15 +99,10 @@ fun AnimateLinkDownload(componentSize: Size) {
                             startX = 0f,
                             endX   = widthGradient
                         ),
-                        //topLeft = Offset(animatedPos,-100f),
-
                         size = Size(widthGradient, heightGradient)
-
                     )
-                    //}
                 }
             }
-
         }
     }
 }
