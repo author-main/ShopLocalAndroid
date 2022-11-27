@@ -1,8 +1,12 @@
 package com.training.shoplocal.screens.mainscreen
 
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.foundation.Canvas
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.LinearGradient
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -16,8 +20,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.node.modifierElementOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -29,8 +38,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.toSize
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.*
 import com.training.shoplocal.AppShopLocal.Companion.appContext
@@ -43,9 +54,73 @@ import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.io.IOException
+import java.lang.Math.sqrt
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
+
+
+@Composable
+fun AnimateLinkDownload(componentSize: Size) {
+   /* val rSize = remember {
+        mutableStateOf( componentSize )
+    }
+    log("animatelink")*/
+    if (componentSize.width > 0) {
+        val dpSize = LocalDensity.current.run {
+            componentSize.toDpSize()
+        }
+
+        val padding = LocalDensity.current.run {
+            16.dp.toPx()
+        }
+        val heightGradient = kotlin.math.sqrt(componentSize.width * componentSize.width +
+                    componentSize.height * componentSize.height) + padding
+        val widthGradient  = 120f
+        val infiniteTransition = rememberInfiniteTransition()
+        val animatedPos by infiniteTransition.animateFloat(
+            initialValue = -2*widthGradient,
+            targetValue = componentSize.width + widthGradient,
+            animationSpec = infiniteRepeatable(
+                animation = tween(
+                    durationMillis = 1000,
+                    easing = FastOutLinearInEasing
+                ),
+                repeatMode = RepeatMode.Reverse
+            )
+        )
+        Canvas(
+            modifier = Modifier.size(dpSize)
+        ) {
+            rotate(degrees = 45f) {
+                translate(animatedPos, -100f) {
+                    drawRect(
+                        /*brush = Brush.linearGradient(
+                            colors = listOf(Color.White, Teal200),
+                            tileMode = TileMode.Mirror
+                        )*/
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(
+                                Color.White,
+                                Color(0xFFDDDDDD),
+                                Color.White
+                            ),
+                            startX = 0f,
+                            endX   = widthGradient
+                        ),
+                        //topLeft = Offset(animatedPos,-100f),
+
+                        size = Size(widthGradient, heightGradient)
+
+                    )
+                    //}
+                }
+            }
+
+        }
+    }
+}
+
 
 @Composable
 fun DiscountPanel(modifier: Modifier, percent: Int){
@@ -176,27 +251,33 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
     val context = LocalContext.current
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
 
-
+    val animateSize = remember{mutableStateOf(Size.Zero)}
     val imageLink = getLinkImage(0, product.linkimages)
 
         /*product.linkimages?.let{
         if (it.isNotEmpty()) it[0] else ""
     } ?: ""*/
-
+    /*val downloadImage = remember {
+        mutableStateOf(true)
+    }*/
     val bitmap = remember{mutableStateOf(ImageBitmap(1, 1,
                                          hasAlpha = true, config = ImageBitmapConfig.Argb8888))}
-    if (bitmap.value.width == 1)
-    LaunchedEffect(true) {
-        ImageLinkDownloader.downloadImage(
-            imageLink?.let {"$SERVER_URL/images/$it"}, object : Callback {
-            override fun onComplete(image: Bitmap) {
-                bitmap.value = image.asImageBitmap()
-            }
+    val downloadImage = bitmap.value.width == 1
+    if (downloadImage) {
+        LaunchedEffect(true) {
+            ImageLinkDownloader.downloadImage(
+                imageLink?.let { "$SERVER_URL/images/$it" }, object : Callback {
+                    override fun onComplete(image: Bitmap) {
+                        bitmap.value = image.asImageBitmap()
+                       // downloadImage = false
+                    }
 
-            override fun onFailure() {
-                //log("error download image")
-            }
-        })
+                    override fun onFailure() {
+                        //log("error download image")
+                    }
+                })
+        }
+
     }
 
 
@@ -215,14 +296,25 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
             ) {
                 Box(modifier = Modifier
                     .fillMaxSize()
-                    .padding(8.dp),
+                    .padding(8.dp)
+                    .onGloballyPositioned { coordinates ->
+                        animateSize.value = coordinates.size.toSize()
+                    },
                     contentAlignment = Alignment.Center
                     ) {
-                       Image(modifier = Modifier.fillMaxSize()
-                           .padding(all = 8.dp),
-                        bitmap = bitmap.value,
-                        contentDescription = null
+                    if (downloadImage) {
+                        log("animatelink")
+                        AnimateLinkDownload(animateSize.value)
+                    } else {
+                        log("downloaded")
+                        Image(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(all = 8.dp),
+                            bitmap = bitmap.value,
+                            contentDescription = null
                         )
+                    }
 
                     DiscountPanel(modifier = Modifier.align(Alignment.BottomStart), percent = product.discount)
                     ButtonMore(modifier = Modifier.align(Alignment.BottomEnd)

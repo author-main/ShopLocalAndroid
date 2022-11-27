@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.os.Handler
 import android.os.Looper
 import com.training.shoplocal.*
+import kotlinx.coroutines.delay
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
@@ -29,6 +30,11 @@ class ImageLinkDownloader private constructor() {
 
     @Synchronized
     private fun downloadImage(link: String, callback: Callback) {
+
+        /*Handler(Looper.getMainLooper()).post {
+            Thread.sleep(4000)
+        }*/
+
         val iterator = listDownloadTask.iterator()
         while (iterator.hasNext()) {
             if (iterator.next().value.isDone) iterator.remove()

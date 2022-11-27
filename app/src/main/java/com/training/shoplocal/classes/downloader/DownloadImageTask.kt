@@ -2,6 +2,8 @@ package com.training.shoplocal.classes.downloader
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Handler
+import android.os.Looper
 import com.training.shoplocal.*
 import java.io.FileOutputStream
 import java.net.HttpURLConnection
@@ -49,6 +51,12 @@ class DownloadImageTask(private val link: String, val callback: (bitmap: Bitmap?
             log("$filename - загружено из кэша")
             bitmap = loadBitmap(filename)
         }
+
+        /*Handler(Looper.getMainLooper()).post {
+            Thread.sleep(3000)
+            callback(bitmap, fileTimestamp)
+        }*/
+        for (i in 1..1000000000){}
         callback(bitmap, fileTimestamp)
         return bitmap
     }
