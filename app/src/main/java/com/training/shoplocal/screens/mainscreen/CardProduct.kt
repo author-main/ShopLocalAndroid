@@ -177,7 +177,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
 
 
-    val imageLink = getLinkImage(1, product.linkimages)
+    val imageLink = getLinkImage(0, product.linkimages)
 
         /*product.linkimages?.let{
         if (it.isNotEmpty()) it[0] else ""

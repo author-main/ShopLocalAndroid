@@ -19,9 +19,7 @@ class DatabaseCRUD: DatabaseCRUDInterface {
                     }
                 }
             }
-
             override fun onFailure(call: Call<List<Brand>>, t: Throwable) {
-                TODO("Not yet implemented")
             }
         })
     }

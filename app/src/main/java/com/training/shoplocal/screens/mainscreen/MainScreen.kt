@@ -33,7 +33,7 @@ fun MainScreen(state: ModalBottomSheetState){
     ) {
       //log(products.size.toString())
       if (products.isNotEmpty()) {
-          CardProduct(products[0], state = state)
+          CardProduct(products[3], state = state)
       }
       // CardProduct(products[0], state = state)*/
     }
