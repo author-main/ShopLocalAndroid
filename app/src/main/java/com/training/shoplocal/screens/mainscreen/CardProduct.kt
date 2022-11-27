@@ -164,23 +164,37 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
 
     }
 
+    fun getLinkImage(index: Int, images: List<String>?): String?{
+        return images?.let{
+            if (index < it.size)
+                it[index]
+            else
+                null
+        }
+    }
+
     val context = LocalContext.current
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
 
-    val imageLink: String = product.linkimages?.let{
+
+    val imageLink = getLinkImage(1, product.linkimages)
+
+        /*product.linkimages?.let{
         if (it.isNotEmpty()) it[0] else ""
-    } ?: ""
-    val bitmap = remember{mutableStateOf(ImageBitmap(5, 5,
+    } ?: ""*/
+
+    val bitmap = remember{mutableStateOf(ImageBitmap(1, 1,
                                          hasAlpha = true, config = ImageBitmapConfig.Argb8888))}
+    if (bitmap.value.width == 1)
     LaunchedEffect(true) {
-        ImageLinkDownloader.downloadImage("$SERVER_URL/images/$imageLink", object : Callback {
+        ImageLinkDownloader.downloadImage(
+            imageLink?.let {"$SERVER_URL/images/$it"}, object : Callback {
             override fun onComplete(image: Bitmap) {
-                val loadimage = image.asImageBitmap()
-                bitmap.value = loadimage
+                bitmap.value = image.asImageBitmap()
             }
 
             override fun onFailure() {
-                log("error download image")
+                //log("error download image")
             }
         })
     }
