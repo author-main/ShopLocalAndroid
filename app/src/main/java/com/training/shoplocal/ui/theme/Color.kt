@@ -32,6 +32,6 @@ val ImageStarOn         = TextOrange
 val ImageStarOff        = Color(0xFF393E46)
 val BorderButton        = Color(0xFFAAAAAA)
 val ImageButton         = Color(0xFF393E46)
-val ImageFavoriteOff    = Color.White
+val ImageFavoriteOff    = Color(0xFFAAAAAA)
 val ImageFavoriteOn     = BgDiscount
 // >
