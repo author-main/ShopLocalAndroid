@@ -201,7 +201,9 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
         val checked = remember{mutableStateOf(favorite > 0)}
         //log("recomposition favorite")
         Image(
-            painter = painterResource(R.drawable.ic_favorite),
+            //painter = painterResource(R.drawable.ic_favorite)
+            painter = if (checked.value) painterResource(R.drawable.ic_favorite)
+            else painterResource(R.drawable.ic_favorite_border),
             contentDescription = null,
             contentScale = ContentScale.None,
             colorFilter = if (checked.value) ColorFilter.tint(ImageFavoriteOn)
@@ -216,7 +218,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
                     action(checked.value)
                 }
         )
-        Image(
+    /*    Image(
             painter = painterResource(R.drawable.ic_favorite_border),
             contentDescription = null,
             contentScale = ContentScale.None,
@@ -224,7 +226,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
             else ColorFilter.tint(BgCard),
             modifier = modifier
                 .size(24.dp)
-        )
+        )*/
 
     }
 
