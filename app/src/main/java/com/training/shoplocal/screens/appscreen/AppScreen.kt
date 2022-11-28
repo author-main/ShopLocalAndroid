@@ -24,8 +24,8 @@ import com.training.shoplocal.ui.theme.PrimaryDark
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AppScreen(){
-    val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
-    BottomSheet(state) {
+      val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+      BottomSheet(state) {
         val navController = rememberNavController()
         Scaffold(bottomBar = {
             BottomNavigationBar(navController)

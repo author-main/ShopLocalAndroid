@@ -22,6 +22,8 @@ import com.training.shoplocal.R
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.log
 import com.training.shoplocal.screens.*
+import com.training.shoplocal.screens.mainscreen.MainMenuItem
+import com.training.shoplocal.screens.mainscreen.MainMenuRouter
 import com.training.shoplocal.screens.mainscreen.MainScreen
 import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.ui.theme.TextFieldBg
@@ -65,7 +67,7 @@ private fun BottomSheetItem(@DrawableRes id: Int, text: String, divider: Boolean
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BottomSheet(state: ModalBottomSheetState, content: @Composable ()-> Unit = {}){
-    //val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+//    val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     //val scope = rememberCoroutineScope()
     ModalBottomSheetLayout(
         sheetContent = {
@@ -107,17 +109,22 @@ private fun BottomSheetContent(state: ModalBottomSheetState){
         scope.launch {
             delay(150)
             state.hide()
+            delay(100)
+            MainMenuRouter.reset()
         }
     }
     val textItems = stringArrayResource(id = R.array.bottomsheet_product_items)
     BottomSheetItem(R.drawable.ic_brend_bs, textItems[0]){
-
+        MainMenuRouter.clickTo(MainMenuItem.BrandItem)
+        hide()
     }
     BottomSheetItem(R.drawable.ic_favorite_bs, textItems[1]){
-
+        MainMenuRouter.clickTo(MainMenuItem.FavoriteItem)
+        hide()
     }
     BottomSheetItem(R.drawable.ic_product_bs, textItems[2]){
-
+        MainMenuRouter.clickTo(MainMenuItem.ProductsItem)
+        hide()
     }
     BottomSheetItem(R.drawable.ic_cancel_bs, textItems[3], divider = false){
         hide()

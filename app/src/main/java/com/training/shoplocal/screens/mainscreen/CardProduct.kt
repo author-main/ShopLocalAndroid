@@ -170,14 +170,28 @@ fun StarPanel(count: Float){
     }
 }
 
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: CoroutineScope){
+fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((product: Product, menuindex: Int) -> Unit)? = null){
+//fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: CoroutineScope){
     val viewModel: RepositoryViewModel = viewModel()
     val brand: String = product.brand?.let { viewModel.getBrand(it) } ?: ""
     val scope = rememberCoroutineScope()
     @Composable
     fun ButtonMore(modifier: Modifier, action: ()-> Unit){
+        /*when (MainMenuRouter.current) {
+            MainMenuItem.BrandItem -> {
+                log("Обработка Brand")
+            }
+            MainMenuItem.FavoriteItem -> {
+                val checked = product.favorite > 0
+                viewModel.setProductFavorite(product.id, !checked)
+            }
+            MainMenuItem.ProductsItem -> {
+                log("Обработка Products")
+            } else ->{}
+        }*/
         Image(
             painter = painterResource(R.drawable.ic_more),
             contentDescription = null,
@@ -197,8 +211,13 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
     }
     @Composable
     fun ButtonFavorite(modifier: Modifier, action: (checked: Boolean)-> Unit){
-        val favorite: Byte = product?.favorite ?: 0
-        val checked = remember{mutableStateOf(favorite > 0)}
+        val checked = remember{
+            mutableStateOf(product.favorite > 0)
+        }
+
+        //val checked = productFavorite.value > 0
+
+        //checked.value = product.favorite > 0
         //log("recomposition favorite")
         Image(
             //painter = painterResource(R.drawable.ic_favorite)
@@ -214,7 +233,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
                 .clickable/*(interactionSource = remember { MutableInteractionSource() },
                            indication = rememberRipple(radius = 16.dp)) */{
                     checked.value = !checked.value
-                    //product.favorite = if (checked.value) 1 else 0
+                    product.favorite = if (checked.value) 1 else 0
                     action(checked.value)
                 }
         )
@@ -238,6 +257,10 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
                 null
         }
     }
+
+
+
+
 
     //log("recomposition card")
 

@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.log
+import com.training.shoplocal.screens.appscreen.BottomSheet
 import com.training.shoplocal.ui.theme.BgScreenDark
 import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.viewmodel.RepositoryViewModel
@@ -31,10 +32,9 @@ fun MainScreen(state: ModalBottomSheetState){
         .fillMaxSize()
         .background(BgScreenDark)
     ) {
-      //log(products.size.toString())
+
       if (products.isNotEmpty()) {
           CardProduct(products[0], state = state)
       }
-      // CardProduct(products[0], state = state)*/
     }
-}
+ }
