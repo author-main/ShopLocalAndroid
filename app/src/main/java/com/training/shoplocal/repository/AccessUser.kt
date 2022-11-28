@@ -71,9 +71,10 @@ class AccessUser(): AccessUserInterface {
                     */
                     val id = response.body()?.id ?: 0
                     if (id > 0) {
-                        action?.invoke(id)
+                        //user.id = id
                         saveUserPassword(password)
                         user.saveUserData()
+                        action?.invoke(id)
                         // log("$id")
                         if (finger)
                             loginState.changePassword(password)

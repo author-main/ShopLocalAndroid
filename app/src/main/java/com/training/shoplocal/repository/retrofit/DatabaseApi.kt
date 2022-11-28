@@ -61,9 +61,9 @@ object DatabaseApi {
         }
     }
 
-    fun getPromoProducts(callback: retrofit2.Callback<List<Product>>){
+    fun getPromoProducts(id: Int, callback: retrofit2.Callback<List<Product>>){
         try {
-            val call: retrofit2.Call<List<Product>> = service!!.getPromoProducts()
+            val call: retrofit2.Call<List<Product>> = service!!.getPromoProducts(id)
             call.enqueue(callback)
         } catch(e: Exception){
             //log(e.message ?: "error")
@@ -71,20 +71,15 @@ object DatabaseApi {
     }
 
 
-    suspend fun updateFavorite(id: Int, value: Byte): Boolean{
+    suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte): Boolean{
         var result = false
         try {
-            val response = service!!.updateFavorite(id, value)
-
-            //result = true
+            val response = service!!.updateFavorite(id_user, id_product, value)
             response.body()?.let{body ->
                 result = body == 1
             }
         } catch(e: Exception){
-            log(e.message ?: "error")
         }
-
-        log("Update Favorite: $result")
         return result
     }
 
@@ -93,7 +88,7 @@ object DatabaseApi {
             val call: retrofit2.Call<List<Brand>> = service!!.getBrands()
             call.enqueue(callback)
         } catch(e: Exception){
-            log(e.message ?: "error")
+           // log(e.message ?: "error")
         }
     }
 

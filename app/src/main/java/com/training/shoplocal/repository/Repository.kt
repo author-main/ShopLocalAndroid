@@ -62,8 +62,8 @@ class Repository: DAOinterface {
         databaseCRUD.getProduct(id, action)
     }
 
-    fun getPromoProducts(action: (products: List<Product>) -> Unit){
-        databaseCRUD.getPromoProducts(action)
+    fun getPromoProducts(id: Int, action: (products: List<Product>) -> Unit){
+        databaseCRUD.getPromoProducts(id, action)
     }
 
     fun getBrands(action: (brands: List<Brand>) -> Unit){
@@ -74,7 +74,7 @@ class Repository: DAOinterface {
         databaseCRUD.getCategories()
     }
 
-    suspend fun updateFavorite(id: Int, value: Byte){
-        databaseCRUD.updateFavorite(id, value)
+    suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte){
+        databaseCRUD.updateFavorite(id_user, id_product, value)
     }
 }

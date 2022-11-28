@@ -4,10 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.training.shoplocal.*
-import com.training.shoplocal.classes.Brand
-import com.training.shoplocal.classes.Product
-import com.training.shoplocal.classes.SORT_PROPERTY
-import com.training.shoplocal.classes.SORT_TYPE
+import com.training.shoplocal.classes.*
 import com.training.shoplocal.repository.Repository
 import com.training.shoplocal.screens.ScreenItem
 import com.training.shoplocal.screens.ScreenRouter
@@ -21,7 +18,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     /*private val sortData = SortData()
     private val filterData = FilterData()*/
     //val activeProduct = Product()
-
+    private var USER_ID: Int = -1
     private var brands = listOf<Brand>()
 
     private val _products = MutableStateFlow<MutableList<Product>>(mutableListOf<Product>())
@@ -30,6 +27,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private val actionLogin: (result: Int) -> Unit = {
         val result = it > 0
         if (result) {
+            USER_ID = it
             getBrands()
             getPromoProducts()//Product(33)
             ScreenRouter.navigateTo(ScreenItem.MainScreen)
@@ -109,7 +107,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     }
 
     private fun getPromoProducts(){
-        repository.getPromoProducts() { products ->
+        repository.getPromoProducts(USER_ID) { products ->
             _products.value = products.toMutableList()
         }
     }
@@ -128,7 +126,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         products.value.find { it.id== id }?.let{
             it.favorite = favorite
             viewModelScope.launch {
-                repository.updateFavorite(it.id, favorite)
+                repository.updateFavorite(USER_ID, it.id, favorite)
             }
         }
     }

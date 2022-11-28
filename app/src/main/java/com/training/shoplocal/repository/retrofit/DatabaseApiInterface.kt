@@ -18,12 +18,16 @@ interface DatabaseApiInterface {
     fun getProduct(@Query("id") id: Int): Call<Product>
 
     @GET("/api/get_promo_products")
-    fun getPromoProducts(): Call<List<Product>>
+    fun getPromoProducts(@Query("id") id: Int): Call<List<Product>>
 
     @GET("/api/get_brands")
     fun getBrands(): Call<List<Brand>>
 
+    /**
+     *  Используем response без обработки результата запроса.
+     *  Обновился статус избранного или нет, не важно.
+     */
     @FormUrlEncoded
     @POST("/api/update_favorite")
-    suspend fun updateFavorite(@Field("id") id: Int, @Field("favorite") value: Byte): Response<Int>
+    suspend fun updateFavorite(@Field("id_user") id_user: Int, @Field("id_product") id_product: Int, @Field("favorite") value: Byte): Response<Int>
 }

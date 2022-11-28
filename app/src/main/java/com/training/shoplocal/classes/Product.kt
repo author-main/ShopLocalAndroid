@@ -24,7 +24,7 @@ data class Product(
     @SerializedName("star")
     val star:           Float = 1.0f,
     @SerializedName("favorite")
-    var favorite:       Byte? = 0,
+    var favorite:       Byte = 0,
     @SerializedName("brand")
     val brand:          Int? = null,
     @SerializedName("linkimages")

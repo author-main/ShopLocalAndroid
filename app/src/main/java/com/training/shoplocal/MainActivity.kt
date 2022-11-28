@@ -34,7 +34,7 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
 //        log("start app")
         viewModel.passContextFingerPrint(this)
 //        val repository = AppShopLocal.appRepository();
-        val user = getUserData()
+        //val user = getUserData()
 
         //val passwordState = PasswordViewState.getPasswordState()
         setContent {
