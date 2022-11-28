@@ -70,6 +70,24 @@ object DatabaseApi {
         }
     }
 
+
+    suspend fun updateFavorite(id: Int, value: Byte): Boolean{
+        var result = false
+        try {
+            val response = service!!.updateFavorite(id, value)
+
+            //result = true
+            response.body()?.let{body ->
+                result = body == 1
+            }
+        } catch(e: Exception){
+            log(e.message ?: "error")
+        }
+
+        log("Update Favorite: $result")
+        return result
+    }
+
     fun getBrands(callback: retrofit2.Callback<List<Brand>>){
         try {
             val call: retrofit2.Call<List<Brand>> = service!!.getBrands()

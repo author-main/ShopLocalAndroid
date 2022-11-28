@@ -2,6 +2,7 @@ package com.training.shoplocal.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.training.shoplocal.*
 import com.training.shoplocal.classes.Brand
 import com.training.shoplocal.classes.Product
@@ -12,6 +13,7 @@ import com.training.shoplocal.screens.ScreenItem
 import com.training.shoplocal.screens.ScreenRouter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -120,5 +122,15 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     fun getBrand(id: Int) =
         brands.find {it.id == id}?.name ?: ""
+
+    fun setProductFavorite(id: Int, value: Boolean){
+        val favorite: Byte = if (value) 1 else 0
+        products.value.find { it.id== id }?.let{
+            it.favorite = favorite
+            viewModelScope.launch {
+                repository.updateFavorite(it.id, favorite)
+            }
+        }
+    }
 
  }

@@ -73,4 +73,8 @@ class Repository: DAOinterface {
     fun getCategories() {
         databaseCRUD.getCategories()
     }
+
+    suspend fun updateFavorite(id: Int, value: Byte){
+        databaseCRUD.updateFavorite(id, value)
+    }
 }

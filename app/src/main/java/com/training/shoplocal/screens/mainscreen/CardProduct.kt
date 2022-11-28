@@ -196,9 +196,10 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
         )
     }
     @Composable
-    fun ButtonFavorite(modifier: Modifier, action: ()-> Unit){
+    fun ButtonFavorite(modifier: Modifier, action: (checked: Boolean)-> Unit){
         val favorite: Byte = product?.favorite ?: 0
         val checked = remember{mutableStateOf(favorite > 0)}
+        log("recomposition favorite")
         Image(
             painter = painterResource(R.drawable.ic_favorite),
             contentDescription = null,
@@ -211,7 +212,8 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
                 .clickable/*(interactionSource = remember { MutableInteractionSource() },
                            indication = rememberRipple(radius = 16.dp)) */{
                     checked.value = !checked.value
-                    action()
+                    //product.favorite = if (checked.value) 1 else 0
+                    action(checked.value)
                 }
         )
         Image(
@@ -234,6 +236,8 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
                 null
         }
     }
+
+    log("recomposition card")
 
     val context = LocalContext.current
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
@@ -320,7 +324,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
 
                     ButtonFavorite(modifier = Modifier.align(Alignment.TopEnd)
                     ) {
-
+                        viewModel.setProductFavorite(product.id, it)
                     }
                 }
             }

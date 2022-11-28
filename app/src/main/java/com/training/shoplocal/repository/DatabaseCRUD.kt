@@ -58,7 +58,10 @@ class DatabaseCRUD: DatabaseCRUDInterface {
     }
 
     override fun getCategories() {
-        TODO("Not yet implemented")
+
     }
 
+    override suspend fun updateFavorite(id: Int, value: Byte): Boolean {
+        return DatabaseApi.updateFavorite(id, value)
+    }
 }

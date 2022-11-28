@@ -5,6 +5,7 @@ import com.training.shoplocal.classes.Brand
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.classes.User
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.*
 
 
@@ -22,5 +23,7 @@ interface DatabaseApiInterface {
     @GET("/api/get_brands")
     fun getBrands(): Call<List<Brand>>
 
-
+    @FormUrlEncoded
+    @POST("/api/update_favorite")
+    suspend fun updateFavorite(@Field("id") id: Int, @Field("favorite") value: Byte): Response<Int>
 }
