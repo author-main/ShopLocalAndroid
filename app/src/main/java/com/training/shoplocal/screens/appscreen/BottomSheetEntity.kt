@@ -109,8 +109,8 @@ private fun BottomSheetContent(state: ModalBottomSheetState){
         scope.launch {
             delay(150)
             state.hide()
-            delay(100)
-            MainMenuRouter.reset()
+/*            delay(10)
+            MainMenuRouter.reset()*/
         }
     }
     val textItems = stringArrayResource(id = R.array.bottomsheet_product_items)

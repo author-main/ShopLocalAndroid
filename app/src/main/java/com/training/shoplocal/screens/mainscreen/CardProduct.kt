@@ -50,6 +50,7 @@ import com.training.shoplocal.R
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.classes.downloader.Callback
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
+import com.training.shoplocal.screens.appscreen.BottomSheet
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -175,23 +176,36 @@ fun StarPanel(count: Float){
 @Composable
 fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((product: Product, menuindex: Int) -> Unit)? = null){
 //fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: CoroutineScope){
+   /* val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+    BottomSheet(state) {*/
+    val checked = remember{
+        mutableStateOf(product.favorite > 0)
+    }
     val viewModel: RepositoryViewModel = viewModel()
     val brand: String = product.brand?.let { viewModel.getBrand(it) } ?: ""
     val scope = rememberCoroutineScope()
+
+    when (MainMenuRouter.current) {
+        MainMenuItem.BrandItem -> {
+            log("Обработка Brand")
+            MainMenuRouter.reset()
+        }
+        MainMenuItem.FavoriteItem -> {
+            product.favorite = if (product.favorite > 0) 0 else 1
+            checked.value = product.favorite > 0
+            MainMenuRouter.reset()
+            viewModel.setProductFavorite(product.id, checked.value)
+        }
+        MainMenuItem.ProductsItem -> {
+            log("Обработка Products")
+            MainMenuRouter.reset()
+        } else ->{}
+    }
+
+
+
     @Composable
     fun ButtonMore(modifier: Modifier, action: ()-> Unit){
-        /*when (MainMenuRouter.current) {
-            MainMenuItem.BrandItem -> {
-                log("Обработка Brand")
-            }
-            MainMenuItem.FavoriteItem -> {
-                val checked = product.favorite > 0
-                viewModel.setProductFavorite(product.id, !checked)
-            }
-            MainMenuItem.ProductsItem -> {
-                log("Обработка Products")
-            } else ->{}
-        }*/
         Image(
             painter = painterResource(R.drawable.ic_more),
             contentDescription = null,
@@ -211,11 +225,8 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
     }
     @Composable
     fun ButtonFavorite(modifier: Modifier, action: (checked: Boolean)-> Unit){
-        val checked = remember{
-            mutableStateOf(product.favorite > 0)
-        }
 
-        //val checked = productFavorite.value > 0
+        //var checked = product.favorite > 0
 
         //checked.value = product.favorite > 0
         //log("recomposition favorite")
@@ -262,12 +273,12 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
 
 
 
-    //log("recomposition card")
+    log("recomposition card")
 
     val context = LocalContext.current
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
 
-    val visible = MutableTransitionState(false)
+    val visible = remember{MutableTransitionState(false)}
     val animateSize = remember{mutableStateOf(Size.Zero)}
     val imageLink = getLinkImage(0, product.linkimages)
 
@@ -411,8 +422,8 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
             StarPanel(product.star)
         }
     }
-}
 
+}
 /*@Preview(showBackground = true)
 @Composable
 fun CardProducttPreview() {

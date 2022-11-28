@@ -26,15 +26,19 @@ import kotlinx.coroutines.CoroutineScope
 @Composable
 //fun MainScreen(state: ModalBottomSheetState, scope: CoroutineScope){
 fun MainScreen(state: ModalBottomSheetState){
+    //val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val viewModel: RepositoryViewModel = viewModel()
     val products: MutableList<Product> by viewModel.products.collectAsState()
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(BgScreenDark)
-    ) {
+    //BottomSheet(state) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(BgScreenDark)
+        ) {
 
-      if (products.isNotEmpty()) {
-          CardProduct(products[0], state = state)
-      }
-    }
+            if (products.isNotEmpty()) {
+                CardProduct(products[0], state = state)
+            }
+        }
+    //}
  }
