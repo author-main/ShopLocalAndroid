@@ -252,6 +252,10 @@ class Journal private constructor(private val cacheDir: String) {
         entries[hash]?.time ?: 0L
 
 
+    @Synchronized
+    fun getEntryState(hash: String): StateEntry =
+        entries[hash]?.state ?: StateEntry.REMOVE
+
    companion object {
        private var instance: Journal? = null
        @JvmName("getInstance1")

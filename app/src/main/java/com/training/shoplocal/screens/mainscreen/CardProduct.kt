@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import android.graphics.LinearGradient
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.*
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -237,6 +238,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
     val context = LocalContext.current
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
 
+    val visible = MutableTransitionState(false)
     val animateSize = remember{mutableStateOf(Size.Zero)}
     val imageLink = getLinkImage(0, product.linkimages)
 
@@ -250,22 +252,22 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
                                          hasAlpha = true, config = ImageBitmapConfig.Argb8888))}
     val downloadImage = bitmap.value.width == 1
     if (downloadImage) {
+        // Запуск в области compose, если compose завершится. Блок внутри будет завершен без
+        // утечки памяти и процессов.
         LaunchedEffect(true) {
             ImageLinkDownloader.downloadImage(
                 imageLink?.let { "$SERVER_URL/images/$it" }, object : Callback {
                     override fun onComplete(image: Bitmap) {
                         bitmap.value = image.asImageBitmap()
-                       // downloadImage = false
                     }
-
                     override fun onFailure() {
-                        //log("error download image")
+
                     }
                 })
         }
 
-    }
-
+    } else
+        visible.targetState = true
 
 
     Box(modifier = Modifier
@@ -289,17 +291,25 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
                     contentAlignment = Alignment.Center
                     ) {
                     if (downloadImage) {
-                        log("animatelink")
+                        //log("animatelink")
                         AnimateLinkDownload(animateSize.value)
-                    } else {
-                        log("downloaded")
-                        Image(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(all = 8.dp),
-                            bitmap = bitmap.value,
-                            contentDescription = null
-                        )
+                    }
+                        androidx.compose.animation.AnimatedVisibility(
+                            visibleState = visible,
+                            enter = fadeIn(
+                                animationSpec = tween(
+                                    durationMillis = 200,
+                                    easing = LinearEasing
+                                )
+                            )
+                        ) {
+                            Image(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(all = 8.dp),
+                                bitmap = bitmap.value,
+                                contentDescription = null
+                            )
                     }
 
                     DiscountPanel(modifier = Modifier.align(Alignment.BottomStart), percent = product.discount)
@@ -312,11 +322,6 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
                     ) {
 
                     }
-
-                    //Text("asfgsdfgsf", modifier = Modifier.align(Alignment.BottomEnd))
-
-                    /*if (imageBitmap != null)
-                    log("image loaded")*/
                 }
             }
             // < * Text Price

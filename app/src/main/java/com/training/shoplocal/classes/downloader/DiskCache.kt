@@ -44,16 +44,21 @@ class DiskCache(private val cacheDir: String): ImageCache {
 
     override fun get(link: String, timestamp: Long): Bitmap? {
         val hash = getHashCacheFile(link)
+        val state = journal.getEntryState(hash)
+        if (state == StateEntry.DIRTY)
+            return null
         journal.update(hash, StateEntry.DIRTY)
         var bitmap: Bitmap? = null
+
         if (timestamp > 0L) {
             if  (journal.equals(hash, timestamp)) {
                 bitmap = loadBitmap(getFileNameFromHash(hash))
-            } /*else
-                journal.remove(hash, changeState = true)*/
+            }
         } else {
             bitmap = loadBitmap(getFileNameFromHash(hash))
         }
+
+
         return bitmap
     }
 

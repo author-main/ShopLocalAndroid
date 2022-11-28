@@ -57,7 +57,7 @@ object DatabaseApi {
             val call: retrofit2.Call<Product> = service!!.getProduct(id)
             call.enqueue(callback)
         } catch(e: Exception){
-            log(e.message ?: "error")
+            //log(e.message ?: "error")
         }
     }
 
@@ -66,7 +66,7 @@ object DatabaseApi {
             val call: retrofit2.Call<List<Product>> = service!!.getPromoProducts()
             call.enqueue(callback)
         } catch(e: Exception){
-            log(e.message ?: "error")
+            //log(e.message ?: "error")
         }
     }
 
