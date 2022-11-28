@@ -72,7 +72,7 @@ class ImageLinkDownloader private constructor() {
         synchronized(this) {
             listDownloadTask[link]?.let { task ->
                 if (!task.isDone) {
-                    cacheStorage?.remove(link, changeState = true)
+                    cacheStorage?.remove(link, changeState = true, true)
                     task.cancel(true)
                 }
             }
@@ -86,7 +86,7 @@ class ImageLinkDownloader private constructor() {
             executorService.shutdownNow()
             listDownloadTask.forEach {
                 if (!it.value.isDone) {
-                    cacheStorage?.remove(it.key, changeState = true)
+                    cacheStorage?.remove(it.key, changeState = true, true)
                     it.value.cancel(true)
                 }
             }

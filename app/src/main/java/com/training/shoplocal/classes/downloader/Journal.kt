@@ -135,7 +135,18 @@ class Journal private constructor(private val cacheDir: String) {
      *  false: запись будет удалена
      */
     @Synchronized
-    fun remove(hash: String, changeState: Boolean) {
+    fun remove(hash: String, changeState: Boolean, cancel: Boolean = false) {
+        if (cancel) {
+            val entry = entries[hash]
+            entry?.let{
+                if (it.state == StateEntry.DIRTY && it.length > 0L)
+                    it.state = StateEntry.CLEAN
+                else
+                    entries.remove(hash)
+            }
+            return
+        }
+
         if (changeState)
             update(hash, StateEntry.REMOVE)
         else

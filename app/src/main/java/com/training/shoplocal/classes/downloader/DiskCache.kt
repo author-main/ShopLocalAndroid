@@ -70,7 +70,7 @@ class DiskCache(private val cacheDir: String): ImageCache {
         journal.put(getHashCacheFile(link), time)
     }
 
-    override fun remove(link: String, changeState: Boolean) {
+    override fun remove(link: String, changeState: Boolean, cancel: Boolean) {
         val hash = getHashCacheFile(link)
         journal.remove(hash, changeState)
         if (!changeState)
