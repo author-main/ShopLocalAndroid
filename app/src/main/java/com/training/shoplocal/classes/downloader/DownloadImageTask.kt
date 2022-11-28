@@ -17,8 +17,9 @@ class DownloadImageTask(private val link: String, val callback: (bitmap: Bitmap?
     }
     override fun download(link: String): Bitmap? {
         val BUFFER_SIZE = 4096
+        val hash = md5(link)
         var bitmap: Bitmap? = null
-        val filename    = getCacheDirectory() + md5(link)
+        val filename    = getCacheDirectory() + hash//md5(link)
         val filenameTmp = "$filename.$EXT_CACHETEMPFILE"
         val conn = URL(link).openConnection() as HttpURLConnection
         var fileTimestamp = cacheTimestamp
@@ -43,12 +44,12 @@ class DownloadImageTask(private val link: String, val callback: (bitmap: Bitmap?
                     bitmap = loadBitmap(filenameTmp)//decodeStream(conn.inputStream)
                     renameFile(filenameTmp, filename)
                     fileTimestamp = timestamp
-                    log("$filename - загружено из Инет")
+                    log("$hash - загружено из Инет")
                 }
             }
         } catch (_: Exception) {}
         if (bitmap == null) {
-            log("$filename - загружено из кэша")
+            log("$hash - загружено из кэша")
             bitmap = loadBitmap(filename)
         }
 

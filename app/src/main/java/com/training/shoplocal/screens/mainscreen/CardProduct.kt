@@ -199,7 +199,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
     fun ButtonFavorite(modifier: Modifier, action: (checked: Boolean)-> Unit){
         val favorite: Byte = product?.favorite ?: 0
         val checked = remember{mutableStateOf(favorite > 0)}
-        log("recomposition favorite")
+        //log("recomposition favorite")
         Image(
             painter = painterResource(R.drawable.ic_favorite),
             contentDescription = null,
@@ -237,7 +237,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: Coro
         }
     }
 
-    log("recomposition card")
+    //log("recomposition card")
 
     val context = LocalContext.current
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
