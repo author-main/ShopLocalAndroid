@@ -7,10 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -56,7 +53,8 @@ private fun BottomSheetItem(@DrawableRes id: Int, text: String, divider: Boolean
     }
     if (divider) {
         Spacer(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .height(1.dp)
                 .padding(start = 49.dp)
                 .background(TextFieldBg)
@@ -69,6 +67,7 @@ private fun BottomSheetItem(@DrawableRes id: Int, text: String, divider: Boolean
 fun BottomSheet(state: ModalBottomSheetState, content: @Composable ()-> Unit = {}){
 //    val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     //val scope = rememberCoroutineScope()
+
     ModalBottomSheetLayout(
         sheetContent = {
             BottomSheetContent(state)
@@ -104,6 +103,18 @@ fun BottomSheet(state: ModalBottomSheetState, content: @Composable ()-> Unit = {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun BottomSheetContent(state: ModalBottomSheetState){
+/*    val favorite = remember {
+        mutableStateOf(
+            false
+        )
+    }*/
+  //  var favorite = false
+    //val product = LocalSelectedProduct.current
+ /*   product?.let{product ->
+        favorite = product.favorite > 0
+    }*/
+
+
     val scope = rememberCoroutineScope()
     fun hide(){
         scope.launch {
@@ -119,6 +130,7 @@ private fun BottomSheetContent(state: ModalBottomSheetState){
         hide()
     }
     BottomSheetItem(R.drawable.ic_favorite_bs, textItems[1]){
+        //log(product?.name ?: "error name")
         MainMenuRouter.clickTo(MainMenuItem.FavoriteItem)
         hide()
     }

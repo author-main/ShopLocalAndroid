@@ -217,7 +217,10 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                 .clip(CircleShape)
                 .border(1.dp, BorderButton, CircleShape)
                 .clickable {
+                    //viewModel.setSelectedProduct(product)
                     scope.launch {
+
+                        //viewModel.selectedProduct = product.copy()
                         state.show()
                     }
                 }
@@ -225,7 +228,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
     }
     @Composable
     fun ButtonFavorite(modifier: Modifier, action: (checked: Boolean)-> Unit){
-        log("recomposition ButtonFavorite")
+        //log("recomposition ButtonFavorite")
         //var checked = product.favorite > 0
 
         //checked.value = product.favorite > 0
@@ -273,7 +276,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
 
 
 
-    log("recomposition card")
+    //log("recomposition card")
     val context = LocalContext.current
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
 

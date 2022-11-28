@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.annotations.SerializedName
 import com.training.shoplocal.*
 import com.training.shoplocal.classes.*
 import com.training.shoplocal.repository.Repository
@@ -19,6 +20,28 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     /*private val sortData = SortData()
     private val filterData = FilterData()*/
     //val activeProduct = Product()
+
+    /*var selectedProduct: Product? = null
+
+    @JvmName("setSelectedProduct1")
+    fun setSelectedProduct(product: Product){
+        selectedProduct = Product(
+            id = product.id,
+            name = product.name,
+            category = product.category,
+            description = "product.description",
+            instock = product.instock,
+            discount = product.discount,
+            price = product.price,
+            star = product.star,
+            favorite = product.favorite,
+            brand = product.brand,
+            linkimages = product.linkimages
+        )
+    }*/
+
+
+
     private var USER_ID: Int = -1
     private var brands = listOf<Brand>()
 
