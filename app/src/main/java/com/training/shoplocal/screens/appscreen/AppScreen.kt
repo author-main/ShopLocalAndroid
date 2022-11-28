@@ -13,6 +13,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 import com.training.shoplocal.screens.*
 import com.training.shoplocal.screens.appscreen.BottomNavigationBar
 import com.training.shoplocal.screens.appscreen.BottomNavigationItem
@@ -35,6 +36,7 @@ fun AppScreen(){
                     .padding(it)
             ) {
                 Navigation(navController)
+                ImageLinkDownloader.cancel()
                 when (ScreenRouter.current) {
                     ScreenItem.MainScreen -> {
                         MainScreen(state)

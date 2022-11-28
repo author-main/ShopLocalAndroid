@@ -107,5 +107,9 @@ class ImageLinkDownloader private constructor() {
             else
                 getInstance().downloadImage(link, callback)
         }
+
+        fun cancel(){
+            getInstance().cancelAll()
+        }
     }
 }
