@@ -57,9 +57,9 @@ class DownloadImageTask(private val link: String, val callback: (bitmap: Bitmap?
             Thread.sleep(3000)
             callback(bitmap, fileTimestamp)
         }*/
-        for (i in 1..1000000000){}
+        //for (i in 1..1000000000){}
         callback(bitmap, fileTimestamp)
-        return bitmap
+        return null//bitmap
     }
 
     override fun call(): Bitmap? {

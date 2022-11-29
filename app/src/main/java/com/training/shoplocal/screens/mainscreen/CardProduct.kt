@@ -320,7 +320,8 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
 
 
     Box(modifier = Modifier
-        .width(150.dp) )
+        .width(150.dp)
+        .padding(vertical = 10.dp))
         {
         Column(
         )//verticalArrangement = Arrangement.spacedBy(4.dp))

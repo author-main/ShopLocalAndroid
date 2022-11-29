@@ -43,22 +43,20 @@ fun MainScreen(state: ModalBottomSheetState){
         ) {
 
             if (products.isNotEmpty()) {
-
-                //CardProduct(products[0], state = state)
-
                 LazyVerticalGrid(modifier = Modifier.fillMaxSize()
-                    .padding(10.dp),
+                    .padding(horizontal = 10.dp),
                     columns = GridCells.Adaptive(minSize = 150.dp),
-                    //state = rememberLazyGridState(),
-                   // contentPadding = PaddingValues(10.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    state = rememberLazyGridState(),
+                    contentPadding = PaddingValues(10.dp),
+                    //horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     items(products.size - 1) { index ->
-                        CardProduct(products[index], state = state)
+                        Row(modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceEvenly) {
+                            CardProduct(products[index], state = state)
+                        }
                     }
                 }
-
-
             }
         }
     //}
