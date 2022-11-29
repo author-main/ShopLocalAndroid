@@ -51,6 +51,7 @@ import com.training.shoplocal.classes.Product
 import com.training.shoplocal.classes.downloader.Callback
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 import com.training.shoplocal.screens.appscreen.BottomSheet
+import com.training.shoplocal.screens.appscreen.LocalSelectedProduct
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.CoroutineScope
