@@ -244,10 +244,23 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                 checked.value = localProduct.favorite > 0
         }
 
+
+            Image(
+            painter = painterResource(R.drawable.ic_favorite),
+            contentDescription = null,
+            contentScale = ContentScale.None,
+            colorFilter = ColorFilter.tint(Color.White),
+            modifier = modifier
+                .size(24.dp)
+        )
+
+
         Image(
             //painter = painterResource(R.drawable.ic_favorite)
+
             painter = if (checked.value) painterResource(R.drawable.ic_favorite)
             else painterResource(R.drawable.ic_favorite_border),
+
             contentDescription = null,
             contentScale = ContentScale.None,
             colorFilter = if (checked.value) ColorFilter.tint(ImageFavoriteOn)
