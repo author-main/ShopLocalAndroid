@@ -111,6 +111,11 @@ private fun BottomSheetContent(state: ModalBottomSheetState){
     val textItems = stringArrayResource(id = R.array.bottomsheet_product_items)
     BottomSheetItem(R.drawable.ic_brend_bs, textItems[0]){
      //   MainMenuRouter.clickTo(MainMenuItem.BrandItem)
+        val product = viewModel.selectedProduct.value
+        val brand = product.brand ?: 0
+        if (brand > 0) {
+            log("brand $brand")
+        }
         hide()
     }
     BottomSheetItem(R.drawable.ic_favorite_bs, run {
@@ -121,20 +126,21 @@ private fun BottomSheetContent(state: ModalBottomSheetState){
                 textItems[1]
         } ?: textItems[1]
     }){
-        //MainMenuRouter.clickTo(MainMenuItem.FavoriteItem)
         val product = viewModel.selectedProduct.value
         val favorite: Byte =
             if (product.favorite > 0)
                 0
             else
                 1
-        /*product.favorite = favorite
-        viewModel.setSelectedProduct(product)*/
         viewModel.setProductFavorite(product.id, favorite > 0)
         hide()
     }
     BottomSheetItem(R.drawable.ic_product_bs, textItems[2]){
-       // MainMenuRouter.clickTo(MainMenuItem.ProductsItem)
+        val product = viewModel.selectedProduct.value
+        val category = product.category ?: 0
+        if (category > 0) {
+            log("category $category")
+        }
         hide()
     }
     BottomSheetItem(R.drawable.ic_cancel_bs, textItems[3], divider = false){

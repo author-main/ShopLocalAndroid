@@ -283,11 +283,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
         }
     }
 
-
-
-
-
-    log("recomposition card")
+//    log("recomposition card")
     val context = LocalContext.current
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
 
