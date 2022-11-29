@@ -44,12 +44,12 @@ class DownloadImageTask(private val link: String, val callback: (bitmap: Bitmap?
                     bitmap = loadBitmap(filenameTmp)//decodeStream(conn.inputStream)
                     renameFile(filenameTmp, filename)
                     fileTimestamp = timestamp
-                    log("$hash - загружено из Инет")
+                    //log("$hash - загружено из Инет")
                 }
             }
         } catch (_: Exception) {}
         if (bitmap == null) {
-            log("$hash - загружено из кэша")
+          //  log("$hash - загружено из кэша")
             bitmap = loadBitmap(filename)
         }
 
