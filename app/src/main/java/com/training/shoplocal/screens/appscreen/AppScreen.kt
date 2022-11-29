@@ -9,6 +9,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -26,13 +27,13 @@ import com.training.shoplocal.screens.mainscreen.MainScreen
 import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 
-//val LocalSelectedProduct = compositionLocalOf<Product?> { error("No selected product!") }
+val LocalSelectedProduct = compositionLocalOf<Product?> { error("No selected product!") }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AppScreen(){
       val viewModel: RepositoryViewModel = viewModel()
-     // CompositionLocalProvider(LocalSelectedProduct provides viewModel.selectedProduct) {
+      CompositionLocalProvider(LocalSelectedProduct provides viewModel.selectedProduct.collectAsState().value) {
           val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
           BottomSheet(state) {
               val navController = rememberNavController()
@@ -65,6 +66,6 @@ fun AppScreen(){
                   }
               }
           }
-   //   }
+      }
 }
 

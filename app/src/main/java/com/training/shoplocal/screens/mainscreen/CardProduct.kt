@@ -220,7 +220,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                     //viewModel.setSelectedProduct(product)
                     scope.launch {
 
-                        //viewModel.selectedProduct = product.copy()
+                        viewModel.setSelectedProduct(product)
                         state.show()
                     }
                 }

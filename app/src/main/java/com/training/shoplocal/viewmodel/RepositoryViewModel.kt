@@ -21,26 +21,13 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private val filterData = FilterData()*/
     //val activeProduct = Product()
 
-    /*var selectedProduct: Product? = null
+    private val _selectedProduct = MutableStateFlow<Product>(Product())
+    val selectedProduct = _selectedProduct.asStateFlow()
 
     @JvmName("setSelectedProduct1")
     fun setSelectedProduct(product: Product){
-        selectedProduct = Product(
-            id = product.id,
-            name = product.name,
-            category = product.category,
-            description = "product.description",
-            instock = product.instock,
-            discount = product.discount,
-            price = product.price,
-            star = product.star,
-            favorite = product.favorite,
-            brand = product.brand,
-            linkimages = product.linkimages
-        )
-    }*/
-
-
+        _selectedProduct.value = product.copy()
+    }
 
     private var USER_ID: Int = -1
     private var brands = listOf<Brand>()

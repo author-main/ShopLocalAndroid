@@ -30,6 +30,19 @@ data class Product(
     @SerializedName("linkimages")
     val linkimages:     List<String>? = null
     ) {
+        constructor(): this(
+                id              = 0,
+                name            = "",
+                category        = 0,
+                description     = "",
+                instock         = 0,
+                discount        = 0,
+                price           = 0.0f,
+                star            = 1.0f,
+                favorite        = 0,
+                brand           = 0,
+                linkimages      =  emptyList<String>()
+        ){}
 /**
  * // Структура таблицы PRODUCTS //
  * `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,

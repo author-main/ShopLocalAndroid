@@ -30,14 +30,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-//val LocalActiveProduct = compositionLocalOf<Product> { Product() }
-
 @Composable
 private fun BottomSheetItem(@DrawableRes id: Int, text: String, divider: Boolean = true, action: ()->Unit){
-/*    CompositionLocalProvider(LocalActiveProduct provides (viewModel() as RepositoryViewModel).activeProduct) {
-
-    }*/
-
 
     Row(modifier = Modifier
         .fillMaxWidth()
@@ -103,34 +97,42 @@ fun BottomSheet(state: ModalBottomSheetState, content: @Composable ()-> Unit = {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun BottomSheetContent(state: ModalBottomSheetState){
-/*    val favorite = remember {
-        mutableStateOf(
-            false
-        )
-    }*/
-  //  var favorite = false
-    //val product = LocalSelectedProduct.current
- /*   product?.let{product ->
-        favorite = product.favorite > 0
-    }*/
-
-
     val scope = rememberCoroutineScope()
     fun hide(){
         scope.launch {
             delay(150)
             state.hide()
-/*            delay(10)
-            MainMenuRouter.reset()*/
         }
     }
+
     val textItems = stringArrayResource(id = R.array.bottomsheet_product_items)
     BottomSheetItem(R.drawable.ic_brend_bs, textItems[0]){
         MainMenuRouter.clickTo(MainMenuItem.BrandItem)
         hide()
     }
-    BottomSheetItem(R.drawable.ic_favorite_bs, textItems[1]){
-        //log(product?.name ?: "error name")
+    BottomSheetItem(//R.drawable.ic_favorite_bs, textItems[1]) {
+
+        run {
+
+        LocalSelectedProduct.current?.let{product ->
+            if (product.favorite > 0)
+                R.drawable.ic_favorite
+            else
+                R.drawable.ic_favorite_bs
+        } ?: R.drawable.ic_favorite_bs
+
+
+
+        }, run {
+        LocalSelectedProduct.current?.let{product ->
+            if (product.favorite > 0)
+                textItems[4]
+            else
+                textItems[1]
+        } ?: textItems[1]
+    }){
+
+
         MainMenuRouter.clickTo(MainMenuItem.FavoriteItem)
         hide()
     }
@@ -139,6 +141,7 @@ private fun BottomSheetContent(state: ModalBottomSheetState){
         hide()
     }
     BottomSheetItem(R.drawable.ic_cancel_bs, textItems[3], divider = false){
-        hide()
+       hide()
     }
+
 }
