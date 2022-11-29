@@ -29,6 +29,9 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         _selectedProduct.value = product.copy()
     }
 
+
+
+
     private var USER_ID: Int = -1
     private var brands = listOf<Brand>()
 
