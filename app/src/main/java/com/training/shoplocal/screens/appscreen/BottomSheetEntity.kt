@@ -19,8 +19,6 @@ import com.training.shoplocal.R
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.log
 import com.training.shoplocal.screens.*
-import com.training.shoplocal.screens.mainscreen.MainMenuItem
-import com.training.shoplocal.screens.mainscreen.MainMenuRouter
 import com.training.shoplocal.screens.mainscreen.MainScreen
 import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.ui.theme.TextFieldBg
