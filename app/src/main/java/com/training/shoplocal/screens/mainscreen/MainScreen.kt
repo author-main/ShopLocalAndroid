@@ -49,7 +49,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 LazyVerticalGrid(modifier = Modifier.fillMaxSize()
                     .padding(10.dp),
                     columns = GridCells.Adaptive(minSize = 150.dp),
-                    state = rememberLazyGridState(),
+                    //state = rememberLazyGridState(),
                    // contentPadding = PaddingValues(10.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
