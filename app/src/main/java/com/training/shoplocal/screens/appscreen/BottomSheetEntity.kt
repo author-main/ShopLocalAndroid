@@ -121,7 +121,16 @@ private fun BottomSheetContent(state: ModalBottomSheetState){
                 textItems[1]
         } ?: textItems[1]
     }){
-        MainMenuRouter.clickTo(MainMenuItem.FavoriteItem)
+        //MainMenuRouter.clickTo(MainMenuItem.FavoriteItem)
+        val product = viewModel.selectedProduct.value
+        val favorite: Byte =
+            if (product.favorite > 0)
+                0
+            else
+                1
+        /*product.favorite = favorite
+        viewModel.setSelectedProduct(product)*/
+        viewModel.setProductFavorite(product.id, favorite > 0)
         hide()
     }
     BottomSheetItem(R.drawable.ic_product_bs, textItems[2]){

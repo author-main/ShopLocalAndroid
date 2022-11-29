@@ -139,6 +139,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         val favorite: Byte = if (value) 1 else 0
         products.value.find { it.id== id }?.let{
             it.favorite = favorite
+            setSelectedProduct(it)
             viewModelScope.launch {
                 repository.updateFavorite(USER_ID, it.id, favorite)
             }

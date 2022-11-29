@@ -179,6 +179,10 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
 //fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: CoroutineScope){
    /* val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     BottomSheet(state) {*/
+       // log("favorites=$isFavorite")*/
+
+   // log("recompose Card")
+
     val checked = remember{
         mutableStateOf(product.favorite > 0)
     }
@@ -186,7 +190,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
     val brand: String = product.brand?.let { viewModel.getBrand(it) } ?: ""
     val scope = rememberCoroutineScope()
 
-    when (MainMenuRouter.current) {
+  /*  when (MainMenuRouter.current) {
         MainMenuItem.BrandItem -> {
             log("Обработка Brand")
             MainMenuRouter.reset()
@@ -201,7 +205,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
             log("Обработка Products")
             MainMenuRouter.reset()
         } else ->{}
-    }
+    }*/
 
 
 
@@ -220,7 +224,6 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                 .clickable {
                     //viewModel.setSelectedProduct(product)
                     scope.launch {
-
                         viewModel.setSelectedProduct(product)
                         state.show()
                     }
@@ -233,7 +236,14 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
         //var checked = product.favorite > 0
 
         //checked.value = product.favorite > 0
-        //log("recomposition favorite")
+       // log("recomposition favorite")
+
+
+        LocalSelectedProduct.current?.let {localProduct ->
+            if (localProduct.id == product.id)
+                checked.value = localProduct.favorite > 0
+        }
+
         Image(
             //painter = painterResource(R.drawable.ic_favorite)
             painter = if (checked.value) painterResource(R.drawable.ic_favorite)
@@ -277,7 +287,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
 
 
 
-    //log("recomposition card")
+    log("recomposition card")
     val context = LocalContext.current
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
 
