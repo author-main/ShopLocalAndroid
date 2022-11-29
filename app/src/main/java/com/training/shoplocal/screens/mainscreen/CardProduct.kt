@@ -361,7 +361,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                             visibleState = visible,
                             enter = fadeIn(
                                 animationSpec = tween(
-                                    durationMillis = 200,
+                                    durationMillis = 70,
                                     easing = LinearEasing
                                 )
                             )
