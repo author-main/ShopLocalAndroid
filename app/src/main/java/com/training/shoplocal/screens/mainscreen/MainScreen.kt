@@ -3,6 +3,12 @@ package com.training.shoplocal.screens.mainscreen
 import androidx.compose.runtime.collectAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -37,7 +43,21 @@ fun MainScreen(state: ModalBottomSheetState){
         ) {
 
             if (products.isNotEmpty()) {
-                CardProduct(products[0], state = state)
+
+                //CardProduct(products[0], state = state)
+
+                LazyVerticalGrid(modifier = Modifier.fillMaxSize()
+                    .padding(8.dp),
+                    columns = GridCells.Adaptive(minSize = 150.dp),
+                    state = rememberLazyGridState(),
+                    contentPadding = PaddingValues(10.dp)
+                ) {
+                    items(products.size - 1) { index ->
+                            CardProduct(products[index], state = state)
+                    }
+                }
+
+
             }
         }
     //}

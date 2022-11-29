@@ -27,7 +27,6 @@ import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-
 @Composable
 private fun BottomSheetItem(@DrawableRes id: Int, text: String, divider: Boolean = true, action: ()->Unit){
 
@@ -59,19 +58,16 @@ private fun BottomSheetItem(@DrawableRes id: Int, text: String, divider: Boolean
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BottomSheet(state: ModalBottomSheetState, content: @Composable ()-> Unit = {}){
-//    val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
-    //val scope = rememberCoroutineScope()
-
-    ModalBottomSheetLayout(
-        sheetContent = {
-            BottomSheetContent(state)
-        },
-        sheetState = state,
-        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-        sheetBackgroundColor = PrimaryDark,
-        scrimColor = Color.Transparent
-    ) {
-       /* when (ScreenRouter.current) {
+        ModalBottomSheetLayout(
+            sheetContent = {
+                BottomSheetContent(state)
+            },
+            sheetState = state,
+            sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+            sheetBackgroundColor = PrimaryDark,
+            scrimColor = Color.Transparent
+        ) {
+            /* when (ScreenRouter.current) {
             ScreenItem.MainScreen -> {
                 MainScreen(state, scope)
                 log("MainScreen")
@@ -87,11 +83,12 @@ fun BottomSheet(state: ModalBottomSheetState, content: @Composable ()-> Unit = {
             }
             else -> {}
         }*/
-        content()
+            content()
 
 
-        //CardProduct(scope, state)
-    }
+            //CardProduct(scope, state)
+        }
+
 }
 
 @OptIn(ExperimentalMaterialApi::class)

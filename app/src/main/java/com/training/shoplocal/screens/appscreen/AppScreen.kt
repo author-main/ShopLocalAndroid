@@ -33,7 +33,7 @@ val LocalSelectedProduct = compositionLocalOf<Product?> { error("No selected pro
 @Composable
 fun AppScreen(){
       val viewModel: RepositoryViewModel = viewModel()
-      CompositionLocalProvider(LocalSelectedProduct provides viewModel.selectedProduct.collectAsState().value) {
+       CompositionLocalProvider(LocalSelectedProduct provides viewModel.selectedProduct.collectAsState().value) {
           val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
           BottomSheet(state) {
               val navController = rememberNavController()
