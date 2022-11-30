@@ -28,7 +28,8 @@ data class Product(
     @SerializedName("brand")
     val brand:          Int? = null,
     @SerializedName("linkimages")
-    val linkimages:     List<String>? = null
+    val linkimages:     List<String>? = null,
+    var imageindex: Int = 0
     ) {
         constructor(): this(
                 id              = 0,

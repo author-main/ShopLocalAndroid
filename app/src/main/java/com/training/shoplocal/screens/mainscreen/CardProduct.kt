@@ -302,38 +302,34 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
 
     val visible = remember{MutableTransitionState(false)}
     val animateSize = remember{mutableStateOf(Size.Zero)}
-    val imageLink = getLinkImage(0, product.linkimages)
-
-        /*product.linkimages?.let{
-        if (it.isNotEmpty()) it[0] else ""
-    } ?: ""*/
-    /*val downloadImage = remember {
-        mutableStateOf(true)
-    }*/
+    val imageLink = getLinkImage(product.imageindex, product.linkimages)
+    //val imageLink = getLinkImage(10, product.linkimages)
     val bitmap = remember{mutableStateOf(ImageBitmap(1, 1,
                                          hasAlpha = true, config = ImageBitmapConfig.Argb8888))}
-    val downloadImage = bitmap.value.width == 1
-    if (downloadImage) {
-        // Запуск в области compose, если compose завершится. Блок внутри будет завершен без
-        // утечки памяти и процессов.
-        LaunchedEffect(true) {
-            // Если не нужно уменьшать изображение,
-            // используйте ImageLinkDownload.downloadImage вместо
-            // ImageLinkDownload.downloadCardImage
-            //ImageLinkDownloader.downloadImage(
-            ImageLinkDownloader.downloadCardImage(
-                imageLink?.let { "$SERVER_URL/images/$it" }, object : Callback {
-                    override fun onComplete(image: Bitmap) {
-                        bitmap.value = image.asImageBitmap()
-                    }
-                    override fun onFailure() {
+    val downloadImage = bitmap.value.width == 1 && !imageLink.isNullOrBlank()
 
-                    }
-                })
-        }
+        if (downloadImage) {
+            // Запуск в области compose, если compose завершится. Блок внутри будет завершен без
+            // утечки памяти и процессов.
+            LaunchedEffect(true) {
+                // Если не нужно уменьшать изображение,
+                // используйте ImageLinkDownload.downloadImage вместо
+                // ImageLinkDownload.downloadCardImage
+                //ImageLinkDownloader.downloadImage(
+                ImageLinkDownloader.downloadCardImage(
+                    imageLink?.let { "$SERVER_URL/images/$it" }, object : Callback {
+                        override fun onComplete(image: Bitmap) {
+                            bitmap.value = image.asImageBitmap()
+                        }
 
-    } else
-        visible.targetState = true
+                        override fun onFailure() {
+
+                        }
+                    })
+            }
+
+        } else
+            visible.targetState = true
 
 
     Box(modifier = Modifier
