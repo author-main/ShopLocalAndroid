@@ -175,10 +175,10 @@ fun StarPanel(count: Float){
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((product: Product, menuindex: Int) -> Unit)? = null){
-    /*val product = remember {
-        productIn
-    }*/
+fun CardProduct(productItem: Product, state: ModalBottomSheetState){//}, action: ((product: Product, menuindex: Int) -> Unit)? = null){
+    val product = remember {
+        productItem
+    }
 //fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: CoroutineScope){
    /* val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     BottomSheet(state) {*/
@@ -244,16 +244,29 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
         //checked.value = product.favorite > 0
 
 
-        var id = product.id
         LocalSelectedProduct.current?.let {localProduct ->
-            id = localProduct.id
             if (localProduct.id == product.id) {
                 checked.value = localProduct.favorite > 0
             }
         }
 
+        val changedFavorite by remember {
+            derivedStateOf {
 
-        log("recomposition favorite ${product.id} localid=$id")
+            }
+        }
+
+
+/*        var id = product.id
+        LocalSelectedProduct.current?.let {localProduct ->
+            id = localProduct.id
+            if (localProduct.id == product.id) {
+                checked.value = localProduct.favorite > 0
+            }
+        }*/
+
+
+        log("recomposition favorite ${product.id}")
 
 
 

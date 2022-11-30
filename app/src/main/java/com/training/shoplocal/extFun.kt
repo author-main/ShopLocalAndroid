@@ -18,7 +18,7 @@ import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import kotlin.math.roundToInt
 
-const val SERVER_URL            = "http://192.168.1.10"
+const val SERVER_URL            = "http://192.168.0.10"
 val DECIMAL_CEPARATOR           = DecimalFormatSymbols().decimalSeparator
 
 /*enum class Error {
