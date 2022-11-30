@@ -176,6 +176,9 @@ fun StarPanel(count: Float){
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((product: Product, menuindex: Int) -> Unit)? = null){
+    /*val product = remember {
+        productIn
+    }*/
 //fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: CoroutineScope){
    /* val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     BottomSheet(state) {*/
@@ -240,14 +243,11 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
 
         //checked.value = product.favorite > 0
 
-        var skip = false
-        LocalSelectedProduct.current?.let {localProduct ->
+    /*    LocalSelectedProduct.current?.let {localProduct ->
             if (localProduct.id == product.id) {
-//                log("change Favorite")
                 checked.value = localProduct.favorite > 0
-                skip = true
             }
-        }
+        }*/
 
         log("recomposition favorite ${product.id}")
 
@@ -291,6 +291,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                 .size(24.dp)
         )*/
 
+
     }
 
     fun getLinkImage(index: Int, images: List<String>?): String?{
@@ -309,7 +310,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
     val visible = remember{MutableTransitionState(false)}
     val animateSize = remember{mutableStateOf(Size.Zero)}
     val imageLink = getLinkImage(product.imageindex, product.linkimages)
-    //val imageLink = getLinkImage(10, product.linkimages)
+    //val imageLink = getLinkImage(0, product.linkimages)
     val bitmap = remember{mutableStateOf(ImageBitmap(1, 1,
                                          hasAlpha = true, config = ImageBitmapConfig.Argb8888))}
     val downloadImage = bitmap.value.width == 1 && !imageLink.isNullOrBlank()
