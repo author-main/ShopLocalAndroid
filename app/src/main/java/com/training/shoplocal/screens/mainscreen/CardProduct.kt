@@ -243,13 +243,19 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
 
         //checked.value = product.favorite > 0
 
-    /*    LocalSelectedProduct.current?.let {localProduct ->
+
+        var id = product.id
+        LocalSelectedProduct.current?.let {localProduct ->
+            id = localProduct.id
             if (localProduct.id == product.id) {
                 checked.value = localProduct.favorite > 0
             }
-        }*/
+        }
 
-        log("recomposition favorite ${product.id}")
+
+        log("recomposition favorite ${product.id} localid=$id")
+
+
 
             Image(
             painter = painterResource(R.drawable.ic_favorite),
