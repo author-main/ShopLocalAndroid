@@ -239,13 +239,13 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
         //var checked = product.favorite > 0
 
         //checked.value = product.favorite > 0
-        log("recomposition favorite ${product.id}")
 
-
+        var skip = false
         LocalSelectedProduct.current?.let {localProduct ->
             if (localProduct.id == product.id) {
 //                log("change Favorite")
                 checked.value = localProduct.favorite > 0
+                skip = true
             }
         }
 
