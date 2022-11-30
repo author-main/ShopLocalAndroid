@@ -434,6 +434,7 @@ fun CardProduct(productItem: Product, state: ModalBottomSheetState){//}, action:
 
                     ButtonFavorite(modifier = Modifier.align(Alignment.TopEnd)
                     ) {
+                        log("click favorite")
                         viewModel.setProductFavorite(product.id, it)
                     }
                 }
