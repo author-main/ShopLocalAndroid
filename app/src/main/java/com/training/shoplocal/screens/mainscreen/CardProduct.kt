@@ -183,9 +183,12 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
 
    // log("recompose Card")
 
+
     val checked = remember{
         mutableStateOf(product.favorite > 0)
     }
+
+
     val viewModel: RepositoryViewModel = viewModel()
     val brand: String = product.brand?.let { viewModel.getBrand(it) } ?: ""
     val scope = rememberCoroutineScope()
