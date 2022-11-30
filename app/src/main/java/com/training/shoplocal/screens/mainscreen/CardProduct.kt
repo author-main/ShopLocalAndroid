@@ -244,28 +244,53 @@ fun CardProduct(productItem: Product, state: ModalBottomSheetState){//}, action:
         //checked.value = product.favorite > 0
 
 
-        LocalSelectedProduct.current?.let {localProduct ->
-            if (localProduct.id == product.id) {
-                checked.value = localProduct.favorite > 0
-            }
-        }
-
-        val changedFavorite by remember {
-            derivedStateOf {
-
-            }
-        }
-
-
-/*        var id = product.id
-        LocalSelectedProduct.current?.let {localProduct ->
-            id = localProduct.id
+      /*  LocalSelectedProduct.current?.let {localProduct ->
             if (localProduct.id == product.id) {
                 checked.value = localProduct.favorite > 0
             }
         }*/
+/*        val localSelectedProduct = LocalSelectedProduct.current
+        val changedFavorite by remember {
+            derivedStateOf {
+                localSelectedProduct?.let {
+                    //it.favorite > 0
+                    val result = it.id == product.id
+                    if (result)
+                        checked.value = it.favorite > 0
+                    result
+                } ?: false
+                    /*  localSelectedProduct?.let{selectedProduct ->
+                          if (selectedProduct.id == product.id) {
+                              checked.value = selectedProduct.favorite > 0
+                              true
+                          } else
+                              false
+                      } ?: false*/
+
+            }
+        }
+*/
+        LocalSelectedProduct.current?.let {localProduct ->
+            if (localProduct.id == product.id) {
+                checked.value = localProduct.favorite > 0
+            }
+        }
+
+        /*val updateFavorite = remember {
+            derivedStateOf {
+              localSelectedProduct?.let {localProduct ->
+                    if (localProduct.id == product.id) {
+                        checked.value = localProduct.favorite > 0
+                        checked.value
+                    }
+                  else false
+              } ?: false
+            }
+        }*/
 
 
+
+      //  log("change derived $changedFavorite")
         log("recomposition favorite ${product.id}")
 
 
