@@ -1,7 +1,9 @@
 package com.training.shoplocal.viewmodel
 
 import android.content.Context
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.annotations.SerializedName
@@ -36,6 +38,11 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private var brands = listOf<Brand>()
 
     private val _products = MutableStateFlow<MutableList<Product>>(mutableListOf<Product>())
+
+    //private val _products = MutableStateFlow<SnapshotStateList<Product>>(mutableStateListOf<Product>())
+
+    //val list: SnapshotStateList<Product>
+    //private val _products = MutableStateFlow<MutableList<Product>>(mutableListOf<Product>())
     val products = _products.asStateFlow()
 
     private val actionLogin: (result: Int) -> Unit = {
@@ -122,6 +129,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     private fun getPromoProducts(){
         repository.getPromoProducts(USER_ID) { products ->
+            /*_products.value.clear()
+            _products.value.addAll(products)*/
             _products.value = products.toMutableList()
         }
     }

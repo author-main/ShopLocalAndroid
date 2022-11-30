@@ -236,14 +236,17 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
         //var checked = product.favorite > 0
 
         //checked.value = product.favorite > 0
-       // log("recomposition favorite")
+        log("recomposition favorite ${product.id}")
 
 
         LocalSelectedProduct.current?.let {localProduct ->
-            if (localProduct.id == product.id)
+            if (localProduct.id == product.id) {
+//                log("change Favorite")
                 checked.value = localProduct.favorite > 0
+            }
         }
 
+        log("recomposition favorite ${product.id}")
 
             Image(
             painter = painterResource(R.drawable.ic_favorite),
@@ -296,7 +299,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
         }
     }
 
-//    log("recomposition card")
+    log("recomposition card")
     val context = LocalContext.current
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
 
