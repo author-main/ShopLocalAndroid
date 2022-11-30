@@ -1,5 +1,6 @@
 package com.training.shoplocal
 
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import java.io.File
@@ -8,7 +9,10 @@ import java.io.IOException
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
+import kotlin.math.roundToInt
 
+
+val CART_IMAGE_SIZE = 150.px
 const val HASH_LENGTH = 32
 const val CACHE_SIZE  = 50 * 1024 * 1024  // 50Мб
 const val EXT_CACHETEMPFILE = "t"
@@ -97,15 +101,27 @@ fun md5(link: String): String {
     }
 }
 
-fun loadBitmap(filename: String): Bitmap?{
+fun loadBitmap(filename: String, reduce: Boolean = false): Bitmap?{
     if (!File(filename).exists())
         return null
     return try {
         val option = BitmapFactory.Options()
+        if (reduce) {
+            option.inJustDecodeBounds = true
+            BitmapFactory.decodeFile(filename, option)
+            val reduceSize = option.outWidth.coerceAtLeast(option.outHeight).toDouble()
+            val inSampleSize = (reduceSize / CART_IMAGE_SIZE).roundToInt()
+            //log("inSampleSize = $inSampleSize, bitmapWidth = ${option.outWidth}")
+            option.inSampleSize = inSampleSize * 2
+            option.inJustDecodeBounds = false
+        }
         option.inPreferredConfig = Bitmap.Config.ARGB_8888
-        BitmapFactory.decodeFile(filename, option)
+        val bitmap = BitmapFactory.decodeFile(filename, option)
+        //log("loadedBitmapWidth = ${bitmap.width}")
+        bitmap
     } catch(_:Exception){
         null
     }
 }
+
 

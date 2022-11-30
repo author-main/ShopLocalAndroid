@@ -1,6 +1,7 @@
 package com.training.shoplocal
 
 import android.content.Context
+import android.content.res.Resources
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.util.Log
@@ -17,7 +18,7 @@ import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import kotlin.math.roundToInt
 
-const val SERVER_URL            = "http://192.168.0.10"
+const val SERVER_URL            = "http://192.168.1.10"
 val DECIMAL_CEPARATOR           = DecimalFormatSymbols().decimalSeparator
 
 /*enum class Error {
@@ -90,3 +91,9 @@ fun getSalePrice(price: Float, discount: Int): String{
     val result = price - (price * discount/100f)
     return getFormattedPrice(result)
 }
+
+val Int.dp: Int
+    get() = (this / Resources.getSystem().displayMetrics.density).toInt()
+
+val Int.px: Int
+    get() = (this * Resources.getSystem().displayMetrics.density).toInt()

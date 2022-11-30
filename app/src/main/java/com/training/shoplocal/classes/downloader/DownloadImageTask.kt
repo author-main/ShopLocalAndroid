@@ -9,7 +9,7 @@ import java.io.FileOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
-class DownloadImageTask(private val link: String, val callback: (bitmap: Bitmap?, timestamp: Long) -> Unit): DownloadTask<Bitmap?>
+class DownloadImageTask(private val link: String, private val reduce: Boolean, val callback: (bitmap: Bitmap?, timestamp: Long) -> Unit): DownloadTask<Bitmap?>
 {
     private var cacheTimestamp: Long = 0L
     fun setCacheTimestamp(timestamp: Long){
@@ -41,7 +41,7 @@ class DownloadImageTask(private val link: String, val callback: (bitmap: Bitmap?
                     inputStream.close()
                     outputStream.close()
                     conn.disconnect()
-                    bitmap = loadBitmap(filenameTmp)//decodeStream(conn.inputStream)
+                    bitmap = loadBitmap(filenameTmp, reduce)//decodeStream(conn.inputStream)
                     renameFile(filenameTmp, filename)
                     fileTimestamp = timestamp
                     //log("$hash - загружено из Инет")
@@ -50,7 +50,7 @@ class DownloadImageTask(private val link: String, val callback: (bitmap: Bitmap?
         } catch (_: Exception) {}
         if (bitmap == null) {
           //  log("$hash - загружено из кэша")
-            bitmap = loadBitmap(filename)
+            bitmap = loadBitmap(filename, reduce)
         }
 
         /*Handler(Looper.getMainLooper()).post {

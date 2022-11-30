@@ -317,7 +317,11 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
         // Запуск в области compose, если compose завершится. Блок внутри будет завершен без
         // утечки памяти и процессов.
         LaunchedEffect(true) {
-            ImageLinkDownloader.downloadImage(
+            // Если не нужно уменьшать изображение,
+            // используйте ImageLinkDownload.downloadImage вместо
+            // ImageLinkDownload.downloadCardImage
+            //ImageLinkDownloader.downloadImage(
+            ImageLinkDownloader.downloadCardImage(
                 imageLink?.let { "$SERVER_URL/images/$it" }, object : Callback {
                     override fun onComplete(image: Bitmap) {
                         bitmap.value = image.asImageBitmap()

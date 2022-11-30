@@ -29,7 +29,7 @@ class ImageLinkDownloader private constructor() {
     }
 
     @Synchronized
-    private fun downloadImage(link: String, callback: Callback) {
+    private fun downloadImage(link: String, reduce: Boolean, callback: Callback) {
 
         /*Handler(Looper.getMainLooper()).post {
             Thread.sleep(4000)
@@ -41,7 +41,7 @@ class ImageLinkDownloader private constructor() {
         }
         cacheStorage?.put(link)
         val timestamp = cacheStorage?.getTimestamp(link) ?: 0L
-        val task = DownloadImageTask(link) { bitmap, fileTimestamp ->
+        val task = DownloadImageTask(link, reduce) { bitmap, fileTimestamp ->
             bitmap?.let {
                 val filesize = getFileSize("$cachedir${md5(link)}")
                 cacheStorage?.let { storage ->
@@ -105,7 +105,14 @@ class ImageLinkDownloader private constructor() {
             if (link.isNullOrEmpty())
                 callback.onFailure()
             else
-                getInstance().downloadImage(link, callback)
+                getInstance().downloadImage(link, reduce = false, callback)
+        }
+
+        fun downloadCardImage(link: String?, callback: Callback) {
+            if (link.isNullOrEmpty())
+                callback.onFailure()
+            else
+                getInstance().downloadImage(link, reduce = true, callback)
         }
 
         fun cancel(){
