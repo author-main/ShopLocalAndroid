@@ -260,10 +260,14 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
         val observeSelectedProduct = viewModel.selectedProduct.collectAsState()
         val isFavorite = remember {
             derivedStateOf {
-                if (observeSelectedProduct.value.id != 0) {
-                product.id == observeSelectedProduct.value.id && observeSelectedProduct.value.favorite > 0
-                } else
+                if (observeSelectedProduct.value.id != -1)
                     product.favorite > 0
+                else {
+                    if (product.id == observeSelectedProduct.value.id)
+                        observeSelectedProduct.value.favorite > 0
+                    else
+                        product.favorite > 0
+                }
             }
         }
         log ("recomposition favorite")

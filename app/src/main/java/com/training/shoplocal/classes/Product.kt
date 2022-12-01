@@ -32,7 +32,7 @@ data class Product(
     var imageindex: Int = 0
     ) {
         constructor(): this(
-                id              = 0,
+                id              = -1,
                 name            = "",
                 category        = 0,
                 description     = "",

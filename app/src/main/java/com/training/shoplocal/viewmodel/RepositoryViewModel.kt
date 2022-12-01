@@ -28,11 +28,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     @JvmName("setSelectedProduct1")
     fun setSelectedProduct(product: Product){
-        /*if (product.id == _selectedProduct.value.id) {
-            _selectedProduct.value.favorite = product.favorite
-            return
-        }*/
-        log("changed Selected Product, favorite = ${product.favorite}")
+       //  log("changed Selected Product, favorite = ${product.favorite}")
         _selectedProduct.value = product.copy(favorite = product.favorite)
     }
 
