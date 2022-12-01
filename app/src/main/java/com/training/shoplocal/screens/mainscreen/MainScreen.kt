@@ -50,7 +50,7 @@ fun MainScreen(state: ModalBottomSheetState){
                     contentPadding = PaddingValues(10.dp),
                     //horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    log("recomposition Grid")
+                    //log("recomposition Grid")
                     items(products.size - 1) { index ->
                         Row(modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceEvenly) {

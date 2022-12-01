@@ -28,6 +28,7 @@ import com.training.shoplocal.TEXT_BOTTOMNAVIGATION
 import com.training.shoplocal.log
 import com.training.shoplocal.screens.*
 import com.training.shoplocal.screens.mainscreen.MainScreen
+import com.training.shoplocal.ui.theme.TextBrand
 import com.training.shoplocal.ui.theme.TextFieldFont
 import com.training.shoplocal.ui.theme.TextOrange
 import kotlinx.coroutines.cancel

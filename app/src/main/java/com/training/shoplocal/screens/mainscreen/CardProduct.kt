@@ -51,7 +51,6 @@ import com.training.shoplocal.classes.Product
 import com.training.shoplocal.classes.downloader.Callback
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 import com.training.shoplocal.screens.appscreen.BottomSheet
-import com.training.shoplocal.screens.appscreen.LocalSelectedProduct
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -175,10 +174,10 @@ fun StarPanel(count: Float){
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CardProduct(productItem: Product, state: ModalBottomSheetState){//}, action: ((product: Product, menuindex: Int) -> Unit)? = null){
-    val product = remember {
-        productItem
-    }
+fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((product: Product, menuindex: Int) -> Unit)? = null){
+    /*val product = remember {
+        productIn
+    }*/
 //fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: CoroutineScope){
    /* val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     BottomSheet(state) {*/
@@ -187,9 +186,9 @@ fun CardProduct(productItem: Product, state: ModalBottomSheetState){//}, action:
    // log("recompose Card")
 
 
-    val checked = remember{
+    /*val checked = remember{
         mutableStateOf(product.favorite > 0)
-    }
+    }*/
 
 
     val viewModel: RepositoryViewModel = viewModel()
@@ -238,64 +237,21 @@ fun CardProduct(productItem: Product, state: ModalBottomSheetState){//}, action:
     }
     @Composable
     fun ButtonFavorite(modifier: Modifier, action: (checked: Boolean)-> Unit){
-        //log("recomposition ButtonFavorite")
-        //var checked = product.favorite > 0
-
-        //checked.value = product.favorite > 0
-
-
-      /*  LocalSelectedProduct.current?.let {localProduct ->
-            if (localProduct.id == product.id) {
-                checked.value = localProduct.favorite > 0
-            }
-        }*/
-/*        val localSelectedProduct = LocalSelectedProduct.current
-        val changedFavorite by remember {
+      val observeSelectedProduct = viewModel.selectedProduct.collectAsState()
+        val isFavorite = remember {
             derivedStateOf {
-                localSelectedProduct?.let {
-                    //it.favorite > 0
-                    val result = it.id == product.id
-                    if (result)
-                        checked.value = it.favorite > 0
-                    result
-                } ?: false
-                    /*  localSelectedProduct?.let{selectedProduct ->
-                          if (selectedProduct.id == product.id) {
-                              checked.value = selectedProduct.favorite > 0
-                              true
-                          } else
-                              false
-                      } ?: false*/
-
+                if (observeSelectedProduct.value.id != -1)
+                    product.favorite > 0
+                else {
+                    if (product.id == observeSelectedProduct.value.id)
+                        observeSelectedProduct.value.favorite > 0
+                    else
+                        product.favorite > 0
+                }
             }
         }
-*/
-        LocalSelectedProduct.current?.let {localProduct ->
-            if (localProduct.id == product.id) {
-                checked.value = localProduct.favorite > 0
-            }
-        }
-
-        /*val updateFavorite = remember {
-            derivedStateOf {
-              localSelectedProduct?.let {localProduct ->
-                    if (localProduct.id == product.id) {
-                        checked.value = localProduct.favorite > 0
-                        checked.value
-                    }
-                  else false
-              } ?: false
-            }
-        }*/
-
-
-
-      //  log("change derived $changedFavorite")
-        log("recomposition favorite ${product.id}")
-
-
-
-            Image(
+        //log ("recomposition favorite")
+    Image(
             painter = painterResource(R.drawable.ic_favorite),
             contentDescription = null,
             contentScale = ContentScale.None,
@@ -303,37 +259,24 @@ fun CardProduct(productItem: Product, state: ModalBottomSheetState){//}, action:
             modifier = modifier
                 .size(24.dp)
         )
-
-
         Image(
-            //painter = painterResource(R.drawable.ic_favorite)
-
-            painter = if (checked.value) painterResource(R.drawable.ic_favorite)
+            painter = if (isFavorite.value) painterResource(R.drawable.ic_favorite)
             else painterResource(R.drawable.ic_favorite_border),
-
             contentDescription = null,
             contentScale = ContentScale.None,
-            colorFilter = if (checked.value) ColorFilter.tint(ImageFavoriteOn)
+            colorFilter = if (isFavorite.value) ColorFilter.tint(ImageFavoriteOn)
             else ColorFilter.tint(ImageFavoriteOff),
             modifier = modifier
                 .clip(CircleShape)
                 .size(24.dp)
                 .clickable/*(interactionSource = remember { MutableInteractionSource() },
                            indication = rememberRipple(radius = 16.dp)) */{
-                    checked.value = !checked.value
-                    product.favorite = if (checked.value) 1 else 0
-                    action(checked.value)
+                    val value: Byte = if (product.favorite > 0) 0 else 1
+                    product.favorite = value//if (isFavorited.value) 1 else 0
+                    action(value > 0)
                 }
         )
-    /*    Image(
-            painter = painterResource(R.drawable.ic_favorite_border),
-            contentDescription = null,
-            contentScale = ContentScale.None,
-            colorFilter = if (!checked.value) ColorFilter.tint(BorderButton)
-            else ColorFilter.tint(BgCard),
-            modifier = modifier
-                .size(24.dp)
-        )*/
+
 
 
     }
@@ -347,16 +290,16 @@ fun CardProduct(productItem: Product, state: ModalBottomSheetState){//}, action:
         }
     }
 
-    log("recomposition card")
+    //log("recomposition card")
     val context = LocalContext.current
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
 
     val visible = remember{MutableTransitionState(false)}
     val animateSize = remember{mutableStateOf(Size.Zero)}
     val imageLink = getLinkImage(product.imageindex, product.linkimages)
-    //val imageLink = getLinkImage(0, product.linkimages)
     val bitmap = remember{mutableStateOf(ImageBitmap(1, 1,
                                          hasAlpha = true, config = ImageBitmapConfig.Argb8888))}
+
     val downloadImage = bitmap.value.width == 1 && !imageLink.isNullOrBlank()
 
         if (downloadImage) {
@@ -366,8 +309,7 @@ fun CardProduct(productItem: Product, state: ModalBottomSheetState){//}, action:
                 // Если не нужно уменьшать изображение,
                 // используйте ImageLinkDownload.downloadImage вместо
                 // ImageLinkDownload.downloadCardImage
-                //ImageLinkDownloader.downloadImage(
-                ImageLinkDownloader.downloadCardImage(
+                 ImageLinkDownloader.downloadCardImage(
                     imageLink?.let { "$SERVER_URL/images/$it" }, object : Callback {
                         override fun onComplete(image: Bitmap) {
                             bitmap.value = image.asImageBitmap()
@@ -434,7 +376,7 @@ fun CardProduct(productItem: Product, state: ModalBottomSheetState){//}, action:
 
                     ButtonFavorite(modifier = Modifier.align(Alignment.TopEnd)
                     ) {
-                        log("click favorite")
+                        //log("setProductFavorite")
                         viewModel.setProductFavorite(product.id, it)
                     }
                 }

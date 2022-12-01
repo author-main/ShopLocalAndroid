@@ -28,10 +28,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     @JvmName("setSelectedProduct1")
     fun setSelectedProduct(product: Product){
-        /*if (product.id == _selectedProduct.value.id) {
-            _selectedProduct.value.favorite = product.favorite
-            return
-        }*/
+       //  log("changed Selected Product, favorite = ${product.favorite}")
         _selectedProduct.value = product.copy(favorite = product.favorite)
     }
 
@@ -126,15 +123,14 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     private fun getProduct(id: Int){
         repository.getProduct(id) { product ->
-            log(product.toString())
+            //log(product.toString())
             //_products.value = products.toMutableList()
         }
     }
 
     private fun getPromoProducts(){
         repository.getPromoProducts(USER_ID) { products ->
-            /*_products.value.clear()
-            _products.value.addAll(products)*/
+            setSelectedProduct(Product())
             _products.value = products.toMutableList()
         }
     }
