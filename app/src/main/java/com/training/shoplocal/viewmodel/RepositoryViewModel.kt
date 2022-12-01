@@ -132,6 +132,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         repository.getPromoProducts(USER_ID) { products ->
             /*_products.value.clear()
             _products.value.addAll(products)*/
+            setSelectedProduct(Product())
             _products.value = products.toMutableList()
         }
     }
