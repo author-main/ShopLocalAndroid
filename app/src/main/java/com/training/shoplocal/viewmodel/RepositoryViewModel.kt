@@ -32,6 +32,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             _selectedProduct.value.favorite = product.favorite
             return
         }*/
+        log("changed Selected Product, favorite = ${product.favorite}")
         _selectedProduct.value = product.copy(favorite = product.favorite)
     }
 

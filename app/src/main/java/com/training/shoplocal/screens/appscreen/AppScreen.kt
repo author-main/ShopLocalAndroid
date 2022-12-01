@@ -27,13 +27,13 @@ import com.training.shoplocal.screens.mainscreen.MainScreen
 import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 
-val LocalSelectedProduct = compositionLocalOf<Product?> { error("No selected product!") }
+//val LocalSelectedProduct = compositionLocalOf<Product?> { error("No selected product!") }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AppScreen(){
       val viewModel: RepositoryViewModel = viewModel()
-       CompositionLocalProvider(LocalSelectedProduct provides viewModel.selectedProduct.collectAsState().value) {
+       //CompositionLocalProvider(LocalSelectedProduct provides viewModel.selectedProduct.collectAsState().value) {
           val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
           BottomSheet(state) {
               val navController = rememberNavController()
@@ -66,6 +66,6 @@ fun AppScreen(){
                   }
               }
           }
-      }
+//      }
 }
 

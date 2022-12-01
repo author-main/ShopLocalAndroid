@@ -115,12 +115,17 @@ private fun BottomSheetContent(state: ModalBottomSheetState){
         hide()
     }
     BottomSheetItem(R.drawable.ic_favorite_bs, run {
-        LocalSelectedProduct.current?.let{product ->
+        val selectedProduct = viewModel.selectedProduct.collectAsState()
+        if (selectedProduct.value.favorite > 0)
+            textItems[4]
+        else
+            textItems[1]
+     /*   LocalSelectedProduct.current?.let{product ->
             if (product.favorite > 0)
                 textItems[4]
             else
                 textItems[1]
-        } ?: textItems[1]
+        } ?: textItems[1]*/
     }){
         val product = viewModel.selectedProduct.value
         val favorite: Byte =
