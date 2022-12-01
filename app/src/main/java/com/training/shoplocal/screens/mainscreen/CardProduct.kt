@@ -297,6 +297,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
     val visible = remember{MutableTransitionState(false)}
     val animateSize = remember{mutableStateOf(Size.Zero)}
     val imageLink = getLinkImage(product.imageindex, product.linkimages)
+    log("product imagelink = ${product.linkimages.toString()}")
     //val imageLink = getLinkImage(0, product.linkimages)
     val bitmap = remember{mutableStateOf(ImageBitmap(1, 1,
                                          hasAlpha = true, config = ImageBitmapConfig.Argb8888))}
