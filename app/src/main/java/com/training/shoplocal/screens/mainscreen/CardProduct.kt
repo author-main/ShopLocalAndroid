@@ -309,8 +309,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                 // Если не нужно уменьшать изображение,
                 // используйте ImageLinkDownload.downloadImage вместо
                 // ImageLinkDownload.downloadCardImage
-                //ImageLinkDownloader.downloadImage(
-                ImageLinkDownloader.downloadCardImage(
+                 ImageLinkDownloader.downloadCardImage(
                     imageLink?.let { "$SERVER_URL/images/$it" }, object : Callback {
                         override fun onComplete(image: Bitmap) {
                             bitmap.value = image.asImageBitmap()
