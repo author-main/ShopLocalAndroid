@@ -124,14 +124,12 @@ fun DiscountPanel(modifier: Modifier, percent: Int){
 
 @Composable
 fun StarPanel(count: Float){
-
     val df = DecimalFormat("#.#")
     df.roundingMode = RoundingMode.HALF_EVEN
     //val rounded = df.format(count)
     val partNumber = df.format(count).split(DECIMAL_CEPARATOR)
     val intPart = partNumber[0].toInt()
-    val floatPart = if (partNumber.size == 2)
-        partNumber[1].toInt() else 0
+    val floatPart = if (partNumber.size == 2) partNumber[1].toInt() else 0
     val starPart = intPart + 1
 
     val bm = BitmapFactory.decodeResource(appContext().resources, R.drawable.ic_star)
@@ -152,10 +150,10 @@ fun StarPanel(count: Float){
             // < * Отрисовка части звезды
             if (i == starPart - 1 && floatPart > 0) {
                 val part       = bm.width / 10f
-                val center     = bm.width / 2f
-                val widthStar  = if (floatPart <= 5)
+                //val center     = bm.width / 2f
+                val widthStar  = floatPart * part /*if (floatPart <= 5)
                     center - (5 - floatPart) * part
-                else center + (floatPart - 5) * part
+                else center + (floatPart - 5) * part*/
                 val bmPart: Bitmap = Bitmap.createBitmap(bm, 0, 0, widthStar.toInt(), bm.height)
                 Image(modifier = Modifier.height(12.dp),
                     bitmap = bmPart.asImageBitmap(),
@@ -237,7 +235,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
     }
     @Composable
     fun ButtonFavorite(modifier: Modifier, action: (checked: Boolean)-> Unit){
-      val observeSelectedProduct = viewModel.selectedProduct.collectAsState()
+        val observeSelectedProduct = viewModel.selectedProduct.collectAsState()
         val isFavorite = remember {
             derivedStateOf {
                 if (observeSelectedProduct.value.id != -1)

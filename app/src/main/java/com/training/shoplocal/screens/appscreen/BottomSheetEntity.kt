@@ -65,7 +65,7 @@ fun BottomSheet(state: ModalBottomSheetState, content: @Composable ()-> Unit = {
             sheetState = state,
             sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
             sheetBackgroundColor = PrimaryDark,
-            scrimColor = Color.Transparent,//Color.Black.copy(alpha = 0.3f),
+            scrimColor = Color.Black.copy(alpha = 0.3f),//Color.Transparent,
             sheetElevation = 3.dp
         ) {
             /* when (ScreenRouter.current) {
