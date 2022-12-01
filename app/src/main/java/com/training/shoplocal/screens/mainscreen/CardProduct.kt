@@ -237,27 +237,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
     }
     @Composable
     fun ButtonFavorite(modifier: Modifier, action: (checked: Boolean)-> Unit){
-        //log("recomposition ButtonFavorite")
-        //var checked = product.favorite > 0
-
-        //checked.value = product.favorite > 0
-
-
-       /* var id = 0
-        LocalSelectedProduct.current?.let {localProduct ->
-            if (localProduct.id == product.id)
-                id = localProduct.id
-          //  id = localProduct.id
-           /* if (localProduct.id == product.id) {
-                checked.value = localProduct.favorite > 0
-            }*/
-        }*/
-
-        //val selectedProduct by viewModel.selectedProduct.collectAsState()
-
-
-
-        val observeSelectedProduct = viewModel.selectedProduct.collectAsState()
+      val observeSelectedProduct = viewModel.selectedProduct.collectAsState()
         val isFavorite = remember {
             derivedStateOf {
                 if (observeSelectedProduct.value.id != -1)
@@ -270,7 +250,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                 }
             }
         }
-        log ("recomposition favorite")
+        //log ("recomposition favorite")
     Image(
             painter = painterResource(R.drawable.ic_favorite),
             contentDescription = null,
@@ -310,7 +290,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
         }
     }
 
-    log("recomposition card")
+    //log("recomposition card")
     val context = LocalContext.current
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
 
