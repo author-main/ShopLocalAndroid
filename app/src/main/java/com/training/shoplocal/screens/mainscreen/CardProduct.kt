@@ -13,10 +13,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -65,6 +62,9 @@ import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 
+/*@Composable
+fun LazyListState.isScrollInInitialState(): Boolean =
+    firstVisibleItemIndex == 0 && firstVisibleItemScrollOffset == 0*/
 
 @Composable
 fun AnimateLinkDownload(componentSize: Size) {
@@ -361,6 +361,13 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                             )
                         ) {
                             val lazyRowState = rememberLazyListState()
+                            val initialState = remember{
+                                derivedStateOf {
+                                    lazyRowState.firstVisibleItemIndex == 0 && lazyRowState.firstVisibleItemScrollOffset == 0
+                                }
+                            }
+                            if (initialState.value)
+                                log("lazyRow init...")
                             LazyRow(state = lazyRowState, modifier = Modifier.fillMaxSize(),
                                 horizontalArrangement = Arrangement.Center
                             ) {
