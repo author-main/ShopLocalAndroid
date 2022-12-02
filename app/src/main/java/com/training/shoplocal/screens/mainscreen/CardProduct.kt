@@ -13,6 +13,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -337,7 +341,6 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                 shape = RoundedCornerShape(8.dp)
             ) {
                 Box(modifier = Modifier
-                    .fillMaxSize()
                     .padding(8.dp)
                     .onGloballyPositioned { coordinates ->
                         animateSize.value = coordinates.size.toSize()
@@ -357,13 +360,22 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                                 )
                             )
                         ) {
-                            Image(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(all = 8.dp),
-                                bitmap = bitmap.value,
-                                contentDescription = null
-                            )
+                            val lazyRowState = rememberLazyListState()
+                            LazyRow(state = lazyRowState, modifier = Modifier.fillMaxSize(),
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                item {
+                                    Image(
+                                        modifier = Modifier
+                                            .fillParentMaxSize()
+                                            //.background(Color.Green),
+                                            .padding(all = 8.dp),
+                                        //contentScale = ContentScale.FillBounds,
+                                        bitmap = bitmap.value,
+                                        contentDescription = null
+                                    )
+                                }
+                            }
                     }
 
                     DiscountPanel(modifier = Modifier.align(Alignment.BottomStart), percent = product.discount)
