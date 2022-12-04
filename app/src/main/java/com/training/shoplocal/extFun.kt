@@ -10,6 +10,8 @@ import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.ImageBitmapConfig
 import com.training.shoplocal.AppShopLocal.Companion.appContext
 import com.training.shoplocal.ui.theme.SelectedItem
 import com.training.shoplocal.ui.theme.TextFieldBg
@@ -18,7 +20,7 @@ import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import kotlin.math.roundToInt
 
-const val SERVER_URL            = "http://192.168.1.10"
+const val SERVER_URL            = "http://192.168.0.10"
 val DECIMAL_CEPARATOR           = DecimalFormatSymbols().decimalSeparator
 
 /*enum class Error {
@@ -36,6 +38,7 @@ enum class FieldFilter {
     PRICE_RANGE
 }
 
+val EMPTY_IMAGE = ImageBitmap(1,1, hasAlpha = true, config = ImageBitmapConfig.Argb8888)
 val TEXT_BOTTOMNAVIGATION: Array<String> = AppShopLocal.appContext().resources.getStringArray(R.array.bottom_navigation_items)
 const val DEFAULT_STRRESOURCE_VALUE  = ""
 const val FILE_PREFERENCES      = "settings"
@@ -97,3 +100,6 @@ val Int.dp: Int
 
 val Int.px: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()
+
+fun ImageBitmap.isEmpty(): Boolean =
+    this.width == 1 || this.height == 1

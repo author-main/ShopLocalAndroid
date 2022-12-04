@@ -292,39 +292,54 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
         }
     }
 
-    //log("recomposition card")
+  //  log("recomposition card")
     val context = LocalContext.current
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
 
     val visible = remember{MutableTransitionState(false)}
     val animateSize = remember{mutableStateOf(Size.Zero)}
     val imageLink = getLinkImage(product.imageindex, product.linkimages)
-    val bitmap = remember{mutableStateOf(ImageBitmap(1, 1,
-                                         hasAlpha = true, config = ImageBitmapConfig.Argb8888))}
+    val listImages = remember{ Array<ImageBitmap>(product.linkimages!!.size) {
+        EMPTY_IMAGE
+    }.toMutableList() }
 
-    val downloadImage = bitmap.value.width == 1 && !imageLink.isNullOrBlank()
 
-        if (downloadImage) {
-            // Запуск в области compose, если compose завершится. Блок внутри будет завершен без
-            // утечки памяти и процессов.
-            LaunchedEffect(true) {
-                // Если не нужно уменьшать изображение,
-                // используйте ImageLinkDownload.downloadImage вместо
-                // ImageLinkDownload.downloadCardImage
-                 ImageLinkDownloader.downloadCardImage(
-                    imageLink?.let { "$SERVER_URL/images/$it" }, object : Callback {
-                        override fun onComplete(image: Bitmap) {
-                            bitmap.value = image.asImageBitmap()
-                        }
+    //val bitmap = remember{mutableStateOf(listImages[0])}
 
-                        override fun onFailure() {
+    /*val bitmap = remember{mutableStateOf(EMPTY_IMAGE)ImageBitmap(1, 1,
+                                         hasAlpha = true, config = ImageBitmapConfig.Argb8888))}*/
 
-                        }
-                    })
-            }
+    val downloadedImage = remember{ mutableStateOf(false) }
 
-        } else
-            visible.targetState = true
+    /*val downloadImage = remember {
+        derivedStateOf {
+            listImages[0].isEmpty() && !imageLink.isNullOrBlank()
+        }
+    }*/
+
+    if (!downloadedImage.value) {
+        // Запуск в области compose, если compose завершится. Блок внутри будет завершен без
+        // утечки памяти и процессов.
+        LaunchedEffect(true) {
+            // Если не нужно уменьшать изображение,
+            // используйте ImageLinkDownload.downloadImage вместо
+            // ImageLinkDownload.downloadCardImage
+             ImageLinkDownloader.downloadCardImage(
+                imageLink?.let { "$SERVER_URL/images/$it" }, object : Callback {
+                    override fun onComplete(image: Bitmap) {
+                       // bitmap.value = image.asImageBitmap()
+                        listImages[0] = image.asImageBitmap()
+                        downloadedImage.value = true
+                    }
+
+                    override fun onFailure() {
+
+                    }
+                })
+        }
+
+    } else
+        visible.targetState = true
 
 
     Box(modifier = Modifier
@@ -347,7 +362,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                     },
                     contentAlignment = Alignment.Center
                     ) {
-                    if (downloadImage) {
+                    if (!downloadedImage.value) {
                         //log("animatelink")
                         AnimateLinkDownload(animateSize.value)
                     }
@@ -366,21 +381,24 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                                     lazyRowState.firstVisibleItemIndex == 0 && lazyRowState.firstVisibleItemScrollOffset == 0
                                 }
                             }
-                            if (initialState.value)
-                                log("lazyRow init...")
+                            /*if (initialState.value)
+                                log("lazyRow init...")*/
+
                             LazyRow(state = lazyRowState, modifier = Modifier.fillMaxSize(),
                                 horizontalArrangement = Arrangement.Center
                             ) {
-                                item {
-                                    Image(
-                                        modifier = Modifier
-                                            .fillParentMaxSize()
-                                            //.background(Color.Green),
-                                            .padding(all = 8.dp),
-                                        //contentScale = ContentScale.FillBounds,
-                                        bitmap = bitmap.value,
-                                        contentDescription = null
-                                    )
+                                listImages.forEach {item ->
+                                    item {
+                                        Image(
+                                            modifier = Modifier
+                                                .fillParentMaxSize()
+                                                //.background(Color.Green),
+                                                .padding(all = 8.dp),
+                                            //contentScale = ContentScale.FillBounds,
+                                            bitmap = item,//bitmap.value,
+                                            contentDescription = null
+                                        )
+                                    }
                                 }
                             }
                     }
