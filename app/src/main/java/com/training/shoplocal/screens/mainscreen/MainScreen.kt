@@ -51,7 +51,7 @@ fun MainScreen(state: ModalBottomSheetState){
                     //horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     //log("recomposition Grid")
-                    items(products.size - 1) { index ->
+                    items(products.size) { index ->
                         Row(modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceEvenly) {
                             CardProduct(products[index], state = state)

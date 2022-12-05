@@ -51,7 +51,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         if (result) {
             USER_ID = it
             getBrands()
-            getPromoProducts()//Product(33)
+            getPromoProducts(1)//Product(33)
             ScreenRouter.navigateTo(ScreenItem.MainScreen)
             authorizeUser()
         }
@@ -128,8 +128,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    private fun getPromoProducts(){
-        repository.getPromoProducts(USER_ID) { products ->
+    private fun getPromoProducts(part: Int){
+        repository.getPromoProducts(USER_ID, part) { products ->
             setSelectedProduct(Product())
             _products.value = products.toMutableList()
         }
