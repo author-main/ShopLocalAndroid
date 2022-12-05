@@ -131,7 +131,11 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private fun getPromoProducts(part: Int){
         repository.getPromoProducts(USER_ID, part) { products ->
             setSelectedProduct(Product())
-            _products.value = products.toMutableList()
+            val list = _products.value.toMutableList().apply {
+                addAll(products)
+            }
+            //list.addAll(products)
+            _products.value = list//products.toMutableList()
         }
     }
 
