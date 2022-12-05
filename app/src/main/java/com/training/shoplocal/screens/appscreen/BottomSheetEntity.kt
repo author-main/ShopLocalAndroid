@@ -97,6 +97,7 @@ fun BottomSheet(state: ModalBottomSheetState, content: @Composable ()-> Unit = {
 private fun BottomSheetContent(state: ModalBottomSheetState){
     val viewModel: RepositoryViewModel = viewModel()
     val scope = rememberCoroutineScope()
+    val selectedProduct = viewModel.selectedProduct.collectAsState()
     fun hide(){
         scope.launch {
             delay(150)
@@ -115,7 +116,7 @@ private fun BottomSheetContent(state: ModalBottomSheetState){
         hide()
     }
     BottomSheetItem(R.drawable.ic_favorite_bs, run {
-        val selectedProduct = viewModel.selectedProduct.collectAsState()
+        //val selectedProduct = viewModel.selectedProduct.collectAsState()
         if (selectedProduct.value.favorite > 0)
             textItems[4]
         else

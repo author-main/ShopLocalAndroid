@@ -295,14 +295,13 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
   //  log("recomposition card")
     val context = LocalContext.current
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
-
+    val countItems = product.linkimages?.size ?: 1 // у продукта должно быть хотя бы одно изображение
     val visible = remember{MutableTransitionState(false)}
     val animateSize = remember{mutableStateOf(Size.Zero)}
     val imageLink = getLinkImage(product.imageindex, product.linkimages)
-    val listImages = remember{ Array<ImageBitmap>(product.linkimages!!.size) {
+    val listImages = remember{ Array<ImageBitmap>(countItems) {
         EMPTY_IMAGE
     }.toMutableList() }
-
 
     //val bitmap = remember{mutableStateOf(listImages[0])}
 
@@ -333,7 +332,10 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                     }
 
                     override fun onFailure() {
-
+                        // здесь можно установить картинку по умолчанию,
+                        // в случае если картинка не загрузилась
+                        //listImages[0] = ваше изображение
+                        downloadedImage.value = true
                     }
                 })
         }
@@ -375,14 +377,50 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                                 )
                             )
                         ) {
+                            val downloadedImages = remember{mutableStateOf(false)}
                             val lazyRowState = rememberLazyListState()
-                            val initialState = remember{
+                            /*val initialState = remember{
                                 derivedStateOf {
                                     lazyRowState.firstVisibleItemIndex == 0 && lazyRowState.firstVisibleItemScrollOffset == 0
                                 }
+                            }*/
+
+                            val needDownloadImages = remember {
+                                derivedStateOf {
+                                    countItems > 1
+                                    &&        (lazyRowState.firstVisibleItemIndex == 0
+//                                              && lazyRowState.firstVisibleItemScrollOffset == 0
+                                              && lazyRowState.isScrollInProgress)
+                                    && !downloadedImages.value
+                                }
                             }
-                            /*if (initialState.value)
-                                log("lazyRow init...")*/
+                            if (needDownloadImages.value) {
+                                log("необходимо загрузить $countItems, ${downloadedImages.value.toString()}")
+                                    product.linkimages?.let { items ->
+                                        for (i in 1 until countItems) {
+                                        //items.forEachIndexed { index, s ->
+                                            val itemImageLink = getLinkImage(i, items)
+                                            ImageLinkDownloader.downloadCardImage(
+                                                "$SERVER_URL/images/$itemImageLink",
+                                                object : Callback {
+                                                    override fun onComplete(image: Bitmap) {
+                                                        listImages[i] = image.asImageBitmap()
+                                                    }
+
+                                                    override fun onFailure() {
+                                                        TODO("Not yet implemented")
+                                                    }
+                                                }
+                                            )
+                                        }
+                                    }
+                                //downloadedImages.value = true
+                            }
+
+
+
+                            /*if (!initialState.value)
+                                log("lazyRow scroll...")*/
 
                             LazyRow(state = lazyRowState, modifier = Modifier.fillMaxSize(),
                                 horizontalArrangement = Arrangement.Center
