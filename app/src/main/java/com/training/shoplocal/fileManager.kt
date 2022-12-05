@@ -78,6 +78,13 @@ fun createDirectory(value: String): Boolean {
         true
 }
 
+fun fileExists(fileName: String): Boolean {
+    val file = File(fileName)
+    return file.exists()
+}
+
+fun fileExists(file: File) = file.exists()
+
 fun getCacheDirectory(): String =
     AppShopLocal.appContext().applicationInfo.dataDir + "/cache/"
 

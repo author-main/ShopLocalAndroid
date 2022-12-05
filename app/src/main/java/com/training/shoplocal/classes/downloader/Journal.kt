@@ -53,6 +53,7 @@ class Journal private constructor(private val cacheDir: String) {
         }
     }
 
+    @Synchronized
     private fun getEntriesFromJournal() {
         var existsJournal = true
         if (!fileJournal.exists()) {
@@ -98,6 +99,7 @@ class Journal private constructor(private val cacheDir: String) {
     @Synchronized
     fun loadEntriesFromJournal(){
         entries.clear()
+        if (!fileExists(fileJournal)) return
         BufferedReader(FileReader(fileJournal)).use{
             it.lineSequence().forEach {line ->
                 val entry = getEntryFromLine(line)

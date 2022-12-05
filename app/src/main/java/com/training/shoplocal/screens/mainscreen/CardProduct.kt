@@ -67,7 +67,7 @@ fun LazyListState.isScrollInInitialState(): Boolean =
     firstVisibleItemIndex == 0 && firstVisibleItemScrollOffset == 0*/
 
 
-private enum IMAGE_STATE {
+private enum class IMAGE_STATE {
     NONE,
     PROCESS,
     COMPLETED,
@@ -300,24 +300,53 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
         }
     }
 
-  //  log("recomposition card")
-    //val downloadedImages = remember{mutableStateOf(false)}
+    val countItems = product.linkimages?.size ?: 1 // у продукта должно быть хотя бы одно изображение
+    /*val listImages = remember { mutableStateListOf<Pair<IMAGE_STATE, ImageBitmap>>().apply {
+        for (i in 0 until countItems)
+            this.add(IMAGE_STATE.NONE to EMPTY_IMAGE)
+    } }*/
+    val listImages = remember{Array<Pair<IMAGE_STATE, ImageBitmap>>(countItems) {
+        IMAGE_STATE.NONE to EMPTY_IMAGE
+    }.toMutableList()}
+    /*val listImages = remember{ mutableStateListOf<Pair<IMAGE_STATE, ImageBitmap>>().apply {
+        for(i in 0 until countItems)
+            this.add(IMAGE_STATE.NONE to EMPTY_IMAGE)
+    }
+    }*/
+    //val listImages = remember{list}
+
+   // log("count images = ${listImages.size}")
+
+    /*fun imagesUploaded(): Boolean {
+        if (countItems == 1) return true
+        var result = true
+        for (i in 1 until countItems) {
+
+            if (!((listImages[i].first == IMAGE_STATE.COMPLETED && !listImages[i].second.isEmpty())
+                || listImages[i].first == IMAGE_STATE.FAILURE)) {
+                result = false
+                break
+            }
+        }
+        //log("product id=${product.id}, images uploaded ${result.toString()}")
+        return result
+    }*/
     val context = LocalContext.current
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
-    val countItems = product.linkimages?.size ?: 1 // у продукта должно быть хотя бы одно изображение
     val visible = remember{MutableTransitionState(false)}
     val animateSize = remember{mutableStateOf(Size.Zero)}
-    val imageLink = getLinkImage(product.imageindex, product.linkimages)
-    val listImages = remember{ Array<ImageBitmap>(countItems) {
-        EMPTY_IMAGE
-    }.toMutableList() }
+    val imageLink = getLinkImage(0, product.linkimages)
+
 
     //val bitmap = remember{mutableStateOf(listImages[0])}
 
     /*val bitmap = remember{mutableStateOf(EMPTY_IMAGE)ImageBitmap(1, 1,
                                          hasAlpha = true, config = ImageBitmapConfig.Argb8888))}*/
 
-    val downloadedImage = remember{ mutableStateOf(false) }
+    //val downloadedImage = remember{ mutableStateOf(false) }
+    val downloadedImage = remember{ mutableStateOf(
+        (listImages[0].first == IMAGE_STATE.COMPLETED && !listImages[0].second.isEmpty()) || listImages[0].first == IMAGE_STATE.FAILURE
+    ) }
 
     /*val downloadImage = remember {
         derivedStateOf {
@@ -336,7 +365,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                 imageLink?.let { "$SERVER_URL/images/$it" }, object : Callback {
                     override fun onComplete(image: Bitmap) {
                        // bitmap.value = image.asImageBitmap()
-                        listImages[0] = image.asImageBitmap()
+                        listImages[0] = IMAGE_STATE.COMPLETED to image.asImageBitmap()
                         downloadedImage.value = true
                     }
 
@@ -344,6 +373,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                         // здесь можно установить картинку по умолчанию,
                         // в случае если картинка не загрузилась
                         //listImages[0] = ваше изображение
+                        listImages[0]  = IMAGE_STATE.FAILURE to EMPTY_IMAGE
                         downloadedImage.value = true
                     }
                 })
@@ -386,41 +416,65 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                                 )
                             )
                         ) {
-                            val downloadedImages = remember{mutableStateOf(false)}
+
                             val lazyRowState = rememberLazyListState()
+                           // val downloadedImages = remember{mutableStateOf(false)}
                             /*val initialState = remember{
                                 derivedStateOf {
                                     lazyRowState.firstVisibleItemIndex == 0 && lazyRowState.firstVisibleItemScrollOffset == 0
                                 }
                             }*/
+                            //val initCardRow = remember{ mutableStateOf(false)}
+
                             val needDownloadImages = remember {
                                 derivedStateOf {
-                                    countItems > 1
-                                    &&        (lazyRowState.firstVisibleItemIndex == 0
-                                              && lazyRowState.firstVisibleItemScrollOffset > 0
-                                              && lazyRowState.isScrollInProgress)
-                                    && !downloadedImages.value
+                                                (countItems > 1
+                                                && (lazyRowState.firstVisibleItemIndex == 0
+                                                    && lazyRowState.firstVisibleItemScrollOffset > 0
+                                                    && lazyRowState.isScrollInProgress))
+                                                //&& !downloadedImages.value )
+
+                                                   //    || (countItems > 1 && downloadedImages.value)
+                                                    //    && !downloadedImages.value)
                                 }
                             }
-                            if (needDownloadImages.value) {
-                                log("необходимо загрузить $countItems, ${downloadedImages.value.toString()}")
+
+                            val uploaded = remember {
+                                derivedStateOf {
+                                    countItems > 1 && (lazyRowState.firstVisibleItemIndex > 0
+                                            || lazyRowState.firstVisibleItemScrollOffset > 0)
+                                }
+                            }
+                           // log("необходимо загрузить ${needDownloadImages.value.toString()}")
+                            if (needDownloadImages.value || uploaded.value) {
+
                                     product.linkimages?.let { items ->
                                         for (i in 1 until countItems) {
-                                        //items.forEachIndexed { index, s ->
-                                            val itemImageLink = getLinkImage(i, items)
-                                            ImageLinkDownloader.downloadCardImage(
-                                                "$SERVER_URL/images/$itemImageLink",
-                                                object : Callback {
-                                                    override fun onComplete(image: Bitmap) {
-                                                        listImages[i] = image.asImageBitmap()
-                                                        downloadedImages.value = true
-                                                    }
+                                            if (listImages[i].first == IMAGE_STATE.NONE) {
+                                                //log("product id = ${product.id}, необходимо загрузить Item$i")
+                                                val itemImageLink = getLinkImage(i, items)
+                                                listImages[i] = IMAGE_STATE.PROCESS to EMPTY_IMAGE
+                                               // log("необходимо загрузить ${product.id}")
+                                                ImageLinkDownloader.downloadCardImage(
+                                                    "$SERVER_URL/images/$itemImageLink",
+                                                    object : Callback {
+                                                        override fun onComplete(image: Bitmap) {
+                                                            log ("product ${product.id}, loaded image $i")
+                                                            listImages[i] =
+                                                                IMAGE_STATE.COMPLETED to image.asImageBitmap()
+                                                                    //downloadedImages.value = imagesUploaded()
+                                                            //log("downloadedImages ${downloadedImages.value.toString()}")
+                                                        }
 
-                                                    override fun onFailure() {
-                                                        TODO("Not yet implemented")
+                                                        override fun onFailure() {
+                                                            listImages[i] =
+                                                                IMAGE_STATE.FAILURE to EMPTY_IMAGE
+                                                           // downloadedImages.value = imagesUploaded()
+                                                            //TODO("Not yet implemented")
+                                                        }
                                                     }
-                                                }
-                                            )
+                                                )
+                                            }
                                         }
                                     }
                                 //downloadedImages.value = true
@@ -442,7 +496,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                                                 //.background(Color.Green),
                                                 .padding(all = 8.dp),
                                             //contentScale = ContentScale.FillBounds,
-                                            bitmap = item,//bitmap.value,
+                                            bitmap = item.second,//bitmap.value,
                                             contentDescription = null
                                         )
                                     }
