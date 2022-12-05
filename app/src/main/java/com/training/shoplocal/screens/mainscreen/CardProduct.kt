@@ -293,6 +293,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
     }
 
   //  log("recomposition card")
+    //val downloadedImages = remember{mutableStateOf(false)}
     val context = LocalContext.current
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
     val countItems = product.linkimages?.size ?: 1 // у продукта должно быть хотя бы одно изображение
@@ -384,12 +385,11 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                                     lazyRowState.firstVisibleItemIndex == 0 && lazyRowState.firstVisibleItemScrollOffset == 0
                                 }
                             }*/
-
                             val needDownloadImages = remember {
                                 derivedStateOf {
                                     countItems > 1
                                     &&        (lazyRowState.firstVisibleItemIndex == 0
-//                                              && lazyRowState.firstVisibleItemScrollOffset == 0
+                                              && lazyRowState.firstVisibleItemScrollOffset > 0
                                               && lazyRowState.isScrollInProgress)
                                     && !downloadedImages.value
                                 }
@@ -405,6 +405,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                                                 object : Callback {
                                                     override fun onComplete(image: Bitmap) {
                                                         listImages[i] = image.asImageBitmap()
+                                                        downloadedImages.value = true
                                                     }
 
                                                     override fun onFailure() {
