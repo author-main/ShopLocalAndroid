@@ -66,6 +66,14 @@ import java.text.DecimalFormatSymbols
 fun LazyListState.isScrollInInitialState(): Boolean =
     firstVisibleItemIndex == 0 && firstVisibleItemScrollOffset == 0*/
 
+
+private enum IMAGE_STATE {
+    NONE,
+    PROCESS,
+    COMPLETED,
+    FAILURE
+}
+
 @Composable
 fun AnimateLinkDownload(componentSize: Size) {
     if (componentSize.width > 0) {
