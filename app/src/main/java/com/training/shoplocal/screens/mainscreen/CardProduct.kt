@@ -1,17 +1,14 @@
 package com.training.shoplocal.screens.mainscreen
 
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.foundation.Canvas
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.LinearGradient
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.*
 import androidx.compose.animation.fadeIn
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.CircleShape
@@ -182,7 +179,7 @@ fun StarPanel(count: Float){
 }
 
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((product: Product, menuindex: Int) -> Unit)? = null){
     /*val product = remember {
@@ -484,9 +481,11 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
 
                             /*if (!initialState.value)
                                 log("lazyRow scroll...")*/
-
+                            val flingBehavior = rememberSnapFlingBehavior(lazyListState = lazyRowState)
+                                //rememberSnapperFlingBehavior(state, itemWidth = 200.dp)
                             LazyRow(state = lazyRowState, modifier = Modifier.fillMaxSize(),
-                                horizontalArrangement = Arrangement.Center
+                                horizontalArrangement = Arrangement.Center,
+                                flingBehavior = flingBehavior
                             ) {
                                 listImages.forEach {item ->
                                     item {
