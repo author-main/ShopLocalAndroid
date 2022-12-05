@@ -19,10 +19,6 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
-    /*private val sortData = SortData()
-    private val filterData = FilterData()*/
-    //val activeProduct = Product()
-
     private val _selectedProduct = MutableStateFlow<Product>(Product())
     val selectedProduct = _selectedProduct.asStateFlow()
 
@@ -32,20 +28,10 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         _selectedProduct.value = product.copy(favorite = product.favorite)
     }
 
-
-
-
     private var USER_ID: Int = -1
     private var brands = listOf<Brand>()
-
     private val _products = MutableStateFlow<MutableList<Product>>(mutableListOf<Product>())
-
-    //private val _products = MutableStateFlow<SnapshotStateList<Product>>(mutableStateListOf<Product>())
-
-    //val list: SnapshotStateList<Product>
-    //private val _products = MutableStateFlow<MutableList<Product>>(mutableListOf<Product>())
     val products = _products.asStateFlow()
-
     private val actionLogin: (result: Int) -> Unit = {
         val result = it > 0
         if (result) {
@@ -69,8 +55,11 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         _authorizedUser.value = value
     }
     fun getLoginState() = repository.loginState
+
     fun getPassword()   = repository.loginState.getPassword()
+
     fun removePassword()   = repository.removePassword()
+
     fun setEmail(value: String)      = repository.loginState.setEmail(value)
 
     fun onRestoreUser(action: ((result: Boolean) -> Unit)?, email: String, password: String) {
@@ -80,6 +69,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     fun onRegisterUser(action: ((result: Boolean) -> Unit)?, vararg userdata: String) {
         repository.onRegisterUser(action, *userdata)
     }
+
     fun onLogin(email: String, password: String, finger: Boolean = false) {
         repository.onLogin({ result ->
             actionLogin(result)
@@ -119,7 +109,6 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     fun passContextFingerPrint(context: Context) {
         repository.setContextFingerPrint(context)
     }
-
 
     private fun getProduct(id: Int){
         repository.getProduct(id) { product ->
