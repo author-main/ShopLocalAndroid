@@ -129,14 +129,12 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             portion -= 1
             return
         }*/
-        log("part = $part")
+      //  log("part = $part")
         if (lastPortion == part) {
-            //updated = false
+            updatePortion = false
             return
         }
         repository.getPromoProducts(USER_ID, part) { products ->
-            //log("portion = $portion")
-            log("load portion $lastPortion")
             if (products.isNotEmpty()) {
                 setSelectedProduct(Product())
                 val list = _products.value.toMutableList().apply {
