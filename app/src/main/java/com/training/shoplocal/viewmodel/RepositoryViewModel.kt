@@ -19,8 +19,8 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
+    private var updatePortion = false
     private var lastPortion  = 0
-    private var portion: Int = 0
     private val _selectedProduct = MutableStateFlow<Product>(Product())
     val selectedProduct = _selectedProduct.asStateFlow()
 
@@ -39,7 +39,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         if (result) {
             USER_ID = it
             getBrands()
-            getNextPortionData()
+            getPromoProducts(1)
             //getPromoProducts(1)//Product(33)
             ScreenRouter.navigateTo(ScreenItem.MainScreen)
             authorizeUser()
@@ -121,22 +121,31 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     }
 
     private fun getPromoProducts(part: Int){
+        if (updatePortion)
+            return
+        updatePortion = true
       /*  val skip = lastPortion in 1..part
         if (skip) {
             portion -= 1
             return
         }*/
+        log("part = $part")
+        if (lastPortion == part) {
+            //updated = false
+            return
+        }
         repository.getPromoProducts(USER_ID, part) { products ->
             //log("portion = $portion")
-            log("load portion $portion")
+            log("load portion $lastPortion")
             if (products.isNotEmpty()) {
                 setSelectedProduct(Product())
                 val list = _products.value.toMutableList().apply {
                     addAll(products)
                 }
                 _products.value = list//products.toMutableList()
-                portion +=1
+                lastPortion = part
             }
+            updatePortion = false
         }
     }
 
@@ -162,7 +171,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     @Synchronized
     fun getNextPortionData(){
-      getPromoProducts(portion + 1)
+        getPromoProducts(lastPortion + 1)
     }
 
  }

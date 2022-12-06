@@ -32,7 +32,7 @@ import kotlinx.coroutines.CoroutineScope
 @Composable
 //fun MainScreen(state: ModalBottomSheetState, scope: CoroutineScope){
 fun MainScreen(state: ModalBottomSheetState){
-    //val part = remember{ mutableStateOf(1) }
+    //var part by remember {mutableStateOf(1)}
     //val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val viewModel: RepositoryViewModel = viewModel()
     val products: MutableList<Product> by viewModel.products.collectAsState()
@@ -71,11 +71,11 @@ fun MainScreen(state: ModalBottomSheetState){
                        // if (nextPart.value) {
                             //log("${lastItemVisible?.index}")
                             LaunchedEffect(nextPart.value) {
+
                                // log("after " + nextPart.value.toString())
-                                if (nextPart.value) {
-                                    //log("load part")
+                                if (nextPart.value)
                                     viewModel.getNextPortionData()
-                                }
+
                             }
                      //   }
 
