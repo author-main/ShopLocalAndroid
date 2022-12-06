@@ -27,15 +27,18 @@ class DatabaseCRUD: DatabaseCRUDInterface {
     override fun getPromoProducts(id: Int, part: Int, action: (products: List<Product>) -> Unit) {
         DatabaseApi.getPromoProducts(id, part, object: retrofit2.Callback<List<Product>>{
             override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
-                response.body()?.let {
-                    if (it.isNotEmpty()) {
+
+                    response.body()?.let {
+                        if (it.isNotEmpty()) {
                             action.invoke(it)
+                        }
                     }
-                }
             }
 
             override fun onFailure(call: Call<List<Product>>, t: Throwable) {
-                log(t.message ?: "ошибка")
+                //log(t.message ?: "ошибка")
+                //log("ошибка")
+                action.invoke(mutableListOf<Product>())
             }
         })
     }

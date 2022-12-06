@@ -19,6 +19,8 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
+    private var lastPortion  = 0
+    private var portion: Int = 0
     private val _selectedProduct = MutableStateFlow<Product>(Product())
     val selectedProduct = _selectedProduct.asStateFlow()
 
@@ -37,7 +39,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         if (result) {
             USER_ID = it
             getBrands()
-            getPromoProducts(1)//Product(33)
+            getNextPortionData()
+            //getPromoProducts(1)//Product(33)
             ScreenRouter.navigateTo(ScreenItem.MainScreen)
             authorizeUser()
         }
@@ -118,19 +121,30 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     }
 
     private fun getPromoProducts(part: Int){
+      /*  val skip = lastPortion in 1..part
+        if (skip) {
+            portion -= 1
+            return
+        }*/
         repository.getPromoProducts(USER_ID, part) { products ->
-            setSelectedProduct(Product())
-            val list = _products.value.toMutableList().apply {
-                addAll(products)
+            //log("portion = $portion")
+            log("load portion $part")
+            if (products.isNotEmpty()) {
+                setSelectedProduct(Product())
+                val list = _products.value.toMutableList().apply {
+                    addAll(products)
+                }
+                _products.value = list//products.toMutableList()
+            } else {
+                portion -= 1
             }
-            //list.addAll(products)
-            _products.value = list//products.toMutableList()
         }
     }
 
     private fun getBrands(){
         repository.getBrands() { it ->
             brands = it
+            lastPortion = portion
         }
     }
 
@@ -146,6 +160,15 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                 repository.updateFavorite(USER_ID, it.id, favorite)
             }
         }
+    }
+
+    @Synchronized
+    fun getNextPortionData(){
+      if (portion + 1 != lastPortion) {
+          portion += 1
+          lastPortion = portion
+      }
+      getPromoProducts(portion)
     }
 
  }

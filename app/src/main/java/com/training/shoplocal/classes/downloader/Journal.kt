@@ -6,6 +6,7 @@ import java.io.File
 import java.io.FileFilter
 import java.io.FileOutputStream
 import java.io.FileReader
+import java.io.IOException
 
 class Journal private constructor(private val cacheDir: String) {
     private data class CacheEntry(val hash: String) {
@@ -99,15 +100,18 @@ class Journal private constructor(private val cacheDir: String) {
     @Synchronized
     fun loadEntriesFromJournal(){
         entries.clear()
-        if (!fileExists(fileJournal)) return
-        BufferedReader(FileReader(fileJournal)).use{
-            it.lineSequence().forEach {line ->
-                val entry = getEntryFromLine(line)
-                entry?.let{ data ->
-                    data.length = getFileSize(getFilenameCacheFile(data.hash))
-                    entries[data.hash] = data
+        try {
+            BufferedReader(FileReader(fileJournal)).use {
+                it.lineSequence().forEach { line ->
+                    val entry = getEntryFromLine(line)
+                    entry?.let { data ->
+                        data.length = getFileSize(getFilenameCacheFile(data.hash))
+                        entries[data.hash] = data
+                    }
                 }
             }
+        } catch(_: IOException) {
+
         }
     }
 

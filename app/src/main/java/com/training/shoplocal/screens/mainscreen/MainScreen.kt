@@ -32,6 +32,7 @@ import kotlinx.coroutines.CoroutineScope
 @Composable
 //fun MainScreen(state: ModalBottomSheetState, scope: CoroutineScope){
 fun MainScreen(state: ModalBottomSheetState){
+    //val part = remember{ mutableStateOf(1) }
     //val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val viewModel: RepositoryViewModel = viewModel()
     val products: MutableList<Product> by viewModel.products.collectAsState()
@@ -41,12 +42,13 @@ fun MainScreen(state: ModalBottomSheetState){
                 .fillMaxSize()
                 .background(BgScreenDark)
         ) {
-
             if (products.isNotEmpty()) {
-                LazyVerticalGrid(modifier = Modifier.fillMaxSize()
+                val stateGrid = rememberLazyGridState()
+                LazyVerticalGrid(modifier = Modifier
+                    .fillMaxSize()
                     .padding(horizontal = 10.dp),
                     columns = GridCells.Adaptive(minSize = 150.dp),
-                    state = rememberLazyGridState(),
+                    state = stateGrid,
                     contentPadding = PaddingValues(10.dp),
                     //horizontalArrangement = Arrangement.SpaceBetween
                 ) {
@@ -56,6 +58,28 @@ fun MainScreen(state: ModalBottomSheetState){
                             horizontalArrangement = Arrangement.SpaceEvenly) {
                             CardProduct(products[index], state = state)
                         }
+
+
+                        val nextPart = remember {
+                            derivedStateOf {
+                                stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.index == stateGrid.layoutInfo.totalItemsCount - 1
+                                        //&& stateGrid.isScrollInProgress
+                                        && stateGrid.layoutInfo.viewportEndOffset - stateGrid.layoutInfo.visibleItemsInfo.last().offset.y >= stateGrid.layoutInfo.visibleItemsInfo.last().size.height
+                            }
+                        }
+
+                       // if (nextPart.value) {
+                            //log("${lastItemVisible?.index}")
+                            LaunchedEffect(nextPart.value) {
+                               // log("after " + nextPart.value.toString())
+                                if (nextPart.value) {
+                                    //log("load part")
+                                    viewModel.getNextPortionData()
+                                }
+                            }
+                     //   }
+
+
                     }
                 }
             }
