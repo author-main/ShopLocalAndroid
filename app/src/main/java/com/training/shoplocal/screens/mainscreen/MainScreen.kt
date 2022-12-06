@@ -72,7 +72,7 @@ fun MainScreen(state: ModalBottomSheetState){
                         }
                         LaunchedEffect(nextPart.value) {
                             if (nextPart.value)
-                            viewModel.getNextPortionData()
+                                viewModel.getNextPortionData()
                         }
                     }
                 }
