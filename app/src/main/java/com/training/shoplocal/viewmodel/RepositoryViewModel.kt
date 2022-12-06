@@ -128,15 +128,14 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         }*/
         repository.getPromoProducts(USER_ID, part) { products ->
             //log("portion = $portion")
-            log("load portion $part")
+            log("load portion $portion")
             if (products.isNotEmpty()) {
                 setSelectedProduct(Product())
                 val list = _products.value.toMutableList().apply {
                     addAll(products)
                 }
                 _products.value = list//products.toMutableList()
-            } else {
-                portion -= 1
+                portion +=1
             }
         }
     }
@@ -144,7 +143,6 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private fun getBrands(){
         repository.getBrands() { it ->
             brands = it
-            lastPortion = portion
         }
     }
 
@@ -164,11 +162,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     @Synchronized
     fun getNextPortionData(){
-      if (portion + 1 != lastPortion) {
-          portion += 1
-          lastPortion = portion
-      }
-      getPromoProducts(portion)
+      getPromoProducts(portion + 1)
     }
 
  }
