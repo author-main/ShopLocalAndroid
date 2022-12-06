@@ -429,10 +429,6 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                                                 && (lazyRowState.firstVisibleItemIndex == 0
                                                     && lazyRowState.firstVisibleItemScrollOffset > 0
                                                     && lazyRowState.isScrollInProgress))
-                                                //&& !downloadedImages.value )
-
-                                                   //    || (countItems > 1 && downloadedImages.value)
-                                                    //    && !downloadedImages.value)
                                 }
                             }
 
@@ -448,10 +444,8 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                                     product.linkimages?.let { items ->
                                         for (i in 1 until countItems) {
                                             if (listImages[i].first == IMAGE_STATE.NONE) {
-                                                //log("product id = ${product.id}, необходимо загрузить Item$i")
                                                 val itemImageLink = getLinkImage(i, items)
                                                 listImages[i] = IMAGE_STATE.PROCESS to EMPTY_IMAGE
-                                               // log("необходимо загрузить ${product.id}")
                                                 ImageLinkDownloader.downloadCardImage(
                                                     "$SERVER_URL/images/$itemImageLink",
                                                     object : Callback {
@@ -459,15 +453,11 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                                                             log ("product ${product.id}, loaded image $i")
                                                             listImages[i] =
                                                                 IMAGE_STATE.COMPLETED to image.asImageBitmap()
-                                                                    //downloadedImages.value = imagesUploaded()
-                                                            //log("downloadedImages ${downloadedImages.value.toString()}")
                                                         }
 
                                                         override fun onFailure() {
                                                             listImages[i] =
                                                                 IMAGE_STATE.FAILURE to EMPTY_IMAGE
-                                                           // downloadedImages.value = imagesUploaded()
-                                                            //TODO("Not yet implemented")
                                                         }
                                                     }
                                                 )

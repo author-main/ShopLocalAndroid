@@ -19,8 +19,6 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
-
-    private var updatePortion = false
     private var lastPortion  = 0
     private val _selectedProduct = MutableStateFlow<Product>(Product())
     val selectedProduct = _selectedProduct.asStateFlow()
@@ -122,25 +120,16 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     }
 
     private fun getPromoProducts(part: Int){
-        if (updatePortion)
-            return
-        updatePortion = true
-        if (lastPortion == part) {
-            updatePortion = false
-            return
-        }
-
-            repository.getPromoProducts(USER_ID, part) { products ->
-                if (products.isNotEmpty()) {
+            if (part == lastPortion)
+                return
+             repository.getPromoProducts(USER_ID, part) { listProducts ->
+               // log("get promo proudcts")
+                if (listProducts.isNotEmpty()) {
                     setSelectedProduct(Product())
-                    log("loaded part = $part")
-                    val list = _products.value.toMutableList().apply {
-                        addAll(products)
-                    }
+                    val list = _products.value.toMutableList().apply{addAll(listProducts)}
                     _products.value = list
                     lastPortion = part
                 }
-                updatePortion = false
             }
 
     }
