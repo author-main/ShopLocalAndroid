@@ -514,7 +514,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                     shape = RoundedCornerShape(6.dp)
                 ){
                     Text(modifier = Modifier.padding(horizontal = 4.dp),
-                        fontSize = 17.sp,
+                        fontSize = 15.sp,
                         text = getSalePrice(product.price, product.discount),
                         fontWeight = FontWeight.SemiBold,
                         color = TextPrice)

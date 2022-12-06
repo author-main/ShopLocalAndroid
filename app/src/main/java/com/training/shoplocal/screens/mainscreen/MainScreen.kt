@@ -48,19 +48,19 @@ fun MainScreen(state: ModalBottomSheetState){
 
             val products: MutableList<Product> by viewModel.products.collectAsState()
             val stateGrid = rememberLazyGridState()
-            val nextPart = remember {
+            val uploadNextPart = remember {
                 derivedStateOf {
                     stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.index == stateGrid.layoutInfo.totalItemsCount - 1
                             //&& stateGrid.isScrollInProgress
                             && stateGrid.layoutInfo.viewportEndOffset - stateGrid.layoutInfo.visibleItemsInfo.last().offset.y >= stateGrid.layoutInfo.visibleItemsInfo.last().size.height
                 }
             }
-            LaunchedEffect(key1 = nextPart.value) {
-                if (nextPart.value) {
+            //LaunchedEffect(uploadNextPart.value) {
+                if (uploadNextPart.value) {
                     log("next part")
                     viewModel.getNextPortionData()
                 }
-            }
+           // }
 
             if (products.isNotEmpty()) {
                 log("recomposition grid")
