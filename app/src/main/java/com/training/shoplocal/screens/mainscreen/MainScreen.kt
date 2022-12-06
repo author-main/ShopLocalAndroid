@@ -26,6 +26,8 @@ import com.training.shoplocal.ui.theme.BgScreenDark
 import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -34,6 +36,7 @@ import kotlinx.coroutines.CoroutineScope
 fun MainScreen(state: ModalBottomSheetState){
     //var part by remember {mutableStateOf(1)}
     //val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+    val scope = rememberCoroutineScope()
     val viewModel: RepositoryViewModel = viewModel()
     val products: MutableList<Product> by viewModel.products.collectAsState()
     //BottomSheet(state) {
@@ -67,19 +70,10 @@ fun MainScreen(state: ModalBottomSheetState){
                                         && stateGrid.layoutInfo.viewportEndOffset - stateGrid.layoutInfo.visibleItemsInfo.last().offset.y >= stateGrid.layoutInfo.visibleItemsInfo.last().size.height
                             }
                         }
-
-                       // if (nextPart.value) {
-                            //log("${lastItemVisible?.index}")
-                            LaunchedEffect(nextPart.value) {
-
-                               // log("after " + nextPart.value.toString())
-                                if (nextPart.value)
-                                    viewModel.getNextPortionData()
-
-                            }
-                     //   }
-
-
+                        LaunchedEffect(nextPart.value) {
+                            if (nextPart.value)
+                            viewModel.getNextPortionData()
+                        }
                     }
                 }
             }
