@@ -51,7 +51,7 @@ fun MainScreen(state: ModalBottomSheetState){
             val uploadNextPart = remember {
                 derivedStateOf {
                     stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.index == stateGrid.layoutInfo.totalItemsCount - 1
-                            //&& stateGrid.isScrollInProgress
+                        //&& stateGrid.isScrollInProgress
                             && stateGrid.layoutInfo.viewportEndOffset - stateGrid.layoutInfo.visibleItemsInfo.last().offset.y >= stateGrid.layoutInfo.visibleItemsInfo.last().size.height
                 }
             }
