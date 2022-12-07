@@ -71,8 +71,9 @@ fun MainScreen(state: ModalBottomSheetState){
                             }
                         }
                         LaunchedEffect(nextPart.value) {
-                            if (nextPart.value)
+                            if (nextPart.value) {
                                 viewModel.getNextPortionData()
+                            }
                         }
                     }
                 }
