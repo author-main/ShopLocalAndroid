@@ -125,6 +125,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
              repository.getPromoProducts(USER_ID, part) { listProducts ->
                // log("get promo proudcts")
                 if (listProducts.isNotEmpty()) {
+                    log("get promo proudcts")
                     setSelectedProduct(Product())
                     val list = _products.value.toMutableList().apply{addAll(listProducts)}
                     _products.value = list

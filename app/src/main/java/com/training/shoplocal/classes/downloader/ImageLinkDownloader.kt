@@ -53,12 +53,13 @@ class ImageLinkDownloader private constructor() {
                     }
                 }
                 callback.onComplete(it)
-                normalizeJournal()
+                //normalizeJournal()
             } ?: run {
                 cacheStorage?.remove(link, changeState = true)
                 callback.onFailure()
-                normalizeJournal()
+                //normalizeJournal()
             }
+            normalizeJournal()
         }.apply {
             //    val time = cacheStorage?.getTimestamp(link)
             setCacheTimestamp(

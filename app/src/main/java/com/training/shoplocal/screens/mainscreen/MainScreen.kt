@@ -45,8 +45,8 @@ fun MainScreen(state: ModalBottomSheetState){
                 .fillMaxSize()
                 .background(BgScreenDark)
         ) {
+            val stateGrid = rememberLazyGridState()
             if (products.isNotEmpty()) {
-                val stateGrid = rememberLazyGridState()
                 LazyVerticalGrid(modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 10.dp),
@@ -61,21 +61,20 @@ fun MainScreen(state: ModalBottomSheetState){
                             horizontalArrangement = Arrangement.SpaceEvenly) {
                             CardProduct(products[index], state = state)
                         }
-
-
-                        val nextPart = remember {
-                            derivedStateOf {
-                                stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.index == stateGrid.layoutInfo.totalItemsCount - 1
-                                        //&& stateGrid.isScrollInProgress
-                                        && stateGrid.layoutInfo.viewportEndOffset - stateGrid.layoutInfo.visibleItemsInfo.last().offset.y >= stateGrid.layoutInfo.visibleItemsInfo.last().size.height
-                            }
-                        }
-                        LaunchedEffect(nextPart.value) {
-                            if (nextPart.value) {
-                                viewModel.getNextPortionData()
-                            }
-                        }
                     }
+                }
+            }
+
+            val nextPart = remember {
+                derivedStateOf {
+                    stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.index == stateGrid.layoutInfo.totalItemsCount - 1
+                            //&& stateGrid.isScrollInProgress
+                            && stateGrid.layoutInfo.viewportEndOffset - stateGrid.layoutInfo.visibleItemsInfo.last().offset.y >= stateGrid.layoutInfo.visibleItemsInfo.last().size.height / 2
+                }
+            }
+            LaunchedEffect(nextPart.value) {
+                if (nextPart.value) {
+                    viewModel.getNextPortionData()
                 }
             }
         }
