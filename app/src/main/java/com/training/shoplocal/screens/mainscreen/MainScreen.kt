@@ -38,32 +38,15 @@ fun MainScreen(state: ModalBottomSheetState){
     //val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val scope = rememberCoroutineScope()
     val viewModel: RepositoryViewModel = viewModel()
-    //val products: MutableList<Product> by viewModel.products.collectAsState()
+    val products: MutableList<Product> by viewModel.products.collectAsState()
     //BottomSheet(state) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(BgScreenDark)
         ) {
-
-            val products: MutableList<Product> by viewModel.products.collectAsState()
-            val stateGrid = rememberLazyGridState()
-            val uploadNextPart = remember {
-                derivedStateOf {
-                    stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.index == stateGrid.layoutInfo.totalItemsCount - 1
-                        //&& stateGrid.isScrollInProgress
-                            && stateGrid.layoutInfo.viewportEndOffset - stateGrid.layoutInfo.visibleItemsInfo.last().offset.y >= stateGrid.layoutInfo.visibleItemsInfo.last().size.height
-                }
-            }
-            //LaunchedEffect(uploadNextPart.value) {
-                if (uploadNextPart.value) {
-                    log("next part")
-                    viewModel.getNextPortionData()
-                }
-           // }
-
             if (products.isNotEmpty()) {
-                log("recomposition grid")
+                val stateGrid = rememberLazyGridState()
                 LazyVerticalGrid(modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 10.dp),
@@ -73,41 +56,25 @@ fun MainScreen(state: ModalBottomSheetState){
                     //horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     //log("recomposition Grid")
-
-
-
-
-
-
-
                     items(products.size) { index ->
-                        //log("index ${index+1}, product count = ${products.size}")
                         Row(modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceEvenly) {
                             CardProduct(products[index], state = state)
                         }
 
-                        /*val nextPart = remember {
+
+                        val nextPart = remember {
                             derivedStateOf {
                                 stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.index == stateGrid.layoutInfo.totalItemsCount - 1
                                         //&& stateGrid.isScrollInProgress
                                         && stateGrid.layoutInfo.viewportEndOffset - stateGrid.layoutInfo.visibleItemsInfo.last().offset.y >= stateGrid.layoutInfo.visibleItemsInfo.last().size.height
                             }
-                        }*/
-
-                       // LaunchedEffect(nextPart.value) {
-
-                            /*if (nextPart.value) {
-                                log("next part")
-                                viewModel.getNextPortionData()*/
-
-                              /* scope.launch {
-                                    stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.let {
-                                        stateGrid.animateScrollToItem(it.index)
-                                    }
-                                }*/
-                          //  }
-                       // }
+                        }
+                        LaunchedEffect(nextPart.value) {
+                            if (nextPart.value) {
+                                viewModel.getNextPortionData()
+                            }
+                        }
                     }
                 }
             }
