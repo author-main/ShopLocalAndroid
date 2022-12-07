@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -55,11 +56,12 @@ fun MainScreen(state: ModalBottomSheetState){
                     contentPadding = PaddingValues(10.dp),
                     //horizontalArrangement = Arrangement.SpaceBetween
                 ) {
+                    items(products, {product -> product.id}) { product ->
                     //log("recomposition Grid")
-                    items(products.size) { index ->
+                   // items(products.size, key = {}) { index ->
                         Row(modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceEvenly) {
-                            CardProduct(products[index], state = state)
+                            CardProduct(product, state = state)
                         }
                     }
                 }
