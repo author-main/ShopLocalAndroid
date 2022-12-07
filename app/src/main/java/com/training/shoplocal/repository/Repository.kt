@@ -77,4 +77,8 @@ class Repository: DAOinterface {
     suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte){
         databaseCRUD.updateFavorite(id_user, id_product, value)
     }
+
+    suspend fun getProducts(id: Int, part: Int): List<Product> =
+        databaseCRUD.getProducts(id, part)
+
 }

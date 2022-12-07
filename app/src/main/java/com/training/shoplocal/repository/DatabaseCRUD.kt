@@ -67,4 +67,8 @@ class DatabaseCRUD: DatabaseCRUDInterface {
     override suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte): Boolean {
         return DatabaseApi.updateFavorite(id_user, id_product, value)
     }
+
+    override suspend fun getProducts(id: Int, part: Int): List<Product> {
+        return DatabaseApi.getProducts(id, part)
+    }
 }

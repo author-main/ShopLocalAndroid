@@ -6,8 +6,11 @@ import com.training.shoplocal.classes.Brand
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.classes.User
 import com.training.shoplocal.log
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.GET
+import retrofit2.http.Query
 
 
 object DatabaseApi {
@@ -71,6 +74,19 @@ object DatabaseApi {
     }
 
 
+    suspend fun getProducts(id: Int, part: Int) : List<Product> {
+        var list = emptyList<Product>()
+        try {
+            val response = service!!.getProducts(id, part)
+            response.body()?.let{body ->
+                list = body
+            }
+        } catch(e: Exception){
+            log(e.message ?: "error")
+        }
+        return list
+    }
+
     suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte): Boolean{
         var result = false
         try {
@@ -78,7 +94,7 @@ object DatabaseApi {
             response.body()?.let{body ->
                 result = body == 1
             }
-        } catch(e: Exception){
+        } catch(_: Exception){
         }
         return result
     }
@@ -91,6 +107,8 @@ object DatabaseApi {
            // log(e.message ?: "error")
         }
     }
+
+
 
 
 

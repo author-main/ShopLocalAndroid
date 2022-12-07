@@ -250,7 +250,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){
     val countItems = product.linkimages?.size ?: 1 // у продукта должно быть хотя бы одно изображение
      val listImages = remember{Array<Pair<IMAGE_STATE, ImageBitmap>>(countItems) {
         IMAGE_STATE.NONE to EMPTY_IMAGE
-    }.toMutableList()}
+    }}
     val context = LocalContext.current
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
     val visible = remember{MutableTransitionState(false)}

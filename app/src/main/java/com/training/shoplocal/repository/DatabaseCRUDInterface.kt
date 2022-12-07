@@ -9,5 +9,5 @@ interface DatabaseCRUDInterface {
     fun getPromoProducts( id: Int, part: Int,action: (products: List<Product>) -> Unit = {})
     fun getBrands( action: (brands: List<Brand>) -> Unit = {})
     suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte): Boolean
-
+    suspend fun getProducts( id: Int, part: Int) : List<Product>
 }
