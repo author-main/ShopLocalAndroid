@@ -59,11 +59,6 @@ import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 
-/*@Composable
-fun LazyListState.isScrollInInitialState(): Boolean =
-    firstVisibleItemIndex == 0 && firstVisibleItemScrollOffset == 0*/
-
-
 private enum class IMAGE_STATE {
     NONE,
     PROCESS,
@@ -118,7 +113,6 @@ fun AnimateLinkDownload(componentSize: Size) {
     }
 }
 
-
 @Composable
 fun DiscountPanel(modifier: Modifier, percent: Int){
     Card(modifier = modifier, backgroundColor = BgDiscount,
@@ -159,10 +153,7 @@ fun StarPanel(count: Float){
             // < * Отрисовка части звезды
             if (i == starPart - 1 && floatPart > 0) {
                 val part       = bm.width / 10f
-                //val center     = bm.width / 2f
-                val widthStar  = floatPart * part /*if (floatPart <= 5)
-                    center - (5 - floatPart) * part
-                else center + (floatPart - 5) * part*/
+                val widthStar  = floatPart * part
                 val bmPart: Bitmap = Bitmap.createBitmap(bm, 0, 0, widthStar.toInt(), bm.height)
                 Image(modifier = Modifier.height(12.dp),
                     bitmap = bmPart.asImageBitmap(),
@@ -178,49 +169,12 @@ fun StarPanel(count: Float){
     }
 }
 
-
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((product: Product, menuindex: Int) -> Unit)? = null){
-    /*val product = remember {
-        productIn
-    }*/
-//fun CardProduct(product: Product, state: ModalBottomSheetState){//}, scope: CoroutineScope){
-   /* val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
-    BottomSheet(state) {*/
-       // log("favorites=$isFavorite")*/
-
-   // log("recompose Card")
-
-
-    /*val checked = remember{
-        mutableStateOf(product.favorite > 0)
-    }*/
-
-
+fun CardProduct(product: Product, state: ModalBottomSheetState){
     val viewModel: RepositoryViewModel = viewModel()
     val brand: String = product.brand?.let { viewModel.getBrand(it) } ?: ""
     val scope = rememberCoroutineScope()
-
-  /*  when (MainMenuRouter.current) {
-        MainMenuItem.BrandItem -> {
-            log("Обработка Brand")
-            MainMenuRouter.reset()
-        }
-        MainMenuItem.FavoriteItem -> {
-            product.favorite = if (product.favorite > 0) 0 else 1
-            checked.value = product.favorite > 0
-            MainMenuRouter.reset()
-            viewModel.setProductFavorite(product.id, checked.value)
-        }
-        MainMenuItem.ProductsItem -> {
-            log("Обработка Products")
-            MainMenuRouter.reset()
-        } else ->{}
-    }*/
-
-
-
     @Composable
     fun ButtonMore(modifier: Modifier, action: ()-> Unit){
         Image(
@@ -234,7 +188,6 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                 .clip(CircleShape)
                 .border(1.dp, BorderButton, CircleShape)
                 .clickable {
-                    //viewModel.setSelectedProduct(product)
                     scope.launch {
                         viewModel.setSelectedProduct(product)
                         state.show()
@@ -283,9 +236,6 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                     action(value > 0)
                 }
         )
-
-
-
     }
 
     fun getLinkImage(index: Int, images: List<String>?): String?{
@@ -298,59 +248,17 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
     }
 
     val countItems = product.linkimages?.size ?: 1 // у продукта должно быть хотя бы одно изображение
-    /*val listImages = remember { mutableStateListOf<Pair<IMAGE_STATE, ImageBitmap>>().apply {
-        for (i in 0 until countItems)
-            this.add(IMAGE_STATE.NONE to EMPTY_IMAGE)
-    } }*/
-    val listImages = remember{Array<Pair<IMAGE_STATE, ImageBitmap>>(countItems) {
+     val listImages = remember{Array<Pair<IMAGE_STATE, ImageBitmap>>(countItems) {
         IMAGE_STATE.NONE to EMPTY_IMAGE
     }.toMutableList()}
-    /*val listImages = remember{ mutableStateListOf<Pair<IMAGE_STATE, ImageBitmap>>().apply {
-        for(i in 0 until countItems)
-            this.add(IMAGE_STATE.NONE to EMPTY_IMAGE)
-    }
-    }*/
-    //val listImages = remember{list}
-
-   // log("count images = ${listImages.size}")
-
-    /*fun imagesUploaded(): Boolean {
-        if (countItems == 1) return true
-        var result = true
-        for (i in 1 until countItems) {
-
-            if (!((listImages[i].first == IMAGE_STATE.COMPLETED && !listImages[i].second.isEmpty())
-                || listImages[i].first == IMAGE_STATE.FAILURE)) {
-                result = false
-                break
-            }
-        }
-        //log("product id=${product.id}, images uploaded ${result.toString()}")
-        return result
-    }*/
     val context = LocalContext.current
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
     val visible = remember{MutableTransitionState(false)}
     val animateSize = remember{mutableStateOf(Size.Zero)}
     val imageLink = getLinkImage(0, product.linkimages)
-
-
-    //val bitmap = remember{mutableStateOf(listImages[0])}
-
-    /*val bitmap = remember{mutableStateOf(EMPTY_IMAGE)ImageBitmap(1, 1,
-                                         hasAlpha = true, config = ImageBitmapConfig.Argb8888))}*/
-
-    //val downloadedImage = remember{ mutableStateOf(false) }
     val downloadedImage = remember{ mutableStateOf(
         (listImages[0].first == IMAGE_STATE.COMPLETED && !listImages[0].second.isEmpty()) || listImages[0].first == IMAGE_STATE.FAILURE
     ) }
-
-    /*val downloadImage = remember {
-        derivedStateOf {
-            listImages[0].isEmpty() && !imageLink.isNullOrBlank()
-        }
-    }*/
-
     if (!downloadedImage.value) {
         // Запуск в области compose, если compose завершится. Блок внутри будет завершен без
         // утечки памяти и процессов.
@@ -375,17 +283,14 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                     }
                 })
         }
-
     } else
         visible.targetState = true
-
-
     Box(modifier = Modifier
         .width(150.dp)
         .padding(vertical = 10.dp))
         {
         Column(
-        )//verticalArrangement = Arrangement.spacedBy(4.dp))
+        )
         {
             Card(modifier = Modifier
                 .requiredSize(150.dp)
@@ -401,7 +306,6 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                     contentAlignment = Alignment.Center
                     ) {
                     if (!downloadedImage.value) {
-                        //log("animatelink")
                         AnimateLinkDownload(animateSize.value)
                     }
                         androidx.compose.animation.AnimatedVisibility(
@@ -413,16 +317,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                                 )
                             )
                         ) {
-
                             val lazyRowState = rememberLazyListState()
-                           // val downloadedImages = remember{mutableStateOf(false)}
-                            /*val initialState = remember{
-                                derivedStateOf {
-                                    lazyRowState.firstVisibleItemIndex == 0 && lazyRowState.firstVisibleItemScrollOffset == 0
-                                }
-                            }*/
-                            //val initCardRow = remember{ mutableStateOf(false)}
-
                             val needDownloadImages = remember {
                                 derivedStateOf {
                                                 (countItems > 1
@@ -431,16 +326,13 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                                                     && lazyRowState.isScrollInProgress))
                                 }
                             }
-
                             val uploaded = remember {
                                 derivedStateOf {
                                     countItems > 1 && (lazyRowState.firstVisibleItemIndex > 0
                                             || lazyRowState.firstVisibleItemScrollOffset > 0)
                                 }
                             }
-                           // log("необходимо загрузить ${needDownloadImages.value.toString()}")
                             if (needDownloadImages.value || uploaded.value) {
-
                                     product.linkimages?.let { items ->
                                         for (i in 1 until countItems) {
                                             if (listImages[i].first == IMAGE_STATE.NONE) {
@@ -464,15 +356,8 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                                             }
                                         }
                                     }
-                                //downloadedImages.value = true
                             }
-
-
-
-                            /*if (!initialState.value)
-                                log("lazyRow scroll...")*/
                             val flingBehavior = rememberSnapFlingBehavior(lazyListState = lazyRowState)
-                                //rememberSnapperFlingBehavior(state, itemWidth = 200.dp)
                             LazyRow(state = lazyRowState, modifier = Modifier.fillMaxSize(),
                                 horizontalArrangement = Arrangement.Center,
                                 flingBehavior = flingBehavior
@@ -482,9 +367,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                                         Image(
                                             modifier = Modifier
                                                 .fillParentMaxSize()
-                                                //.background(Color.Green),
                                                 .padding(all = 8.dp),
-                                            //contentScale = ContentScale.FillBounds,
                                             bitmap = item.second,//bitmap.value,
                                             contentDescription = null
                                         )
@@ -492,13 +375,11 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                                 }
                             }
                     }
-
                     DiscountPanel(modifier = Modifier.align(Alignment.BottomStart), percent = product.discount)
                     ButtonMore(modifier = Modifier.align(Alignment.BottomEnd)
                     ) {
                         log("click")
                     }
-
                     ButtonFavorite(modifier = Modifier.align(Alignment.TopEnd)
                     ) {
                         //log("setProductFavorite")
@@ -507,7 +388,6 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                 }
             }
             // < * Text Price
-            //Row(verticalAlignment = Alignment.CenterVertically) {
                 Card(
                     modifier = Modifier.padding(top = 4.dp),
                     backgroundColor = BgTextPrice,
@@ -519,24 +399,12 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
                         fontWeight = FontWeight.SemiBold,
                         color = TextPrice)
                 }
-
-               /* Text(modifier = Modifier.padding(end = 8.dp),
-                    fontSize = 18.sp,
-                    text = getPrice(11100f),
-                    fontWeight = FontWeight.SemiBold,
-                    color = TextPrice
-                )*/
                 Text(modifier = Modifier.padding(top = 4.dp),
                     fontSize = 14.sp,
                     text = getFormattedPrice(product.price),
                     fontWeight = FontWeight.SemiBold,
                     style = TextStyle(textDecoration = TextDecoration.LineThrough),
                     color = TextPriceDiscount)
-
-        //    }
-            // * >
-            // < * Text Promotion
-
             val promostr: String =
                 if (product.star > 4)
                     getStringResource(R.string.text_bestseller)
@@ -566,9 +434,3 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){//}, action: ((p
     }
 
 }
-/*@Preview(showBackground = true)
-@Composable
-fun CardProducttPreview() {
-    BottomSheet()
-    //CardProduct()
-}*/

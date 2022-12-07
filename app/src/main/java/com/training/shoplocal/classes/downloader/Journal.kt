@@ -223,6 +223,7 @@ class Journal private constructor(private val cacheDir: String) {
                0L
        } ?: 0L
 
+    @Synchronized
     fun leavingCacheFiles(limit: Long): List<String> {
         val size = getCacheSize()
         val list = mutableListOf<String>()
