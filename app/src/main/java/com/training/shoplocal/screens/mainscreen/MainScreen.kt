@@ -37,30 +37,40 @@ import kotlinx.coroutines.launch
 fun MainScreen(state: ModalBottomSheetState){
     //var part by remember {mutableStateOf(1)}
     //val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
-    val scope = rememberCoroutineScope()
+    //val scope = rememberCoroutineScope()
     val viewModel: RepositoryViewModel = viewModel()
-    val products: MutableList<Product> by viewModel.products.collectAsState()
+    //val products: MutableList<Product> by viewModel.products.collectAsState()
     //BottomSheet(state) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+    TopAppBar(backgroundColor = Color.Red) {
+        Text(text = "ghjdthrf")
+    }
+
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(BgScreenDark)
         ) {
+            val products: MutableList<Product> by viewModel.products.collectAsState()
             val stateGrid = rememberLazyGridState()
             if (products.isNotEmpty()) {
-                LazyVerticalGrid(modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 10.dp),
+                LazyVerticalGrid(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 10.dp),
                     columns = GridCells.Adaptive(minSize = 150.dp),
                     state = stateGrid,
                     contentPadding = PaddingValues(10.dp),
                     //horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    items(products, {product -> product.id}) { product ->
-                    //log("recomposition Grid")
-                   // items(products.size, key = {}) { index ->
-                        Row(modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceEvenly) {
+                    items(products, { product -> product.id }) { product ->
+                        //log("recomposition Grid")
+                        // items(products.size, key = {}) { index ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
                             CardProduct(product, state = state)
                         }
                     }
@@ -80,5 +90,6 @@ fun MainScreen(state: ModalBottomSheetState){
                 }
             }
         }
-    //}
+
+    }
  }

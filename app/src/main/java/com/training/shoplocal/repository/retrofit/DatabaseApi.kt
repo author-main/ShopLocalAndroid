@@ -82,7 +82,7 @@ object DatabaseApi {
                 list = body
             }
         } catch(e: Exception){
-            log(e.message ?: "error")
+            //log(e.message ?: "error")
         }
         return list
     }
