@@ -16,7 +16,7 @@ class DownloadImageTask(private val link: String, private val reduce: Boolean, v
         cacheTimestamp   = timestamp
     }
     override fun download(link: String): Bitmap? {
-        val BUFFER_SIZE = 4096
+        val BUFFER_SIZE = 32768
         val hash = md5(link)
         var bitmap: Bitmap? = null
         val filename    = getCacheDirectory() + hash//md5(link)
@@ -48,11 +48,11 @@ class DownloadImageTask(private val link: String, private val reduce: Boolean, v
                     //log("$hash - загружено из Инет")
                 }
             }
-        } catch (_: Exception) {}
-        if (bitmap == null) {
-          //  log("$hash - загружено из кэша")
-            bitmap = loadBitmap(filename, reduce)
+        } catch (_: Exception) {
         }
+
+        if (bitmap == null)
+           bitmap = loadBitmap(filename, reduce)
 
         /*Handler(Looper.getMainLooper()).post {
             Thread.sleep(3000)
