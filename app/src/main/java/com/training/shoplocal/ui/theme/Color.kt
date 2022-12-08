@@ -34,4 +34,5 @@ val BorderButton        = Color(0xFFAAAAAA)
 val ImageButton         = Color(0xFF393E46)
 val ImageFavoriteOff    = Color(0xFFAAAAAA)
 val ImageFavoriteOn     = BgDiscount
+//val PlaceHolder         = Color(0xFF5E5E5E)
 // >

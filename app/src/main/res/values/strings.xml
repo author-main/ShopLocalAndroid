@@ -31,6 +31,7 @@
         <item>Отмена</item>
         <item>Удалить из избранного</item>
     </string-array>
+    <string name="text_search">Искать в ShopLocal</string>
 
 
 </resources>
