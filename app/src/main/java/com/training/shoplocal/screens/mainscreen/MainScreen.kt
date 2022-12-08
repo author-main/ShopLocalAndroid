@@ -42,7 +42,7 @@ fun MainScreen(state: ModalBottomSheetState){
     //val products: MutableList<Product> by viewModel.products.collectAsState()
     //BottomSheet(state) {
     Column(modifier = Modifier.fillMaxWidth()) {
-    TopAppBar(backgroundColor = Color.Red) {
+    TopAppBar(backgroundColor = MaterialTheme.colors.primary) {
         Text(text = "ghjdthrf")
     }
 
