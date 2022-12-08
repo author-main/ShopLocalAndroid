@@ -39,6 +39,7 @@ class DownloadImageTask(private val link: String, private val reduce: Boolean, v
                         outputStream.write(buffer, 0, count)
                     }
                     inputStream.close()
+                    outputStream.flush()
                     outputStream.close()
                     conn.disconnect()
                     bitmap = loadBitmap(filenameTmp, reduce)//decodeStream(conn.inputStream)
