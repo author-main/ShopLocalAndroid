@@ -1,5 +1,6 @@
 package com.training.shoplocal.screens.mainscreen
 
+import android.widget.ImageButton
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.collectAsState
@@ -15,6 +16,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
@@ -24,9 +26,12 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -73,20 +78,31 @@ fun MainScreen(state: ModalBottomSheetState){
         BasicTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(32.dp),
+                .height(32.dp)
+                .background(color = TextFieldBg, shape = RoundedCornerShape(32.dp)),
+            cursorBrush = SolidColor(TextFieldFont),
             value = textSearch.value,
             textStyle = TextStyle(color = TextFieldFont),
             onValueChange = {
                 textSearch.value = it
             },
             singleLine = true,
+
+            /*colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color.Red,
+                cursorColor = TextFieldFont,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),*/
+
+
             decorationBox = { innerTextField ->
-                Row(
+               /* Row(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(color = TextFieldBg, shape = RoundedCornerShape(32.dp)),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
+                   // verticalAlignment = Alignment.CenterVertically,
+                ) {*/
                     //if (value.isEmpty()) {
                     /* Text(
                             text = "checkit",
@@ -99,24 +115,56 @@ fun MainScreen(state: ModalBottomSheetState){
                             modifier = Modifier.padding(start = 8.dp),
                             text = stringResource(id = R.string.text_search))*/
                      TextFieldDefaults.TextFieldDecorationBox(
-                        value = "",
+                         value = "",
                          placeholder = {
                              if (textSearch.value.isEmpty())
-                             Text(
-                                 text = stringResource(id = R.string.text_search),
-                                 fontSize = 14.sp,
-                                 color = TextFieldFont.copy(alpha = 0.4f)
-                             )
+                                Text(
+                                     text = stringResource(id = R.string.text_search),
+                                     fontSize = 14.sp,
+                                     color = TextFieldFont.copy(alpha = 0.4f)
+                                 )
                          },
+                         leadingIcon = {
+                             Icon(imageVector = ImageVector.vectorResource(R.drawable.ic_search),
+                                 contentDescription = null)
+                                       },
+                         trailingIcon = {
+                             val showClearIcon = textSearch.value.isNotEmpty()
+                             val iconSize = if (showClearIcon) 16.dp else 24.dp
+                             Icon(
+                                 imageVector = if (showClearIcon)
+                                    ImageVector.vectorResource(R.drawable.ic_cancel_bs)
+                                 else
+                                    ImageVector.vectorResource(R.drawable.ic_microphone)
+
+                                     ,
+                                 contentDescription = null,
+                                 modifier = Modifier
+                                     .clip(CircleShape)
+                                     .size(iconSize)
+                                     .clickable/*(interactionSource = remember { MutableInteractionSource() },
+                                            indication = rememberRipple(radius = 16.dp)) */{
+                                         /*val value: Byte = if (product.favorite > 0) 0 else 1
+                                         product.favorite = value//if (isFavorited.value) 1 else 0
+                                         action(value > 0)*/
+                                        if (showClearIcon)
+                                            textSearch.value = ""
+                                        else {
+                                            // Вызвать голосовой ввод
+                                        }
+                                     }
+                                 )
+                         },
+
                         visualTransformation = VisualTransformation.None,
                         innerTextField = innerTextField,
                         singleLine = true,
                         enabled = true,
                         interactionSource = interaction,
-                        contentPadding = PaddingValues(horizontal = 8.dp), // this is how you can remove the padding
+                        contentPadding = PaddingValues(0.dp)
                     )
                     //innerTextField()
-                }
+               // }
             })
 
 /*
