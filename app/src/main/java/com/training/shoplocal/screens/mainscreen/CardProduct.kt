@@ -342,7 +342,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){
                                                     "$SERVER_URL/images/$itemImageLink",
                                                     object : Callback {
                                                         override fun onComplete(image: Bitmap) {
-                                                            log ("product ${product.id}, loaded image $i")
+                                                          //  log ("product ${product.id}, loaded image $i")
                                                             listImages[i] =
                                                                 IMAGE_STATE.COMPLETED to image.asImageBitmap()
                                                         }

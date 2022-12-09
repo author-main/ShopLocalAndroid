@@ -9,6 +9,7 @@ import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -23,17 +24,22 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -61,7 +67,7 @@ fun MainScreen(state: ModalBottomSheetState){
     val startLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {it ->
-        if (it.resultCode == Activity.RESULT_OK ) {
+        if (it.resultCode == Activity.RESULT_OK) {
             it.data?.let{ data ->
                 (data.extras?.getStringArrayList(RecognizerIntent.EXTRA_RESULTS)).let { matches ->
                     val value = matches?.get(0)
@@ -74,81 +80,128 @@ fun MainScreen(state: ModalBottomSheetState){
 
     Column(modifier = Modifier.fillMaxWidth()) {
     TopAppBar(backgroundColor = MaterialTheme.colors.primary) {
-
-        val interaction = remember {
-            MutableInteractionSource()
-        }
-        BasicTextField(
-            modifier = Modifier
-                .padding(horizontal = 4.dp)
-                .fillMaxWidth()
-                .height(32.dp)
-                .background(color = TextFieldBg, shape = RoundedCornerShape(32.dp)),
-            cursorBrush = SolidColor(TextFieldFont),
-            value = textSearch.value,
-            textStyle = TextStyle(color = TextFieldFont),
-            onValueChange = {
-                textSearch.value = it
-            },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Search,
-                keyboardType = KeyboardType.Text
-            ),
-            decorationBox = { innerTextField ->
-                    val error_speechrecognizer = stringResource(id = R.string.text_error_speechrecognizer)
-                     TextFieldDefaults.TextFieldDecorationBox(
-                         value = "",
-                         placeholder = {
-                             if (textSearch.value.isEmpty())
+        Row(Modifier
+            .padding(horizontal = 4.dp)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.End) {
+            /*val interaction = remember {
+                MutableInteractionSource()
+            }*/
+            BasicTextField(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(32.dp)
+                    .background(color = TextFieldBg, shape = RoundedCornerShape(32.dp)),
+                cursorBrush = SolidColor(TextFieldFont),
+                value = textSearch.value,
+                textStyle = TextStyle(color = TextFieldFont),
+                onValueChange = {
+                    textSearch.value = it
+                },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Search,
+                    keyboardType = KeyboardType.Text
+                ),
+                decorationBox = { innerTextField ->
+                    val error_speechrecognizer =
+                        stringResource(id = R.string.text_error_speechrecognizer)
+                    TextFieldDefaults.TextFieldDecorationBox(
+                        value = "",
+                        placeholder = {
+                            if (textSearch.value.isEmpty())
                                 Text(
-                                     text = stringResource(id = R.string.text_search),
-                                     fontSize = 14.sp,
-                                     color = TextFieldFont.copy(alpha = 0.4f)
-                                 )
-                         },
-                         leadingIcon = {
-                             Icon(imageVector = ImageVector.vectorResource(R.drawable.ic_search),
-                                 contentDescription = null)
-                                       },
-                         trailingIcon = {
-                             val showClearIcon = textSearch.value.isNotEmpty()
-                             val iconSize = if (showClearIcon) 16.dp else 24.dp
-                             Icon(
-                                 imageVector = if (showClearIcon)
+                                    text = stringResource(id = R.string.text_search),
+                                    fontSize = 14.sp,
+                                    color = TextFieldFont.copy(alpha = 0.4f)
+                                )
+                        },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(R.drawable.ic_search),
+                                contentDescription = null
+                            )
+                        },
+                        trailingIcon = {
+                            val showClearIcon = textSearch.value.isNotEmpty()
+                            val iconSize = if (showClearIcon) 16.dp else 24.dp
+                            Icon(
+                                imageVector = if (showClearIcon)
                                     ImageVector.vectorResource(R.drawable.ic_cancel_bs)
-                                 else
-                                    ImageVector.vectorResource(R.drawable.ic_microphone)
-
-                                     ,
-                                 contentDescription = null,
-                                 modifier = Modifier
-                                     .clip(CircleShape)
-                                     .size(iconSize)
-                                     .clickable {
-                                         if (showClearIcon)
-                                             textSearch.value = ""
-                                         else {
-                                             // Вызвать голосовой ввод
-                                             getSpeechInput(context)?.let { intent ->
-                                                 startLauncher.launch(intent)
-                                             } ?: viewModel.showSnackbar(
-                                                 error_speechrecognizer,
-                                                 type = MESSAGE.ERROR
-                                             )
-                                         }
-                                     }
-                                 )
-                         },
+                                else
+                                    ImageVector.vectorResource(R.drawable.ic_microphone),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .clip(CircleShape)
+                                    .size(iconSize)
+                                    .clickable {
+                                        if (showClearIcon)
+                                            textSearch.value = ""
+                                        else {
+                                            // Вызвать голосовой ввод
+                                            getSpeechInput(context)?.let { intent ->
+                                                startLauncher.launch(intent)
+                                            } ?: viewModel.showSnackbar(
+                                                error_speechrecognizer,
+                                                type = MESSAGE.ERROR
+                                            )
+                                        }
+                                    }
+                            )
+                        },
 
                         visualTransformation = VisualTransformation.None,
                         innerTextField = innerTextField,
                         singleLine = true,
                         enabled = true,
-                        interactionSource = interaction,
+                        interactionSource = remember {
+                            MutableInteractionSource()
+                        },
                         contentPadding = PaddingValues(0.dp)
                     )
-            })
+                })
+
+            //val interactionSource = remember { MutableInteractionSource() }
+            Box(modifier = Modifier
+                .clickable(interactionSource = remember { MutableInteractionSource() }, indication = null){}
+                .padding(start = 4.dp)
+                .size(32.dp),
+
+/*                .clickable(
+                    interaction = interactionSource,
+                    indication = null
+                ){},*/
+                contentAlignment = Alignment.TopEnd
+            ){
+                Icon(
+                    ImageVector.vectorResource(R.drawable.ic_message),
+                    contentDescription = null,
+                    tint = TextFieldFont,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                )
+                Box(modifier = Modifier
+                    .size(18.dp)
+                    .background(color = BgDiscount, shape = CircleShape),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                       /* modifier = Modifier
+                            .size(18.dp)
+                            .align(Alignment.TopEnd)
+                            .background(color = BgDiscount, shape = CircleShape),*/
+                        text = "25",
+                        color = TextDiscount,
+                        fontSize = 10.sp,
+
+                        //textAlign = TextAlign.Center
+                    )
+                }
+
+            }
+
+
+        }
     }
         Box(
             modifier = Modifier
@@ -203,7 +256,6 @@ private fun getSpeechInput(context: Context) : Intent? {
     return if (!SpeechRecognizer.isRecognitionAvailable(context))
         null
     else {
-
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         intent.putExtra(
             RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH
