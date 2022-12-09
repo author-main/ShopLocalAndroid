@@ -87,6 +87,10 @@ fun MainScreen(state: ModalBottomSheetState){
                 textSearch.value = it
             },
             singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Search,
+                keyboardType = KeyboardType.Text
+            ),
 
             /*colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Color.Red,
