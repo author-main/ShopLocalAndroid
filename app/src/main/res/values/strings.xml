@@ -3,7 +3,7 @@
     <string name="text_auth">АВТОРИЗАЦИЯ</string>
     <string name="btn_reg">РЕГИСТРАЦИЯ</string>
     <string name="btn_rest">ЗАБЫЛИ ПАРОЛЬ?</string>
-    <string name="biometric_title">Добро пожаловать в ShopLocal</string>
+    <string name="biometric_title">Добро пожаловать\nв ShopLocal</string>
     <string name="button_cancel">Отмена</string>
     <string name="title_restore">Восстановление доступа</string>
     <string name="title_reg">Регистрация</string>
@@ -32,6 +32,8 @@
         <item>Удалить из избранного</item>
     </string-array>
     <string name="text_search">Искать в ShopLocal</string>
+    <string name="text_error_speechrecognizer">Система распознавания речи\nне доступна</string>
+    <string name="prompt_speechrecognizer">Не молчи, родной</string>
 
 
 </resources>
