@@ -136,6 +136,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                     //_products.value.clear()
                     _products.value = list
                     lastPortion = part
+                    log("last portion = $lastPortion, items count = ${_products.value.size}")
                 }
             }
 
