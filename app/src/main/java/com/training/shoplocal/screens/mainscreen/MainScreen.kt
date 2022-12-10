@@ -221,7 +221,7 @@ fun MainScreen(state: ModalBottomSheetState){
                     //horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     items(products, { product -> product.id }) { product ->
-                        //log("recomposition Grid")
+                        //log("item${product.id}")
                         // items(products.size, key = {}) { index ->
                         Row(
                             modifier = Modifier.fillMaxWidth(),

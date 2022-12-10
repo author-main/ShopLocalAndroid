@@ -31,8 +31,13 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     private var USER_ID: Int = -1
     private var brands = listOf<Brand>()
+
+    /*private val _products = MutableStateFlow<MutableList<Product>>(mutableListOf<Product>())
+    val products = _products.asStateFlow()*/
+
     private val _products = MutableStateFlow<MutableList<Product>>(mutableListOf<Product>())
     val products = _products.asStateFlow()
+
     private val actionLogin: (result: Int) -> Unit = {
         val result = it > 0
         if (result) {
@@ -128,6 +133,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                     log("get promo proudcts")
                     setSelectedProduct(Product())
                     val list = _products.value.toMutableList().apply{addAll(listProducts)}
+                    _products.value.clear()
                     _products.value = list
                     lastPortion = part
                 }
