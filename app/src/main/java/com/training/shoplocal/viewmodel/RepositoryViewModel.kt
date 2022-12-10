@@ -19,7 +19,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
-    private var lastPortion  = 0
+    private var loadedPortion = 0
     private val _selectedProduct = MutableStateFlow<Product>(Product())
     val selectedProduct = _selectedProduct.asStateFlow()
 
@@ -44,7 +44,6 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             USER_ID = it
             getBrands()
             getPromoProducts(1)
-            //getPromoProducts(1)//Product(33)
             ScreenRouter.navigateTo(ScreenItem.MainScreen)
             authorizeUser()
         }
@@ -124,22 +123,19 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
+   // @Synchronized
     private fun getPromoProducts(part: Int){
-            if (part == lastPortion)
-                return
-             repository.getPromoProducts(USER_ID, part) { listProducts ->
-               // log("get promo proudcts")
-                if (listProducts.isNotEmpty()) {
-                    log("get promo proudcts")
-                    setSelectedProduct(Product())
-                    val list = _products.value.toMutableList().apply{addAll(listProducts)}
-                    //_products.value.clear()
-                    _products.value = list
-                    lastPortion = part
-                    log("last portion = $lastPortion, items count = ${_products.value.size}")
-                }
-            }
-
+       if (loadedPortion != part) {
+           loadedPortion = part
+           repository.getPromoProducts(USER_ID, part) { listProducts ->
+               if (listProducts.isNotEmpty()) {
+                   setSelectedProduct(Product())
+                   val list = _products.value.toMutableList().apply { addAll(listProducts) }
+                   _products.value = list
+                   log("GET PORTION: portion = $part, lastPortion = ${loadedPortion}, items count = ${_products.value.size}")
+               }
+           }
+       }
     }
 
     private fun getBrands(){
@@ -164,7 +160,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     @Synchronized
     fun getNextPortionData(){
-        getPromoProducts(lastPortion + 1)
+        getPromoProducts(loadedPortion + 1)
     }
 
  }

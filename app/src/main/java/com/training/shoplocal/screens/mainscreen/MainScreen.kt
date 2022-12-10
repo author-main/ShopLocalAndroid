@@ -9,6 +9,14 @@ import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -51,18 +59,23 @@ import com.training.shoplocal.getStringResource
 import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
+import kotlinx.coroutines.delay
 import java.util.*
 
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun MainScreen(state: ModalBottomSheetState){
 
     @Composable
-    fun ShowMessageCount(value: Int, animate: Boolean = false){
+    fun ShowMessageCount(value: Int){
+       // var animate by remember {mutableStateOf(false)}
+        val animateBigCircle = remember{ MutableTransitionState(false) }
+        /*val sizeBigCircle by animateDpAsState(if (animate) 32.dp else 0.dp){
+            log("size = $it")
+        }*/
         val count = remember{ mutableStateOf(0) }
         count.value = value
-        if (count.value > 0) {
             Box(modifier = Modifier
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
@@ -72,6 +85,37 @@ fun MainScreen(state: ModalBottomSheetState){
                 .size(32.dp),
                 contentAlignment = Alignment.TopEnd
             ) {
+
+                if (count.value > 0) {
+                      androidx.compose.animation.AnimatedVisibility(
+                        visibleState = animateBigCircle,
+                        enter = scaleIn(
+                            animationSpec = tween(
+                                durationMillis = 250,
+                                easing = LinearEasing
+                            )
+                        ),
+                         exit = scaleOut(
+                             animationSpec = tween(
+                                 durationMillis = 250,
+                                 easing = LinearEasing
+                             )
+                        )
+                    ) {
+                          Surface(
+                              modifier = Modifier
+                                  .fillMaxWidth()
+                                  .size(32.dp),
+                              shape = CircleShape,
+                              color = BgDiscount
+                          ) {}
+
+                          LaunchedEffect(true) {
+                              delay(700)
+                              animateBigCircle.targetState = false
+                          }
+                      }
+                }
                 Icon(
                     ImageVector.vectorResource(R.drawable.ic_message),
                     contentDescription = null,
@@ -79,27 +123,37 @@ fun MainScreen(state: ModalBottomSheetState){
                     modifier = Modifier
                         .align(Alignment.Center)
                 )
-                Box(
-                    modifier = Modifier
-                        .size(18.dp)
-                        .background(color = BgDiscount, shape = CircleShape),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        /* modifier = Modifier
+                if (count.value > 0) {
+
+                    Box(
+                        modifier = Modifier
+                            .size(18.dp)
+                            .background(color = BgDiscount, shape = CircleShape),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            /* modifier = Modifier
                          .size(18.dp)
                          .align(Alignment.TopEnd)
                          .background(color = BgDiscount, shape = CircleShape),*/
-                        text = count.value.toString(),
-                        color = TextDiscount,
-                        fontSize = 10.sp,
+                            text = count.value.toString(),
+                            color = TextDiscount,
+                            fontSize = 10.sp,
 
-                        //textAlign = TextAlign.Center
-                    )
+                            //textAlign = TextAlign.Center
+                        )
+                    }
                 }
 
             }
+        SideEffect {
+            animateBigCircle.targetState = true
+            //Thread.sleep(1000)
+            //animate = true
+            /*if (animate)
+                animateBigCircle.targetState = true*/
         }
+
     }
 
 
