@@ -57,6 +57,52 @@ import java.util.*
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MainScreen(state: ModalBottomSheetState){
+
+    @Composable
+    fun ShowMessageCount(value: Int){
+        val count = remember{ mutableStateOf(0) }
+        count.value = value
+        if (count.value > 0) {
+            Box(modifier = Modifier
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                ) {}
+                .padding(start = 4.dp)
+                .size(32.dp),
+                contentAlignment = Alignment.TopEnd
+            ) {
+                Icon(
+                    ImageVector.vectorResource(R.drawable.ic_message),
+                    contentDescription = null,
+                    tint = TextFieldFont,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                )
+                Box(
+                    modifier = Modifier
+                        .size(18.dp)
+                        .background(color = BgDiscount, shape = CircleShape),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        /* modifier = Modifier
+                         .size(18.dp)
+                         .align(Alignment.TopEnd)
+                         .background(color = BgDiscount, shape = CircleShape),*/
+                        text = count.value.toString(),
+                        color = TextDiscount,
+                        fontSize = 10.sp,
+
+                        //textAlign = TextAlign.Center
+                    )
+                }
+
+            }
+        }
+    }
+
+
     //val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val viewModel: RepositoryViewModel = viewModel()
@@ -80,9 +126,10 @@ fun MainScreen(state: ModalBottomSheetState){
 
     Column(modifier = Modifier.fillMaxWidth()) {
     TopAppBar(backgroundColor = MaterialTheme.colors.primary) {
-        Row(Modifier
-            .padding(horizontal = 4.dp)
-            .fillMaxWidth(),
+        Row(
+            Modifier
+                .padding(horizontal = 4.dp)
+                .fillMaxWidth(),
         horizontalArrangement = Arrangement.End) {
             /*val interaction = remember {
                 MutableInteractionSource()
@@ -162,45 +209,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 })
 
             //val interactionSource = remember { MutableInteractionSource() }
-            Box(modifier = Modifier
-                .clickable(interactionSource = remember { MutableInteractionSource() }, indication = null){}
-                .padding(start = 4.dp)
-                .size(32.dp),
-
-/*                .clickable(
-                    interaction = interactionSource,
-                    indication = null
-                ){},*/
-                contentAlignment = Alignment.TopEnd
-            ){
-                Icon(
-                    ImageVector.vectorResource(R.drawable.ic_message),
-                    contentDescription = null,
-                    tint = TextFieldFont,
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                )
-                Box(modifier = Modifier
-                    .size(18.dp)
-                    .background(color = BgDiscount, shape = CircleShape),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                       /* modifier = Modifier
-                            .size(18.dp)
-                            .align(Alignment.TopEnd)
-                            .background(color = BgDiscount, shape = CircleShape),*/
-                        text = "25",
-                        color = TextDiscount,
-                        fontSize = 10.sp,
-
-                        //textAlign = TextAlign.Center
-                    )
-                }
-
-            }
-
-
+            ShowMessageCount(value = 17)
         }
     }
         Box(
