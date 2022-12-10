@@ -59,7 +59,7 @@ import java.util.*
 fun MainScreen(state: ModalBottomSheetState){
 
     @Composable
-    fun ShowMessageCount(value: Int){
+    fun ShowMessageCount(value: Int, animate: Boolean = false){
         val count = remember{ mutableStateOf(0) }
         count.value = value
         if (count.value > 0) {
@@ -106,6 +106,7 @@ fun MainScreen(state: ModalBottomSheetState){
     //val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val viewModel: RepositoryViewModel = viewModel()
+    val products: MutableList<Product> by viewModel.products.collectAsState()
     val dataSnackbar: Triple<String, Boolean, MESSAGE> by viewModel.snackbarData.collectAsState()
     val textSearch = remember {
         mutableStateOf("")
@@ -217,7 +218,6 @@ fun MainScreen(state: ModalBottomSheetState){
                 .fillMaxSize()
                 .background(BgScreenDark)
         ) {
-            val products: MutableList<Product> by viewModel.products.collectAsState()
             val stateGrid = rememberLazyGridState()
             if (products.isNotEmpty()) {
                 LazyVerticalGrid(

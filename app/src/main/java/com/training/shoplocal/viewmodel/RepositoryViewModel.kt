@@ -133,7 +133,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                     log("get promo proudcts")
                     setSelectedProduct(Product())
                     val list = _products.value.toMutableList().apply{addAll(listProducts)}
-                    _products.value.clear()
+                    //_products.value.clear()
                     _products.value = list
                     lastPortion = part
                 }
