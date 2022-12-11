@@ -66,7 +66,7 @@ import java.util.*
 fun MainScreen(state: ModalBottomSheetState){
 
     @Composable
-    fun ShowMessageCount(value: Int){
+    fun ShowMessageCount(value: Int = 0){
         val animated = remember{ mutableStateOf(value > 0) }
 
       /*  val timer = remember {
@@ -106,7 +106,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 contentAlignment = Alignment.TopEnd
             ) {
                 LaunchedEffect(animated.value) {
-                    log("animation")
+                    //log("animation")
                     scope.launch {
                         animate.animateTo(
                             targetValue = MAX_SIZE,
@@ -317,7 +317,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 })
 
             //val interactionSource = remember { MutableInteractionSource() }
-            ShowMessageCount(value = 7)
+            ShowMessageCount(31)
         }
     }
         Box(
