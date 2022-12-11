@@ -68,8 +68,8 @@ fun MainScreen(state: ModalBottomSheetState){
     @Composable
     fun ShowMessageCount(value: Int){
         val animated = remember{ mutableStateOf(value > 0) }
-/*
-        val timer = remember {
+
+      /*  val timer = remember {
             Timer().apply {
                 val task = object : TimerTask() {
                     override fun run() {
@@ -77,10 +77,10 @@ fun MainScreen(state: ModalBottomSheetState){
                         animated.value = !animated.value
                     }
                 }
-                scheduleAtFixedRate(task, 2000L, 5000L)
+                scheduleAtFixedRate(task, 5000L, 5000L)
             }
-        }
-*/
+        }*/
+
 
 /*        @Composable
         fun AnimateMessage(count: Int, content: @Composable () -> Unit) {
@@ -106,6 +106,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 contentAlignment = Alignment.TopEnd
             ) {
                 LaunchedEffect(animated.value) {
+                    log("animation")
                     scope.launch {
                         animate.animateTo(
                             targetValue = MAX_SIZE,
@@ -135,7 +136,7 @@ fun MainScreen(state: ModalBottomSheetState){
                         animate.animateTo(
                             targetValue = 18f,
                             animationSpec = tween(
-                                delayMillis = 500,
+                                delayMillis = 200,
                                 durationMillis = 100
                             )
                         )
@@ -146,13 +147,18 @@ fun MainScreen(state: ModalBottomSheetState){
                                 animationSpec = tween(//delayMillis = 1200,
                                     durationMillis = 200)
                             )
-
-                       // }
-
+                        /*animate.animateTo(targetValue = 0f, tween(delayMillis = 0, durationMillis = 0))
+                        animate1.animateTo(targetValue = 0f, tween(delayMillis = 0, durationMillis = 0))
+                        animate2.animateTo(targetValue = 0f, tween(delayMillis = 0, durationMillis = 0))
+                        align.value = Alignment.Center
+                        animated.value = false*/
                     }
-                   // animated.value = false
-                    //delay(5000)
-                    //animated.value = true
+                    //animated.value = false
+                    /*animate.animateTo(targetValue = 0f)
+                    animate1.animateTo(targetValue = 0f)
+                    animate2.animateTo(targetValue = 0f)
+                    //align.value = Alignment.Center
+                    animated.value = false*/
                 }
 
 
