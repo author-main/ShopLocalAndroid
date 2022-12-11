@@ -67,6 +67,21 @@ fun MainScreen(state: ModalBottomSheetState){
 
     @Composable
     fun ShowMessageCount(value: Int){
+        val animated = remember{ mutableStateOf(value > 0) }
+/*
+        val timer = remember {
+            Timer().apply {
+                val task = object : TimerTask() {
+                    override fun run() {
+                        log("timer task")
+                        animated.value = !animated.value
+                    }
+                }
+                scheduleAtFixedRate(task, 2000L, 5000L)
+            }
+        }
+*/
+
 /*        @Composable
         fun AnimateMessage(count: Int, content: @Composable () -> Unit) {
         }*/
@@ -76,12 +91,11 @@ fun MainScreen(state: ModalBottomSheetState){
         val animate1 = remember{ Animatable(0f) }
         val animate2 = remember{ Animatable(0f) }
         val align = remember{ mutableStateOf( Alignment.Center)}
-        val animateBigCircle = remember{ MutableTransitionState(false) }
         val count = remember{ mutableStateOf(0) }
         count.value = value
         //log ("${18.toPx}, ${32.toPx}")
 
-
+      //      log("recomposition")
             Box(modifier = Modifier
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
@@ -91,7 +105,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 .size(32.dp),
                 contentAlignment = Alignment.TopEnd
             ) {
-                LaunchedEffect(Unit) {
+                LaunchedEffect(animated.value) {
                     scope.launch {
                         animate.animateTo(
                             targetValue = MAX_SIZE,
@@ -119,20 +133,26 @@ fun MainScreen(state: ModalBottomSheetState){
 
                         align.value = Alignment.TopEnd
                         animate.animateTo(
-                            targetValue = 17f,
+                            targetValue = 18f,
                             animationSpec = tween(
                                 delayMillis = 500,
                                 durationMillis = 100
                             )
                         )
-                    }
-                    scope.launch {
-                        animate1.animateTo(
-                            targetValue = 18f,
-                            animationSpec = tween(delayMillis = 1200, durationMillis = 200)
-                        )
-                    }
 
+                      //  scope.launch {
+                            animate1.animateTo(
+                                targetValue = 18f,
+                                animationSpec = tween(//delayMillis = 1200,
+                                    durationMillis = 200)
+                            )
+
+                       // }
+
+                    }
+                   // animated.value = false
+                    //delay(5000)
+                    //animated.value = true
                 }
 
 
@@ -152,7 +172,7 @@ fun MainScreen(state: ModalBottomSheetState){
                     tint = TextFieldFont,
                     modifier = Modifier
                         .align(Alignment.Center)
-                        .offset(x = animate2.value.dp)
+                        .offset(x = if (count.value > 0) animate2.value.dp else 0.dp)
                 )
                 if (count.value > 0) {
                     Box(
@@ -171,8 +191,10 @@ fun MainScreen(state: ModalBottomSheetState){
                     }
                 }
             }
-       /* SideEffect {
-            animateBigCircle.targetState = true
+/*        SideEffect {
+            //Thread.sleep(1000)
+            if (!animated.value)
+                animated.value = true
             //Thread.sleep(1000)
             //animate = true
             /*if (animate)
@@ -289,7 +311,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 })
 
             //val interactionSource = remember { MutableInteractionSource() }
-            ShowMessageCount(value = 25)
+            ShowMessageCount(value = 7)
         }
     }
         Box(
