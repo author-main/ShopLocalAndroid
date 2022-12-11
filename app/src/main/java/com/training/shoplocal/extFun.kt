@@ -96,10 +96,10 @@ fun getSalePrice(price: Float, discount: Int): String{
     return getFormattedPrice(result)
 }
 
-val Int.dp: Int
+val Int.Dp: Int
     get() = (this / Resources.getSystem().displayMetrics.density).toInt()
 
-val Int.px: Int
+val Int.Px: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
 fun ImageBitmap.isEmpty(): Boolean =

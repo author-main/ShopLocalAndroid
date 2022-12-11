@@ -10,10 +10,7 @@ import android.speech.SpeechRecognizer
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
@@ -39,7 +36,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.PlatformTextStyle
@@ -51,15 +50,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.training.shoplocal.MESSAGE
+import com.training.shoplocal.*
 import com.training.shoplocal.R
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.dialogs.ShowMessage
-import com.training.shoplocal.getStringResource
-import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -69,13 +67,21 @@ fun MainScreen(state: ModalBottomSheetState){
 
     @Composable
     fun ShowMessageCount(value: Int){
-       // var animate by remember {mutableStateOf(false)}
-        val animateBigCircle = remember{ MutableTransitionState(false) }
-        /*val sizeBigCircle by animateDpAsState(if (animate) 32.dp else 0.dp){
-            log("size = $it")
+/*        @Composable
+        fun AnimateMessage(count: Int, content: @Composable () -> Unit) {
         }*/
+        val MAX_SIZE = 32f
+        val scope = rememberCoroutineScope()
+        val animate  = remember{ Animatable(0f) }
+        val animate1 = remember{ Animatable(0f) }
+        val animate2 = remember{ Animatable(0f) }
+        val align = remember{ mutableStateOf( Alignment.Center)}
+        val animateBigCircle = remember{ MutableTransitionState(false) }
         val count = remember{ mutableStateOf(0) }
         count.value = value
+        //log ("${18.toPx}, ${32.toPx}")
+
+
             Box(modifier = Modifier
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
@@ -85,36 +91,60 @@ fun MainScreen(state: ModalBottomSheetState){
                 .size(32.dp),
                 contentAlignment = Alignment.TopEnd
             ) {
+                LaunchedEffect(Unit) {
+                    scope.launch {
+                        animate.animateTo(
+                            targetValue = MAX_SIZE,
+                            animationSpec = tween(400)
+                        )
+                        // ** Анимация Icon
+                        val offset = 3f
+                        for(i in 1 until 5){
+                           val direction = if (i.mod(2) > 0) -1 else 1
+                           val delta = direction * offset
+                            animate2.animateTo(
+                                targetValue = delta,
+                                animationSpec = tween(
+                                    //delayMillis = 500,
+                                durationMillis = 20
+                            ))
+                        }
+                        animate2.animateTo(
+                            targetValue = 0f,
+                            animationSpec = tween(
+                                //delayMillis = 500,
+                                durationMillis = 20)
+                        )
+                        // ** end Анимация Icon
+
+                        align.value = Alignment.TopEnd
+                        animate.animateTo(
+                            targetValue = 17f,
+                            animationSpec = tween(
+                                delayMillis = 500,
+                                durationMillis = 100
+                            )
+                        )
+                    }
+                    scope.launch {
+                        animate1.animateTo(
+                            targetValue = 18f,
+                            animationSpec = tween(delayMillis = 1200, durationMillis = 200)
+                        )
+                    }
+
+                }
+
 
                 if (count.value > 0) {
-                      androidx.compose.animation.AnimatedVisibility(
-                        visibleState = animateBigCircle,
-                        enter = scaleIn(
-                            animationSpec = tween(
-                                durationMillis = 250,
-                                easing = LinearEasing
-                            )
-                        ),
-                         exit = scaleOut(
-                             animationSpec = tween(
-                                 durationMillis = 250,
-                                 easing = LinearEasing
-                             )
-                        )
-                    ) {
-                          Surface(
-                              modifier = Modifier
-                                  .fillMaxWidth()
-                                  .size(32.dp),
-                              shape = CircleShape,
-                              color = BgDiscount
-                          ) {}
-
-                          LaunchedEffect(true) {
-                              delay(700)
-                              animateBigCircle.targetState = false
-                          }
-                      }
+                    Surface(
+                        modifier = Modifier
+                            .align(align.value)
+                            //.fillMaxWidth()
+                            .size(animate.value.dp),
+                            shape = CircleShape,
+                            color = BgDiscount.copy(alpha = animate.value / MAX_SIZE)
+                        ) {}
                 }
                 Icon(
                     ImageVector.vectorResource(R.drawable.ic_message),
@@ -122,37 +152,32 @@ fun MainScreen(state: ModalBottomSheetState){
                     tint = TextFieldFont,
                     modifier = Modifier
                         .align(Alignment.Center)
+                        .offset(x = animate2.value.dp)
                 )
                 if (count.value > 0) {
-
                     Box(
                         modifier = Modifier
-                            .size(18.dp)
-                            .background(color = BgDiscount, shape = CircleShape),
+                            .size(18.dp)//animate1.value.dp)
+                            //.height(animate1.value.dp)
+                            //.width(animate1.value.dp)
+                            .background(color = BgDiscount.copy(alpha = animate1.value / 18), shape = CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            /* modifier = Modifier
-                         .size(18.dp)
-                         .align(Alignment.TopEnd)
-                         .background(color = BgDiscount, shape = CircleShape),*/
                             text = count.value.toString(),
-                            color = TextDiscount,
+                            color = TextDiscount.copy(alpha = animate1.value / 18),
                             fontSize = 10.sp,
-
-                            //textAlign = TextAlign.Center
                         )
                     }
                 }
-
             }
-        SideEffect {
+       /* SideEffect {
             animateBigCircle.targetState = true
             //Thread.sleep(1000)
             //animate = true
             /*if (animate)
                 animateBigCircle.targetState = true*/
-        }
+        }*/
 
     }
 
@@ -264,7 +289,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 })
 
             //val interactionSource = remember { MutableInteractionSource() }
-            ShowMessageCount(value = 17)
+            ShowMessageCount(value = 25)
         }
     }
         Box(

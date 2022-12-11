@@ -12,7 +12,7 @@ import java.security.NoSuchAlgorithmException
 import kotlin.math.roundToInt
 
 
-val CART_IMAGE_SIZE = 150.px
+val CART_IMAGE_SIZE = 150.Px
 const val HASH_LENGTH = 32
 const val CACHE_SIZE  = 50 * 1024 * 1024  // 50Мб
 const val EXT_CACHETEMPFILE = "t"
@@ -119,7 +119,7 @@ fun loadBitmap(filename: String, reduce: Boolean = false): Bitmap?{
             val reduceSize = option.outWidth.coerceAtLeast(option.outHeight).toDouble()
             val inSampleSize = (reduceSize / CART_IMAGE_SIZE).roundToInt()
             //log("inSampleSize = $inSampleSize, bitmapWidth = ${option.outWidth}")
-            option.inSampleSize = inSampleSize * 2
+           // option.inSampleSize = inSampleSize * 2
             option.inJustDecodeBounds = false
         }
         option.inPreferredConfig = Bitmap.Config.ARGB_8888
