@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -26,12 +27,18 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -39,6 +46,7 @@ import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.PlatformTextStyle
@@ -61,6 +69,41 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 
+/*@Composable
+fun keyboardAsState(): State<Boolean> {
+    val isImeVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
+  //  log(isImeVisible.toString())
+    return rememberUpdatedState(isImeVisible)
+}*/
+
+/*@OptIn(ExperimentalLayoutApi::class)
+fun Modifier.clearFocusOnKeyboardDismiss(): Modifier = composed {
+    var isFocused by remember { mutableStateOf(false) }
+    var keyboardAppearedSinceLastFocused by remember { mutableStateOf(false) }
+    log ("isFocused $isFocused")
+    if (isFocused) {
+        val imeIsVisible = WindowInsets.isImeVisible
+        val focusManager = LocalFocusManager.current
+        LaunchedEffect(imeIsVisible) {
+            //log(imeIsVisible.toString())
+            if (imeIsVisible) {
+                keyboardAppearedSinceLastFocused = true
+            } else if (keyboardAppearedSinceLastFocused) {
+                log("clear focus")
+                focusManager.clearFocus()
+            }
+        }
+    }
+    onFocusEvent {
+        if (isFocused != it.isFocused) {
+            isFocused = it.isFocused
+            if (isFocused) {
+                keyboardAppearedSinceLastFocused = false
+            }
+        }
+    }
+}
+*/
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun MainScreen(state: ModalBottomSheetState){
@@ -91,8 +134,8 @@ fun MainScreen(state: ModalBottomSheetState){
         val animate1 = remember{ Animatable(0f) }
         val animate2 = remember{ Animatable(0f) }
         val align = remember{ mutableStateOf( Alignment.Center)}
-        val count = remember{ mutableStateOf(0) }
-        count.value = value
+        val count = remember{ mutableStateOf(value)}
+        //count.value = value
         //log ("${18.toPx}, ${32.toPx}")
 
       //      log("recomposition")
@@ -186,7 +229,10 @@ fun MainScreen(state: ModalBottomSheetState){
                             .size(18.dp)//animate1.value.dp)
                             //.height(animate1.value.dp)
                             //.width(animate1.value.dp)
-                            .background(color = BgDiscount.copy(alpha = animate1.value / 18), shape = CircleShape),
+                            .background(
+                                color = BgDiscount.copy(alpha = animate1.value / 18),
+                                shape = CircleShape
+                            ),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
@@ -232,33 +278,56 @@ fun MainScreen(state: ModalBottomSheetState){
         }
     }
 
+    val isFocusedSearchTextField = remember {
+        mutableStateOf(false)
+    }
+
     Column(modifier = Modifier.fillMaxWidth()) {
     TopAppBar(backgroundColor = MaterialTheme.colors.primary) {
+      /*  val focusedTextField = remember {
+            mutableStateOf(false)
+        }
+        BackHandler(enabled = focusedTextField.value) {
+            log("BackPressHandler")
+        }*/
         Row(
             Modifier
                 .padding(horizontal = 4.dp)
                 .fillMaxWidth(),
-        horizontalArrangement = Arrangement.End) {
-            /*val interaction = remember {
-                MutableInteractionSource()
-            }*/
+                horizontalArrangement = Arrangement.End) {
+            val focusManager = LocalFocusManager.current
+          //  log("recompose TextField")
+            //**************************************************************************************
             BasicTextField(
                 modifier = Modifier
+                    .onFocusChanged {
+                        if (it.isFocused)
+                            isFocusedSearchTextField.value = true
+                    }
+                    //   .clearFocusOnKeyboardDismiss()
                     .weight(1f)
                     .height(32.dp)
                     .background(color = TextFieldBg, shape = RoundedCornerShape(32.dp)),
-                cursorBrush = SolidColor(TextFieldFont),
-                value = textSearch.value,
-                textStyle = TextStyle(color = TextFieldFont),
-                onValueChange = {
-                    textSearch.value = it
-                },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Search,
-                    keyboardType = KeyboardType.Text
-                ),
-                decorationBox = { innerTextField ->
+                    cursorBrush = SolidColor(TextFieldFont),
+                    value = textSearch.value,
+                    textStyle = TextStyle(color = TextFieldFont),
+                    onValueChange = {
+                        textSearch.value = it
+                    },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Search,
+                        keyboardType = KeyboardType.Text
+                    ),
+                    keyboardActions = KeyboardActions (
+                        onSearch = {
+                            //log("search...")
+                            //focusRequester.freeFocus()
+                            isFocusedSearchTextField.value = false
+                            focusManager.clearFocus()
+                        }
+                    ),
+                    decorationBox = { innerTextField ->
                     val error_speechrecognizer =
                         stringResource(id = R.string.text_error_speechrecognizer)
                     TextFieldDefaults.TextFieldDecorationBox(
@@ -317,7 +386,11 @@ fun MainScreen(state: ModalBottomSheetState){
                 })
 
             //val interactionSource = remember { MutableInteractionSource() }
-            ShowMessageCount(31)
+            //  ShowMessageCount(31)
+
+            //**************************************************************************************
+                ShowMessageCount(24)
+
         }
     }
         Box(
@@ -325,6 +398,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 .fillMaxSize()
                 .background(BgScreenDark)
         ) {
+        //    log ("recompose Grid")
             val stateGrid = rememberLazyGridState()
             if (products.isNotEmpty()) {
                 LazyVerticalGrid(

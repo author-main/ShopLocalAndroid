@@ -20,7 +20,7 @@ import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import kotlin.math.roundToInt
 
-const val SERVER_URL            = "http://192.168.1.10"
+const val SERVER_URL            = "http://192.168.0.10"
 val DECIMAL_CEPARATOR           = DecimalFormatSymbols().decimalSeparator
 
 /*enum class Error {
@@ -56,9 +56,13 @@ fun getStringResource(@StringRes id: Int): String =
         DEFAULT_STRRESOURCE_VALUE
     }
 
-fun log(value: String?) {
-    if (value != null)
-        Log.v("shoplocal", value)
+fun<T> log(value: T?) {
+    if (value != null) {
+        if (value is String)
+            Log.v("shoplocal", value.uppercase())
+        else
+            Log.v("shoplocal", value.toString().uppercase())
+    }
 }
 
 fun validateMail(email: String): Boolean {
