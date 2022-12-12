@@ -132,7 +132,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                    setSelectedProduct(Product())
                    val list = _products.value.toMutableList().apply { addAll(listProducts) }
                    _products.value = list
-                   log("GET PORTION: portion = $part, lastPortion = ${loadedPortion}, items count = ${_products.value.size}")
+                       //  log("GET PORTION: portion = $part, lastPortion = ${loadedPortion}, items count = ${_products.value.size}")
                }
            }
        }
