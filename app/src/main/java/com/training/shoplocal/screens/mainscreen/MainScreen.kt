@@ -128,10 +128,6 @@ fun MainScreen(state: ModalBottomSheetState){
             }
         }*/
 
-
-/*        @Composable
-        fun AnimateMessage(count: Int, content: @Composable () -> Unit) {
-        }*/
         val MAX_SIZE = 32f
         val scope = rememberCoroutineScope()
         val animate  = remember{ Animatable(0f) }
@@ -139,10 +135,6 @@ fun MainScreen(state: ModalBottomSheetState){
         val animate2 = remember{ Animatable(0f) }
         val align = remember{ mutableStateOf( Alignment.Center)}
         val count = remember{ mutableStateOf(value)}
-        //count.value = value
-        //log ("${18.toPx}, ${32.toPx}")
-
-      //      log("recomposition")
             Box(modifier = Modifier
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
@@ -153,7 +145,6 @@ fun MainScreen(state: ModalBottomSheetState){
                 contentAlignment = Alignment.TopEnd
             ) {
                 LaunchedEffect(animated.value) {
-                    //log("animation")
                     scope.launch {
                         animate.animateTo(
                             targetValue = MAX_SIZE,
@@ -178,7 +169,6 @@ fun MainScreen(state: ModalBottomSheetState){
                                 durationMillis = 20)
                         )
                         // ** end Анимация Icon
-
                         align.value = Alignment.TopEnd
                         animate.animateTo(
                             targetValue = 18f,
@@ -187,28 +177,13 @@ fun MainScreen(state: ModalBottomSheetState){
                                 durationMillis = 100
                             )
                         )
-
-                      //  scope.launch {
                             animate1.animateTo(
                                 targetValue = 18f,
                                 animationSpec = tween(//delayMillis = 1200,
                                     durationMillis = 200)
                             )
-                        /*animate.animateTo(targetValue = 0f, tween(delayMillis = 0, durationMillis = 0))
-                        animate1.animateTo(targetValue = 0f, tween(delayMillis = 0, durationMillis = 0))
-                        animate2.animateTo(targetValue = 0f, tween(delayMillis = 0, durationMillis = 0))
-                        align.value = Alignment.Center
-                        animated.value = false*/
                     }
-                    //animated.value = false
-                    /*animate.animateTo(targetValue = 0f)
-                    animate1.animateTo(targetValue = 0f)
-                    animate2.animateTo(targetValue = 0f)
-                    //align.value = Alignment.Center
-                    animated.value = false*/
                 }
-
-
                 if (count.value > 0) {
                     Surface(
                         modifier = Modifier
@@ -247,20 +222,7 @@ fun MainScreen(state: ModalBottomSheetState){
                     }
                 }
             }
-/*        SideEffect {
-            //Thread.sleep(1000)
-            if (!animated.value)
-                animated.value = true
-            //Thread.sleep(1000)
-            //animate = true
-            /*if (animate)
-                animateBigCircle.targetState = true*/
-        }*/
-
     }
-
-
-    //val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val viewModel: RepositoryViewModel = viewModel()
     val products: MutableList<Product> by viewModel.products.collectAsState()
@@ -281,32 +243,11 @@ fun MainScreen(state: ModalBottomSheetState){
             }
         }
     }
-
     val isFocusedSearchTextField = remember {
         mutableStateOf(false)
     }
-
-    /*var showSearch by remember {
-        mutableStateOf(false)
-    }*/
-
-
-   // var sizeTopBar: IntSize? = null
     Column(modifier = Modifier.fillMaxWidth()) {
-
         TopAppBar( backgroundColor = MaterialTheme.colors.primary){
-
-           /* if (isFocusedSearchTextField.value) {
-                    IconButton(onClick = {  }) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = "Back"
-                        )
-                    }
-            } else null ,*/
-
-
-
             Row(
                 Modifier
                     .padding(horizontal = 4.dp)
@@ -314,13 +255,11 @@ fun MainScreen(state: ModalBottomSheetState){
                 horizontalArrangement = Arrangement.End
             ) {
                 val focusManager = LocalFocusManager.current
-
                 fun hideSearchDialog() {
                     focusManager.clearFocus()
                     isFocusedSearchTextField.value = false
                     viewModel.hideBottomNavigation(false)
                 }
-
                 if (isFocusedSearchTextField.value) {
                   //  IconButton(onClick = {  }) {
                         Icon(modifier = Modifier.align(Alignment.CenterVertically)
@@ -334,11 +273,7 @@ fun MainScreen(state: ModalBottomSheetState){
                             contentDescription = null,
                             tint = TextFieldFont
                         )
-                  //  }
                 }
-
-
-                //  log("recompose TextField")
                 //**************************************************************************************
                 BasicTextField(
                     modifier = Modifier
@@ -348,7 +283,6 @@ fun MainScreen(state: ModalBottomSheetState){
                                 isFocusedSearchTextField.value = true
                             }
                         }
-                        //   .clearFocusOnKeyboardDismiss()
                         .weight(1f)
                         .height(32.dp)
                         .background(color = TextFieldBg, shape = RoundedCornerShape(32.dp)),
@@ -365,20 +299,9 @@ fun MainScreen(state: ModalBottomSheetState){
                     ),
                     keyboardActions = KeyboardActions(
                         onSearch = {
-                            // log("search...")
-
-                            //focusRequester.freeFocus()
-                            //isFocusedSearchTextField.value = false
-                           /* focusManager.clearFocus()
-                            isFocusedSearchTextField.value = false
-                            viewModel.hideBottomNavigation(false)*/
                             hideSearchDialog()
                             if (textSearch.value.isNotBlank()) {
-                                //showSearch = true
                                 log("search ${textSearch.value}...")
-                                /*log ("TopAppSize = ${sizeTopBar}")
-                                DialogRouter.navigateTo(DialogItem.SearchProductDialog)*/
-
                             }
                         }
                     ),
