@@ -30,6 +30,8 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -112,6 +114,7 @@ fun MainScreen(state: ModalBottomSheetState){
     @Composable
     fun ShowMessageCount(value: Int = 0){
         val animated = remember{ mutableStateOf(value > 0) }
+
 
       /*  val timer = remember {
             Timer().apply {
@@ -279,32 +282,31 @@ fun MainScreen(state: ModalBottomSheetState){
         }
     }
 
-    /*val isFocusedSearchTextField = remember {
+    val isFocusedSearchTextField = remember {
         mutableStateOf(false)
-    }*/
+    }
 
     /*var showSearch by remember {
         mutableStateOf(false)
     }*/
 
 
-
-    var sizeTopBar: IntSize? = null
+   // var sizeTopBar: IntSize? = null
     Column(modifier = Modifier.fillMaxWidth()) {
-        TopAppBar(backgroundColor = MaterialTheme.colors.primary,
-            modifier = Modifier
-                .onGloballyPositioned { coordinates ->
-                     sizeTopBar = coordinates.size
- //                    positionInRootTopBar = coordinates.positionInRoot()
-                }
 
-        ) {
-            /*  val focusedTextField = remember {
-            mutableStateOf(false)
-        }
-        BackHandler(enabled = focusedTextField.value) {
-            log("BackPressHandler")
-        }*/
+        TopAppBar( backgroundColor = MaterialTheme.colors.primary){
+
+           /* if (isFocusedSearchTextField.value) {
+                    IconButton(onClick = {  }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
+            } else null ,*/
+
+
+
             Row(
                 Modifier
                     .padding(horizontal = 4.dp)
@@ -312,14 +314,40 @@ fun MainScreen(state: ModalBottomSheetState){
                 horizontalArrangement = Arrangement.End
             ) {
                 val focusManager = LocalFocusManager.current
+
+                fun hideSearchDialog() {
+                    focusManager.clearFocus()
+                    isFocusedSearchTextField.value = false
+                    viewModel.hideBottomNavigation(false)
+                }
+
+                if (isFocusedSearchTextField.value) {
+                  //  IconButton(onClick = {  }) {
+                        Icon(modifier = Modifier.align(Alignment.CenterVertically)
+                            .padding(end = 8.dp)
+                            .clickable(interactionSource = remember { MutableInteractionSource() },
+                                indication = null
+                            ) {
+                                hideSearchDialog()
+                            },
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = null,
+                            tint = TextFieldFont
+                        )
+                  //  }
+                }
+
+
                 //  log("recompose TextField")
                 //**************************************************************************************
                 BasicTextField(
                     modifier = Modifier
-                        /* .onFocusChanged {
-                        if (it.isFocused)
-                            isFocusedSearchTextField.value = true
-                    }*/
+                        .onFocusChanged {
+                            if (it.isFocused) {
+                                viewModel.hideBottomNavigation()
+                                isFocusedSearchTextField.value = true
+                            }
+                        }
                         //   .clearFocusOnKeyboardDismiss()
                         .weight(1f)
                         .height(32.dp)
@@ -341,12 +369,16 @@ fun MainScreen(state: ModalBottomSheetState){
 
                             //focusRequester.freeFocus()
                             //isFocusedSearchTextField.value = false
-                            focusManager.clearFocus()
+                           /* focusManager.clearFocus()
+                            isFocusedSearchTextField.value = false
+                            viewModel.hideBottomNavigation(false)*/
+                            hideSearchDialog()
                             if (textSearch.value.isNotBlank()) {
                                 //showSearch = true
                                 log("search ${textSearch.value}...")
-                                log ("TopAppSize = ${sizeTopBar}")
-                                DialogRouter.navigateTo(DialogItem.SearchProductDialog)
+                                /*log ("TopAppSize = ${sizeTopBar}")
+                                DialogRouter.navigateTo(DialogItem.SearchProductDialog)*/
+
                             }
                         }
                     ),
@@ -387,8 +419,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
                                                 DialogRouter.reset()
                                                 //showSearch = false
-                                            }
-                                            else {
+                                            } else {
                                                 // Вызвать голосовой ввод
                                                 getSpeechInput(context)?.let { intent ->
                                                     startLauncher.launch(intent)
@@ -416,7 +447,8 @@ fun MainScreen(state: ModalBottomSheetState){
                 //  ShowMessageCount(31)
 
                 //**************************************************************************************
-                ShowMessageCount(24)
+                if (!isFocusedSearchTextField.value)
+                    ShowMessageCount(24)
 
             }
         }

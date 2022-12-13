@@ -19,6 +19,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
+import com.training.shoplocal.log
 import com.training.shoplocal.screens.*
 import com.training.shoplocal.screens.appscreen.BottomNavigationBar
 import com.training.shoplocal.screens.appscreen.BottomNavigationItem
@@ -38,30 +39,38 @@ fun AppScreen(){
           BottomSheet(state) {
               val navController = rememberNavController()
               Scaffold(bottomBar = {
-                  BottomNavigationBar(navController)
+                  val hiddenNavigation = viewModel.hiddenBottomNavigation.collectAsState()
+                  if (!hiddenNavigation.value)
+                      BottomNavigationBar(navController)
+
               }
               ) {
                   Box(
                       modifier = Modifier
                           .padding(it)
                   ) {
-                      Navigation(navController)
-                      ImageLinkDownloader.cancel()
-                      when (ScreenRouter.current) {
-                          ScreenItem.MainScreen -> {
-                              MainScreen(state)
+                          Navigation(navController)
+                         // log("clear downloader")
+                          when (ScreenRouter.current) {
+                              ScreenItem.MainScreen -> {
+                                  ImageLinkDownloader.cancel()
+                                  MainScreen(state)
+                              }
+                              ScreenItem.CatalogScreen -> {
+                                  ImageLinkDownloader.cancel()
+                                  CatalogScreen()
+                              }
+                              ScreenItem.CartScreen -> {
+                                  ImageLinkDownloader.cancel()
+                                  CartScreen()
+                              }
+                              ScreenItem.ProfileScreen -> {
+                                  ImageLinkDownloader.cancel()
+                                  ProfileScreen()
+                              }
+                              else -> {}
                           }
-                          ScreenItem.CatalogScreen -> {
-                              CatalogScreen()
-                          }
-                          ScreenItem.CartScreen -> {
-                              CartScreen()
-                          }
-                          ScreenItem.ProfileScreen -> {
-                              ProfileScreen()
-                          }
-                          else -> {}
-                      }
+
 
                   }
               }

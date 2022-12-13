@@ -19,6 +19,12 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
+    private val _hiddenBottomNavigation = MutableStateFlow<Boolean>(false)
+    val hiddenBottomNavigation = _hiddenBottomNavigation.asStateFlow()
+    fun hideBottomNavigation(value: Boolean = true) {
+        _hiddenBottomNavigation.value = value
+    }
+
     private var loadedPortion = 0
     private val _selectedProduct = MutableStateFlow<Product>(Product())
     val selectedProduct = _selectedProduct.asStateFlow()
