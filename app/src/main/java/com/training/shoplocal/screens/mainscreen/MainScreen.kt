@@ -384,6 +384,7 @@ fun MainScreen(state: ModalBottomSheetState){
                                         .clickable {
                                             if (showClearIcon) {
                                                 textSearch.value = ""
+
                                                 DialogRouter.reset()
                                                 //showSearch = false
                                             }
