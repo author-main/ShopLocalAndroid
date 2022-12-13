@@ -39,9 +39,11 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.platform.LocalContext
@@ -52,12 +54,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.*
 import com.training.shoplocal.R
 import com.training.shoplocal.classes.Product
+import com.training.shoplocal.dialogs.DialogSearch
 import com.training.shoplocal.dialogs.ShowMessage
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
@@ -275,36 +279,51 @@ fun MainScreen(state: ModalBottomSheetState){
         }
     }
 
-    val isFocusedSearchTextField = remember {
+    /*val isFocusedSearchTextField = remember {
         mutableStateOf(false)
-    }
+    }*/
 
+    /*var showSearch by remember {
+        mutableStateOf(false)
+    }*/
+
+
+
+    var sizeTopBar: IntSize? = null
     Column(modifier = Modifier.fillMaxWidth()) {
-    TopAppBar(backgroundColor = MaterialTheme.colors.primary) {
-      /*  val focusedTextField = remember {
+        TopAppBar(backgroundColor = MaterialTheme.colors.primary,
+            modifier = Modifier
+                .onGloballyPositioned { coordinates ->
+                     sizeTopBar = coordinates.size
+ //                    positionInRootTopBar = coordinates.positionInRoot()
+                }
+
+        ) {
+            /*  val focusedTextField = remember {
             mutableStateOf(false)
         }
         BackHandler(enabled = focusedTextField.value) {
             log("BackPressHandler")
         }*/
-        Row(
-            Modifier
-                .padding(horizontal = 4.dp)
-                .fillMaxWidth(),
-                horizontalArrangement = Arrangement.End) {
-            val focusManager = LocalFocusManager.current
-          //  log("recompose TextField")
-            //**************************************************************************************
-            BasicTextField(
-                modifier = Modifier
-                    .onFocusChanged {
+            Row(
+                Modifier
+                    .padding(horizontal = 4.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                val focusManager = LocalFocusManager.current
+                //  log("recompose TextField")
+                //**************************************************************************************
+                BasicTextField(
+                    modifier = Modifier
+                        /* .onFocusChanged {
                         if (it.isFocused)
                             isFocusedSearchTextField.value = true
-                    }
-                    //   .clearFocusOnKeyboardDismiss()
-                    .weight(1f)
-                    .height(32.dp)
-                    .background(color = TextFieldBg, shape = RoundedCornerShape(32.dp)),
+                    }*/
+                        //   .clearFocusOnKeyboardDismiss()
+                        .weight(1f)
+                        .height(32.dp)
+                        .background(color = TextFieldBg, shape = RoundedCornerShape(32.dp)),
                     cursorBrush = SolidColor(TextFieldFont),
                     value = textSearch.value,
                     textStyle = TextStyle(color = TextFieldFont),
@@ -316,129 +335,149 @@ fun MainScreen(state: ModalBottomSheetState){
                         imeAction = ImeAction.Search,
                         keyboardType = KeyboardType.Text
                     ),
-                    keyboardActions = KeyboardActions (
+                    keyboardActions = KeyboardActions(
                         onSearch = {
-                            //log("search...")
+                            // log("search...")
+
                             //focusRequester.freeFocus()
-                            isFocusedSearchTextField.value = false
+                            //isFocusedSearchTextField.value = false
                             focusManager.clearFocus()
+                            if (textSearch.value.isNotBlank()) {
+                                //showSearch = true
+                                log("search ${textSearch.value}...")
+                                log ("TopAppSize = ${sizeTopBar}")
+                                DialogRouter.navigateTo(DialogItem.SearchProductDialog)
+                            }
                         }
                     ),
                     decorationBox = { innerTextField ->
-                    val error_speechrecognizer =
-                        stringResource(id = R.string.text_error_speechrecognizer)
-                    TextFieldDefaults.TextFieldDecorationBox(
-                        value = "",
-                        placeholder = {
-                            if (textSearch.value.isEmpty())
-                                Text(
-                                    text = stringResource(id = R.string.text_search),
-                                    fontSize = 14.sp,
-                                    color = TextFieldFont.copy(alpha = 0.4f)
+                        val error_speechrecognizer =
+                            stringResource(id = R.string.text_error_speechrecognizer)
+                        TextFieldDefaults.TextFieldDecorationBox(
+                            value = "",
+                            placeholder = {
+                                if (textSearch.value.isEmpty())
+                                    Text(
+                                        text = stringResource(id = R.string.text_search),
+                                        fontSize = 14.sp,
+                                        color = TextFieldFont.copy(alpha = 0.4f)
+                                    )
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(R.drawable.ic_search),
+                                    contentDescription = null
                                 )
-                        },
-                        leadingIcon = {
-                            Icon(
-                                imageVector = ImageVector.vectorResource(R.drawable.ic_search),
-                                contentDescription = null
-                            )
-                        },
-                        trailingIcon = {
-                            val showClearIcon = textSearch.value.isNotEmpty()
-                            val iconSize = if (showClearIcon) 16.dp else 24.dp
-                            Icon(
-                                imageVector = if (showClearIcon)
-                                    ImageVector.vectorResource(R.drawable.ic_cancel_bs)
-                                else
-                                    ImageVector.vectorResource(R.drawable.ic_microphone),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .clip(CircleShape)
-                                    .size(iconSize)
-                                    .clickable {
-                                        if (showClearIcon)
-                                            textSearch.value = ""
-                                        else {
-                                            // Вызвать голосовой ввод
-                                            getSpeechInput(context)?.let { intent ->
-                                                startLauncher.launch(intent)
-                                            } ?: viewModel.showSnackbar(
-                                                error_speechrecognizer,
-                                                type = MESSAGE.ERROR
-                                            )
+                            },
+                            trailingIcon = {
+                                val showClearIcon = textSearch.value.isNotEmpty()
+                                val iconSize = if (showClearIcon) 16.dp else 24.dp
+                                Icon(
+                                    imageVector = if (showClearIcon)
+                                        ImageVector.vectorResource(R.drawable.ic_cancel_bs)
+                                    else
+                                        ImageVector.vectorResource(R.drawable.ic_microphone),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .clip(CircleShape)
+                                        .size(iconSize)
+                                        .clickable {
+                                            if (showClearIcon) {
+                                                textSearch.value = ""
+                                                DialogRouter.reset()
+                                                //showSearch = false
+                                            }
+                                            else {
+                                                // Вызвать голосовой ввод
+                                                getSpeechInput(context)?.let { intent ->
+                                                    startLauncher.launch(intent)
+                                                } ?: viewModel.showSnackbar(
+                                                    error_speechrecognizer,
+                                                    type = MESSAGE.ERROR
+                                                )
+                                            }
                                         }
-                                    }
-                            )
-                        },
+                                )
+                            },
 
-                        visualTransformation = VisualTransformation.None,
-                        innerTextField = innerTextField,
-                        singleLine = true,
-                        enabled = true,
-                        interactionSource = remember {
-                            MutableInteractionSource()
-                        },
-                        contentPadding = PaddingValues(0.dp)
-                    )
-                })
+                            visualTransformation = VisualTransformation.None,
+                            innerTextField = innerTextField,
+                            singleLine = true,
+                            enabled = true,
+                            interactionSource = remember {
+                                MutableInteractionSource()
+                            },
+                            contentPadding = PaddingValues(0.dp)
+                        )
+                    })
 
-            //val interactionSource = remember { MutableInteractionSource() }
-            //  ShowMessageCount(31)
+                //val interactionSource = remember { MutableInteractionSource() }
+                //  ShowMessageCount(31)
 
-            //**************************************************************************************
+                //**************************************************************************************
                 ShowMessageCount(24)
 
+            }
         }
-    }
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(BgScreenDark)
-        ) {
-        //    log ("recompose Grid")
-            val stateGrid = rememberLazyGridState()
-            if (products.isNotEmpty()) {
-                LazyVerticalGrid(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 10.dp),
-                    columns = GridCells.Adaptive(minSize = 150.dp),
-                    state = stateGrid,
-                    contentPadding = PaddingValues(10.dp),
-                    //horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    items(products, { product -> product.id }) { product ->
-                        //log("item${product.id}")
-                        // items(products.size, key = {}) { index ->
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceEvenly
-                        ) {
-                            CardProduct(product, state = state)
+        /*if (showSearch)
+            DialogSearch(textSearch.value)*/
+       // else {
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(BgScreenDark)
+            ) {
+                //    log ("recompose Grid")
+                val stateGrid = rememberLazyGridState()
+                if (products.isNotEmpty()) {
+                    LazyVerticalGrid(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 10.dp),
+                        columns = GridCells.Adaptive(minSize = 150.dp),
+                        state = stateGrid,
+                        contentPadding = PaddingValues(10.dp),
+                        //horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        items(products, { product -> product.id }) { product ->
+                            //log("item${product.id}")
+                            // items(products.size, key = {}) { index ->
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceEvenly
+                            ) {
+                                CardProduct(product, state = state)
+                            }
                         }
+                    }
+                }
+
+                val nextPart = remember {
+                    derivedStateOf {
+                        stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.index == stateGrid.layoutInfo.totalItemsCount - 1
+                                //&& stateGrid.isScrollInProgress
+                                && stateGrid.layoutInfo.viewportEndOffset - stateGrid.layoutInfo.visibleItemsInfo.last().offset.y >= stateGrid.layoutInfo.visibleItemsInfo.last().size.height / 2
+                    }
+                }
+                LaunchedEffect(nextPart.value) {
+                    if (nextPart.value) {
+                        viewModel.getNextPortionData()
                     }
                 }
             }
 
-            val nextPart = remember {
-                derivedStateOf {
-                    stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.index == stateGrid.layoutInfo.totalItemsCount - 1
-                            //&& stateGrid.isScrollInProgress
-                            && stateGrid.layoutInfo.viewportEndOffset - stateGrid.layoutInfo.visibleItemsInfo.last().offset.y >= stateGrid.layoutInfo.visibleItemsInfo.last().size.height / 2
-                }
-            }
-            LaunchedEffect(nextPart.value) {
-                if (nextPart.value) {
-                    viewModel.getNextPortionData()
-                }
-            }
         }
-
-    }
-    if (dataSnackbar.second) {
-        ShowMessage(message = dataSnackbar.first, viewModel = viewModel, type = dataSnackbar.third)//, type = MESSAGE.WARNING)
-    }
+        if (dataSnackbar.second) {
+            ShowMessage(
+                message = dataSnackbar.first,
+                viewModel = viewModel,
+                type = dataSnackbar.third
+            )//, type = MESSAGE.WARNING)
+        }
+  //  }
  }
+
 private fun getSpeechInput(context: Context) : Intent? {
     return if (!SpeechRecognizer.isRecognitionAvailable(context))
         null

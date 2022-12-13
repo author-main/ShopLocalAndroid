@@ -15,6 +15,7 @@ import com.training.shoplocal.AppShopLocal.Companion.appRepository
 import com.training.shoplocal.dialogs.DialogRegistration
 import com.training.shoplocal.dialogs.DialogRestore
 import com.training.shoplocal.classes.User.Companion.getUserData
+import com.training.shoplocal.dialogs.DialogSearch
 import com.training.shoplocal.screens.appscreen.AppScreen
 import com.training.shoplocal.screens.LoginScreen
 import com.training.shoplocal.screens.ScreenItem
@@ -75,6 +76,9 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
             }
             DialogItem.RestoreUserDialog -> {
                 DialogRestore()
+            }
+            DialogItem.SearchProductDialog -> {
+                DialogSearch(textSearch = "ghjdthrf")
             }
         }
     }
