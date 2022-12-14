@@ -63,7 +63,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.*
 import com.training.shoplocal.R
 import com.training.shoplocal.classes.Product
-import com.training.shoplocal.dialogs.DialogSearch
 import com.training.shoplocal.dialogs.ShowMessage
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
