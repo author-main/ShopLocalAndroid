@@ -20,7 +20,7 @@ class SearchQueryStorage: SearchQueryStorageInterface {
     }
 
     override fun delete(value: String) {
-        listSQ.remove(value)
+        changed = listSQ.remove(value)
         /*val removed = listSQ.filter { it == value }
         if (removed.isNotEmpty()) {
             changed = true
