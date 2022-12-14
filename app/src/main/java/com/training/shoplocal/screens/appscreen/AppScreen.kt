@@ -7,10 +7,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -19,6 +16,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
+import com.training.shoplocal.classes.searcher.SearchQueryStorage
+import com.training.shoplocal.classes.searcher.SearchQueryStorageInterface
 import com.training.shoplocal.log
 import com.training.shoplocal.screens.*
 import com.training.shoplocal.screens.appscreen.BottomNavigationBar
@@ -28,13 +27,15 @@ import com.training.shoplocal.screens.mainscreen.MainScreen
 import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 
-//val LocalSelectedProduct = compositionLocalOf<Product?> { error("No selected product!") }
+val LocalSearchStorage = staticCompositionLocalOf<SearchQueryStorageInterface?> { error("no init") }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AppScreen(){
       val viewModel: RepositoryViewModel = viewModel()
-       //CompositionLocalProvider(LocalSelectedProduct provides viewModel.selectedProduct.collectAsState().value) {
+      val searchStorage = SearchQueryStorage.getInstance()
+          //CompositionLocalProvider(LocalSearchStorage provides viewModel.selectedProduct.collectAsState().value) {
+          CompositionLocalProvider(LocalSearchStorage provides searchStorage) {
           val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
           BottomSheet(state) {
               val navController = rememberNavController()
@@ -75,6 +76,6 @@ fun AppScreen(){
                   }
               }
           }
-//      }
+      }
 }
 
