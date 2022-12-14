@@ -6,7 +6,7 @@ import java.io.*
 
 class SearchQueryStorage: SearchQueryStorageInterface {
     private var changed = false;
-    private val listSQ = getQueriesStorage().toMutableList()
+    private val listSQ = mutableListOf<String>()// getQueriesStorage().toMutableList()
 
     override val fileNameStorage: String =
         AppShopLocal.appContext().applicationInfo.dataDir + "/search.lst"
@@ -28,21 +28,19 @@ class SearchQueryStorage: SearchQueryStorageInterface {
         }*/
     }
 
-    private fun getQueriesStorage(): List<String>{
-        if (!fileExists(fileNameStorage))
-            return listOf<String>()
-        val list = mutableListOf<String>()
-        try {
-            BufferedReader(FileReader(fileNameStorage)).use {
-                it.lineSequence().forEach { line ->
-                    list.add(line)
-                }
-            }
-        } catch(_: IOException) {}
-        return list
-    }
-
+//    private fun getQueriesStorage(): List<String>{
     override fun getQueries(): List<String> {
+        listSQ.clear()
+        if (fileExists(fileNameStorage)) {
+            try {
+                BufferedReader(FileReader(fileNameStorage)).use {
+                    it.lineSequence().forEach { line ->
+                        listSQ.add(line)
+                    }
+                }
+            } catch (_: IOException) {
+            }
+        }
         return listSQ
     }
 
@@ -66,4 +64,22 @@ class SearchQueryStorage: SearchQueryStorageInterface {
             listSQ.add(0, value)
         }
     }
+
+    fun clearAndSave(){
+        saveQueries(listSQ)
+        listSQ.clear()
+    }
+
+    companion object {
+        private lateinit var instance: SearchQueryStorage
+        fun getInstance() =
+            if (this::instance.isInitialized)
+                instance
+            else {
+                instance = SearchQueryStorage().apply { getQueries() }
+                instance
+            }
+
+    }
+
 }

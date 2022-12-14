@@ -28,5 +28,4 @@ interface SearchQueryStorageInterface {
      * @param - строка поискового запроса
      */
     fun moveFirst(value: String)
-
 }

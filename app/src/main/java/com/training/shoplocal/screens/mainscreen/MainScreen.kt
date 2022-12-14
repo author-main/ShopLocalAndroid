@@ -63,6 +63,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.*
 import com.training.shoplocal.R
 import com.training.shoplocal.classes.Product
+import com.training.shoplocal.classes.searcher.SearchQueryStorage
+import com.training.shoplocal.classes.searcher.SearchQueryStorageInterface
 import com.training.shoplocal.dialogs.ShowMessage
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
@@ -278,6 +280,7 @@ fun MainScreen(state: ModalBottomSheetState){
                     modifier = Modifier
                         .onFocusChanged {
                             if (it.isFocused) {
+                                val searchStore: SearchQueryStorageInterface = SearchQueryStorage.getInstance()
                                 viewModel.hideBottomNavigation()
                                 isFocusedSearchTextField.value = true
                             }
