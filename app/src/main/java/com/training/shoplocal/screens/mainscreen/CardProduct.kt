@@ -248,7 +248,8 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){
     }
 
     val countItems = product.linkimages?.size ?: 1 // у продукта должно быть хотя бы одно изображение
-     val listImages = remember{Array<Pair<IMAGE_STATE, ImageBitmap>>(countItems) {
+    val listImages = remember{
+        Array<Pair<IMAGE_STATE, ImageBitmap>>(countItems) {
         IMAGE_STATE.NONE to EMPTY_IMAGE
     }}
     val context = LocalContext.current
@@ -256,25 +257,38 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){
     val visible = remember{MutableTransitionState(false)}
     val animateSize = remember{mutableStateOf(Size.Zero)}
     val imageLink = getLinkImage(0, product.linkimages)
-    val downloadedImage = remember{ mutableStateOf(
+
+    val downloadedImage = remember {
+        mutableStateOf(
+            (listImages[0].first == IMAGE_STATE.COMPLETED && !listImages[0].second.isEmpty()) || listImages[0].first == IMAGE_STATE.FAILURE
+        )
+    }
+
+
+    /*val downloadedImage = remember{ mutableStateOf(
         (listImages[0].first == IMAGE_STATE.COMPLETED && !listImages[0].second.isEmpty()) || listImages[0].first == IMAGE_STATE.FAILURE
-    ) }
+    ) }*/
+
+        //log("downloadedImage = ${downloadedImage.value}")
+    log("product id = ${product.id} -> status ${listImages[0].first}")
     if (!downloadedImage.value) {
         // Запуск в области compose, если compose завершится. Блок внутри будет завершен без
         // утечки памяти и процессов.
-        LaunchedEffect(true) {
+        LaunchedEffect(Unit) {
             // Если не нужно уменьшать изображение,
             // используйте ImageLinkDownload.downloadImage вместо
             // ImageLinkDownload.downloadCardImage
              ImageLinkDownloader.downloadCardImage(
                 imageLink?.let { "$SERVER_URL/images/$it" }, object : Callback {
                     override fun onComplete(image: Bitmap) {
+                        log("product id = ${product.id} reload image")
                        // bitmap.value = image.asImageBitmap()
                         listImages[0] = IMAGE_STATE.COMPLETED to image.asImageBitmap()
                         downloadedImage.value = true
                     }
 
                     override fun onFailure() {
+                        log("product id = ${product.id} failure")
                         // здесь можно установить картинку по умолчанию,
                         // в случае если картинка не загрузилась
                         //listImages[0] = ваше изображение

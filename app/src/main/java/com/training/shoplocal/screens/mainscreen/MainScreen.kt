@@ -382,7 +382,13 @@ fun MainScreen(state: ModalBottomSheetState){
         /*if (showSearch)
             DialogSearch(textSearch.value)*/
        // else {
-
+        if (isFocusedSearchTextField.value) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(BgScreenDark)
+            ) {}
+        }
             Box(
                 modifier = Modifier
                     .fillMaxSize()
