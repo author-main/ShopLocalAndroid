@@ -23,5 +23,10 @@ interface SearchQueryStorageInterface {
      * @return true - данные сохранены, false - ошибка сохранения данных
      */
     fun saveQueries(list: List<String>): Boolean
+    /**
+     * Переместить строку запроса в начало списка
+     * @param - строка поискового запроса
+     */
+    fun moveFirst(value: String)
 
 }

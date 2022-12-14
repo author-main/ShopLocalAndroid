@@ -5,17 +5,27 @@ import com.training.shoplocal.fileExists
 import java.io.*
 
 class SearchQueryStorage: SearchQueryStorageInterface {
+    private var changed = false;
     private val listSQ = getQueriesStorage().toMutableList()
 
     override val fileNameStorage: String =
         AppShopLocal.appContext().applicationInfo.dataDir + "/search.lst"
 
     override fun put(value: String) {
-        TODO("Not yet implemented")
+        if (!listSQ.contains(value)) {
+            changed = true
+            listSQ.add(0, value)
+        } else
+            moveFirst(value)
     }
 
     override fun delete(value: String) {
-        TODO("Not yet implemented")
+        listSQ.remove(value)
+        /*val removed = listSQ.filter { it == value }
+        if (removed.isNotEmpty()) {
+            changed = true
+            listSQ.removeAll(removed)
+        }*/
     }
 
     private fun getQueriesStorage(): List<String>{
@@ -38,12 +48,22 @@ class SearchQueryStorage: SearchQueryStorageInterface {
 
     override fun saveQueries(list: List<String>): Boolean {
         return try {
-            FileOutputStream(File(fileNameStorage)).use{
-                it.write(list.toString().toByteArray())
-                true
+            if (changed) {
+                FileOutputStream(File(fileNameStorage)).use {
+                    it.write(list.toString().toByteArray())
+                }
             }
+            true
         } catch (_: IOException){
             false
+        }
+    }
+
+    override fun moveFirst(value: String) {
+        if (!listSQ.contains(value)) {
+            changed = true
+            listSQ.remove(value)
+            listSQ.add(0, value)
         }
     }
 }
