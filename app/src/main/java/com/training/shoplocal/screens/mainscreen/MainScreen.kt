@@ -114,6 +114,11 @@ fun Modifier.clearFocusOnKeyboardDismiss(): Modifier = composed {
 fun MainScreen(state: ModalBottomSheetState){
 
     @Composable
+    fun ShowFoundProducts(query: String) {
+
+    }
+
+    @Composable
     fun ShowMessageCount(value: Int = 0){
         val animated = remember{ mutableStateOf(value > 0) }
 
