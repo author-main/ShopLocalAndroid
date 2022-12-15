@@ -27,7 +27,7 @@ import com.training.shoplocal.screens.mainscreen.MainScreen
 import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 
-val LocalSearchStorage = staticCompositionLocalOf<SearchQueryStorageInterface?> { error("no init") }
+val LocalSearchStorage = staticCompositionLocalOf<SearchQueryStorageInterface?> { error("")}
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

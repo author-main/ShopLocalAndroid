@@ -269,8 +269,21 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){
         (listImages[0].first == IMAGE_STATE.COMPLETED && !listImages[0].second.isEmpty()) || listImages[0].first == IMAGE_STATE.FAILURE
     ) }*/
 
+
+    // Вызывается при старте композиции один раз, выполняется блок,
+    // в случае рекомпозиции: при измененнии key или уничтожения композиции блок не выполняется,
+    // а выполняется OnDispose()
+    DisposableEffect(Unit) {
+        //log("effect product id = ${product.id}")
+        onDispose {
+          //  log("product id = ${product.id} dispose")
+            for (i in listImages.indices)
+              listImages[i] = IMAGE_STATE.NONE to EMPTY_IMAGE
+        }
+    }
+
         //log("downloadedImage = ${downloadedImage.value}")
-    log("product id = ${product.id} -> status ${listImages[0].first}")
+    //log("product id = ${product.id} -> status ${listImages[0].first}")
     if (!downloadedImage.value) {
         // Запуск в области compose, если compose завершится. Блок внутри будет завершен без
         // утечки памяти и процессов.
@@ -281,7 +294,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){
              ImageLinkDownloader.downloadCardImage(
                 imageLink?.let { "$SERVER_URL/images/$it" }, object : Callback {
                     override fun onComplete(image: Bitmap) {
-                        log("product id = ${product.id} reload image")
+                        //log("product id = ${product.id} reload image")
                        // bitmap.value = image.asImageBitmap()
                         listImages[0] = IMAGE_STATE.COMPLETED to image.asImageBitmap()
                         downloadedImage.value = true
@@ -401,6 +414,14 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){
                     }
                 }
             }
+
+
+            /*Text(modifier = Modifier.padding(top = 4.dp),
+                text = product.id.toString(),
+                fontSize = 23.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = TextPriceDiscount)*/
+
             // < * Text Price
                 Card(
                     modifier = Modifier.padding(top = 4.dp),

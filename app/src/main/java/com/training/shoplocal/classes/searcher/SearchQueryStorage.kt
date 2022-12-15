@@ -1,6 +1,7 @@
 package com.training.shoplocal.classes.searcher
 
 import com.training.shoplocal.AppShopLocal
+import com.training.shoplocal.deleteFile
 import com.training.shoplocal.fileExists
 import java.io.*
 
@@ -19,7 +20,7 @@ class SearchQueryStorage: SearchQueryStorageInterface {
             moveFirst(value)
     }
 
-    override fun delete(value: String) {
+    override fun remove(value: String) {
         changed = listSQ.remove(value)
         /*val removed = listSQ.filter { it == value }
         if (removed.isNotEmpty()) {
@@ -65,9 +66,14 @@ class SearchQueryStorage: SearchQueryStorageInterface {
         }
     }
 
-    fun clearAndSave(){
+    fun dispose(){
         saveQueries(listSQ)
         listSQ.clear()
+    }
+
+    override fun removeAllQueries() {
+        listSQ.clear()
+        deleteFile(fileNameStorage)
     }
 
     companion object {
