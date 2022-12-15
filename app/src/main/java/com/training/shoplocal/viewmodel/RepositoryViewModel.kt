@@ -169,4 +169,11 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         getPromoProducts(loadedPortion + 1)
     }
 
+    fun getSearchHistoryList(): List<String> =
+        repository.getSearchHistoryList()
+
+    fun disposeSearchHistoryList(){
+        repository.disposeSearchHistoryList()
+    }
+
  }

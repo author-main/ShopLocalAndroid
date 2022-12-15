@@ -9,6 +9,7 @@ import com.training.shoplocal.classes.Category
 import com.training.shoplocal.classes.DataDisplay
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
+import com.training.shoplocal.classes.searcher.SearchQueryStorage
 import com.training.shoplocal.getCacheDirectory
 import com.training.shoplocal.log
 import com.training.shoplocal.loginview.LoginViewState
@@ -80,5 +81,14 @@ class Repository: DAOinterface {
 
     suspend fun getProducts(id: Int, part: Int): List<Product> =
         databaseCRUD.getProducts(id, part)
+
+     fun getSearchHistoryList(): List<String> {
+        return SearchQueryStorage.getInstance().getQueries()
+     }
+
+    fun disposeSearchHistoryList(){
+        SearchQueryStorage.getInstance().dispose()
+    }
+
 
 }

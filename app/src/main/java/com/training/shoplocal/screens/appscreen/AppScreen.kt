@@ -27,15 +27,15 @@ import com.training.shoplocal.screens.mainscreen.MainScreen
 import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 
-val LocalSearchStorage = staticCompositionLocalOf<SearchQueryStorageInterface?> { error("")}
+//val LocalSearchStorage = staticCompositionLocalOf<SearchQueryStorageInterface?> { error("")}
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AppScreen(){
       val viewModel: RepositoryViewModel = viewModel()
-      val searchStorage = SearchQueryStorage.getInstance()
+     // val searchStorage = SearchQueryStorage.getInstance()
           //CompositionLocalProvider(LocalSearchStorage provides viewModel.selectedProduct.collectAsState().value) {
-          CompositionLocalProvider(LocalSearchStorage provides searchStorage) {
+         // CompositionLocalProvider(LocalSearchStorage provides searchStorage) {
           val state = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
           BottomSheet(state) {
               val navController = rememberNavController()
@@ -76,6 +76,6 @@ fun AppScreen(){
                   }
               }
           }
-      }
+   //   }
 }
 

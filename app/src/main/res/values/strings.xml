@@ -34,6 +34,8 @@
     <string name="text_search">Искать в ShopLocal</string>
     <string name="text_error_speechrecognizer">Система распознавания речи\nне доступна</string>
     <string name="prompt_speechrecognizer">Не молчи, родной</string>
+    <string name="text_history">История</string>
+    <string name="text_clear">Очистить</string>
 
 
 </resources>

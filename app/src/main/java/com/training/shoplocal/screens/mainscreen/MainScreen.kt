@@ -67,7 +67,6 @@ import com.training.shoplocal.classes.searcher.SearchQueryStorage
 import com.training.shoplocal.classes.searcher.SearchQueryStorageInterface
 import com.training.shoplocal.classes.searcher.ShowSearchHistory
 import com.training.shoplocal.dialogs.ShowMessage
-import com.training.shoplocal.screens.appscreen.LocalSearchStorage
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.delay
@@ -264,7 +263,7 @@ fun MainScreen(state: ModalBottomSheetState){
                     viewModel.hideBottomNavigation(false)
                 }
                 if (isFocusedSearchTextField.value) {
-                      val list = LocalSearchStorage.current?.getQueries() ?: listOf<String>()
+//                      val list = LocalSearchStorage.current?.getQueries() ?: listOf<String>()
                   //  IconButton(onClick = {  }) {
                         Icon(modifier = Modifier
                             .align(Alignment.CenterVertically)
@@ -386,7 +385,7 @@ fun MainScreen(state: ModalBottomSheetState){
             DialogSearch(textSearch.value)*/
        // else {
         if (isFocusedSearchTextField.value) {
-            ShowSearchHistory()
+            ShowSearchHistory(textSearch)
         }
             Box(
                 modifier = Modifier
