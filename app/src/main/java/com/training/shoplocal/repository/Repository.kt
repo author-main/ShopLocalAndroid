@@ -3,6 +3,7 @@ package com.training.shoplocal.repository
 
 
 import android.content.Context
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import com.training.shoplocal.AppShopLocal.Companion.appContext
 import com.training.shoplocal.classes.Brand
 import com.training.shoplocal.classes.Category
@@ -17,8 +18,24 @@ import java.io.File
 
 
 class Repository: DAOinterface {
+    private var snapshotData: Pair<LazyGridState, List<Product>>? = null
     private val dataDisplay = DataDisplay()
     val loginState = LoginViewState.getLoginState()
+
+    /**
+     * Сохраняем текущие данные списка продуктов
+     * @param product список продуктов текущего экрана
+     * @param state состояние LazyGrid
+     */
+    fun saveCurrentScreenData(products: List<Product>, state: LazyGridState){
+        snapshotData = state to products.toList()
+    }
+    /**
+     * Восстанавливаем список продуктов текущего экрана
+     * @return Pair&lt;LazyGridState, List<Product>&gt;?, где List&lt;Product&gt; - список продуктов, state - состояние LazyGrid
+     */
+    fun restoreCurrentScreenData() =
+        snapshotData
 
     /**
      *  Реализация методов для получения доступа (регистрация, вход по паролю,
