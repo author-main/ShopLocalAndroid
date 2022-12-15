@@ -18,7 +18,7 @@ import java.io.File
 
 
 class Repository: DAOinterface {
-    private var snapshotData: Pair<List<Product>, LazyGridState>? = null
+    private var snapshotData: Pair<MutableList<Product>, LazyGridState>? = null
     private val dataDisplay = DataDisplay()
     val loginState = LoginViewState.getLoginState()
 
@@ -28,7 +28,7 @@ class Repository: DAOinterface {
      * @param state состояние LazyGrid
      */
     fun saveCurrentScreenData(products: List<Product>, state: LazyGridState){
-        snapshotData = products.toList() to state
+        snapshotData = products.toMutableList() to state
     }
     /**
      * Восстанавливаем список продуктов текущего экрана
