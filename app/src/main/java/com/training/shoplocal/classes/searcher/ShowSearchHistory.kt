@@ -30,7 +30,8 @@ fun ShowSearchHistory(textSearch: State<String>){//}, history: List<String>, act
     DisposableEffect(Unit) {
         history.addAll(viewModel.getSearchHistoryList())
         onDispose(){
-            log("dispose history")
+           // log("dispose history")
+           // textSearch.value = ";jgf"
             viewModel.disposeSearchHistoryList()
         }
     }
@@ -40,7 +41,7 @@ fun ShowSearchHistory(textSearch: State<String>){//}, history: List<String>, act
         .background(MaterialTheme.colors.primary)
     ){
         Column(Modifier.padding(all = 8.dp)){
-            log("recomposition history ${textSearch.value}")
+         //   log("recomposition history ${textSearch.value}")
             if (textSearch.value.isBlank())
             Row(modifier = Modifier.fillMaxWidth()){
                 Text(modifier = Modifier.weight(1f), text = stringResource(id = R.string.text_history))
