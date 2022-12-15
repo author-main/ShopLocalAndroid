@@ -182,8 +182,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         _products.value = dataScreen?.first ?: mutableListOf<Product>()
     }
 
-    fun saveCurrentScreenData(products: List<Product>, state: LazyGridState){
-        repository.saveCurrentScreenData(products, state)
+    fun saveCurrentScreenData(state: LazyGridState){
+        repository.saveCurrentScreenData(products.value, state)
     }
 
  }

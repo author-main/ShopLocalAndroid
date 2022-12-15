@@ -253,6 +253,7 @@ fun MainScreen(state: ModalBottomSheetState){
     val isFocusedSearchTextField = remember {
         mutableStateOf(false)
     }
+    val stateGrid = rememberLazyGridState()
     Column(modifier = Modifier.fillMaxWidth()) {
         TopAppBar( backgroundColor = MaterialTheme.colors.primary){
             Row(
@@ -312,6 +313,7 @@ fun MainScreen(state: ModalBottomSheetState){
                         onSearch = {
                             hideSearchDialog()
                             if (textSearch.value.isNotBlank()) {
+                                viewModel.saveCurrentScreenData(stateGrid)
                                 log("search ${textSearch.value}...")
                             }
                         }
@@ -398,7 +400,6 @@ fun MainScreen(state: ModalBottomSheetState){
                     .background(BgScreenDark)
             ) {
                 //    log ("recompose Grid")
-                val stateGrid = rememberLazyGridState()
                 if (products.isNotEmpty()) {
                     LazyVerticalGrid(
                         modifier = Modifier
