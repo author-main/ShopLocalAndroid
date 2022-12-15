@@ -1,6 +1,7 @@
 package com.training.shoplocal.viewmodel
 
 import android.content.Context
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -174,6 +175,13 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     fun disposeSearchHistoryList(){
         repository.disposeSearchHistoryList()
+    }
+
+    fun restoreCurrentScreenData(): Pair<List<Product>, LazyGridState>? =
+        repository.restoreCurrentScreenData()
+
+    fun saveCurrentScreenData(products: List<Product>, state: LazyGridState){
+        repository.saveCurrentScreenData(products, state)
     }
 
  }
