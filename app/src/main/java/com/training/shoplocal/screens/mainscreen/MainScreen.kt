@@ -65,6 +65,7 @@ import com.training.shoplocal.R
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.classes.searcher.SearchQueryStorage
 import com.training.shoplocal.classes.searcher.SearchQueryStorageInterface
+import com.training.shoplocal.classes.searcher.ShowSearchHistory
 import com.training.shoplocal.dialogs.ShowMessage
 import com.training.shoplocal.screens.appscreen.LocalSearchStorage
 import com.training.shoplocal.ui.theme.*
@@ -265,9 +266,11 @@ fun MainScreen(state: ModalBottomSheetState){
                 if (isFocusedSearchTextField.value) {
                       val list = LocalSearchStorage.current?.getQueries() ?: listOf<String>()
                   //  IconButton(onClick = {  }) {
-                        Icon(modifier = Modifier.align(Alignment.CenterVertically)
+                        Icon(modifier = Modifier
+                            .align(Alignment.CenterVertically)
                             .padding(end = 8.dp)
-                            .clickable(interactionSource = remember { MutableInteractionSource() },
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
                                 indication = null
                             ) {
                                 hideSearchDialog()
@@ -383,11 +386,7 @@ fun MainScreen(state: ModalBottomSheetState){
             DialogSearch(textSearch.value)*/
        // else {
         if (isFocusedSearchTextField.value) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(BgScreenDark)
-            ) {}
+            ShowSearchHistory()
         }
             Box(
                 modifier = Modifier
