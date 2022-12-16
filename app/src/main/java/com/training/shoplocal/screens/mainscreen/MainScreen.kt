@@ -124,6 +124,7 @@ fun MainScreen(state: ModalBottomSheetState){
         val animate2 = remember{ Animatable(0f) }
         val align = remember{ mutableStateOf( Alignment.Center)}
         val count = remember{ mutableStateOf(value)}
+
             Box(modifier = Modifier
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },

@@ -142,11 +142,12 @@ fun Navigation(navController: NavHostController) {
       /*  viewModel.saveScreenProducts(ScreenRouter.current.key)
         log("before " + ScreenRouter.current.key.toString())*/
         composable(BottomNavigationItem.Main.route) {
-                log("after " + ScreenRouter.current.key.toString())
-                ScreenRouter.navigateTo(ScreenItem.MainScreen)
+           //log("after " + ScreenRouter.current.key.toString())
+           ScreenRouter.navigateTo(ScreenItem.MainScreen)
+
         }
         composable(BottomNavigationItem.Catalog.route) {
-            log("after " + ScreenRouter.current.key.toString())
+          //  log("after " + ScreenRouter.current.key.toString())
             ScreenRouter.navigateTo(ScreenItem.CatalogScreen)
             //CatalogScreen()
         }

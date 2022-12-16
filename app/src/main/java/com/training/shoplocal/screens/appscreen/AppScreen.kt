@@ -54,13 +54,15 @@ fun AppScreen(){
                       modifier = Modifier
                           .padding(it)
                   ) {
-                      log("navigation")
                           Navigation(navController)
-                         // log("clear downloader")
                           when (ScreenRouter.current) {
                               ScreenItem.MainScreen -> {
-                                  ImageLinkDownloader.cancel()
-                                  MainScreen(state)
+
+
+                                      ImageLinkDownloader.cancel()
+                                      MainScreen(state)
+                                      log("mainscreen")
+
                               }
                               ScreenItem.CatalogScreen -> {
                                   ImageLinkDownloader.cancel()

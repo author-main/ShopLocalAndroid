@@ -20,6 +20,7 @@ object ScreenRouter {
         current = ScreenItem.LoginScreen
     }
     fun navigateTo(destination: ScreenItem){
-        current = destination
+        if (current != destination)
+            current = destination
     }
 }
