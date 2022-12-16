@@ -177,13 +177,13 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         repository.disposeSearchHistoryList()
     }
 
-    fun restoreCurrentScreenData() {
-        val dataScreen = repository.restoreCurrentScreenData()
+    /*fun restoreCurrentScreenData(key: ScreenRouter.KEYSCREEN) {
+        val dataScreen = repository.restoreCurrentScreenData(key)
         _products.value = dataScreen?.first ?: mutableListOf<Product>()
     }
 
-    fun saveCurrentScreenData(state: LazyGridState){
-        repository.saveCurrentScreenData(products.value, state)
-    }
+    fun saveCurrentScreenData(state: LazyGridState, key: ScreenRouter.KEYSCREEN){
+        repository.saveCurrentScreenData(products.value, state, key)
+    }*/
 
  }

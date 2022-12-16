@@ -14,28 +14,35 @@ import com.training.shoplocal.classes.searcher.SearchQueryStorage
 import com.training.shoplocal.getCacheDirectory
 import com.training.shoplocal.log
 import com.training.shoplocal.loginview.LoginViewState
+import com.training.shoplocal.screens.ScreenRouter
 import java.io.File
 
+/*data class LazyScrollData (
+    var firstVisibleItemIndex: Int,
+    var firstVisibleItemScrollOffset: Int
+    )*/
 
 class Repository: DAOinterface {
-    private var snapshotData: Pair<MutableList<Product>, LazyGridState>? = null
+   // private val screenData = HashMap<ScreenRouter.KEYSCREEN, Pair<List<Product>, LazyScrollData>>()
+    //private var snapshotData: Pair<MutableList<Product>, LazyGridState>? = null
     private val dataDisplay = DataDisplay()
     val loginState = LoginViewState.getLoginState()
 
-    /**
+  /*  /**
      * Сохраняем текущие данные списка продуктов
      * @param product список продуктов текущего экрана
      * @param state состояние LazyGrid
      */
-    fun saveCurrentScreenData(products: List<Product>, state: LazyGridState){
-        snapshotData = products.toMutableList() to state
+    fun saveCurrentScreenData(products: List<Product>, state: LazyGridState, key: ScreenRouter.KEYSCREEN){
+        screenData[key] = products to LazyScrollData(state.firstVisibleItemIndex, state.firstVisibleItemScrollOffset)
+        //snapshotData = products.toMutableList() to state
     }
     /**
      * Восстанавливаем список продуктов текущего экрана
      * @return Pair&lt;LazyGridState, List<Product>&gt;?, где List&lt;Product&gt; - список продуктов, state - состояние LazyGrid
      */
-    fun restoreCurrentScreenData() =
-        snapshotData
+    fun restoreCurrentScreenData(key: ScreenRouter.KEYSCREEN): LazyScrollData? =
+        screenData[key]?.second*/
 
     /**
      *  Реализация методов для получения доступа (регистрация, вход по паролю,

@@ -20,6 +20,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -67,6 +68,8 @@ import com.training.shoplocal.classes.searcher.SearchQueryStorage
 import com.training.shoplocal.classes.searcher.SearchQueryStorageInterface
 import com.training.shoplocal.classes.searcher.ShowSearchHistory
 import com.training.shoplocal.dialogs.ShowMessage
+import com.training.shoplocal.screens.ScreenRouter
+import com.training.shoplocal.screens.rememberLazyViewState
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.delay
@@ -253,7 +256,8 @@ fun MainScreen(state: ModalBottomSheetState){
     val isFocusedSearchTextField = remember {
         mutableStateOf(false)
     }
-    val stateGrid = rememberLazyGridState()
+    //val stateGrid = rememberLazyGridState()
+    val stateGrid = rememberLazyViewState(key = ScreenRouter.current.key)
     Column(modifier = Modifier.fillMaxWidth()) {
         TopAppBar( backgroundColor = MaterialTheme.colors.primary){
             Row(
@@ -313,7 +317,7 @@ fun MainScreen(state: ModalBottomSheetState){
                         onSearch = {
                             hideSearchDialog()
                             if (textSearch.value.isNotBlank()) {
-                                viewModel.saveCurrentScreenData(stateGrid)
+                               // viewModel.saveCurrentScreenData(stateGrid)
                                 log("search ${textSearch.value}...")
                             }
                         }

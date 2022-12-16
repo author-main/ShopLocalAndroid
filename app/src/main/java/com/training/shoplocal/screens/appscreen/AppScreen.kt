@@ -29,6 +29,10 @@ import com.training.shoplocal.viewmodel.RepositoryViewModel
 
 //val LocalSearchStorage = staticCompositionLocalOf<SearchQueryStorageInterface?> { error("")}
 
+
+
+
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AppScreen(){
