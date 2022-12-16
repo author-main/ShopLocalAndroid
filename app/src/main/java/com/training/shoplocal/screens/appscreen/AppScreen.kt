@@ -59,9 +59,10 @@ fun AppScreen(){
                               ScreenItem.MainScreen -> {
 
 
-                                      ImageLinkDownloader.cancel()
-                                      MainScreen(state)
-                                      log("mainscreen")
+                                        ImageLinkDownloader.cancel()
+                                        MainScreen(state)
+                                //        log("mainscreen")
+
 
                               }
                               ScreenItem.CatalogScreen -> {

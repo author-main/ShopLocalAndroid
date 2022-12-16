@@ -143,7 +143,9 @@ fun Navigation(navController: NavHostController) {
         log("before " + ScreenRouter.current.key.toString())*/
         composable(BottomNavigationItem.Main.route) {
            //log("after " + ScreenRouter.current.key.toString())
-           ScreenRouter.navigateTo(ScreenItem.MainScreen)
+            //LaunchedEffect(ScreenRouter.current.key) {
+                ScreenRouter.navigateTo(ScreenItem.MainScreen)
+            //}
 
         }
         composable(BottomNavigationItem.Catalog.route) {
