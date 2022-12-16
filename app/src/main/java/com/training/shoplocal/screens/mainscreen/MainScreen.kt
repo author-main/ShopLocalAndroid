@@ -69,7 +69,8 @@ import com.training.shoplocal.classes.searcher.SearchQueryStorageInterface
 import com.training.shoplocal.classes.searcher.ShowSearchHistory
 import com.training.shoplocal.dialogs.ShowMessage
 import com.training.shoplocal.screens.ScreenRouter
-import com.training.shoplocal.screens.rememberLazyViewState
+import com.training.shoplocal.screens.remember.rememberLazyViewState
+import com.training.shoplocal.screens.remember.rememberProductsState
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.delay

@@ -1,10 +1,11 @@
-package com.training.shoplocal.screens
+package com.training.shoplocal.screens.remember
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.saveable.rememberSaveable
+import com.training.shoplocal.screens.ScreenRouter
 
 private val MapScreenData = mutableMapOf<ScreenRouter.KEYSCREEN, ScreenData>()
 private data class ScreenData(
