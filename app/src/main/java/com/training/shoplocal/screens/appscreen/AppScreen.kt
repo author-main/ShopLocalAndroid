@@ -54,6 +54,7 @@ fun AppScreen(){
                       modifier = Modifier
                           .padding(it)
                   ) {
+                      log("navigation")
                           Navigation(navController)
                          // log("clear downloader")
                           when (ScreenRouter.current) {

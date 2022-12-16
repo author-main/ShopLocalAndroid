@@ -114,5 +114,12 @@ class Repository: DAOinterface {
         SearchQueryStorage.getInstance().dispose()
     }
 
+    private val MapScreenProducts = HashMap<ScreenRouter.KEYSCREEN, List<Product>>()
+    fun saveScreenProducts(key: ScreenRouter.KEYSCREEN, products: List<Product>) {
+        MapScreenProducts[key] = products.toList()
+    }
+    fun restoreScreenProducts(key: ScreenRouter.KEYSCREEN): List<Product> =
+        MapScreenProducts[key] ?: listOf()
+
 
 }

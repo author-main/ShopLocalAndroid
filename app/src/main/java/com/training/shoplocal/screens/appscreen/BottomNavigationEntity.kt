@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -31,6 +32,7 @@ import com.training.shoplocal.screens.mainscreen.MainScreen
 import com.training.shoplocal.ui.theme.TextBrand
 import com.training.shoplocal.ui.theme.TextFieldFont
 import com.training.shoplocal.ui.theme.TextOrange
+import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
@@ -135,12 +137,16 @@ fun BottomNavigationBar(navController: NavController) {
 
 @Composable
 fun Navigation(navController: NavHostController) {
+   // val viewModel: RepositoryViewModel = viewModel()
     NavHost(navController, startDestination = BottomNavigationItem.Main.route) {
+      /*  viewModel.saveScreenProducts(ScreenRouter.current.key)
+        log("before " + ScreenRouter.current.key.toString())*/
         composable(BottomNavigationItem.Main.route) {
-            ScreenRouter.navigateTo(ScreenItem.MainScreen)
-            //MainScreen()
+                log("after " + ScreenRouter.current.key.toString())
+                ScreenRouter.navigateTo(ScreenItem.MainScreen)
         }
         composable(BottomNavigationItem.Catalog.route) {
+            log("after " + ScreenRouter.current.key.toString())
             ScreenRouter.navigateTo(ScreenItem.CatalogScreen)
             //CatalogScreen()
         }

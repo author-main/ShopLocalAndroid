@@ -187,4 +187,15 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         repository.saveCurrentScreenData(products.value, state, key)
     }*/
 
+
+    fun saveScreenProducts(key: ScreenRouter.KEYSCREEN) {
+        repository.saveScreenProducts(key, products.value)
+       // _products.value.clear()
+    }
+    fun restoreScreenProducts(key: ScreenRouter.KEYSCREEN) {
+        _products.value = repository.restoreScreenProducts(key).toMutableList()
+    }
+
+
+
  }
