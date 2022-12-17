@@ -38,12 +38,43 @@ import com.training.shoplocal.viewmodel.RepositoryViewModel
 @Composable
 fun ShowSearchHistory(textSearch: State<String>, callback: (value: String) -> Unit){//}, history: List<String>, actionClear: () -> Unit){
     val viewModel: RepositoryViewModel = viewModel()
-    val history = remember {
+    val history = remember{
+        mutableListOf<String>()
+    }
+    var filtered by remember {
+        mutableStateOf(true)
+    }
+
+    val showList = remember {
         mutableStateListOf<String>()
     }
 
+    LaunchedEffect(textSearch.value) {
+        val query = textSearch.value
+        if (query.isNotBlank()) {
+            filtered = true
+            showList.apply {
+                clear()
+                addAll(history.filter { text ->
+                    text.startsWith(query, true)
+                })
+                //        log(filteredList.toString())
+            }
+        } else {
+            filtered = false
+            if (!showList.containsAll(history))
+            showList.apply {
+                clear()
+                addAll(history)
+                //log("restore history")
+            }
+        }
+    }
+
+    //log("search ${textSearch.value}")
     DisposableEffect(Unit) {
         history.addAll(viewModel.getSearchHistoryList())
+        showList.addAll(history)
         onDispose(){
            // log("dispose history")
            // textSearch.value = ";jgf"
@@ -55,6 +86,7 @@ fun ShowSearchHistory(textSearch: State<String>, callback: (value: String) -> Un
         .fillMaxSize()
         .background(MaterialTheme.colors.primary)
     ){
+        log("recompose")
         Column(Modifier.padding(vertical = 8.dp, horizontal = 16.dp)){
          //   log("recomposition history ${textSearch.value}")
             if (textSearch.value.isBlank())
@@ -67,15 +99,16 @@ fun ShowSearchHistory(textSearch: State<String>, callback: (value: String) -> Un
                 },
                     text = stringResource(id = R.string.text_clear))
             }
-            LazyColumn(modifier = Modifier.fillMaxSize()
+            LazyColumn(modifier = Modifier
+                .fillMaxSize()
 //                .background(Color.DarkGray)
                 .padding(vertical = 8.dp)
             ){
-                itemsIndexed(history){index, line ->
+                itemsIndexed(showList){index, line ->
                     Column() {
                         Row(
                             modifier = Modifier//.height(32.dp)
-                             //   .padding(vertical = 8.dp)
+                                //   .padding(vertical = 8.dp)
                                 .animateItemPlacement()
                                 .clickable {
                                     callback(line)
@@ -84,7 +117,8 @@ fun ShowSearchHistory(textSearch: State<String>, callback: (value: String) -> Un
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier
+                                    .weight(1f)
                                     .padding(vertical = 8.dp)
                                     .padding(end = 8.dp),
                                 text = line,
@@ -92,6 +126,7 @@ fun ShowSearchHistory(textSearch: State<String>, callback: (value: String) -> Un
                                 fontSize = 14.sp/*,
                                 fontFamily = textFont*/
                             )
+                            if (!filtered)
                             Icon(
                                 modifier = Modifier
                                     //.align(Alignment.CenterVertically)
@@ -101,23 +136,27 @@ fun ShowSearchHistory(textSearch: State<String>, callback: (value: String) -> Un
                                         indication = null
                                     ) {
                                         history.removeAt(index)
+                                        showList.removeAt(index)
                                     },
                                 imageVector = Icons.Filled.Close,
                                 contentDescription = null,
                                 tint = TextFieldFont
                             )
                         }
-                        if (index != history.size-1)
-                        Spacer(Modifier
-                            .height(1.dp)
-                            .fillMaxWidth()
-                            .background(brush = Brush.horizontalGradient(
-                                colors = listOf(
-                                    MaterialTheme.colors.primary,
-                                    Color(0x1BDDDDDD),
-                                    MaterialTheme.colors.primary
-                                ))
-                            )
+                        if (index != showList.size-1)
+                        Spacer(
+                            Modifier
+                                .height(1.dp)
+                                .fillMaxWidth()
+                                .background(
+                                    brush = Brush.horizontalGradient(
+                                        colors = listOf(
+                                            MaterialTheme.colors.primary,
+                                            Color(0x1BDDDDDD),
+                                            MaterialTheme.colors.primary
+                                        )
+                                    )
+                                )
                         )
                     }
                 }
