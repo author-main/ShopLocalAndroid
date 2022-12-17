@@ -19,10 +19,14 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.log
@@ -46,7 +50,7 @@ fun ShowSearchHistory(textSearch: State<String>, callback: (value: String) -> Un
             viewModel.disposeSearchHistoryList()
         }
     }
-
+    //val textFont = FontFamily(Font(R.font.robotocondensed_light))
     Box(modifier = Modifier
         .fillMaxSize()
         .background(MaterialTheme.colors.primary)
@@ -68,8 +72,10 @@ fun ShowSearchHistory(textSearch: State<String>, callback: (value: String) -> Un
                 .padding(vertical = 8.dp)
             ){
                 itemsIndexed(history){index, line ->
+                    Column() {
                         Row(
-                            modifier = Modifier.height(32.dp)
+                            modifier = Modifier//.height(32.dp)
+                             //   .padding(vertical = 8.dp)
                                 .animateItemPlacement()
                                 .clickable {
                                     callback(line)
@@ -78,9 +84,13 @@ fun ShowSearchHistory(textSearch: State<String>, callback: (value: String) -> Un
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                modifier = Modifier.weight(1f),
+                                modifier = Modifier.weight(1f)
+                                    .padding(vertical = 8.dp)
+                                    .padding(end = 8.dp),
                                 text = line,
-                                color = TextFieldFont
+                                color = TextFieldFont,
+                                fontSize = 14.sp/*,
+                                fontFamily = textFont*/
                             )
                             Icon(
                                 modifier = Modifier
@@ -97,6 +107,19 @@ fun ShowSearchHistory(textSearch: State<String>, callback: (value: String) -> Un
                                 tint = TextFieldFont
                             )
                         }
+                        if (index != history.size-1)
+                        Spacer(Modifier
+                            .height(1.dp)
+                            .fillMaxWidth()
+                            .background(brush = Brush.horizontalGradient(
+                                colors = listOf(
+                                    MaterialTheme.colors.primary,
+                                    Color(0x1BDDDDDD),
+                                    MaterialTheme.colors.primary
+                                ))
+                            )
+                        )
+                    }
                 }
             }
         }

@@ -95,10 +95,10 @@ fun Modifier.clearFocusOnKeyboardDismiss(): Modifier = composed {
 @Composable
 fun MainScreen(state: ModalBottomSheetState){
 
-    @Composable
+  /*  @Composable
     fun ShowFoundProducts() {
 
-    }
+    }*/
 
     @Composable
     fun ShowMessageCount(value: Int = 0){
