@@ -107,7 +107,11 @@ class Repository: DAOinterface {
         databaseCRUD.getProducts(id, part)
 
      fun getSearchHistoryList(): List<String> {
-        return SearchQueryStorage.getInstance().getQueries()
+        val list = mutableListOf<String>()
+        for (i in 0..50)
+            list.add("Поисковая строка $i")
+        return list
+         //SearchQueryStorage.getInstance().getQueries()
      }
 
     fun disposeSearchHistoryList(){

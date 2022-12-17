@@ -46,9 +46,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.*
 import com.training.shoplocal.R
 import com.training.shoplocal.classes.Product
-import com.training.shoplocal.classes.searcher.ShowSearchHistory
 import com.training.shoplocal.dialogs.ShowMessage
 import com.training.shoplocal.screens.ScreenRouter
+import com.training.shoplocal.screens.appscreen.ShowSearchHistory
 import com.training.shoplocal.screens.remember.rememberLazyViewState
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
@@ -376,7 +376,9 @@ fun MainScreen(state: ModalBottomSheetState){
             DialogSearch(textSearch.value)*/
        // else {
         if (isFocusedSearchTextField.value) {
-            ShowSearchHistory(textSearch)
+            ShowSearchHistory(textSearch) { value ->
+                textSearch.value = value
+            }
         }
             Box(
                 modifier = Modifier
