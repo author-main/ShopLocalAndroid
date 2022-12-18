@@ -240,6 +240,9 @@ fun MainScreen(state: ModalBottomSheetState){
     val isFocusedSearchTextField = remember {
         mutableStateOf(false)
     }
+
+
+
     //val stateGrid = rememberLazyGridState()
     val stateGrid = rememberLazyViewState(key = ScreenRouter.current.key)
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -306,11 +309,8 @@ fun MainScreen(state: ModalBottomSheetState){
                         onSearch = {
                          //   hideSearchDialog()
                             if (textSearch.value.isNotBlank()) {
-                                //focusManager.clearFocus()
-
                                // viewModel.saveCurrentScreenData(stateGrid)
                                 hideSearchDialog()
-                                log("search ${textSearch.value}...")
                             }
                         }
                     ),

@@ -38,9 +38,7 @@ import com.training.shoplocal.viewmodel.RepositoryViewModel
 @Composable
 fun ShowSearchHistory(textSearch: State<String>, callback: (value: String) -> Unit){//}, history: List<String>, actionClear: () -> Unit){
     val viewModel: RepositoryViewModel = viewModel()
-    val history = remember{
-        mutableListOf<String>()
-    }
+
     var filtered by remember {
         mutableStateOf(true)
     }
@@ -49,23 +47,29 @@ fun ShowSearchHistory(textSearch: State<String>, callback: (value: String) -> Un
         mutableStateListOf<String>()
     }
 
+    /*LaunchedEffect(key1 = searchRequest.value) {
+        if (searchRequest.value) {
+            viewModel.putSearchHistoryQuery(textSearch.value)
+        }
+    }*/
+
     LaunchedEffect(textSearch.value) {
         val query = textSearch.value
         if (query.isNotBlank()) {
             filtered = true
             showList.apply {
                 clear()
-                addAll(history.filter { text ->
+                addAll(viewModel.getSearchHistoryList().filter { text ->
                     text.startsWith(query, true)
                 })
                 //        log(filteredList.toString())
             }
         } else {
             filtered = false
-            if (!showList.containsAll(history))
+            if (!showList.containsAll(viewModel.getSearchHistoryList()))
             showList.apply {
                 clear()
-                addAll(history)
+                addAll(viewModel.getSearchHistoryList())
                 //log("restore history")
             }
         }
@@ -73,12 +77,11 @@ fun ShowSearchHistory(textSearch: State<String>, callback: (value: String) -> Un
 
     //log("search ${textSearch.value}")
     DisposableEffect(Unit) {
-        history.addAll(viewModel.getSearchHistoryList())
-        showList.addAll(history)
+        showList.addAll(viewModel.getSearchHistoryList())
         onDispose(){
-           // log("dispose history")
-           // textSearch.value = ";jgf"
+            viewModel.saveSearchHistory()
             viewModel.disposeSearchHistoryList()
+            showList.clear()
         }
     }
     //val textFont = FontFamily(Font(R.font.robotocondensed_light))
@@ -86,7 +89,7 @@ fun ShowSearchHistory(textSearch: State<String>, callback: (value: String) -> Un
         .fillMaxSize()
         .background(MaterialTheme.colors.primary)
     ){
-        log("recompose")
+        //log("recompose")
         Column(Modifier.padding(vertical = 8.dp, horizontal = 16.dp)){
          //   log("recomposition history ${textSearch.value}")
             if (textSearch.value.isBlank())
@@ -94,8 +97,9 @@ fun ShowSearchHistory(textSearch: State<String>, callback: (value: String) -> Un
                 Text(modifier = Modifier.weight(1f), text = stringResource(id = R.string.text_history))
                 Text(modifier = Modifier
                     .clickable {
-
-                    history.clear()
+                    viewModel.clearSearchHistory()
+                    showList.clear()
+                    //history.clear()
                 },
                     text = stringResource(id = R.string.text_clear))
             }
@@ -111,6 +115,7 @@ fun ShowSearchHistory(textSearch: State<String>, callback: (value: String) -> Un
                                 //   .padding(vertical = 8.dp)
                                 .animateItemPlacement()
                                 .clickable {
+                                    //   textSearch.value = line
                                     callback(line)
                                 },
                             //.padding(horizontal = 8.dp),
@@ -135,7 +140,8 @@ fun ShowSearchHistory(textSearch: State<String>, callback: (value: String) -> Un
                                         interactionSource = remember { MutableInteractionSource() },
                                         indication = null
                                     ) {
-                                        history.removeAt(index)
+                                        //history.removeAt(index)
+                                        viewModel.removeSearchHistoryQuery(index)
                                         showList.removeAt(index)
                                     },
                                 imageVector = Icons.Filled.Close,

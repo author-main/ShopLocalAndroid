@@ -11,7 +11,7 @@ interface SearchQueryStorageInterface {
      * Удалить строку поискового запроса
      * @param value - строка запроса
      */
-    fun remove(value: String)
+    fun remove(index: Int)//value: String)
     /**
      * Получить весь список сохраненных строк поисковых запросов
      * @return список строк
@@ -19,14 +19,13 @@ interface SearchQueryStorageInterface {
     fun getQueries(): List<String>
     /**
      * Сохраняет список строк поисковых запросов
-     * @param - список строк
      * @return true - данные сохранены, false - ошибка сохранения данных
      */
-    fun saveQueries(list: List<String>): Boolean
+    fun saveQueries(): Boolean
     /**
      * Переместить строку запроса в начало списка
      * @param - строка поискового запроса
      */
-    fun moveFirst(value: String)
+    //fun moveFirst(value: String)
     fun removeAllQueries()
 }

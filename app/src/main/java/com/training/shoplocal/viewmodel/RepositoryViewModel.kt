@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.annotations.SerializedName
 import com.training.shoplocal.*
 import com.training.shoplocal.classes.*
+import com.training.shoplocal.classes.searcher.SearchQueryStorage
 import com.training.shoplocal.repository.Repository
 import com.training.shoplocal.screens.ScreenItem
 import com.training.shoplocal.screens.ScreenRouter
@@ -171,14 +172,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         getPromoProducts(loadedPortion + 1)
     }
 
-    fun getSearchHistoryList(): List<String> =
-        repository.getSearchHistoryList()
 
-    fun disposeSearchHistoryList(){
-        repository.disposeSearchHistoryList()
-    }
-
-    /*fun restoreCurrentScreenData(key: ScreenRouter.KEYSCREEN) {
+  /*  fun restoreCurrentScreenData(key: ScreenRouter.KEYSCREEN) {
         val dataScreen = repository.restoreCurrentScreenData(key)
         _products.value = dataScreen?.first ?: mutableListOf<Product>()
     }
@@ -195,6 +190,44 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     fun restoreScreenProducts(key: ScreenRouter.KEYSCREEN) {
         _products.value = repository.restoreScreenProducts(key).toMutableList()
     }
+
+
+
+    /**
+     *  Блок методов для управления журналом поисковых запросов
+     */
+    fun getSearchHistoryList(): List<String> {
+        return repository.getSearchHistoryList()
+    }
+
+    fun disposeSearchHistoryList(){
+        repository.disposeSearchHistoryList()
+    }
+
+    fun putSearchHistoryQuery(value: String) {
+        repository.putSearchHistoryQuery(value)
+    }
+
+    fun removeSearchHistoryQuery(index: Int){//value: String) {
+        repository.removeSearchHistoryQuery(index)
+    }
+
+    fun saveSearchHistory() {
+        repository.saveSearchHistory()
+    }
+
+    fun disposeSearchHistory() {
+        repository.disposeSearchHistory()
+    }
+
+    fun clearSearchHistory() {
+        repository.clearSearchHistory()
+    }
+    /**
+     *  End Блок методов для управления журналом поисковых запросов
+     */
+
+
 
 
 
