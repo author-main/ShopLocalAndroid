@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -19,6 +20,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.modifier.modifierLocalConsumer
@@ -140,6 +142,7 @@ fun ShowSearchHistory(textSearch: MutableState<String>, lastSearch: State<String
                             Icon(
                                 modifier = Modifier
                                     //.align(Alignment.CenterVertically)
+                                    .background(TextFieldBg, CircleShape)
                                     .size(16.dp)
                                     .clickable(
                                         interactionSource = remember { MutableInteractionSource() },
@@ -151,7 +154,7 @@ fun ShowSearchHistory(textSearch: MutableState<String>, lastSearch: State<String
                                     },
                                 imageVector = Icons.Filled.Close,
                                 contentDescription = null,
-                                tint = TextFieldFont
+                                tint = TextFieldFont.copy(alpha = 0.7f)
                             )
                         }
                         if (index != showList.size-1)
