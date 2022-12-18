@@ -7,12 +7,9 @@ import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.*
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -400,8 +397,8 @@ fun MainScreen(state: ModalBottomSheetState){
                     ),
                 initialAlpha = 0.3f
             )*/
-            enter = fadeIn(),
-            exit  = fadeOut()
+           /* enter = expandVertically(),
+            exit  = shrinkVertically()*/
         ) {
             ShowSearchHistory(textSearch, lastSearchQuery)
         }
