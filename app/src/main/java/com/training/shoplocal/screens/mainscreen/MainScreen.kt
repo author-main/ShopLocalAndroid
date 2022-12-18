@@ -233,6 +233,10 @@ fun MainScreen(state: ModalBottomSheetState){
             }
         }
     }
+    var isSearchMode by remember {
+        mutableStateOf(false)
+    }
+    
     val isFocusedSearchTextField = remember {
         mutableStateOf(false)
     }
@@ -252,7 +256,8 @@ fun MainScreen(state: ModalBottomSheetState){
                     isFocusedSearchTextField.value = false
                     viewModel.hideBottomNavigation(false)
                 }
-                if (isFocusedSearchTextField.value) {
+                //if (isFocusedSearchTextField.value) {
+                if (isSearchMode) {    
 //                      val list = LocalSearchStorage.current?.getQueries() ?: listOf<String>()
                   //  IconButton(onClick = {  }) {
                         Icon(modifier = Modifier
@@ -262,6 +267,8 @@ fun MainScreen(state: ModalBottomSheetState){
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = null
                             ) {
+                                textSearch.value = ""
+                                isSearchMode = false
                                 hideSearchDialog()
                             },
                             imageVector = Icons.Filled.ArrowBack,
@@ -274,8 +281,10 @@ fun MainScreen(state: ModalBottomSheetState){
                     modifier = Modifier
                         .onFocusChanged {
                             if (it.isFocused) {
+
                                 //val searchStore: SearchQueryStorageInterface = SearchQueryStorage.getInstance()
                                 viewModel.hideBottomNavigation()
+                                isSearchMode = true
                                 isFocusedSearchTextField.value = true
                             }
                         }
@@ -295,9 +304,12 @@ fun MainScreen(state: ModalBottomSheetState){
                     ),
                     keyboardActions = KeyboardActions(
                         onSearch = {
-                            hideSearchDialog()
+                         //   hideSearchDialog()
                             if (textSearch.value.isNotBlank()) {
+                                //focusManager.clearFocus()
+
                                // viewModel.saveCurrentScreenData(stateGrid)
+                                hideSearchDialog()
                                 log("search ${textSearch.value}...")
                             }
                         }
@@ -367,7 +379,8 @@ fun MainScreen(state: ModalBottomSheetState){
                 //  ShowMessageCount(31)
 
                 //**************************************************************************************
-                if (!isFocusedSearchTextField.value)
+                if (!isSearchMode)
+                //if (!isFocusedSearchTextField.value)
                     ShowMessageCount(24)
 
             }
