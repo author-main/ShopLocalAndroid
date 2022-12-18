@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.*
@@ -246,6 +247,23 @@ fun MainScreen(state: ModalBottomSheetState){
     }
 
     //val stateGrid = rememberLazyGridState()
+
+    val focusManager = LocalFocusManager.current
+    fun hideSearchDialog() {
+        focusManager.clearFocus()
+        isFocusedSearchTextField.value = false
+        viewModel.hideBottomNavigation(false)
+    }
+
+    BackHandler(enabled = isSearchMode){
+        if (isSearchMode) {
+            textSearch.value = ""
+            isSearchMode = false
+            hideSearchDialog()
+        }
+    }
+
+
     val stateGrid = rememberLazyViewState(key = ScreenRouter.current.key)
     Column(modifier = Modifier.fillMaxWidth()) {
         TopAppBar( backgroundColor = MaterialTheme.colors.primary){
@@ -255,12 +273,7 @@ fun MainScreen(state: ModalBottomSheetState){
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-                val focusManager = LocalFocusManager.current
-                fun hideSearchDialog() {
-                    focusManager.clearFocus()
-                    isFocusedSearchTextField.value = false
-                    viewModel.hideBottomNavigation(false)
-                }
+
                 //if (isFocusedSearchTextField.value) {
                 if (isSearchMode) {    
 //                      val list = LocalSearchStorage.current?.getQueries() ?: listOf<String>()
@@ -391,17 +404,14 @@ fun MainScreen(state: ModalBottomSheetState){
         }
 
        // if (isFocusedSearchTextField.value) {
-        AnimatedVisibility(visible = isFocusedSearchTextField.value,
-           /* enter = fadeIn(animationSpec = tween(
-                        delayMillis = 500
-                    ),
-                initialAlpha = 0.3f
-            )*/
-           /* enter = expandVertically(),
-            exit  = shrinkVertically()*/
-        ) {
-            ShowSearchHistory(textSearch, lastSearchQuery)
-        }
+        AnimatedVisibility(
+                    visible = isFocusedSearchTextField.value,
+                     enter = fadeIn(),
+                    exit  = fadeOut()
+                ) {
+                    ShowSearchHistory(textSearch, lastSearchQuery)
+                }
+
             Box(
                 modifier = Modifier
                     .fillMaxSize()
