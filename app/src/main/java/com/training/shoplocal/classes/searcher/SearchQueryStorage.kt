@@ -114,11 +114,11 @@ class SearchQueryStorage: SearchQueryStorageInterface {
     }
 
     private fun moveFirst(value: String) {
-        if (!listSQ.contains(value)) {
+        //if (!listSQ.contains(value)) {
             changed = true
             listSQ.remove(value)
             listSQ.add(0, value)
-        }
+        //}
     }
 
     fun dispose(){

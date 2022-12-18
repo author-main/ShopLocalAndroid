@@ -241,7 +241,9 @@ fun MainScreen(state: ModalBottomSheetState){
         mutableStateOf(false)
     }
 
-
+    val lastSearchQuery = remember {
+        mutableStateOf("")
+    }
 
     //val stateGrid = rememberLazyGridState()
     val stateGrid = rememberLazyViewState(key = ScreenRouter.current.key)
@@ -286,6 +288,7 @@ fun MainScreen(state: ModalBottomSheetState){
                             if (it.isFocused) {
 
                                 //val searchStore: SearchQueryStorageInterface = SearchQueryStorage.getInstance()
+                                lastSearchQuery.value = ""
                                 viewModel.hideBottomNavigation()
                                 isSearchMode = true
                                 isFocusedSearchTextField.value = true
@@ -310,6 +313,7 @@ fun MainScreen(state: ModalBottomSheetState){
                          //   hideSearchDialog()
                             if (textSearch.value.isNotBlank()) {
                                // viewModel.saveCurrentScreenData(stateGrid)
+                                lastSearchQuery.value = textSearch.value
                                 hideSearchDialog()
                             }
                         }
@@ -389,9 +393,9 @@ fun MainScreen(state: ModalBottomSheetState){
             DialogSearch(textSearch.value)*/
        // else {
         if (isFocusedSearchTextField.value) {
-            ShowSearchHistory(textSearch) { value ->
+            ShowSearchHistory(textSearch, lastSearchQuery)/* { value ->
                 textSearch.value = value
-            }
+            }*/
         }
             Box(
                 modifier = Modifier

@@ -36,7 +36,7 @@ import com.training.shoplocal.viewmodel.RepositoryViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ShowSearchHistory(textSearch: State<String>, callback: (value: String) -> Unit){//}, history: List<String>, actionClear: () -> Unit){
+fun ShowSearchHistory(textSearch: MutableState<String>, lastSearch: State<String>){//, callback: (value: String) -> Unit){//}, history: List<String>, actionClear: () -> Unit){
     val viewModel: RepositoryViewModel = viewModel()
 
     var filtered by remember {
@@ -47,9 +47,10 @@ fun ShowSearchHistory(textSearch: State<String>, callback: (value: String) -> Un
         mutableStateListOf<String>()
     }
 
-    /*LaunchedEffect(key1 = searchRequest.value) {
-        if (searchRequest.value) {
-            viewModel.putSearchHistoryQuery(textSearch.value)
+   /* LaunchedEffect(lastSearch.value) {
+        log("put ${lastSearch.value}")
+        if (lastSearch.value.isNotBlank()) {
+            viewModel.putSearchHistoryQuery(lastSearch.value)
         }
     }*/
 
@@ -79,6 +80,10 @@ fun ShowSearchHistory(textSearch: State<String>, callback: (value: String) -> Un
     DisposableEffect(Unit) {
         showList.addAll(viewModel.getSearchHistoryList())
         onDispose(){
+            if (lastSearch.value.isNotBlank()) {
+                viewModel.putSearchHistoryQuery(lastSearch.value)
+                log("put search query ${lastSearch.value}")
+            }
             viewModel.saveSearchHistory()
             viewModel.disposeSearchHistoryList()
             showList.clear()
@@ -115,8 +120,8 @@ fun ShowSearchHistory(textSearch: State<String>, callback: (value: String) -> Un
                                 //   .padding(vertical = 8.dp)
                                 .animateItemPlacement()
                                 .clickable {
-                                    //   textSearch.value = line
-                                    callback(line)
+                                       textSearch.value = line
+                                    //callback(line)
                                 },
                             //.padding(horizontal = 8.dp),
                             verticalAlignment = Alignment.CenterVertically
