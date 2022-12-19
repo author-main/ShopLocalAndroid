@@ -17,32 +17,9 @@ import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.screens.ScreenRouter
 import java.io.File
 
-/*data class LazyScrollData (
-    var firstVisibleItemIndex: Int,
-    var firstVisibleItemScrollOffset: Int
-    )*/
-
 class Repository: DAOinterface {
-   // private val screenData = HashMap<ScreenRouter.KEYSCREEN, Pair<List<Product>, LazyScrollData>>()
-    //private var snapshotData: Pair<MutableList<Product>, LazyGridState>? = null
     private val dataDisplay = DataDisplay()
     val loginState = LoginViewState.getLoginState()
-
-  /*  /**
-     * Сохраняем текущие данные списка продуктов
-     * @param product список продуктов текущего экрана
-     * @param state состояние LazyGrid
-     */
-    fun saveCurrentScreenData(products: List<Product>, state: LazyGridState, key: ScreenRouter.KEYSCREEN){
-        screenData[key] = products to LazyScrollData(state.firstVisibleItemIndex, state.firstVisibleItemScrollOffset)
-        //snapshotData = products.toMutableList() to state
-    }
-    /**
-     * Восстанавливаем список продуктов текущего экрана
-     * @return Pair&lt;LazyGridState, List<Product>&gt;?, где List&lt;Product&gt; - список продуктов, state - состояние LazyGrid
-     */
-    fun restoreCurrentScreenData(key: ScreenRouter.KEYSCREEN): LazyScrollData? =
-        screenData[key]?.second*/
 
     /**
      *  Реализация методов для получения доступа (регистрация, вход по паролю,
@@ -142,14 +119,20 @@ class Repository: DAOinterface {
      */
 
 
-
-
     private val MapScreenProducts = HashMap<ScreenRouter.KEYSCREEN, List<Product>>()
+    /**
+     * Сохраняем текущие данные списка продуктов
+     * @param key идентификатор screen
+     * @param product список продуктов текущего экрана
+    */
     fun saveScreenProducts(key: ScreenRouter.KEYSCREEN, products: List<Product>) {
         MapScreenProducts[key] = products.toList()
     }
+    /**
+     * Восстанавливаем список продуктов текущего экрана
+     * @param key идентификатор screen
+     * @return список продуктов List&ltProduct&gt;
+    */
     fun restoreScreenProducts(key: ScreenRouter.KEYSCREEN): List<Product> =
         MapScreenProducts[key] ?: listOf()
-
-
 }

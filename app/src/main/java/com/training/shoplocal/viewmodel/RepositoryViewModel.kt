@@ -174,20 +174,9 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         getPromoProducts(loadedPortion + 1)
     }
 
-
-  /*  fun restoreCurrentScreenData(key: ScreenRouter.KEYSCREEN) {
-        val dataScreen = repository.restoreCurrentScreenData(key)
-        _products.value = dataScreen?.first ?: mutableListOf<Product>()
-    }
-
-    fun saveCurrentScreenData(state: LazyGridState, key: ScreenRouter.KEYSCREEN){
-        repository.saveCurrentScreenData(products.value, state, key)
-    }*/
-
-
     fun saveScreenProducts(key: ScreenRouter.KEYSCREEN) {
         repository.saveScreenProducts(key, products.value)
-       // _products.value.clear()
+        log("save products")
     }
     fun restoreScreenProducts(key: ScreenRouter.KEYSCREEN) {
         _products.value = repository.restoreScreenProducts(key).toMutableList()

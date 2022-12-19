@@ -287,6 +287,7 @@ fun MainScreen(state: ModalBottomSheetState){
                             ) {
                                 textSearch.value = ""
                                 isSearchMode = false
+                                viewModel.restoreScreenProducts(ScreenRouter.current.key)
                                 hideSearchDialog()
                             },
                             imageVector = Icons.Filled.ArrowBack,
@@ -328,6 +329,7 @@ fun MainScreen(state: ModalBottomSheetState){
                                // viewModel.saveCurrentScreenData(stateGrid)
                                 lastSearchQuery.value = textSearch.value
                                 hideSearchDialog()
+                                viewModel.saveScreenProducts(ScreenRouter.current.key)
                             }
                         }
                     ),
