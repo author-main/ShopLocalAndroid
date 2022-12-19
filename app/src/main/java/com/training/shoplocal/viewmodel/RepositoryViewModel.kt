@@ -29,6 +29,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         _hiddenBottomNavigation.value = value
     }
 
+    private val SIZE_PORTION =  8
     private var loadedPortion = 0
     private val _selectedProduct = MutableStateFlow<Product>(Product())
     val selectedProduct = _selectedProduct.asStateFlow()
@@ -135,10 +136,12 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
    // @Synchronized
     private fun getPromoProducts(part: Int){
-       if (loadedPortion != part) {
-           loadedPortion = part
+       if (loadedPortion < part) {
+           //loadedPortion = part
+          // log("portion = $loadedPortion")
            repository.getPromoProducts(USER_ID, part) { listProducts ->
                if (listProducts.isNotEmpty()) {
+                   loadedPortion = part
                    setSelectedProduct(Product())
                    val list = _products.value.toMutableList().apply { addAll(listProducts) }
                    _products.value = list
@@ -171,15 +174,26 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     @Synchronized
     fun getNextPortionData(){
-        getPromoProducts(loadedPortion + 1)
+        getPromoProducts(getPortion() + 1)
     }
 
     fun saveScreenProducts(key: ScreenRouter.KEYSCREEN) {
         repository.saveScreenProducts(key, products.value)
-        log("save products")
+       // log("save products")
     }
     fun restoreScreenProducts(key: ScreenRouter.KEYSCREEN) {
         _products.value = repository.restoreScreenProducts(key).toMutableList()
+        loadedPortion = getPortion()
+        //log("partion = $loadedPortion")
+    }
+
+    private fun getPortion(): Int{
+        val value = products.value.size % SIZE_PORTION
+        var portion = products.value.size/ SIZE_PORTION
+        if (value > 0)
+            portion += 1
+        return portion
+        //log("portion = $portion")
     }
 
 
