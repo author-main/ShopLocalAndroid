@@ -134,19 +134,15 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-   // @Synchronized
+    @Synchronized
     private fun getPromoProducts(part: Int){
        if (loadedPortion < part) {
-           //loadedPortion = part
-          // log("portion = $loadedPortion")
            repository.getPromoProducts(USER_ID, part) { listProducts ->
                if (listProducts.isNotEmpty()) {
                    loadedPortion = part
                    setSelectedProduct(Product())
                    val list = _products.value.toMutableList().apply { addAll(listProducts) }
                    _products.value = list
-//                   log("update products")
-                       //  log("GET PORTION: portion = $part, lastPortion = ${loadedPortion}, items count = ${_products.value.size}")
                }
            }
        }
@@ -179,12 +175,11 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     fun saveScreenProducts(key: ScreenRouter.KEYSCREEN) {
         repository.saveScreenProducts(key, products.value)
-       // log("save products")
     }
+
     fun restoreScreenProducts(key: ScreenRouter.KEYSCREEN) {
-        _products.value = repository.restoreScreenProducts(key).toMutableList()
+        _products.value = repository.restoreScreenProducts(key)//.toMutableList()
         loadedPortion = getPortion()
-        //log("partion = $loadedPortion")
     }
 
     private fun getPortion(): Int{
@@ -193,7 +188,6 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         if (value > 0)
             portion += 1
         return portion
-        //log("portion = $portion")
     }
 
 

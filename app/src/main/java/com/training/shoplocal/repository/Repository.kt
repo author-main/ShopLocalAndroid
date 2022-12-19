@@ -133,6 +133,9 @@ class Repository: DAOinterface {
      * @param key идентификатор screen
      * @return список продуктов List&ltProduct&gt;
     */
-    fun restoreScreenProducts(key: ScreenRouter.KEYSCREEN): List<Product> =
-        MapScreenProducts[key] ?: listOf()
+    fun restoreScreenProducts(key: ScreenRouter.KEYSCREEN): MutableList<Product> {
+        val list = MapScreenProducts[key]?.toMutableList() ?: mutableListOf()
+        MapScreenProducts.remove(key)
+        return list
+    }
 }
