@@ -134,8 +134,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    @Synchronized
     private fun getPromoProducts(part: Int){
+        log("lastpart = $loadedPortion")
        if (loadedPortion < part) {
            repository.getPromoProducts(USER_ID, part) { listProducts ->
                if (listProducts.isNotEmpty()) {
