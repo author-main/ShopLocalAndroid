@@ -143,5 +143,3 @@ class SearchQueryStorage: SearchQueryStorageInterface {
     }
 
 }
-
-//ALTER TABLE `products` ADD FULLTEXT INDEX `product_name_idx` (`name`);

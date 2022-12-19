@@ -23,6 +23,7 @@ import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
+    var lockDB = false
     //private val reflexRepository = Repository::class.java.methods
     //log(reflexRepository.toString())
     private val _hiddenBottomNavigation = MutableStateFlow<Boolean>(false)
@@ -137,18 +138,18 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     }
 
     private fun getPromoProducts(part: Int){
-       // log("lastpart = $loadedPortion")
-       if (loadedPortion < part) {
-    //       log("lastpart = $loadedPortion")
-           repository.getPromoProducts(USER_ID, part) { listProducts ->
-               if (listProducts.isNotEmpty()) {
-                   loadedPortion = part
-                   setSelectedProduct(Product())
-                   val list = _products.value.toMutableList().apply { addAll(listProducts) }
-                   _products.value = list
-               }
-           }
-       }
+        if (!lockDB && loadedPortion < part) {
+            lockDB = true
+            repository.getPromoProducts(USER_ID, part) { listProducts ->
+                lockDB = false
+                if (listProducts.isNotEmpty()) {
+                    loadedPortion = part
+                    setSelectedProduct(Product())
+                    val list = _products.value.toMutableList().apply { addAll(listProducts) }
+                    _products.value = list
+                }
+            }
+        }
     }
 
     private fun getBrands(){

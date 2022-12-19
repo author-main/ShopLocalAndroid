@@ -179,3 +179,7 @@ fun ShowSearchHistory(textSearch: MutableState<String>, lastSearch: State<String
 
     }
 }
+
+
+//ALTER TABLE `products` ADD FULLTEXT INDEX `product_name_idx` (`name`);
+//SELECT * FROM `products` WHERE MATCH (name) AGAINST (textSearch);
