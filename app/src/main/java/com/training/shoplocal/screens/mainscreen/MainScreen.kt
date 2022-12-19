@@ -403,22 +403,22 @@ fun MainScreen(state: ModalBottomSheetState){
             }
         }
 
-       // if (isFocusedSearchTextField.value) {
-        AnimatedVisibility(
+        /*if (isFocusedSearchTextField.value) {
+            ShowSearchHistory(textSearch, lastSearchQuery)
+        }*/
+        /*AnimatedVisibility(
                     visible = isFocusedSearchTextField.value,
                      enter = fadeIn(),
                     exit  = fadeOut()
                 ) {
                     ShowSearchHistory(textSearch, lastSearchQuery)
-                }
+                }*/
 
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(BgScreenDark)
             ) {
-
-
 
 
 
@@ -459,10 +459,27 @@ fun MainScreen(state: ModalBottomSheetState){
                         viewModel.getNextPortionData()
                     }
                 }
-            }
 
+
+                androidx.compose.animation.AnimatedVisibility(
+                        visible = isFocusedSearchTextField.value,
+                        enter = fadeIn(),
+                        exit = fadeOut()
+                    ) {
+                        //if (isFocusedSearchTextField.value) {
+                        ShowSearchHistory(textSearch, lastSearchQuery)
+                    }
+
+
+
+
+            }
         }
-        if (dataSnackbar.second) {
+
+
+
+
+    if (dataSnackbar.second) {
             ShowMessage(
                 message = dataSnackbar.first,
                 viewModel = viewModel,
