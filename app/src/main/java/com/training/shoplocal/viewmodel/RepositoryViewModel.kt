@@ -19,6 +19,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.concurrent.Callable
+import java.util.concurrent.Executors
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     //private val reflexRepository = Repository::class.java.methods
@@ -29,7 +31,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         _hiddenBottomNavigation.value = value
     }
 
-    private val SIZE_PORTION =  8
+    private val SIZE_PORTION =  6
     private var loadedPortion = 0
     private val _selectedProduct = MutableStateFlow<Product>(Product())
     val selectedProduct = _selectedProduct.asStateFlow()
@@ -135,8 +137,9 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     }
 
     private fun getPromoProducts(part: Int){
-        log("lastpart = $loadedPortion")
+       // log("lastpart = $loadedPortion")
        if (loadedPortion < part) {
+    //       log("lastpart = $loadedPortion")
            repository.getPromoProducts(USER_ID, part) { listProducts ->
                if (listProducts.isNotEmpty()) {
                    loadedPortion = part
@@ -183,11 +186,15 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     }
 
     private fun getPortion(): Int{
+       /* log("% ${4 % 3}")
+        log("floor ${4.floorDiv(3)}")
+        log("mod ${4.mod(3)}")*/
+        //log("floor ${products.value.size.floorDiv(SIZE_PORTION)}")
         val value = products.value.size % SIZE_PORTION
         var portion = products.value.size/ SIZE_PORTION
         if (value > 0)
             portion += 1
-        return portion
+        return portion//products.value.size.floorDiv(SIZE_PORTION)
     }
 
 
@@ -196,7 +203,12 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
      *  Блок методов для управления журналом поисковых запросов
      */
     fun getSearchHistoryList(): List<String> {
-        return repository.getSearchHistoryList()
+        val callable = Callable<List<String>> {
+            repository.getSearchHistoryList()
+        }
+        return Executors.newSingleThreadExecutor().submit(callable).get()
+
+        //}repository.getSearchHistoryList()
     }
 
     fun disposeSearchHistoryList(){

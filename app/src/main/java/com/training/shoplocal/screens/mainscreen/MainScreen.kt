@@ -454,11 +454,16 @@ fun MainScreen(state: ModalBottomSheetState){
                     derivedStateOf {
                         stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.index == stateGrid.layoutInfo.totalItemsCount - 1
                                 //&& stateGrid.isScrollInProgress
-                                && stateGrid.layoutInfo.viewportEndOffset - stateGrid.layoutInfo.visibleItemsInfo.last().offset.y >= stateGrid.layoutInfo.visibleItemsInfo.last().size.height / 2
+                                && stateGrid.layoutInfo.viewportEndOffset - stateGrid.layoutInfo.visibleItemsInfo.last().offset.y > stateGrid.layoutInfo.visibleItemsInfo.last().size.height
                     }
                 }
                 LaunchedEffect(nextPart.value) {
+
+                   // log("deriverd ${nextPart.value}")
                     if (nextPart.value) {
+                      /*  try {
+                            log("last ${stateGrid.layoutInfo.visibleItemsInfo.last().index}")
+                        } catch (_: Exception){}*/
                         viewModel.getNextPortionData()
                     }
                 }

@@ -1,5 +1,4 @@
-package com.training.shoplocal
-.classes.searcher
+package com.training.shoplocal.classes.searcher
 
 
 import com.training.shoplocal.AppShopLocal
@@ -144,3 +143,5 @@ class SearchQueryStorage: SearchQueryStorageInterface {
     }
 
 }
+
+//ALTER TABLE `products` ADD FULLTEXT INDEX `product_name_idx` (`name`);
