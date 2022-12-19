@@ -84,7 +84,7 @@ fun ShowSearchHistory(textSearch: MutableState<String>, lastSearch: State<String
         onDispose(){
             if (lastSearch.value.isNotBlank()) {
                 viewModel.putSearchHistoryQuery(lastSearch.value)
-                log("put search query ${lastSearch.value}")
+                //log("put search query ${lastSearch.value}")
             }
             viewModel.saveSearchHistory()
             viewModel.disposeSearchHistoryList()

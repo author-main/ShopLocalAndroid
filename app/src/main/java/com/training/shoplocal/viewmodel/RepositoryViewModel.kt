@@ -21,6 +21,8 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
+    //private val reflexRepository = Repository::class.java.methods
+    //log(reflexRepository.toString())
     private val _hiddenBottomNavigation = MutableStateFlow<Boolean>(false)
     val hiddenBottomNavigation = _hiddenBottomNavigation.asStateFlow()
     fun hideBottomNavigation(value: Boolean = true) {

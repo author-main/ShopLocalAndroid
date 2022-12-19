@@ -302,9 +302,9 @@ fun MainScreen(state: ModalBottomSheetState){
 
                                 //val searchStore: SearchQueryStorageInterface = SearchQueryStorage.getInstance()
                                 lastSearchQuery.value = ""
-                                viewModel.hideBottomNavigation()
                                 isSearchMode = true
                                 isFocusedSearchTextField.value = true
+                                viewModel.hideBottomNavigation()
                             }
                         }
                         .weight(1f)
