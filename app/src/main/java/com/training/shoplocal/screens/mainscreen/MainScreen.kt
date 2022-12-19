@@ -285,9 +285,10 @@ fun MainScreen(state: ModalBottomSheetState){
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = null
                             ) {
+                                if (lastSearchQuery.value.isNotEmpty())
+                                    viewModel.restoreScreenProducts(ScreenRouter.current.key)
                                 textSearch.value = ""
                                 isSearchMode = false
-                                viewModel.restoreScreenProducts(ScreenRouter.current.key)
                                 hideSearchDialog()
                             },
                             imageVector = Icons.Filled.ArrowBack,
