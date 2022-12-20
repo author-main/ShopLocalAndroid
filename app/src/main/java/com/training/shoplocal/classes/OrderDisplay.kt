@@ -9,7 +9,7 @@ const val ANY_VALUE =    -1
 enum class SORT_TYPE     {ASCENDING, DESCENDING}
 enum class SORT_PROPERTY {POPULAR, RATING, PRICE}
 
-class DataDisplay{
+class OrderDisplay{
     data class SortData(var sortType: SORT_TYPE             = SORT_TYPE.ASCENDING,
                         var sortProperty: SORT_PROPERTY     = SORT_PROPERTY.PRICE)
 
@@ -55,6 +55,16 @@ class DataDisplay{
         filterData.favorite        = ANY_VALUE
         filterData.priceRange      = 0.00f to 0.00f
         filterData.category        = ANY_VALUE
+    }
+    companion object {
+        private lateinit var instance: OrderDisplay
+        fun getInstance(): OrderDisplay {
+            if (!this::instance.isInitialized)
+                instance = OrderDisplay()
+            return instance
+        }
+
+
     }
 }
 

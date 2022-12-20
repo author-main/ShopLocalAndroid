@@ -19,10 +19,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.UUID
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
+    var UUID_query: UUID = UUID.randomUUID()
     var lockDB = false
     //private val reflexRepository = Repository::class.java.methods
     //log(reflexRepository.toString())
@@ -102,28 +104,12 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         repository.onFingerPrint(actionLogin, email)
     }
 
-    fun getDataDisplay(field: FieldFilter): Any{
-        val dataDisplay = repository.getDataDisplay()
-        return when (field) {
-            FieldFilter.SORT_TYPE     -> dataDisplay.getSortType()
-            FieldFilter.SORT_PROPERTY -> dataDisplay.getSortProperty()
-            FieldFilter.BREND         -> dataDisplay.getBrend()
-            FieldFilter.CATEGORY      -> dataDisplay.getCategory()
-            FieldFilter.FAVORITE      -> dataDisplay.getFavorite()
-            FieldFilter.PRICE_RANGE   -> dataDisplay.getPriceRange()
-        }
-    }
+    fun getOrderDisplay(field: FieldFilter) =
+        repository.getOrderDisplay(field)
 
-    fun<T> setDataDisplay(field: FieldFilter, value: T){
-        val dataDisplay = repository.getDataDisplay()
-        when (field) {
-            FieldFilter.SORT_TYPE     -> dataDisplay.setSortType(value as SORT_TYPE)
-            FieldFilter.SORT_PROPERTY -> dataDisplay.setSortProperty(value as SORT_PROPERTY)
-            FieldFilter.BREND         -> dataDisplay.setBrend(value as Int)
-            FieldFilter.CATEGORY      -> dataDisplay.setCategory(value as Int)
-            FieldFilter.FAVORITE      -> dataDisplay.setFavorite(value as Int)
-            FieldFilter.PRICE_RANGE   -> dataDisplay.setPriceRange(value as Pair<Float, Float>)
-        }
+
+    fun<T> setOrderDisplay(field: FieldFilter, value: T){
+        repository.setOrderDisplay(field, value)
     }
 
     fun passContextFingerPrint(context: Context) {
@@ -187,15 +173,11 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     }
 
     private fun getPortion(): Int{
-       /* log("% ${4 % 3}")
-        log("floor ${4.floorDiv(3)}")
-        log("mod ${4.mod(3)}")*/
-        //log("floor ${products.value.size.floorDiv(SIZE_PORTION)}")
         val value = products.value.size % SIZE_PORTION
         var portion = products.value.size/ SIZE_PORTION
         if (value > 0)
             portion += 1
-        return portion//products.value.size.floorDiv(SIZE_PORTION)
+        return portion
     }
 
 
@@ -209,7 +191,6 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         }
         return Executors.newSingleThreadExecutor().submit(callable).get()*/
         return repository.getSearchHistoryList(fromFile)
-        //}repository.getSearchHistoryList()
     }
 
     fun disposeSearchHistoryList(){
@@ -239,8 +220,14 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
      *  End Блок методов для управления журналом поисковых запросов
      */
 
-
-
-
+    fun findProductsRequest(query: String){
+        UUID_query = UUID.randomUUID()
+        repository.findProductsRequest(query, UUID_query.toString(), USER_ID, OrderDisplay.getInstance())
+        /*INSERT INTO new_table_name
+        SELECT labels.label,shortabstracts.ShortAbstract,images.LinkToImage,types.Type
+        FROM ner.images,ner.labels,ner.shortabstracts,ner.types
+        WHERE labels.Resource=images.Resource AND labels.Resource=shortabstracts.Resource
+                AND labels.Resource=types.Resource;*/
+    }
 
  }

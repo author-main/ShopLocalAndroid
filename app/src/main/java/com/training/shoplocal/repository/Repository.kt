@@ -5,10 +5,8 @@ package com.training.shoplocal.repository
 import android.content.Context
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import com.training.shoplocal.AppShopLocal.Companion.appContext
-import com.training.shoplocal.classes.Brand
-import com.training.shoplocal.classes.Category
-import com.training.shoplocal.classes.DataDisplay
-import com.training.shoplocal.classes.Product
+import com.training.shoplocal.FieldFilter
+import com.training.shoplocal.classes.*
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 import com.training.shoplocal.classes.searcher.SearchQueryStorage
 import com.training.shoplocal.getCacheDirectory
@@ -16,9 +14,11 @@ import com.training.shoplocal.log
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.screens.ScreenRouter
 import java.io.File
+import java.util.*
+import kotlin.collections.HashMap
 
 class Repository: DAOinterface {
-    private val dataDisplay = DataDisplay()
+    //private val dataDisplay = DataDisplay()
     val loginState = LoginViewState.getLoginState()
 
     /**
@@ -55,7 +55,7 @@ class Repository: DAOinterface {
         accessUser.onRemoveUserPassword()
     }
 
-    fun getDataDisplay() = dataDisplay
+    //fun getDataDisplay() = dataDisplay
 
     /**
      *  Реализация методов для получения данных из базы данных MySQL
@@ -138,4 +138,41 @@ class Repository: DAOinterface {
         MapScreenProducts.remove(key)
         return list
     }
+
+
+    fun getOrderDisplay(field: FieldFilter): Any{
+        val orderDisplay = OrderDisplay.getInstance()
+        return when (field) {
+            FieldFilter.SORT_TYPE     -> orderDisplay.getSortType()
+            FieldFilter.SORT_PROPERTY -> orderDisplay.getSortProperty()
+            FieldFilter.BREND         -> orderDisplay.getBrend()
+            FieldFilter.CATEGORY      -> orderDisplay.getCategory()
+            FieldFilter.FAVORITE      -> orderDisplay.getFavorite()
+            FieldFilter.PRICE_RANGE   -> orderDisplay.getPriceRange()
+        }
+    }
+
+    fun<T> setOrderDisplay(field: FieldFilter, value: T){
+        val orderDisplay = OrderDisplay.getInstance()
+        when (field) {
+            FieldFilter.SORT_TYPE     -> orderDisplay.setSortType(value as SORT_TYPE)
+            FieldFilter.SORT_PROPERTY -> orderDisplay.setSortProperty(value as SORT_PROPERTY)
+            FieldFilter.BREND         -> orderDisplay.setBrend(value as Int)
+            FieldFilter.CATEGORY      -> orderDisplay.setCategory(value as Int)
+            FieldFilter.FAVORITE      -> orderDisplay.setFavorite(value as Int)
+            FieldFilter.PRICE_RANGE   -> orderDisplay.setPriceRange(value as Pair<Float, Float>)
+        }
+    }
+
+    /**
+     * @param query строка поиска
+     * @param UUID_query уникальный id запроса
+     * @param userId id пользователя
+     * @param order порядок и фильтр отображения списка продуктов
+     */
+    fun findProductsRequest(query: String, UUID_query: String, userId: Int, order: OrderDisplay){
+        log("query: $query, uuid: $UUID_query")
+    }
+
+
 }
