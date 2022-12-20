@@ -16,7 +16,7 @@ interface SearchQueryStorageInterface {
      * Получить весь список сохраненных строк поисковых запросов
      * @return список строк
      */
-    fun getQueries(): List<String>
+    fun getQueries(fromFile: Boolean): List<String>
     /**
      * Сохраняет список строк поисковых запросов
      * @return true - данные сохранены, false - ошибка сохранения данных

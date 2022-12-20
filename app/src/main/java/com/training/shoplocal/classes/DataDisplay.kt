@@ -12,14 +12,14 @@ enum class SORT_PROPERTY {POPULAR, RATING, PRICE}
 class DataDisplay{
     data class SortData(var sortType: SORT_TYPE             = SORT_TYPE.ASCENDING,
                         var sortProperty: SORT_PROPERTY     = SORT_PROPERTY.PRICE)
-    {}
+
     data class FilterData(
         var brend: Int                      = ANY_VALUE,
         var favorite: Int                   = ANY_VALUE,
         var priceRange: Pair<Float, Float>
         = 0.00f to 0.00f,
         var category: Int                   = ANY_VALUE
-    ) {}
+    )
     private val sortData    = SortData()
     private val filterData  = FilterData()
     fun setSortType(value: SORT_TYPE){

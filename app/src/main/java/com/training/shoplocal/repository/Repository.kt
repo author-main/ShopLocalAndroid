@@ -87,8 +87,8 @@ class Repository: DAOinterface {
     /**
      *  Блок методов для управления журналом поисковых запросов
      */
-    fun getSearchHistoryList(): List<String> {
-       return SearchQueryStorage.getInstance().getQueries()
+    fun getSearchHistoryList(fromFile: Boolean): List<String> {
+       return SearchQueryStorage.getInstance().getQueries(fromFile)
     }
 
     fun disposeSearchHistoryList(){

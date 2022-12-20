@@ -4,7 +4,16 @@ package com.training.shoplocal.classes.searcher
 import com.training.shoplocal.AppShopLocal
 import com.training.shoplocal.deleteFile
 import com.training.shoplocal.fileExists
+import com.training.shoplocal.log
 import java.io.*
+import java.util.concurrent.Callable
+import java.util.concurrent.Executors
+
+enum class SearchState {
+    SEARCH_QUERY,
+    SEARCH_CANCEL,
+    SEARCH_PROCESS
+}
 
 class SearchQueryStorage: SearchQueryStorageInterface {
     private var changed = false;
@@ -31,8 +40,8 @@ class SearchQueryStorage: SearchQueryStorageInterface {
     }
 
 //    private fun getQueriesStorage(): List<String>{
-    override fun getQueries(): List<String> {
-      /*  listSQ.addAll(listOf(
+    override fun getQueries(fromFile: Boolean): List<String> {
+  /*      listSQ.addAll(listOf(
         "Скайлайн / Skyline (2010) BDRip-HEVC 1080p от RIPS CLUB | D | USA Transfer",
         "Фабельманы / The Fabelmans (2022) WEB-DLRip-AVC от DoMiNo & селезень | A | Яроцкий",
         "Кто убил Санту? Тайна убийства в Мердервилле / Who Killed Santa? A Murderville Murder Mystery (2022) WEBRip 1080p | ColdFilm",
@@ -80,19 +89,26 @@ class SearchQueryStorage: SearchQueryStorageInterface {
         "Мой домашний крокодил / Lyle, Lyle, Crocodile (2022) BDRip 720p от ExKinoRay | Jaskier"))
 */
 
-
-        listSQ.clear()
-        if (fileExists(fileNameStorage)) {
-            try {
-                BufferedReader(FileReader(fileNameStorage)).use {
-                    it.lineSequence().forEach { line ->
-                        listSQ.add(line)//.replace("\n", ""))
+    val callable = Callable<List<String>> {
+        if (fromFile) {
+            listSQ.clear()
+            if (fileExists(fileNameStorage)) {
+                try {
+                    BufferedReader(FileReader(fileNameStorage)).use {
+                        it.lineSequence().forEach { line ->
+                            listSQ.add(line)//.replace("\n", ""))
+                        }
                     }
+                } catch (_: IOException) {
                 }
-            } catch (_: IOException) {
             }
         }
-        return listSQ
+       // log ("history size = ${listSQ.size}")
+        listSQ
+    }
+    return Executors.newSingleThreadExecutor().submit(callable).get()
+  //  log("listSQ size ${listSQ.size}")
+    //return listSQ
     }
 
     //override fun saveQueries(list: List<String>): Boolean {
@@ -132,13 +148,11 @@ class SearchQueryStorage: SearchQueryStorageInterface {
 
     companion object {
         private lateinit var instance: SearchQueryStorage
-        fun getInstance() =
-            if (this::instance.isInitialized)
-                instance
-            else {
-                instance = SearchQueryStorage()//.apply { getQueries() }
-                instance
-            }
+        fun getInstance(): SearchQueryStorage {
+            if (!this::instance.isInitialized)
+                instance = SearchQueryStorage()
+            return instance
+        }
 
     }
 

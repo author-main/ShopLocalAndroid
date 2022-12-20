@@ -47,6 +47,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.*
 import com.training.shoplocal.R
 import com.training.shoplocal.classes.Product
+import com.training.shoplocal.classes.searcher.SearchState
 import com.training.shoplocal.dialogs.ShowMessage
 import com.training.shoplocal.screens.ScreenRouter
 import com.training.shoplocal.screens.appscreen.ShowSearchHistory
@@ -242,8 +243,12 @@ fun MainScreen(state: ModalBottomSheetState){
         mutableStateOf(false)
     }
 
-    val lastSearchQuery = remember {
+    /*val lastSearchQuery = remember {
         mutableStateOf("")
+    }*/
+
+    val searchState = remember {
+        mutableStateOf(SearchState.SEARCH_QUERY)
     }
 
     //val stateGrid = rememberLazyGridState()
@@ -285,11 +290,13 @@ fun MainScreen(state: ModalBottomSheetState){
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = null
                             ) {
-                                if (lastSearchQuery.value.isNotEmpty())
-                                    viewModel.restoreScreenProducts(ScreenRouter.current.key)
-                                textSearch.value = ""
                                 isSearchMode = false
                                 hideSearchDialog()
+//                                if (lastSearchQuery.value.isNotEmpty())
+                                if (searchState.value == SearchState.SEARCH_PROCESS)
+                                    viewModel.restoreScreenProducts(ScreenRouter.current.key)
+                                searchState.value = SearchState.SEARCH_CANCEL
+                                textSearch.value = ""
                             },
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = null,
@@ -301,10 +308,10 @@ fun MainScreen(state: ModalBottomSheetState){
                     modifier = Modifier
                         .onFocusChanged {
                             if (it.isFocused) {
-
-                                //val searchStore: SearchQueryStorageInterface = SearchQueryStorage.getInstance()
-                                lastSearchQuery.value = ""
                                 isSearchMode = true
+                                //val searchStore: SearchQueryStorageInterface = SearchQueryStorage.getInstance()
+                                //lastSearchQuery.value = ""
+                                searchState.value = SearchState.SEARCH_QUERY
                                 isFocusedSearchTextField.value = true
                                 viewModel.hideBottomNavigation()
                             }
@@ -328,7 +335,8 @@ fun MainScreen(state: ModalBottomSheetState){
                          //   hideSearchDialog()
                             if (textSearch.value.isNotBlank()) {
                                // viewModel.saveCurrentScreenData(stateGrid)
-                                lastSearchQuery.value = textSearch.value
+                                //lastSearchQuery.value = textSearch.value
+                                searchState.value = SearchState.SEARCH_PROCESS
                                 hideSearchDialog()
                                 viewModel.saveScreenProducts(ScreenRouter.current.key)
                             }
@@ -475,7 +483,7 @@ fun MainScreen(state: ModalBottomSheetState){
                         exit = fadeOut()
                     ) {
                         //if (isFocusedSearchTextField.value) {
-                        ShowSearchHistory(textSearch, lastSearchQuery)
+                        ShowSearchHistory(textSearch, searchState)//lastSearchQuery)
                     }
 
 

@@ -203,12 +203,12 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     /**
      *  Блок методов для управления журналом поисковых запросов
      */
-    fun getSearchHistoryList(): List<String> {
-        val callable = Callable<List<String>> {
+    fun getSearchHistoryList(fromFile: Boolean = false): List<String> {
+/*        val callable = Callable<List<String>> {
             repository.getSearchHistoryList()
         }
-        return Executors.newSingleThreadExecutor().submit(callable).get()
-
+        return Executors.newSingleThreadExecutor().submit(callable).get()*/
+        return repository.getSearchHistoryList(fromFile)
         //}repository.getSearchHistoryList()
     }
 

@@ -31,14 +31,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.training.shoplocal.classes.searcher.SearchState
 import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.TextFieldBg
 import com.training.shoplocal.ui.theme.TextFieldFont
 import com.training.shoplocal.viewmodel.RepositoryViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ShowSearchHistory(textSearch: MutableState<String>, lastSearch: State<String>){//, callback: (value: String) -> Unit){//}, history: List<String>, actionClear: () -> Unit){
+//fun ShowSearchHistory(textSearch: MutableState<String>, onSearch: State<Boolean>lastSearch: State<String>){//, callback: (value: String) -> Unit){//}, history: List<String>, actionClear: () -> Unit){
+fun ShowSearchHistory(textSearch: MutableState<String>, searchState: State<SearchState>){//, callback: (value: String) -> Unit){//}, history: List<String>, actionClear: () -> Unit){
     val viewModel: RepositoryViewModel = viewModel()
 
     var filtered by remember {
@@ -57,38 +60,52 @@ fun ShowSearchHistory(textSearch: MutableState<String>, lastSearch: State<String
     }*/
 
     LaunchedEffect(textSearch.value) {
-        val query = textSearch.value
-        if (query.isNotBlank()) {
-            filtered = true
-            showList.apply {
-                clear()
-                addAll(viewModel.getSearchHistoryList().filter { text ->
-                    text.startsWith(query, true)
-                })
-                //        log(filteredList.toString())
+            val query = textSearch.value
+            if (query.isNotBlank()) {
+                filtered = true
+                showList.apply {
+                    clear()
+                    addAll(viewModel.getSearchHistoryList().filter { text ->
+                        text.startsWith(query, true)
+                    })
+                    //        log(filteredList.toString())
+                }
+            } else {
+                    if (searchState.value == SearchState.SEARCH_QUERY) {
+                        filtered = false
+                        try {
+                            /*val list = viewModel.getSearchHistoryList()
+                log ("historySize = ${list.size}")*/
+                            if (!showList.containsAll(viewModel.getSearchHistoryList()))
+                                showList.apply {
+                                    clear()
+                                    //val list = viewModel.getSearchHistoryList()
+                                    addAll(viewModel.getSearchHistoryList())
+                                    //log("restore history")
+                                }
+                        } catch (e: Exception) {
+                            log(e.message)
+                        }
+                    }
             }
-        } else {
-            filtered = false
-            if (!showList.containsAll(viewModel.getSearchHistoryList()))
-            showList.apply {
-                clear()
-                addAll(viewModel.getSearchHistoryList())
-                //log("restore history")
-            }
-        }
     }
 
     //log("search ${textSearch.value}")
     DisposableEffect(Unit) {
-        showList.addAll(viewModel.getSearchHistoryList())
+        showList.addAll(viewModel.getSearchHistoryList(true))
         onDispose(){
-            if (lastSearch.value.isNotBlank()) {
-                viewModel.putSearchHistoryQuery(lastSearch.value)
+            //textSearch.value = ""
+//            if (lastSearch.value.isNotBlank()) {
+            if (searchState.value == SearchState.SEARCH_PROCESS) {
+                //viewModel.putSearchHistoryQuery(lastSearch.value)
+                viewModel.putSearchHistoryQuery(textSearch.value)
+               // textSearch.value = lastSearch.value
                 //log("put search query ${lastSearch.value}")
             }
             viewModel.saveSearchHistory()
             viewModel.disposeSearchHistoryList()
             showList.clear()
+
         }
     }
     //val textFont = FontFamily(Font(R.font.robotocondensed_light))
@@ -122,7 +139,7 @@ fun ShowSearchHistory(textSearch: MutableState<String>, lastSearch: State<String
                                 //   .padding(vertical = 8.dp)
                                 .animateItemPlacement()
                                 .clickable {
-                                       textSearch.value = line
+                                    textSearch.value = line
                                     //callback(line)
                                 },
                             //.padding(horizontal = 8.dp),
