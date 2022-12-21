@@ -74,6 +74,19 @@ object DatabaseApi {
     }
 
 
+    fun getFoundProducts(query: String,
+                         order: String,
+                         portion: Int,
+                         uuid: String,
+                         userid: Int, callback: retrofit2.Callback<List<Product>>){
+        try {
+            val call: retrofit2.Call<List<Product>> = service!!.getFoundProducts(query, order, portion, uuid, userid)
+            call.enqueue(callback)
+        } catch(_: Exception){}
+    }
+
+
+
     suspend fun getProducts(id: Int, part: Int) : List<Product> {
         var list = emptyList<Product>()
         try {

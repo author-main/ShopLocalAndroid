@@ -9,6 +9,7 @@ import com.training.shoplocal.FieldFilter
 import com.training.shoplocal.classes.*
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 import com.training.shoplocal.classes.searcher.SearchQueryStorage
+import com.training.shoplocal.encodeBase64
 import com.training.shoplocal.getCacheDirectory
 import com.training.shoplocal.log
 import com.training.shoplocal.loginview.LoginViewState
@@ -164,6 +165,13 @@ class Repository: DAOinterface {
         }
     }
 
+    fun getFoundProducts(query: String,
+                         order: String,
+                         portion: Int,
+                         uuid: String,
+                         userid: Int, action: (products: List<Product>) -> Unit){
+        databaseCRUD.getFoundProducts(query, order, portion, uuid, userid, action)
+    }
     /**
      * @param query строка поиска
      * @param portion порция (часть) подгружаемых данных, значение -1 - инициализация выполнения поискового запроса
@@ -171,14 +179,19 @@ class Repository: DAOinterface {
      * @param userId id пользователя
      * @param order порядок и фильтр отображения списка продуктов
      */
-    fun findProductsRequest(query: String, portion: Int, UUID_query: String, userId: Int){
-        val sort_order          = getOrderDisplay(FieldFilter.SORT_TYPE)
-        val sort_type           = getOrderDisplay(FieldFilter.SORT_PROPERTY)
-        val filter_brend        = getOrderDisplay(FieldFilter.BREND)
-        val filter_favorite     = getOrderDisplay(FieldFilter.FAVORITE)
-        val filter_priceRange   = getOrderDisplay(FieldFilter.PRICE_RANGE)
-        val filter_category     = getOrderDisplay(FieldFilter.CATEGORY)
-        log("query: $query, uuid: $UUID_query")
+    fun findProductsRequest(query: String, portion: Int, UUID_query: String, userId: Int, action: (products: List<Product>) -> Unit ){
+        val sort_order          = (getOrderDisplay(FieldFilter.SORT_TYPE) as SORT_TYPE).value
+        val sort_type           = (getOrderDisplay(FieldFilter.SORT_PROPERTY) as SORT_PROPERTY).value
+        val filter_category     = getOrderDisplay(FieldFilter.CATEGORY).toString()
+        val filter_brend        = getOrderDisplay(FieldFilter.BREND).toString()
+        val filter_favorite     = getOrderDisplay(FieldFilter.FAVORITE).toString()
+        val filter_price        = run {
+            val value: Pair<Float, Float>   = getOrderDisplay(FieldFilter.PRICE_RANGE) as Pair<Float, Float>
+            "${value.first}-${value.second}"
+        }
+        val order64 = encodeBase64("$sort_order $sort_type $filter_category $filter_brend $filter_favorite $filter_price")
+        val query64 = encodeBase64(query)
+        getFoundProducts(query64, order64, portion, UUID_query, userId, action)
     }
 
 

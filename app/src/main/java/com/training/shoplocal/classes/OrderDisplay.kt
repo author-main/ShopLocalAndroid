@@ -6,8 +6,8 @@ package com.training.shoplocal.classes
  */
 
 const val ANY_VALUE =    -1
-enum class SORT_TYPE     {ASCENDING, DESCENDING}
-enum class SORT_PROPERTY {POPULAR, RATING, PRICE}
+enum class SORT_TYPE(val value: Int)     {ASCENDING(0), DESCENDING(1)}
+enum class SORT_PROPERTY(val value: Int) {POPULAR(0), RATING(1), PRICE(2)}
 
 class OrderDisplay{
     data class SortData(var sortType: SORT_TYPE             = SORT_TYPE.ASCENDING,

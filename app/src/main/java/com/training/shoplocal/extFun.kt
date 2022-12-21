@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Resources
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.util.Base64
 import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
@@ -18,9 +19,10 @@ import com.training.shoplocal.ui.theme.TextFieldBg
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
+import java.util.Base64.getEncoder
 import kotlin.math.roundToInt
 
-const val SERVER_URL            = "http://192.168.1.10"
+const val SERVER_URL            = "http://192.168.0.10"
 val DECIMAL_CEPARATOR           = DecimalFormatSymbols().decimalSeparator
 
 /*enum class Error {
@@ -108,3 +110,6 @@ val Int.Px: Int
 
 fun ImageBitmap.isEmpty(): Boolean =
     this.width == 1 || this.height == 1
+
+fun encodeBase64(value: String) =
+   Base64.encodeToString(value.toByteArray(), Base64.NO_PADDING)

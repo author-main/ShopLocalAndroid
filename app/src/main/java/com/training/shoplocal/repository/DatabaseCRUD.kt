@@ -43,6 +43,34 @@ class DatabaseCRUD: DatabaseCRUDInterface {
         })
     }
 
+
+    override fun getFoundProducts(
+        query: String,
+        order: String,
+        portion: Int,
+        uuid: String,
+        userid: Int,
+        action: (products: List<Product>) -> Unit
+    ) {
+        DatabaseApi.getFoundProducts(query,
+            order,
+            portion,
+            uuid,
+            userid, object: retrofit2.Callback<List<Product>>{
+            override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
+                response.body()?.let {
+                    if (it.isNotEmpty()) {
+                        action.invoke(it)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<List<Product>>, t: Throwable) {
+                action.invoke(mutableListOf<Product>())
+            }
+        })
+    }
+
     override fun getProduct(id: Int, action: (product: Product) -> Unit ){
        // log("getPromotionProduct")
         DatabaseApi.getProduct(id, object: retrofit2.Callback<Product> {
