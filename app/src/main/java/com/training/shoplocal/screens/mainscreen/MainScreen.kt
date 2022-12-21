@@ -339,7 +339,7 @@ fun MainScreen(state: ModalBottomSheetState){
                                 searchState.value = SearchState.SEARCH_PROCESS
                                 hideSearchDialog()
                                 viewModel.saveScreenProducts(ScreenRouter.current.key)
-                                viewModel.findProductsRequest(textSearch.value)
+                                viewModel.findProductsRequest(textSearch.value.trim())
                             }
                         }
                     ),
