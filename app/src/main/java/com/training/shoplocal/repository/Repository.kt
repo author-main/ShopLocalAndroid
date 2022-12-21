@@ -187,7 +187,7 @@ class Repository: DAOinterface {
         getFoundProducts(query64, order64, portion, UUID_query, userId, action)
     }
 
-    private fun getOrderDislayQuery(): String {
+    fun getOrderDislayQuery(): String {
         val sort_order          = (getOrderDisplay(FieldFilter.SORT_TYPE) as SORT_TYPE).value
         val sort_type           = (getOrderDisplay(FieldFilter.SORT_PROPERTY) as SORT_PROPERTY).value
         val filter_category     = getOrderDisplay(FieldFilter.CATEGORY)
