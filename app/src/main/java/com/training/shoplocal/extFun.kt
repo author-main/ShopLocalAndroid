@@ -111,5 +111,5 @@ val Int.Px: Int
 fun ImageBitmap.isEmpty(): Boolean =
     this.width == 1 || this.height == 1
 
-fun encodeBase64(value: String) =
-   Base64.encodeToString(value.toByteArray(), Base64.NO_PADDING)
+fun encodeBase64(value: String): String =
+   Base64.encodeToString((value.trim()).toByteArray(), Base64.NO_PADDING)
