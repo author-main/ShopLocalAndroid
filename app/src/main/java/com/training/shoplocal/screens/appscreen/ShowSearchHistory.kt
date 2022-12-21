@@ -98,7 +98,7 @@ fun ShowSearchHistory(textSearch: MutableState<String>, searchState: State<Searc
 //            if (lastSearch.value.isNotBlank()) {
             if (searchState.value == SearchState.SEARCH_PROCESS) {
                 //viewModel.putSearchHistoryQuery(lastSearch.value)
-                viewModel.putSearchHistoryQuery(textSearch.value)
+                viewModel.putSearchHistoryQuery(textSearch.value.trim())
                // textSearch.value = lastSearch.value
                 //log("put search query ${lastSearch.value}")
             }
