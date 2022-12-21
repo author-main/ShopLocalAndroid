@@ -182,9 +182,9 @@ class Repository: DAOinterface {
     fun findProductsRequest(query: String, portion: Int, UUID_query: String, userId: Int, action: (products: List<Product>) -> Unit ){
         val sort_order          = (getOrderDisplay(FieldFilter.SORT_TYPE) as SORT_TYPE).value
         val sort_type           = (getOrderDisplay(FieldFilter.SORT_PROPERTY) as SORT_PROPERTY).value
-        val filter_category     = getOrderDisplay(FieldFilter.CATEGORY).toString()
-        val filter_brend        = getOrderDisplay(FieldFilter.BREND).toString()
-        val filter_favorite     = getOrderDisplay(FieldFilter.FAVORITE).toString()
+        val filter_category     = getOrderDisplay(FieldFilter.CATEGORY)
+        val filter_brend        = getOrderDisplay(FieldFilter.BREND)
+        val filter_favorite     = getOrderDisplay(FieldFilter.FAVORITE)
         val filter_price        = run {
             val value: Pair<Float, Float>   = getOrderDisplay(FieldFilter.PRICE_RANGE) as Pair<Float, Float>
             "${value.first}-${value.second}"

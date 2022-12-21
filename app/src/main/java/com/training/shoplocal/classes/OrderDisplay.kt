@@ -15,7 +15,7 @@ class OrderDisplay{
 
     data class FilterData(
         var brend: Int                      = ANY_VALUE,
-        var favorite: Int                   = ANY_VALUE,
+        var favorite: Int                   = 0,
         var priceRange: Pair<Float, Float>
         = 0.00f to 0.00f,
         var category: Int                   = ANY_VALUE
@@ -52,7 +52,7 @@ class OrderDisplay{
     }
     fun resetFilter() {
         filterData.brend           = ANY_VALUE
-        filterData.favorite        = ANY_VALUE
+        filterData.favorite        = 0
         filterData.priceRange      = 0.00f to 0.00f
         filterData.category        = ANY_VALUE
     }
