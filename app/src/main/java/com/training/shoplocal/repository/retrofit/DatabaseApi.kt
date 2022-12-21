@@ -64,9 +64,9 @@ object DatabaseApi {
         }
     }
 
-    fun getPromoProducts(id: Int, part: Int, callback: retrofit2.Callback<List<Product>>){
+    fun getPromoProducts(id: Int, part: Int, order: String, callback: retrofit2.Callback<List<Product>>){
         try {
-            val call: retrofit2.Call<List<Product>> = service!!.getPromoProducts(id, part)
+            val call: retrofit2.Call<List<Product>> = service!!.getPromoProducts(id, part, order)
             call.enqueue(callback)
         } catch(e: Exception){
             //log(e.message ?: "error")

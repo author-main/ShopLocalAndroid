@@ -66,7 +66,8 @@ class Repository: DAOinterface {
     }
 
     fun getPromoProducts(id: Int, part: Int, action: (products: List<Product>) -> Unit){
-        databaseCRUD.getPromoProducts(id, part, action)
+        val order64 = encodeBase64(getOrderDislayQuery())
+        databaseCRUD.getPromoProducts(id, part, order64, action)
     }
 
     fun getBrands(action: (brands: List<Brand>) -> Unit){
@@ -180,6 +181,12 @@ class Repository: DAOinterface {
      * @param order порядок и фильтр отображения списка продуктов
      */
     fun findProductsRequest(query: String, portion: Int, UUID_query: String, userId: Int, action: (products: List<Product>) -> Unit ){
+        val order64 = encodeBase64(getOrderDislayQuery())
+        val query64 = encodeBase64(query)
+        getFoundProducts(query64, order64, portion, UUID_query, userId, action)
+    }
+
+    private fun getOrderDislayQuery(): String {
         val sort_order          = (getOrderDisplay(FieldFilter.SORT_TYPE) as SORT_TYPE).value
         val sort_type           = (getOrderDisplay(FieldFilter.SORT_PROPERTY) as SORT_PROPERTY).value
         val filter_category     = getOrderDisplay(FieldFilter.CATEGORY)
@@ -189,9 +196,15 @@ class Repository: DAOinterface {
             val value: Pair<Float, Float>   = getOrderDisplay(FieldFilter.PRICE_RANGE) as Pair<Float, Float>
             "${value.first}-${value.second}"
         }
-        val order64 = encodeBase64("$sort_order $sort_type $filter_category $filter_brend $filter_favorite $filter_price")
-        val query64 = encodeBase64(query)
-        getFoundProducts(query64, order64, portion, UUID_query, userId, action)
+        /** Порядок для извлечения в PHP:
+         *  sort_order:         0 - ASCENDING, 1 - DESCENDING
+         *  sort_type:          0 POPULAR, 1 - RATING, 2 - PRICE
+         *  filter_category:    ID категории продукта
+         *  filter_brand:       ID бренда
+         *  filter_favorite:    0 - все продукты, 1 - избранное
+         *  filter_price:       интервал цен, н/р 1000,00-20000,00
+         */
+        return "$sort_order $sort_type $filter_category $filter_brend $filter_favorite $filter_price"
     }
 
 

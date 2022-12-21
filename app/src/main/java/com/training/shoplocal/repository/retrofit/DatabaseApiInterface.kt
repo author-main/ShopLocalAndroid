@@ -18,7 +18,7 @@ interface DatabaseApiInterface {
     fun getProduct(@Query("id") id: Int): Call<Product>
 
     @GET("/api/get_promo_products")
-    fun getPromoProducts(@Query("id") id: Int, @Query("part") part: Int): Call<List<Product>>
+    fun getPromoProducts(@Query("id") id: Int, @Query("part") part: Int, @Query("order") order: String): Call<List<Product>>
 
     @GET("/api/get_found_products")
     fun getFoundProducts(@Query("query") query: String,

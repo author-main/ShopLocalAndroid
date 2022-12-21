@@ -24,8 +24,8 @@ class DatabaseCRUD: DatabaseCRUDInterface {
         })
     }
 
-    override fun getPromoProducts(id: Int, part: Int, action: (products: List<Product>) -> Unit) {
-        DatabaseApi.getPromoProducts(id, part, object: retrofit2.Callback<List<Product>>{
+    override fun getPromoProducts(id: Int, part: Int, order: String, action: (products: List<Product>) -> Unit) {
+        DatabaseApi.getPromoProducts(id, part, order, object: retrofit2.Callback<List<Product>>{
             override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
 
                     response.body()?.let {
