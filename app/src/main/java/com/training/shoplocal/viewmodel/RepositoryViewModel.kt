@@ -221,8 +221,9 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
      */
 
     fun findProductsRequest(query: String){
+        val portion: Int = -1
         UUID_query = UUID.randomUUID()
-        repository.findProductsRequest(query, UUID_query.toString(), USER_ID, OrderDisplay.getInstance())
+        repository.findProductsRequest(query, portion, UUID_query.toString(), USER_ID)
         /*INSERT INTO new_table_name
         SELECT labels.label,shortabstracts.ShortAbstract,images.LinkToImage,types.Type
         FROM ner.images,ner.labels,ner.shortabstracts,ner.types

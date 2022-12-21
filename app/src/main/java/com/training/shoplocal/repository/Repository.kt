@@ -166,11 +166,18 @@ class Repository: DAOinterface {
 
     /**
      * @param query строка поиска
+     * @param portion порция (часть) подгружаемых данных, значение -1 - инициализация выполнения поискового запроса
      * @param UUID_query уникальный id запроса
      * @param userId id пользователя
      * @param order порядок и фильтр отображения списка продуктов
      */
-    fun findProductsRequest(query: String, UUID_query: String, userId: Int, order: OrderDisplay){
+    fun findProductsRequest(query: String, portion: Int, UUID_query: String, userId: Int){
+        val sort_order          = getOrderDisplay(FieldFilter.SORT_TYPE)
+        val sort_type           = getOrderDisplay(FieldFilter.SORT_PROPERTY)
+        val filter_brend        = getOrderDisplay(FieldFilter.BREND)
+        val filter_favorite     = getOrderDisplay(FieldFilter.FAVORITE)
+        val filter_priceRange   = getOrderDisplay(FieldFilter.PRICE_RANGE)
+        val filter_category     = getOrderDisplay(FieldFilter.CATEGORY)
         log("query: $query, uuid: $UUID_query")
     }
 
