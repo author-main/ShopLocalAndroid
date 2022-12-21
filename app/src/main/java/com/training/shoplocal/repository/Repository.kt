@@ -66,7 +66,7 @@ class Repository: DAOinterface {
     }
 
     fun getPromoProducts(id: Int, part: Int, action: (products: List<Product>) -> Unit){
-        val order64 = encodeBase64(getOrderDislayQuery())
+        val order64 = encodeBase64(OrderDisplay.getOrderDislayQuery())
         databaseCRUD.getPromoProducts(id, part, order64, action)
     }
 
@@ -142,7 +142,7 @@ class Repository: DAOinterface {
     }
 
 
-    private fun getOrderDisplay(field: FieldFilter): Any{
+    fun getOrderDisplay(field: FieldFilter): Any{
         val orderDisplay = OrderDisplay.getInstance()
         return when (field) {
             FieldFilter.SORT_TYPE     -> orderDisplay.getSortType()
@@ -154,7 +154,7 @@ class Repository: DAOinterface {
         }
     }
 
-    private fun<T> setOrderDisplay(field: FieldFilter, value: T){
+    fun<T> setOrderDisplay(field: FieldFilter, value: T){
         val orderDisplay = OrderDisplay.getInstance()
         when (field) {
             FieldFilter.SORT_TYPE     -> orderDisplay.setSortType(value as SORT_TYPE)
@@ -182,31 +182,9 @@ class Repository: DAOinterface {
      * @param order порядок и фильтр отображения списка продуктов
      */
     fun findProductsRequest(query: String, portion: Int, UUID_query: String, userId: Int, action: (products: List<Product>) -> Unit ){
-        val order64 = encodeBase64(getOrderDislayQuery())
+        val order64 = encodeBase64(OrderDisplay.getOrderDislayQuery())
         val query64 = encodeBase64(query)
         getFoundProducts(query64, order64, portion, UUID_query, userId, action)
     }
-
-    fun getOrderDislayQuery(): String {
-        val sort_order          = (getOrderDisplay(FieldFilter.SORT_TYPE) as SORT_TYPE).value
-        val sort_type           = (getOrderDisplay(FieldFilter.SORT_PROPERTY) as SORT_PROPERTY).value
-        val filter_category     = getOrderDisplay(FieldFilter.CATEGORY)
-        val filter_brend        = getOrderDisplay(FieldFilter.BREND)
-        val filter_favorite     = getOrderDisplay(FieldFilter.FAVORITE)
-        val filter_price        = run {
-            val value: Pair<Float, Float>   = getOrderDisplay(FieldFilter.PRICE_RANGE) as Pair<Float, Float>
-            "${value.first}-${value.second}"
-        }
-        /** Порядок для извлечения в PHP:
-         *  sort_order:         0 - ASCENDING, 1 - DESCENDING
-         *  sort_type:          0 POPULAR, 1 - RATING, 2 - PRICE
-         *  filter_category:    ID категории продукта
-         *  filter_brand:       ID бренда
-         *  filter_favorite:    0 - все продукты, 1 - избранное
-         *  filter_price:       интервал цен, н/р 1000,00-20000,00
-         */
-        return "$sort_order $sort_type $filter_category $filter_brend $filter_favorite $filter_price"
-    }
-
 
 }

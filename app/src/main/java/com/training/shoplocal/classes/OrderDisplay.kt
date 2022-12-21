@@ -1,5 +1,7 @@
 package com.training.shoplocal.classes
 
+import com.training.shoplocal.FieldFilter
+
 /**
   Класс для выборки данных (product) из БД (таблица products),
  * определяет тип сортировки и фильтр выборки по параметрам продукта
@@ -48,7 +50,7 @@ class OrderDisplay{
     fun getPriceRange()     = filterData.priceRange
     fun getCategory()       = filterData.category
     fun isFiltered() : Boolean {
-        return filterData.brend != ANY_VALUE || filterData.favorite != ANY_VALUE || filterData.category != ANY_VALUE || filterData.priceRange.second != 0.00f
+        return filterData.brend != ANY_VALUE || filterData.favorite == 1 || filterData.category != ANY_VALUE || filterData.priceRange.second != 0.00f
     }
     fun resetFilter() {
         filterData.brend           = ANY_VALUE
@@ -63,6 +65,30 @@ class OrderDisplay{
                 instance = OrderDisplay()
             return instance
         }
+
+        fun getOrderDislayQuery(): String {
+            getInstance()
+            val sort_order          = instance.getSortType().value
+            val sort_type           = instance.getSortProperty().value
+            val filter_category     = instance.getCategory()
+            val filter_brend        = instance.getBrend()
+            val filter_favorite     = instance.getFavorite()
+            val filter_price        = run {
+                val value: Pair<Float, Float>   = instance.getPriceRange()
+                "${value.first}-${value.second}"
+            }
+            /** Порядок для извлечения в PHP:
+             *  sort_order:         0 - ASCENDING, 1 - DESCENDING
+             *  sort_type:          0 POPULAR, 1 - RATING, 2 - PRICE
+             *  filter_category:    ID категории продукта
+             *  filter_brand:       ID бренда
+             *  filter_favorite:    0 - все продукты, 1 - избранное
+             *  filter_price:       интервал цен, н/р 1000,00-20000,00
+             */
+            return "$sort_order $sort_type $filter_category $filter_brend $filter_favorite $filter_price"
+        }
+
+
 
 
     }
