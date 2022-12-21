@@ -142,7 +142,7 @@ class Repository: DAOinterface {
     }
 
 
-    fun getOrderDisplay(field: FieldFilter): Any{
+    private fun getOrderDisplay(field: FieldFilter): Any{
         val orderDisplay = OrderDisplay.getInstance()
         return when (field) {
             FieldFilter.SORT_TYPE     -> orderDisplay.getSortType()
@@ -154,7 +154,7 @@ class Repository: DAOinterface {
         }
     }
 
-    fun<T> setOrderDisplay(field: FieldFilter, value: T){
+    private fun<T> setOrderDisplay(field: FieldFilter, value: T){
         val orderDisplay = OrderDisplay.getInstance()
         when (field) {
             FieldFilter.SORT_TYPE     -> orderDisplay.setSortType(value as SORT_TYPE)
@@ -166,13 +166,14 @@ class Repository: DAOinterface {
         }
     }
 
-    fun getFoundProducts(query: String,
-                         order: String,
-                         portion: Int,
-                         uuid: String,
-                         userid: Int, action: (products: List<Product>) -> Unit){
+    private fun getFoundProducts(query: String,
+                                 order: String,
+                                 portion: Int,
+                                 uuid: String,
+                                 userid: Int, action: (products: List<Product>) -> Unit){
         databaseCRUD.getFoundProducts(query, order, portion, uuid, userid, action)
     }
+
     /**
      * @param query строка поиска
      * @param portion порция (часть) подгружаемых данных, значение -1 - инициализация выполнения поискового запроса
