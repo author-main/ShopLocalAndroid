@@ -67,6 +67,7 @@ class Repository: DAOinterface {
 
     fun getPromoProducts(id: Int, part: Int, action: (products: List<Product>) -> Unit){
         val order64 = encodeBase64(OrderDisplay.getOrderDislayQuery())
+        log(order64)
         databaseCRUD.getPromoProducts(id, part, order64, action)
     }
 
@@ -182,6 +183,14 @@ class Repository: DAOinterface {
      * @param order порядок и фильтр отображения списка продуктов
      */
     fun findProductsRequest(query: String, portion: Int, UUID_query: String, userId: Int, action: (products: List<Product>) -> Unit ){
+        /*val orderDisplay = OrderDisplay.getInstance()
+        orderDisplay.setSortType(SORT_TYPE.DESCENDING)
+        orderDisplay.setSortProperty(SORT_PROPERTY.POPULAR)
+        orderDisplay.setBrend(1)
+        orderDisplay.setCategory(3)
+        orderDisplay.setFavorite(1)
+        orderDisplay.setPriceRange(10.00f to 100.00f)*/
+
         val order64 = encodeBase64(OrderDisplay.getOrderDislayQuery())
         val query64 = encodeBase64(query)
         log(query64)
