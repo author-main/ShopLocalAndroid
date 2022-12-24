@@ -27,6 +27,8 @@ data class Product(
     var favorite:       Byte = 0,
     @SerializedName("brand")
     val brand:          Int? = null,
+    @SerializedName("sold")
+    val sold:          Int? = null,
     @SerializedName("linkimages")
     val linkimages:     List<String>? = null,
    // var imageindex: Int = 0
@@ -42,6 +44,7 @@ data class Product(
                 star            = 1.0f,
                 favorite        = 0,
                 brand           = 0,
+                sold            = 0,
                 linkimages      =  emptyList<String>()
         ){}
 /**
