@@ -180,8 +180,6 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         return portion
     }
 
-
-
     /**
      *  Блок методов для управления журналом поисковых запросов
      */
