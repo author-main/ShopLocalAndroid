@@ -64,9 +64,9 @@ object DatabaseApi {
         }
     }
 
-    fun getPromoProducts(id: Int, part: Int, order: String, callback: retrofit2.Callback<List<Product>>){
+    fun getProducts(id: Int, part: Int, order: String, reserved: String, callback: retrofit2.Callback<List<Product>>){
         try {
-            val call: retrofit2.Call<List<Product>> = service!!.getPromoProducts(id, part, order)
+            val call: retrofit2.Call<List<Product>> = service!!.getProducts(id, part, order, reserved)
             call.enqueue(callback)
         } catch(e: Exception){
             //log(e.message ?: "error")
@@ -78,16 +78,18 @@ object DatabaseApi {
                          order: String,
                          portion: Int,
                          uuid: String,
-                         userid: Int, callback: retrofit2.Callback<List<Product>>){
+                         userid: Int,
+                         reserved: String,
+                         callback: retrofit2.Callback<List<Product>>){
         try {
-            val call: retrofit2.Call<List<Product>> = service!!.getFoundProducts(query, order, portion, uuid, userid)
+            val call: retrofit2.Call<List<Product>> = service!!.getFoundProducts(query, order, portion, uuid, userid, reserved)
             call.enqueue(callback)
         } catch(_: Exception){}
     }
 
 
 
-    suspend fun getProducts(id: Int, part: Int) : List<Product> {
+ /*   suspend fun getProducts(id: Int, part: Int) : List<Product> {
         var list = emptyList<Product>()
         try {
             val response = service!!.getProducts(id, part)
@@ -98,7 +100,7 @@ object DatabaseApi {
             //log(e.message ?: "error")
         }
         return list
-    }
+    }*/
 
     suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte): Boolean{
         var result = false

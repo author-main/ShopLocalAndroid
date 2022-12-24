@@ -24,8 +24,8 @@ class DatabaseCRUD: DatabaseCRUDInterface {
         })
     }
 
-    override fun getPromoProducts(id: Int, part: Int, order: String, action: (products: List<Product>) -> Unit) {
-        DatabaseApi.getPromoProducts(id, part, order, object: retrofit2.Callback<List<Product>>{
+    override fun getProducts(id: Int, part: Int, order: String, reserved: String, action: (products: List<Product>) -> Unit) {
+        DatabaseApi.getProducts(id, part, order, reserved, object: retrofit2.Callback<List<Product>>{
             override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
 
                     response.body()?.let {
@@ -50,13 +50,16 @@ class DatabaseCRUD: DatabaseCRUDInterface {
         portion: Int,
         uuid: String,
         userid: Int,
+        reserved: String,
         action: (products: List<Product>) -> Unit
     ) {
         DatabaseApi.getFoundProducts(query,
             order,
             portion,
             uuid,
-            userid, object: retrofit2.Callback<List<Product>>{
+            userid,
+            reserved,
+            object: retrofit2.Callback<List<Product>>{
             override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
                 response.body()?.let {
                     if (it.isNotEmpty()) {
@@ -96,7 +99,7 @@ class DatabaseCRUD: DatabaseCRUDInterface {
         return DatabaseApi.updateFavorite(id_user, id_product, value)
     }
 
-    override suspend fun getProducts(id: Int, part: Int): List<Product> {
+   /* override suspend fun getProducts(id: Int, part: Int): List<Product> {
         return DatabaseApi.getProducts(id, part)
-    }
+    }*/
 }

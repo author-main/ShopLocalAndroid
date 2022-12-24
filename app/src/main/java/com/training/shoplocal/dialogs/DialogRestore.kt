@@ -224,7 +224,7 @@ fun DialogRestore() {
 
                 ) {
                     val message = stringResource(id = R.string.message_restore_email)
-                    val scope = rememberCoroutineScope()
+                    //val scope = rememberCoroutineScope()
                     TextButton(onClick = {
                         DialogRouter.reset()
                         //viewModel.showSnackbar(message)

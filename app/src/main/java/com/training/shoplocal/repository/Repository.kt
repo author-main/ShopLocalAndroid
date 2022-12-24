@@ -65,10 +65,10 @@ class Repository: DAOinterface {
         databaseCRUD.getProduct(id, action)
     }
 
-    fun getPromoProducts(id: Int, part: Int, action: (products: List<Product>) -> Unit){
+    fun getProducts(id: Int, part: Int, reserved: String, action: (products: List<Product>) -> Unit){
         val order64 = encodeBase64(OrderDisplay.getOrderDislayQuery())
         log(order64)
-        databaseCRUD.getPromoProducts(id, part, order64, action)
+        databaseCRUD.getProducts(id, part, order64, reserved, action)
     }
 
     fun getBrands(action: (brands: List<Brand>) -> Unit){
@@ -83,8 +83,8 @@ class Repository: DAOinterface {
         databaseCRUD.updateFavorite(id_user, id_product, value)
     }
 
-    suspend fun getProducts(id: Int, part: Int): List<Product> =
-        databaseCRUD.getProducts(id, part)
+    /*suspend fun getProducts(id: Int, part: Int): List<Product> =
+        databaseCRUD.getProducts(id, part)*/
 
 
     /**
@@ -171,8 +171,10 @@ class Repository: DAOinterface {
                                  order: String,
                                  portion: Int,
                                  uuid: String,
-                                 userid: Int, action: (products: List<Product>) -> Unit){
-        databaseCRUD.getFoundProducts(query, order, portion, uuid, userid, action)
+                                 userid: Int,
+                                 reserved: String,
+                                 action: (products: List<Product>) -> Unit){
+        databaseCRUD.getFoundProducts(query, order, portion, uuid, userid, reserved, action)
     }
 
     /**
@@ -182,7 +184,7 @@ class Repository: DAOinterface {
      * @param userId id пользователя
      * @param order порядок и фильтр отображения списка продуктов
      */
-    fun findProductsRequest(query: String, portion: Int, UUID_query: String, userId: Int, action: (products: List<Product>) -> Unit ){
+    fun findProductsRequest(query: String, portion: Int, UUID_query: String, userId: Int, reserved: String, action: (products: List<Product>) -> Unit ){
         /*val orderDisplay = OrderDisplay.getInstance()
         orderDisplay.setSortType(SORT_TYPE.DESCENDING)
         orderDisplay.setSortProperty(SORT_PROPERTY.POPULAR)
@@ -195,7 +197,7 @@ class Repository: DAOinterface {
         val query64 = encodeBase64(query)
         log(query64)
         log(order64)
-        getFoundProducts(query64, order64, portion, UUID_query, userId, action)
+        getFoundProducts(query64, order64, portion, UUID_query, userId, reserved, action)
     }
 
 }

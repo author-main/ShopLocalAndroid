@@ -58,9 +58,9 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         val result = it > 0
         if (result) {
             USER_ID = it
-            getBrands()
-            getPromoProducts(1)
             ScreenRouter.navigateTo(ScreenItem.MainScreen)
+            getBrands()
+            getProducts(1)
             authorizeUser()
         }
         else
@@ -123,10 +123,17 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    private fun getPromoProducts(part: Int){
+    // p1 - promotion
+    // p0 - catalog
+    private fun getReservedParamQuery() =
+        if (ScreenRouter.current == ScreenItem.MainScreen)
+            "p1" else "p0"
+
+    private fun getProducts(part: Int){
+
         if (!lockDB && loadedPortion < part) {
             lockDB = true
-            repository.getPromoProducts(USER_ID, part) { listProducts ->
+            repository.getProducts(USER_ID, part, getReservedParamQuery()) { listProducts ->
                 lockDB = false
                 if (listProducts.isNotEmpty()) {
                     loadedPortion = part
@@ -160,7 +167,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     @Synchronized
     fun getNextPortionData(){
-        getPromoProducts(getPortion() + 1)
+        getProducts(getPortion() + 1)
     }
 
     fun saveScreenProducts(key: ScreenRouter.KEYSCREEN) {
@@ -221,7 +228,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     fun findProductsRequest(query: String){
         val portion: Int = -1
         UUID_query = UUID.randomUUID()
-        repository.findProductsRequest(query, portion, UUID_query.toString(), USER_ID) {
+        repository.findProductsRequest(query, portion, UUID_query.toString(), USER_ID, getReservedParamQuery()) {
 
         }
         /*INSERT INTO new_table_name
