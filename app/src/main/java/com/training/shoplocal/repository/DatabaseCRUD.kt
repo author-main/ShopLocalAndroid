@@ -36,7 +36,7 @@ class DatabaseCRUD: DatabaseCRUDInterface {
             }
 
             override fun onFailure(call: Call<List<Product>>, t: Throwable) {
-                log(t.message ?: "ошибка")
+                //log(t.message ?: "ошибка")
                 //log("ошибка")
                 action.invoke(mutableListOf<Product>())
             }
