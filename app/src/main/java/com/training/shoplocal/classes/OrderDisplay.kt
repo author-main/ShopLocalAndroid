@@ -1,6 +1,8 @@
 package com.training.shoplocal.classes
 
 import com.training.shoplocal.FieldFilter
+import com.training.shoplocal.log
+import com.training.shoplocal.screens.ScreenItem
 
 /**
   Класс для выборки данных (product) из БД (таблица products),
@@ -22,14 +24,20 @@ class OrderDisplay{
         = 0.00f to 0.00f,
         var category: Int                   = ANY_VALUE
     )
-    private val sortData    = SortData()
-    private val filterData  = FilterData()
+    private val sortData                = SortData()
+    private val filterData              = FilterData()
+    private var screenData: ScreenItem  = ScreenItem.MainScreen
     fun setSortType(value: SORT_TYPE){
         sortData.sortType = value
     }
     fun setSortProperty(value: SORT_PROPERTY){
         sortData.sortProperty = value
     }
+    fun setScreenData(value: ScreenItem){
+        screenData = value
+    }
+
+    fun getScreenData()     = screenData
     fun getSortType()       = sortData.sortType
     fun getSortProperty()   = sortData.sortProperty
 
@@ -77,6 +85,13 @@ class OrderDisplay{
                 val value: Pair<Float, Float>   = instance.getPriceRange()
                 "${value.first}-${value.second}"
             }
+            val current_screen = when (instance.getScreenData()) {
+                ScreenItem.MainScreen    -> 0
+                ScreenItem.CatalogScreen -> 1
+                ScreenItem.CartScreen    -> 2
+                ScreenItem.ProfileScreen -> 3
+                else                     -> -1
+            }
             /** Порядок для извлечения в PHP:
              *  sort_order:         0 - ASCENDING, 1 - DESCENDING
              *  sort_type:          0 POPULAR, 1 - RATING, 2 - PRICE
@@ -84,8 +99,10 @@ class OrderDisplay{
              *  filter_brand:       ID бренда
              *  filter_favorite:    0 - все продукты, 1 - избранное
              *  filter_price:       интервал цен, н/р 1000,00-20000,00
+             *  current_screen:     текущий экран
              */
-            return "$sort_order $sort_type $filter_category $filter_brend $filter_favorite $filter_price"
+            //log("$sort_order $sort_type $filter_category $filter_brend $filter_favorite $filter_price $current_screen")
+            return "$sort_order $sort_type $filter_category $filter_brend $filter_favorite $filter_price $current_screen"
         }
 
 

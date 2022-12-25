@@ -9,14 +9,12 @@ interface DatabaseCRUDInterface {
     fun getProducts( id: Int,
                      part: Int,
                      order: String,
-                     reserved: String,
                      action:(products: List<Product>) -> Unit = {})
     fun getFoundProducts(query: String,
                          order: String,
                          portion: Int,
                          uuid: String,
                          userid: Int,
-                         reserved: String,
                          action: (products: List<Product>) -> Unit = {})
     fun getBrands( action: (brands: List<Brand>) -> Unit = {})
     suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte): Boolean

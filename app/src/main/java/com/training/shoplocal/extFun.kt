@@ -38,7 +38,8 @@ enum class FieldFilter {
     BREND,
     CATEGORY,
     FAVORITE,
-    PRICE_RANGE
+    PRICE_RANGE,
+    SCREEN
 }
 
 val EMPTY_IMAGE = ImageBitmap(1,1, hasAlpha = true, config = ImageBitmapConfig.Argb8888)

@@ -64,9 +64,9 @@ object DatabaseApi {
         }
     }
 
-    fun getProducts(id: Int, part: Int, order: String, reserved: String, callback: retrofit2.Callback<List<Product>>){
+    fun getProducts(id: Int, part: Int, order: String, callback: retrofit2.Callback<List<Product>>){
         try {
-            val call: retrofit2.Call<List<Product>> = service!!.getProducts(id, part, order, reserved)
+            val call: retrofit2.Call<List<Product>> = service!!.getProducts(id, part, order)
             call.enqueue(callback)
         } catch(e: Exception){
             //log(e.message ?: "error")
@@ -79,10 +79,9 @@ object DatabaseApi {
                          portion: Int,
                          uuid: String,
                          userid: Int,
-                         reserved: String,
                          callback: retrofit2.Callback<List<Product>>){
         try {
-            val call: retrofit2.Call<List<Product>> = service!!.getFoundProducts(query, order, portion, uuid, userid, reserved)
+            val call: retrofit2.Call<List<Product>> = service!!.getFoundProducts(query, order, portion, uuid, userid)
             call.enqueue(callback)
         } catch(_: Exception){}
     }

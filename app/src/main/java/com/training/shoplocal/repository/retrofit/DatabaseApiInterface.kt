@@ -20,16 +20,14 @@ interface DatabaseApiInterface {
     @GET("/api/get_promo_products")
     fun getProducts(@Query("id") id: Int,
                     @Query("part") part: Int,
-                    @Query("order") order: String,
-                    @Query("reserved") reserved: String): Call<List<Product>>
+                    @Query("order") order: String): Call<List<Product>>
 
     @GET("/api/get_found_products")
     fun getFoundProducts(@Query("query") query: String,
                          @Query("order") order: String,
                          @Query("portion") portion: Int,
                          @Query("uuid") uuid: String,
-                         @Query("userid") userid: Int,
-                         @Query("reserved") reserved: String): Call<List<Product>>
+                         @Query("userid") userid: Int): Call<List<Product>>
 
 
     /*@GET("/api/get_promo_products")

@@ -13,6 +13,7 @@ import com.training.shoplocal.encodeBase64
 import com.training.shoplocal.getCacheDirectory
 import com.training.shoplocal.log
 import com.training.shoplocal.loginview.LoginViewState
+import com.training.shoplocal.screens.ScreenItem
 import com.training.shoplocal.screens.ScreenRouter
 import java.io.File
 import java.util.*
@@ -65,10 +66,10 @@ class Repository: DAOinterface {
         databaseCRUD.getProduct(id, action)
     }
 
-    fun getProducts(id: Int, part: Int, reserved: String, action: (products: List<Product>) -> Unit){
+    fun getProducts(id: Int, part: Int, action: (products: List<Product>) -> Unit){
         val order64 = encodeBase64(OrderDisplay.getOrderDislayQuery())
         log(order64)
-        databaseCRUD.getProducts(id, part, order64, reserved, action)
+        databaseCRUD.getProducts(id, part, order64, action)
     }
 
     fun getBrands(action: (brands: List<Brand>) -> Unit){
@@ -152,6 +153,7 @@ class Repository: DAOinterface {
             FieldFilter.CATEGORY      -> orderDisplay.getCategory()
             FieldFilter.FAVORITE      -> orderDisplay.getFavorite()
             FieldFilter.PRICE_RANGE   -> orderDisplay.getPriceRange()
+            FieldFilter.SCREEN  -> orderDisplay.getScreenData()
         }
     }
 
@@ -164,6 +166,7 @@ class Repository: DAOinterface {
             FieldFilter.CATEGORY      -> orderDisplay.setCategory(value as Int)
             FieldFilter.FAVORITE      -> orderDisplay.setFavorite(value as Int)
             FieldFilter.PRICE_RANGE   -> orderDisplay.setPriceRange(value as Pair<Float, Float>)
+            FieldFilter.SCREEN        -> orderDisplay.setScreenData(value as ScreenItem)
         }
     }
 
@@ -172,9 +175,8 @@ class Repository: DAOinterface {
                                  portion: Int,
                                  uuid: String,
                                  userid: Int,
-                                 reserved: String,
                                  action: (products: List<Product>) -> Unit){
-        databaseCRUD.getFoundProducts(query, order, portion, uuid, userid, reserved, action)
+        databaseCRUD.getFoundProducts(query, order, portion, uuid, userid, action)
     }
 
     /**
@@ -184,7 +186,7 @@ class Repository: DAOinterface {
      * @param userId id пользователя
      * @param order порядок и фильтр отображения списка продуктов
      */
-    fun findProductsRequest(query: String, portion: Int, UUID_query: String, userId: Int, reserved: String, action: (products: List<Product>) -> Unit ){
+    fun findProductsRequest(query: String, portion: Int, UUID_query: String, userId: Int, action: (products: List<Product>) -> Unit ){
         /*val orderDisplay = OrderDisplay.getInstance()
         orderDisplay.setSortType(SORT_TYPE.DESCENDING)
         orderDisplay.setSortProperty(SORT_PROPERTY.POPULAR)
@@ -197,7 +199,7 @@ class Repository: DAOinterface {
         val query64 = encodeBase64(query)
         log(query64)
         log(order64)
-        getFoundProducts(query64, order64, portion, UUID_query, userId, reserved, action)
+        getFoundProducts(query64, order64, portion, UUID_query, userId, action)
     }
 
 }

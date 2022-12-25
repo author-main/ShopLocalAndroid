@@ -123,17 +123,11 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    // p1 - promotion
-    // p0 - catalog
-    private fun getReservedParamQuery() =
-        if (ScreenRouter.current == ScreenItem.MainScreen)
-            "p1" else "p0"
-
     private fun getProducts(part: Int){
 
         if (!lockDB && loadedPortion < part) {
             lockDB = true
-            repository.getProducts(USER_ID, part, getReservedParamQuery()) { listProducts ->
+            repository.getProducts(USER_ID, part) { listProducts ->
                 lockDB = false
                 if (listProducts.isNotEmpty()) {
                     loadedPortion = part
@@ -228,8 +222,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     fun findProductsRequest(query: String){
         val portion: Int = -1
         UUID_query = UUID.randomUUID()
-        repository.findProductsRequest(query, portion, UUID_query.toString(), USER_ID, getReservedParamQuery()) {
-
+        repository.findProductsRequest(query, portion, UUID_query.toString(), USER_ID) {
         }
         /*INSERT INTO new_table_name
         SELECT labels.label,shortabstracts.ShortAbstract,images.LinkToImage,types.Type

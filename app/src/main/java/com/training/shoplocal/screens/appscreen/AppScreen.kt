@@ -14,6 +14,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.training.shoplocal.classes.OrderDisplay
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 import com.training.shoplocal.classes.searcher.SearchQueryStorage
@@ -57,8 +58,7 @@ fun AppScreen(){
                           Navigation(navController)
                           when (ScreenRouter.current) {
                               ScreenItem.MainScreen -> {
-
-
+                                        OrderDisplay.getInstance().setScreenData(ScreenItem.MainScreen)
                                         ImageLinkDownloader.cancel()
                                         MainScreen(state)
                                 //        log("mainscreen")
@@ -66,14 +66,17 @@ fun AppScreen(){
 
                               }
                               ScreenItem.CatalogScreen -> {
+                                  OrderDisplay.getInstance().setScreenData(ScreenItem.CatalogScreen)
                                   ImageLinkDownloader.cancel()
                                   CatalogScreen()
                               }
                               ScreenItem.CartScreen -> {
+                                  OrderDisplay.getInstance().setScreenData(ScreenItem.CartScreen)
                                   ImageLinkDownloader.cancel()
                                   CartScreen()
                               }
                               ScreenItem.ProfileScreen -> {
+                                  OrderDisplay.getInstance().setScreenData(ScreenItem.ProfileScreen)
                                   ImageLinkDownloader.cancel()
                                   ProfileScreen()
                               }
