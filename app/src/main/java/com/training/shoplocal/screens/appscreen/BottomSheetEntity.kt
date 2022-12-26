@@ -16,6 +16,7 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.R
+import com.training.shoplocal.classes.OrderDisplay
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.log
 import com.training.shoplocal.screens.*
@@ -134,6 +135,10 @@ private fun BottomSheetContent(state: ModalBottomSheetState){
                 0
             else
                 1
+
+            OrderDisplay.getInstance().setFavorite(favorite.toInt())
+        //log("favorite = ${OrderDisplay.getInstance().getFavorite()}")
+
         viewModel.setProductFavorite(product.id, favorite > 0)
         hide()
     }
