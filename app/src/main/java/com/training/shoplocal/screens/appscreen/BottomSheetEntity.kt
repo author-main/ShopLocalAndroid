@@ -136,7 +136,7 @@ private fun BottomSheetContent(state: ModalBottomSheetState){
             else
                 1
 
-            OrderDisplay.getInstance().setFavorite(favorite.toInt())
+        OrderDisplay.getInstance().setFavorite(favorite.toInt())
         //log("favorite = ${OrderDisplay.getInstance().getFavorite()}")
 
         viewModel.setProductFavorite(product.id, favorite > 0)

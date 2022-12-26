@@ -10,17 +10,24 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.training.shoplocal.classes.OrderDisplay
+import com.training.shoplocal.log
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
 fun ShowDataDisplayPanel(){
-    val dataDisplay by remember { mutableStateOf(OrderDisplay.getInstance(), policy= neverEqualPolicy())}
+//    val dataDisplay by remember { mutableStateOf(OrderDisplay.getInstance(), policy= neverEqualPolicy())}
+    /*val state = remember {
+        OrderDisplay.getInstance()
+    }*/
 
-
-    Box(modifier = Modifier.fillMaxWidth()
+    Box(modifier = Modifier
+        .fillMaxWidth()
         .height(48.dp)
         .background(MaterialTheme.colors.primary)
     ){
-        Text(text = dataDisplay.getFavorite().toString())
+        if (OrderDisplay.getInstance().state)
+            Text(text = "1")
+        else
+            Text(text = "2")
     }
 }

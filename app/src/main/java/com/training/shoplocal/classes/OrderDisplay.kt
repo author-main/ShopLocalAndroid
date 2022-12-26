@@ -1,5 +1,6 @@
 package com.training.shoplocal.classes
 
+import androidx.compose.runtime.*
 import com.training.shoplocal.FieldFilter
 import com.training.shoplocal.log
 import com.training.shoplocal.screens.ScreenItem
@@ -14,6 +15,10 @@ enum class SORT_TYPE(val value: Int)     {ASCENDING(0), DESCENDING(1)}
 enum class SORT_PROPERTY(val value: Int) {POPULAR(0), RATING(1), PRICE(2)}
 
 class OrderDisplay{
+    var state by mutableStateOf(false)
+    private fun updateState(){
+        state = !state
+    }
     data class SortData(var sortType: SORT_TYPE             = SORT_TYPE.ASCENDING,
                         var sortProperty: SORT_PROPERTY     = SORT_PROPERTY.PRICE)
 
@@ -27,6 +32,7 @@ class OrderDisplay{
     private val sortData                = SortData()
     private val filterData              = FilterData()
     private var screenData: ScreenItem  = ScreenItem.MainScreen
+
     fun setSortType(value: SORT_TYPE){
         sortData.sortType = value
     }
@@ -46,6 +52,7 @@ class OrderDisplay{
     }
     fun setFavorite(value: Int){
         filterData.favorite = value
+        updateState()
     }
     fun setPriceRange(value: Pair<Float, Float>){
         filterData.priceRange = value
