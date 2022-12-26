@@ -15,11 +15,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
 fun ShowDataDisplayPanel(){
-//    val dataDisplay by remember { mutableStateOf(OrderDisplay.getInstance(), policy= neverEqualPolicy())}
-    /*val state = remember {
-        OrderDisplay.getInstance()
-    }*/
-
     Box(modifier = Modifier
         .fillMaxWidth()
         .height(48.dp)
