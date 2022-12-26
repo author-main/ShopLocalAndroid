@@ -4,6 +4,7 @@ import androidx.compose.runtime.*
 import com.training.shoplocal.FieldFilter
 import com.training.shoplocal.log
 import com.training.shoplocal.screens.ScreenItem
+import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
   Класс для выборки данных (product) из БД (таблица products),
@@ -15,10 +16,19 @@ enum class SORT_TYPE(val value: Int)     {ASCENDING(0), DESCENDING(1)}
 enum class SORT_PROPERTY(val value: Int) {POPULAR(0), RATING(1), PRICE(2)}
 
 class OrderDisplay{
+    private var completeUpdate = true
     var state by mutableStateOf(false)
     private fun updateState(){
-        state = !state
+        if (completeUpdate)
+            state = !state
     }
+    fun beginUpdate(){
+        completeUpdate = false
+    }
+    fun endUpdate(){
+        completeUpdate = true
+    }
+
     data class SortData(var sortType: SORT_TYPE             = SORT_TYPE.ASCENDING,
                         var sortProperty: SORT_PROPERTY     = SORT_PROPERTY.PRICE)
 

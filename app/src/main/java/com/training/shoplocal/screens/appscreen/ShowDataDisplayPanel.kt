@@ -26,8 +26,8 @@ fun ShowDataDisplayPanel(){
         .background(MaterialTheme.colors.primary)
     ){
         if (OrderDisplay.getInstance().state)
-            Text(text = "1")
+            Text(text = "${OrderDisplay.getInstance().getFavorite()}")
         else
-            Text(text = "2")
+            Text(text = "${OrderDisplay.getInstance().getFavorite()}")
     }
 }
