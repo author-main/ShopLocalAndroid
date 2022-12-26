@@ -24,8 +24,9 @@ import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
-    var UUID_query: UUID = UUID.randomUUID()
-    var lockDB = false
+    private var maxPortion: Int = 0
+    private var UUID_query: UUID = UUID.randomUUID()
+    private var lockDB = false
     //private val reflexRepository = Repository::class.java.methods
     //log(reflexRepository.toString())
     private val _hiddenBottomNavigation = MutableStateFlow<Boolean>(false)
@@ -57,6 +58,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private val actionLogin: (result: Int) -> Unit = {
         val result = it > 0
         if (result) {
+            maxPortion = 0
             USER_ID = it
             ScreenRouter.navigateTo(ScreenItem.MainScreen)
             getBrands()
@@ -124,12 +126,25 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     }
 
     private fun getProducts(part: Int){
+        if (part != 1 && loadedPortion == maxPortion) return
 
-        if (!lockDB && loadedPortion < part) {
+        if (!lockDB){// && loadedPortion != part) {
             lockDB = true
+            //log("portition = $part")
             repository.getProducts(USER_ID, part) { listProducts ->
                 lockDB = false
+                //log ("portion $part")
                 if (listProducts.isNotEmpty()) {
+                    if (part == 1) {
+                        val index = listProducts[0].name.indexOf(' ')
+                        if (index != -1) {
+                            val count = listProducts[0].name.substring(0, index).toInt()
+                            val name = listProducts[0].name.substring(index + 1)
+                            listProducts[0].name = name
+                            maxPortion = getPortion(count)
+                        }
+
+                    }
                     loadedPortion = part
                     setSelectedProduct(Product())
                     val list = _products.value.toMutableList().apply { addAll(listProducts) }
@@ -161,7 +176,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     @Synchronized
     fun getNextPortionData(){
-        getProducts(getPortion() + 1)
+        getProducts(getPortion()+1)
     }
 
     fun saveScreenProducts(key: ScreenRouter.KEYSCREEN) {
@@ -173,9 +188,14 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         loadedPortion = getPortion()
     }
 
-    private fun getPortion(): Int{
-        val value = products.value.size % SIZE_PORTION
-        var portion = products.value.size/ SIZE_PORTION
+    private fun getPortion(size: Int = 0): Int{
+        val count = if (size == 0)
+                        products.value.size
+                    else size
+        /*val value = products.value.size % SIZE_PORTION
+        var portion = products.value.size/ SIZE_PORTION*/
+        val value   = count % SIZE_PORTION
+        var portion = count / SIZE_PORTION
         if (value > 0)
             portion += 1
         return portion

@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 const val ANY_VALUE =    -1
 enum class SORT_TYPE(val value: Int)     {ASCENDING(0), DESCENDING(1)}
-enum class SORT_PROPERTY(val value: Int) {POPULAR(0), RATING(1), PRICE(2)}
+enum class SORT_PROPERTY(val value: Int) {PRICE(0), POPULAR(1), RATING(2)}
 
 class OrderDisplay{
     private var completeUpdate = true
@@ -47,9 +47,22 @@ class OrderDisplay{
     fun setSortType(value: SORT_TYPE){
         sortData.sortType = value
     }
-    fun setSortProperty(value: SORT_PROPERTY){
-        sortData.sortProperty = value
+
+    private fun invertSortType(){
+        if (sortData.sortType == SORT_TYPE.ASCENDING)
+            sortData.sortType = SORT_TYPE.DESCENDING
+        else
+            sortData.sortType = SORT_TYPE.ASCENDING
     }
+
+    fun setSortProperty(value: SORT_PROPERTY){
+        if (value != sortData.sortProperty)
+            sortData.sortProperty = value
+        else
+            invertSortType()
+        updateState()
+    }
+
     fun setScreenData(value: ScreenItem){
         screenData = value
     }
