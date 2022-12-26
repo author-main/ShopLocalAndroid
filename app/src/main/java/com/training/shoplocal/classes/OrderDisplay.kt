@@ -27,6 +27,7 @@ class OrderDisplay{
     }
     fun endUpdate(){
         completeUpdate = true
+        updateState()
     }
 
     data class SortData(var sortType: SORT_TYPE             = SORT_TYPE.ASCENDING,
