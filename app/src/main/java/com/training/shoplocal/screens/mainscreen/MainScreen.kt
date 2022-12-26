@@ -50,6 +50,7 @@ import com.training.shoplocal.classes.Product
 import com.training.shoplocal.classes.searcher.SearchState
 import com.training.shoplocal.dialogs.ShowMessage
 import com.training.shoplocal.screens.ScreenRouter
+import com.training.shoplocal.screens.appscreen.ShowDataDisplayPanel
 import com.training.shoplocal.screens.appscreen.ShowSearchHistory
 import com.training.shoplocal.screens.remember.rememberLazyViewState
 import com.training.shoplocal.ui.theme.*
@@ -424,7 +425,10 @@ fun MainScreen(state: ModalBottomSheetState){
                     exit  = fadeOut()
                 ) {
                     ShowSearchHistory(textSearch, lastSearchQuery)
+
                 }*/
+
+        ShowDataDisplayPanel()
 
             Box(
                 modifier = Modifier

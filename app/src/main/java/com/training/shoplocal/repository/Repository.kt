@@ -68,7 +68,7 @@ class Repository: DAOinterface {
 
     fun getProducts(id: Int, part: Int, action: (products: List<Product>) -> Unit){
         val order64 = encodeBase64(OrderDisplay.getOrderDislayQuery())
-        log(order64)
+        //log(order64)
         databaseCRUD.getProducts(id, part, order64, action)
     }
 
@@ -197,8 +197,8 @@ class Repository: DAOinterface {
 
         val order64 = encodeBase64(OrderDisplay.getOrderDislayQuery())
         val query64 = encodeBase64(query)
-        log(query64)
-        log(order64)
+        //log(query64)
+        //log(order64)
         getFoundProducts(query64, order64, portion, UUID_query, userId, action)
     }
 
