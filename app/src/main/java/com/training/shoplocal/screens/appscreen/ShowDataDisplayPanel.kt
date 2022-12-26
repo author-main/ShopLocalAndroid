@@ -25,9 +25,7 @@ fun ShowDataDisplayPanel(){
         .height(48.dp)
         .background(MaterialTheme.colors.primary)
     ){
-        if (OrderDisplay.getInstance().state)
-            Text(text = "${OrderDisplay.getInstance().getFavorite()}")
-        else
-            Text(text = "${OrderDisplay.getInstance().getFavorite()}")
+        val recompose = OrderDisplay.getInstance().state
+        Text(text = "${OrderDisplay.getInstance().getFavorite()}")
     }
 }
