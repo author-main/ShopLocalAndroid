@@ -97,14 +97,16 @@ fun ShowDataDisplayPanel(){
                 changeSortProperty(SORT_PROPERTY.PRICE)
             }) {
                     Text(sortItems[0],
-                    style = MaterialTheme.typography.h4
+                    fontSize = 14.sp
+                    //style = MaterialTheme.typography.h4
                 )
             }
             DropdownMenuItem(onClick = {
                 changeSortProperty(SORT_PROPERTY.POPULAR)
             }) {
                     Text(sortItems[1],
-                    style = MaterialTheme.typography.h4
+                    fontSize = 14.sp
+                   // style = MaterialTheme.typography.h4
                 )
             }
             //Divider()
@@ -112,7 +114,8 @@ fun ShowDataDisplayPanel(){
                 changeSortProperty(SORT_PROPERTY.RATING)
             }) {
                     Text(sortItems[2],
-                    style = MaterialTheme.typography.h4
+                    fontSize = 14.sp
+                   // style = MaterialTheme.typography.h4
                 )
             }
         }

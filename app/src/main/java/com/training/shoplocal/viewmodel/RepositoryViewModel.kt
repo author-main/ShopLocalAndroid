@@ -22,6 +22,7 @@ import java.net.URL
 import java.util.UUID
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
+import kotlin.math.max
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private var maxPortion: Int = 0
@@ -136,14 +137,19 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                 //log ("portion $part")
                 if (listProducts.isNotEmpty()) {
                     if (part == 1) {
-                        val index = listProducts[0].name.indexOf(' ')
-                        if (index != -1) {
-                            val count = listProducts[0].name.substring(0, index).toInt()
-                            val name = listProducts[0].name.substring(index + 1)
-                            listProducts[0].name = name
-                            maxPortion = getPortion(count)
+                        if (listProducts[0].name.startsWith('<')) {
+                            val index = listProducts[0].name.indexOf('>')
+                            try {
+                                if (index != -1) {
+                                    val count = listProducts[0].name.substring(1, index).toInt()
+                                    val name = listProducts[0].name.substring(index + 1)
+                                    listProducts[0].name = name
+                                    maxPortion = getPortion(count)
+                                }
+                            } catch (_: Exception) {
+                                maxPortion = 0
+                            }
                         }
-
                     }
                     loadedPortion = part
                     setSelectedProduct(Product())

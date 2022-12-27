@@ -474,6 +474,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
                    // log("deriverd ${nextPart.value}")
                     if (nextPart.value) {
+                        //log("end scroll")
                       /*  try {
                             log("last ${stateGrid.layoutInfo.visibleItemsInfo.last().index}")
                         } catch (_: Exception){}*/
