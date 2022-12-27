@@ -1,9 +1,7 @@
 package com.training.shoplocal.screens.appscreen
 
 import androidx.compose.animation.*
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateOffsetAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -16,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.modifier.modifierLocalConsumer
@@ -45,8 +44,8 @@ fun ShowDataDisplayPanel(hide: Boolean){
     var isShowMenu by remember {
         mutableStateOf(false)
     }
-    val animatedOffset: Offset by animateOffsetAsState(
-        targetValue = Offset(0f, if (hide) -40f else 50f),
+    val animatedValue: Float by animateFloatAsState(
+        targetValue =  if (hide) -40f else 0f,
         animationSpec = tween(1200),
         finishedListener = {
             isShowPanel = !hide
@@ -65,20 +64,24 @@ fun ShowDataDisplayPanel(hide: Boolean){
         if (isShowPanel) {
             val font = remember { FontFamily(Font(R.font.roboto_light)) }
             val sortItems = stringArrayResource(id = R.array.sort_items)
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(40.dp)
-                    .background(MaterialTheme.colors.primary)
-                   /* .onGloballyPositioned {
+            Box (modifier = Modifier
+                .fillMaxWidth()
+                .height(40.dp)
+                //  .height(intrinsicSize = IntrinsicSize.Min)
+                .background(Color.Red)//MaterialTheme.colors.primary)
+                /* .onGloballyPositioned {
                         log("height = ${it.size.height}")
                     }*/
-                    .offset(animatedOffset.x.dp, animatedOffset.y.dp)
+                /*  .graphicsLayer {
+                        translationY = animatedOffset.y.dp.toPx()
+                    }*/
+                 .offset(0.dp, animatedValue.dp)
+
                     //elevation = 4.dp
             ) {
                 Row(
                     modifier = Modifier
-                        .fillMaxSize()
+                       // .height(intrinsicSize = IntrinsicSize.Min)
                         .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {

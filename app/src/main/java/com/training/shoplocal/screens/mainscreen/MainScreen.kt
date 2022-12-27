@@ -272,8 +272,8 @@ fun MainScreen(state: ModalBottomSheetState){
 
     val stateGrid = rememberLazyViewState(key = ScreenRouter.current.key)
     Column(modifier = Modifier.fillMaxWidth()) {
-            Box(Modifier.height(IntrinsicSize.Max)) {
-                ShowDataDisplayPanel(hide = isSearchMode)
+         //   Box() {
+             //   ShowDataDisplayPanel(hide = isSearchMode)
                 TopAppBar(backgroundColor = MaterialTheme.colors.primary) {
                     Row(
                         Modifier
@@ -419,6 +419,7 @@ fun MainScreen(state: ModalBottomSheetState){
                     }
                 }
 
+        //ShowDataDisplayPanel(hide = isSearchMode)
                 /*if (isFocusedSearchTextField.value) {
             ShowSearchHistory(textSearch, lastSearchQuery)
         }*/
@@ -432,16 +433,17 @@ fun MainScreen(state: ModalBottomSheetState){
                 }*/
 
                 //ShowDataDisplayPanel(hide = isSearchMode)
-            }
-            Box(
+        //    }
+            /*Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(BgScreenDark)
-            ) {
+            ) {*/
+            Column(modifier = Modifier
+                .fillMaxSize()
+                .background(BgScreenDark)) {
 
-
-
-
+                ShowDataDisplayPanel(hide = isSearchMode)
                 //    log ("recompose Grid")
                 if (products.isNotEmpty()) {
                     LazyVerticalGrid(
