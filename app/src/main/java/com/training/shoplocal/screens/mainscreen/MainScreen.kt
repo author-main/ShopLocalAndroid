@@ -428,7 +428,8 @@ fun MainScreen(state: ModalBottomSheetState){
 
                 }*/
 
-        ShowDataDisplayPanel()
+        if (!isSearchMode)
+            ShowDataDisplayPanel()
 
             Box(
                 modifier = Modifier
@@ -492,6 +493,8 @@ fun MainScreen(state: ModalBottomSheetState){
                         ShowSearchHistory(textSearch, searchState)//lastSearchQuery)
                     }
 
+               /* if (!isSearchMode)
+                    ShowDataDisplayPanel()*/
 
 
 
