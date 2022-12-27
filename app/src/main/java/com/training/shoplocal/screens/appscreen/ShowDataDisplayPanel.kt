@@ -48,7 +48,7 @@ fun ShowDataDisplayPanel(hide: Boolean){
         targetValue =  if (hide) -40f else 0f,
         animationSpec = tween(1200),
         finishedListener = {
-            isShowPanel = !hide
+    //        isShowPanel = !hide
         }
     )
 
@@ -67,17 +67,8 @@ fun ShowDataDisplayPanel(hide: Boolean){
             Box (modifier = Modifier
                 .fillMaxWidth()
                 .height(40.dp)
-                //  .height(intrinsicSize = IntrinsicSize.Min)
                 .background(Color.Red)//MaterialTheme.colors.primary)
-                /* .onGloballyPositioned {
-                        log("height = ${it.size.height}")
-                    }*/
-                /*  .graphicsLayer {
-                        translationY = animatedOffset.y.dp.toPx()
-                    }*/
-                 .offset(0.dp, animatedValue.dp)
-
-                    //elevation = 4.dp
+                .offset(0.dp, animatedValue.dp)
             ) {
                 Row(
                     modifier = Modifier

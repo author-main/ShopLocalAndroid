@@ -432,19 +432,18 @@ fun MainScreen(state: ModalBottomSheetState){
 
                 }*/
 
-                //ShowDataDisplayPanel(hide = isSearchMode)
+                ShowDataDisplayPanel(hide = isSearchMode)
         //    }
-            /*Box(
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(BgScreenDark)
-            ) {*/
-            Column(modifier = Modifier
+            ) {
+          /*  Column(modifier = Modifier
                 .fillMaxSize()
-                .background(BgScreenDark)) {
-
-                ShowDataDisplayPanel(hide = isSearchMode)
+                .background(BgScreenDark)) {*/
                 //    log ("recompose Grid")
+                //ShowDataDisplayPanel(hide = isSearchMode)
                 if (products.isNotEmpty()) {
                     LazyVerticalGrid(
                         modifier = Modifier
