@@ -272,154 +272,157 @@ fun MainScreen(state: ModalBottomSheetState){
 
     val stateGrid = rememberLazyViewState(key = ScreenRouter.current.key)
     Column(modifier = Modifier.fillMaxWidth()) {
-        TopAppBar( backgroundColor = MaterialTheme.colors.primary){
-            Row(
-                Modifier
-                    .padding(horizontal = 4.dp)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
-            ) {
+            Box(Modifier.height(IntrinsicSize.Max)) {
+                ShowDataDisplayPanel(hide = isSearchMode)
+                TopAppBar(backgroundColor = MaterialTheme.colors.primary) {
+                    Row(
+                        Modifier
+                            .padding(horizontal = 4.dp)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
+                    ) {
 
-                //if (isFocusedSearchTextField.value) {
-                if (isSearchMode) {    
+                        //if (isFocusedSearchTextField.value) {
+                        if (isSearchMode) {
 //                      val list = LocalSearchStorage.current?.getQueries() ?: listOf<String>()
-                  //  IconButton(onClick = {  }) {
-                        Icon(modifier = Modifier
-                            .align(Alignment.CenterVertically)
-                            .padding(end = 8.dp)
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null
-                            ) {
-                                isSearchMode = false
-                                hideSearchDialog()
+                            //  IconButton(onClick = {  }) {
+                            Icon(
+                                modifier = Modifier
+                                    .align(Alignment.CenterVertically)
+                                    .padding(end = 8.dp)
+                                    .clickable(
+                                        interactionSource = remember { MutableInteractionSource() },
+                                        indication = null
+                                    ) {
+                                        isSearchMode = false
+                                        hideSearchDialog()
 //                                if (lastSearchQuery.value.isNotEmpty())
-                                if (searchState.value == SearchState.SEARCH_PROCESS)
-                                    viewModel.restoreScreenProducts(ScreenRouter.current.key)
-                                searchState.value = SearchState.SEARCH_CANCEL
-                                textSearch.value = ""
-                            },
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = null,
-                            tint = TextFieldFont
-                        )
-                }
-                //**************************************************************************************
-                BasicTextField(
-                    modifier = Modifier
-                        .onFocusChanged {
-                            if (it.isFocused) {
-                                isSearchMode = true
-                                //val searchStore: SearchQueryStorageInterface = SearchQueryStorage.getInstance()
-                                //lastSearchQuery.value = ""
-                                searchState.value = SearchState.SEARCH_QUERY
-                                isFocusedSearchTextField.value = true
-                                viewModel.hideBottomNavigation()
-                            }
+                                        if (searchState.value == SearchState.SEARCH_PROCESS)
+                                            viewModel.restoreScreenProducts(ScreenRouter.current.key)
+                                        searchState.value = SearchState.SEARCH_CANCEL
+                                        textSearch.value = ""
+                                    },
+                                imageVector = Icons.Filled.ArrowBack,
+                                contentDescription = null,
+                                tint = TextFieldFont
+                            )
                         }
-                        .weight(1f)
-                        .height(32.dp)
-                        .background(color = TextFieldBg, shape = RoundedCornerShape(32.dp)),
-                    cursorBrush = SolidColor(TextFieldFont),
-                    value = textSearch.value,
-                    textStyle = TextStyle(color = TextFieldFont),
-                    onValueChange = {
-                        textSearch.value = it
-                    },
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Search,
-                        keyboardType = KeyboardType.Text
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onSearch = {
-                         //   hideSearchDialog()
-                            if (textSearch.value.isNotBlank()) {
-                               // viewModel.saveCurrentScreenData(stateGrid)
-                                //lastSearchQuery.value = textSearch.value
-                                searchState.value = SearchState.SEARCH_PROCESS
-                                hideSearchDialog()
-                                viewModel.saveScreenProducts(ScreenRouter.current.key)
-                                viewModel.findProductsRequest(textSearch.value.trim())
-                            }
-                        }
-                    ),
-                    decorationBox = { innerTextField ->
-                        val error_speechrecognizer =
-                            stringResource(id = R.string.text_error_speechrecognizer)
-                        TextFieldDefaults.TextFieldDecorationBox(
-                            value = "",
-                            placeholder = {
-                                if (textSearch.value.isEmpty())
-                                    Text(
-                                        text = stringResource(id = R.string.text_search),
-                                        fontSize = 14.sp,
-                                        color = TextFieldFont.copy(alpha = 0.4f)
-                                    )
+                        //**************************************************************************************
+                        BasicTextField(
+                            modifier = Modifier
+                                .onFocusChanged {
+                                    if (it.isFocused) {
+                                        isSearchMode = true
+                                        //val searchStore: SearchQueryStorageInterface = SearchQueryStorage.getInstance()
+                                        //lastSearchQuery.value = ""
+                                        searchState.value = SearchState.SEARCH_QUERY
+                                        isFocusedSearchTextField.value = true
+                                        viewModel.hideBottomNavigation()
+                                    }
+                                }
+                                .weight(1f)
+                                .height(32.dp)
+                                .background(color = TextFieldBg, shape = RoundedCornerShape(32.dp)),
+                            cursorBrush = SolidColor(TextFieldFont),
+                            value = textSearch.value,
+                            textStyle = TextStyle(color = TextFieldFont),
+                            onValueChange = {
+                                textSearch.value = it
                             },
-                            leadingIcon = {
-                                Icon(
-                                    imageVector = ImageVector.vectorResource(R.drawable.ic_search),
-                                    contentDescription = null
-                                )
-                            },
-                            trailingIcon = {
-                                val showClearIcon = textSearch.value.isNotEmpty()
-                                val iconSize = if (showClearIcon) 16.dp else 24.dp
-                                Icon(
-                                    imageVector = if (showClearIcon)
-                                        ImageVector.vectorResource(R.drawable.ic_cancel_bs)
-                                    else
-                                        ImageVector.vectorResource(R.drawable.ic_microphone),
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .clip(CircleShape)
-                                        .size(iconSize)
-                                        .clickable {
-                                            if (showClearIcon) {
-                                                textSearch.value = ""
-
-                                                DialogRouter.reset()
-                                                //showSearch = false
-                                            } else {
-                                                // Вызвать голосовой ввод
-                                                getSpeechInput(context)?.let { intent ->
-                                                    startLauncher.launch(intent)
-                                                } ?: viewModel.showSnackbar(
-                                                    error_speechrecognizer,
-                                                    type = MESSAGE.ERROR
-                                                )
-                                            }
-                                        }
-                                )
-                            },
-
-                            visualTransformation = VisualTransformation.None,
-                            innerTextField = innerTextField,
                             singleLine = true,
-                            enabled = true,
-                            interactionSource = remember {
-                                MutableInteractionSource()
-                            },
-                            contentPadding = PaddingValues(0.dp)
-                        )
-                    })
+                            keyboardOptions = KeyboardOptions(
+                                imeAction = ImeAction.Search,
+                                keyboardType = KeyboardType.Text
+                            ),
+                            keyboardActions = KeyboardActions(
+                                onSearch = {
+                                    //   hideSearchDialog()
+                                    if (textSearch.value.isNotBlank()) {
+                                        // viewModel.saveCurrentScreenData(stateGrid)
+                                        //lastSearchQuery.value = textSearch.value
+                                        searchState.value = SearchState.SEARCH_PROCESS
+                                        hideSearchDialog()
+                                        viewModel.saveScreenProducts(ScreenRouter.current.key)
+                                        viewModel.findProductsRequest(textSearch.value.trim())
+                                    }
+                                }
+                            ),
+                            decorationBox = { innerTextField ->
+                                val error_speechrecognizer =
+                                    stringResource(id = R.string.text_error_speechrecognizer)
+                                TextFieldDefaults.TextFieldDecorationBox(
+                                    value = "",
+                                    placeholder = {
+                                        if (textSearch.value.isEmpty())
+                                            Text(
+                                                text = stringResource(id = R.string.text_search),
+                                                fontSize = 14.sp,
+                                                color = TextFieldFont.copy(alpha = 0.4f)
+                                            )
+                                    },
+                                    leadingIcon = {
+                                        Icon(
+                                            imageVector = ImageVector.vectorResource(R.drawable.ic_search),
+                                            contentDescription = null
+                                        )
+                                    },
+                                    trailingIcon = {
+                                        val showClearIcon = textSearch.value.isNotEmpty()
+                                        val iconSize = if (showClearIcon) 16.dp else 24.dp
+                                        Icon(
+                                            imageVector = if (showClearIcon)
+                                                ImageVector.vectorResource(R.drawable.ic_cancel_bs)
+                                            else
+                                                ImageVector.vectorResource(R.drawable.ic_microphone),
+                                            contentDescription = null,
+                                            modifier = Modifier
+                                                .clip(CircleShape)
+                                                .size(iconSize)
+                                                .clickable {
+                                                    if (showClearIcon) {
+                                                        textSearch.value = ""
 
-                //val interactionSource = remember { MutableInteractionSource() }
-                //  ShowMessageCount(31)
+                                                        DialogRouter.reset()
+                                                        //showSearch = false
+                                                    } else {
+                                                        // Вызвать голосовой ввод
+                                                        getSpeechInput(context)?.let { intent ->
+                                                            startLauncher.launch(intent)
+                                                        } ?: viewModel.showSnackbar(
+                                                            error_speechrecognizer,
+                                                            type = MESSAGE.ERROR
+                                                        )
+                                                    }
+                                                }
+                                        )
+                                    },
 
-                //**************************************************************************************
-                if (!isSearchMode)
-                //if (!isFocusedSearchTextField.value)
-                    ShowMessageCount(24)
+                                    visualTransformation = VisualTransformation.None,
+                                    innerTextField = innerTextField,
+                                    singleLine = true,
+                                    enabled = true,
+                                    interactionSource = remember {
+                                        MutableInteractionSource()
+                                    },
+                                    contentPadding = PaddingValues(0.dp)
+                                )
+                            })
 
-            }
-        }
+                        //val interactionSource = remember { MutableInteractionSource() }
+                        //  ShowMessageCount(31)
 
-        /*if (isFocusedSearchTextField.value) {
+                        //**************************************************************************************
+                        if (!isSearchMode)
+                        //if (!isFocusedSearchTextField.value)
+                            ShowMessageCount(24)
+
+                    }
+                }
+
+                /*if (isFocusedSearchTextField.value) {
             ShowSearchHistory(textSearch, lastSearchQuery)
         }*/
-        /*AnimatedVisibility(
+                /*AnimatedVisibility(
                     visible = isFocusedSearchTextField.value,
                      enter = fadeIn(),
                     exit  = fadeOut()
@@ -428,9 +431,8 @@ fun MainScreen(state: ModalBottomSheetState){
 
                 }*/
 
-        if (!isSearchMode)
-            ShowDataDisplayPanel()
-
+                //ShowDataDisplayPanel(hide = isSearchMode)
+            }
             Box(
                 modifier = Modifier
                     .fillMaxSize()
