@@ -38,19 +38,19 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
 fun ShowDataDisplayPanel(hide: Boolean){
-    var isShowPanel by remember {
+   /* var isShowPanel by remember {
         mutableStateOf(true)
-    }
+    }*/
     var isShowMenu by remember {
         mutableStateOf(false)
     }
-    val animatedValue: Float by animateFloatAsState(
+ /*   val animatedValue: Float by animateFloatAsState(
         targetValue =  if (hide) -40f else 0f,
         animationSpec = tween(1200),
         finishedListener = {
     //        isShowPanel = !hide
         }
-    )
+    )*/
 
     /*androidx.compose.animation.AnimatedVisibility(
         visible = !hide,
@@ -61,18 +61,41 @@ fun ShowDataDisplayPanel(hide: Boolean){
 
 
         //log("hide $hide")
-        if (isShowPanel) {
+     //   if (isShowPanel) {
             val font = remember { FontFamily(Font(R.font.roboto_light)) }
             val sortItems = stringArrayResource(id = R.array.sort_items)
+            val duration = 1300
+            AnimatedVisibility(
+                visible = !hide,
+
+                enter = fadeIn(
+                    animationSpec = keyframes {
+                        this.durationMillis = duration
+                    }
+                ) + slideInVertically(
+                    animationSpec = keyframes {
+                        this.durationMillis = duration
+                    }
+                ),// { it * -1},
+                exit = fadeOut(
+                    animationSpec = keyframes {
+                        this.durationMillis = duration
+                    }
+                ) + slideOutVertically(
+                    animationSpec = keyframes {
+                        this.durationMillis = duration
+                    }
+                )
+            ) {
             Box (modifier = Modifier
                 .fillMaxWidth()
                 .height(40.dp)
-                .background(Color.Red)//MaterialTheme.colors.primary)
-                .offset(0.dp, animatedValue.dp)
+                .background(MaterialTheme.colors.primary)
+              //  .offset(0.dp, animatedValue.dp)
             ) {
                 Row(
                     modifier = Modifier
-                       // .height(intrinsicSize = IntrinsicSize.Min)
+                        // .height(intrinsicSize = IntrinsicSize.Min)
                         .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -162,7 +185,7 @@ fun ShowDataDisplayPanel(hide: Boolean){
                     }
                 }
 
+                //   }
             }
-
     }
 }
