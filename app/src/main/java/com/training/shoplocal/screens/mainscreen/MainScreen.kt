@@ -467,7 +467,7 @@ fun MainScreen(state: ModalBottomSheetState){
 */
             Box(
                 modifier = Modifier
-                 //   .fillMaxSize()
+                    .fillMaxSize()
                     .background(BgScreenDark)
             ) {
 
@@ -482,14 +482,16 @@ fun MainScreen(state: ModalBottomSheetState){
                 }*/
 
             Column(modifier = Modifier
-                .fillMaxSize()
+                //.fillMaxSize()
                 .background(BgScreenDark)) {
                 //    log ("recompose Grid")
 
                 ShowDataDisplayPanel(modifier = Modifier
                     .offset { IntOffset(x = 0, y = panelOffsetHeightPx.value.roundToInt()) }
                     .fillMaxWidth()
-                    .height(40.dp + panelOffsetHeightPx.value.dp)
+                    .height(intrinsicSize = IntrinsicSize.Max)
+                    .height(IntrinsicSize.Min)
+                  //  .height(40.dp + panelOffsetHeightPx.value.dp)
                     .background(MaterialTheme.colors.primary),
                     hide = isSearchMode)
 
@@ -498,7 +500,10 @@ fun MainScreen(state: ModalBottomSheetState){
                     LazyVerticalGrid(
                         modifier = Modifier
                             .nestedScroll(nestedScrollConnection)
-                            .fillMaxSize()
+                            //.fillMaxSize()
+
+                            //.fillMaxWidth()
+                            //.weight(1f, fill = true)
                             .padding(horizontal = 10.dp),
                         columns = GridCells.Adaptive(minSize = 150.dp),
                         state = stateGrid,
