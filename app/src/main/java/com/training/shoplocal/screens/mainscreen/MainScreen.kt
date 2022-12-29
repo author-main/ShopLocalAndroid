@@ -31,9 +31,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -41,6 +46,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -57,6 +63,7 @@ import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.math.roundToInt
 
 
 /*@Composable
@@ -270,6 +277,22 @@ fun MainScreen(state: ModalBottomSheetState){
     }
 
 
+    val panelHeightPx = with(LocalDensity.current) { 40.dp.roundToPx().toFloat() }
+    val panelOffsetHeightPx = remember { mutableStateOf(0f) }
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                val delta = available.y
+                val newOffset = panelOffsetHeightPx.value + delta
+                panelOffsetHeightPx.value = newOffset.coerceIn(-panelHeightPx, 0f)
+                return Offset.Zero
+            }
+        }
+    }
+
+
+
+
     val stateGrid = rememberLazyViewState(key = ScreenRouter.current.key)
     Column(modifier = Modifier.fillMaxWidth()) {
          //   Box() {
@@ -443,10 +466,16 @@ fun MainScreen(state: ModalBottomSheetState){
                 .fillMaxSize()
                 .background(BgScreenDark)) {
                 //    log ("recompose Grid")
-                ShowDataDisplayPanel(hide = isSearchMode)
+                ShowDataDisplayPanel(modifier = Modifier
+                    .offset{ IntOffset(x = 0, y = -panelOffsetHeightPx.value.roundToInt()) }
+                    .fillMaxWidth()
+                    .height(40.dp)
+                    .background(MaterialTheme.colors.primary),
+                    hide = isSearchMode)
                 if (products.isNotEmpty()) {
                     LazyVerticalGrid(
                         modifier = Modifier
+                            .nestedScroll(nestedScrollConnection)
                             .fillMaxSize()
                             .padding(horizontal = 10.dp),
                         columns = GridCells.Adaptive(minSize = 150.dp),

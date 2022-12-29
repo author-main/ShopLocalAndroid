@@ -16,9 +16,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.modifier.modifierLocalMapOf
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -37,7 +41,20 @@ import com.training.shoplocal.ui.theme.TextFieldFont
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
-fun ShowDataDisplayPanel(hide: Boolean){
+fun ShowDataDisplayPanel(modifier: Modifier, hide: Boolean){
+    /*val panelHeightPx = with(LocalDensity.current) { 40.dp.roundToPx().toFloat() }
+    val panelOffsetHeightPx = remember { mutableStateOf(0f) }
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                val delta = available.y
+                val newOffset = panelOffsetHeightPx.value + delta
+                panelOffsetHeightPx.value = newOffset.coerceIn(-panelHeightPx, 0f)
+                return Offset.Zero
+            }
+        }
+    }*/
+
    /* var isShowPanel by remember {
         mutableStateOf(true)
     }*/
@@ -65,7 +82,7 @@ fun ShowDataDisplayPanel(hide: Boolean){
             val font = remember { FontFamily(Font(R.font.roboto_light)) }
             val sortItems = stringArrayResource(id = R.array.sort_items)
             val duration = 1300
-            AnimatedVisibility(
+        /*    AnimatedVisibility(
                 visible = !hide,
 
                 enter = fadeIn(
@@ -86,12 +103,13 @@ fun ShowDataDisplayPanel(hide: Boolean){
                         this.durationMillis = duration
                     }
                 )
-            ) {
-            Box (modifier = Modifier
-                .fillMaxWidth()
+            ) {*/
+            Box (modifier = modifier
+                //.nestedScroll(nestedScrollConnection)
+               /* .fillMaxWidth()
                 .height(40.dp)
                 .background(MaterialTheme.colors.primary)
-              //  .offset(0.dp, animatedValue.dp)
+              //  .offset(0.dp, animatedValue.dp)*/
             ) {
                 Row(
                     modifier = Modifier
@@ -186,6 +204,6 @@ fun ShowDataDisplayPanel(hide: Boolean){
                 }
 
                 //   }
-            }
+          //  }
     }
 }
