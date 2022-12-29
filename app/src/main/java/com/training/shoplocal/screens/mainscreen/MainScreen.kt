@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
@@ -482,15 +483,21 @@ fun MainScreen(state: ModalBottomSheetState){
                 }*/
 
             Column(modifier = Modifier
-                //.fillMaxSize()
+                .nestedScroll(nestedScrollConnection)
+                .fillMaxSize()
                 .background(BgScreenDark)) {
                 //    log ("recompose Grid")
 
+              /*  Box(Modifier
+                    .offset { IntOffset(x = 0, y = panelOffsetHeightPx.value.roundToInt()) }
+                    .fillMaxWidth()
+                    .background(Color.Red)
+                    .height(40.dp)
+                )*/
                 ShowDataDisplayPanel(modifier = Modifier
                     .offset { IntOffset(x = 0, y = panelOffsetHeightPx.value.roundToInt()) }
                     .fillMaxWidth()
-                    .height(intrinsicSize = IntrinsicSize.Max)
-                    .height(IntrinsicSize.Min)
+                    //.height(IntrinsicSize.Max)
                   //  .height(40.dp + panelOffsetHeightPx.value.dp)
                     .background(MaterialTheme.colors.primary),
                     hide = isSearchMode)
@@ -499,7 +506,8 @@ fun MainScreen(state: ModalBottomSheetState){
                 if (products.isNotEmpty()) {
                     LazyVerticalGrid(
                         modifier = Modifier
-                            .nestedScroll(nestedScrollConnection)
+                            .weight(1f)
+                           // .offset { IntOffset(x = 0, y = panelOffsetHeightPx.value.roundToInt()) }
                             //.fillMaxSize()
 
                             //.fillMaxWidth()

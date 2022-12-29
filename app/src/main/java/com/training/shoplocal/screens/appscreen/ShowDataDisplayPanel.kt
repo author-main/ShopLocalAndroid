@@ -61,6 +61,7 @@ fun ShowDataDisplayPanel(modifier: Modifier, hide: Boolean){
     var isShowMenu by remember {
         mutableStateOf(false)
     }
+
  /*   val animatedValue: Float by animateFloatAsState(
         targetValue =  if (hide) -40f else 0f,
         animationSpec = tween(1200),
@@ -104,19 +105,18 @@ fun ShowDataDisplayPanel(modifier: Modifier, hide: Boolean){
                     }
                 )
             ) {*/
-         /*   Box(modifier = modifier
+            Box(modifier = modifier
                 //.nestedScroll(nestedScrollConnection)
                /* .fillMaxWidth()
                 .height(40.dp)
                 .background(MaterialTheme.colors.primary)
               //  .offset(0.dp, animatedValue.dp)*/
-            ) {*/
+            ) {
                /* val boxWithConstraintsScope = this
                 log("height = ${boxWithConstraintsScope.maxHeight}")*/
-
+                log("recompose panel")
                 Row(
-                    modifier = modifier
-                        // .height(intrinsicSize = IntrinsicSize.Min)
+                    modifier = Modifier
                         .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -207,6 +207,6 @@ fun ShowDataDisplayPanel(modifier: Modifier, hide: Boolean){
             //    }
 
                 //   }
-          //  }
+           }
     }
 }
