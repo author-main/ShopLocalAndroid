@@ -104,7 +104,7 @@ fun ShowDataDisplayPanel(modifier: Modifier, hide: Boolean){
                     }
                 )
             ) {*/
-            Box (modifier = modifier
+            BoxWithConstraints (modifier = modifier
                 //.nestedScroll(nestedScrollConnection)
                /* .fillMaxWidth()
                 .height(40.dp)

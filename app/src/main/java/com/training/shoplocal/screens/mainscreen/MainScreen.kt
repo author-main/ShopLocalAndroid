@@ -457,21 +457,43 @@ fun MainScreen(state: ModalBottomSheetState){
 
                 //ShowDataDisplayPanel(hide = isSearchMode)
         //    }
+
+        /*ShowDataDisplayPanel(modifier = Modifier
+            .offset{ IntOffset(x = 0, y = panelOffsetHeightPx.value.roundToInt()) }
+            .fillMaxWidth()
+            .height(40.dp)
+            .background(MaterialTheme.colors.primary),
+            hide = isSearchMode)
+*/
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
+                 //   .fillMaxSize()
                     .background(BgScreenDark)
             ) {
+
+               /* val boxWithConstraintsScope = this
+                log("height = ${boxWithConstraintsScope.maxHeight}")*/
+               /* var heightConstraints by remember {
+                    mutableStateOf(boxWithConstraintsScope.maxHeight)
+                }
+                LaunchedEffect(key1 = boxWithConstraintsScope.maxHeight) {
+                    heightConstraints = boxWithConstraintsScope.maxHeight
+                    log("height = $heightConstraints")
+                }*/
+
             Column(modifier = Modifier
                 .fillMaxSize()
                 .background(BgScreenDark)) {
                 //    log ("recompose Grid")
+
                 ShowDataDisplayPanel(modifier = Modifier
-                    .offset{ IntOffset(x = 0, y = panelOffsetHeightPx.value.roundToInt()) }
+                    .offset { IntOffset(x = 0, y = panelOffsetHeightPx.value.roundToInt()) }
                     .fillMaxWidth()
-                    .height(40.dp)
+                    .height(40.dp + panelOffsetHeightPx.value.dp)
                     .background(MaterialTheme.colors.primary),
                     hide = isSearchMode)
+
+
                 if (products.isNotEmpty()) {
                     LazyVerticalGrid(
                         modifier = Modifier
