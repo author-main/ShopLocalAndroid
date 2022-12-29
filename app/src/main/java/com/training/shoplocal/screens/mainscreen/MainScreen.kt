@@ -467,7 +467,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 .background(BgScreenDark)) {
                 //    log ("recompose Grid")
                 ShowDataDisplayPanel(modifier = Modifier
-                    .offset{ IntOffset(x = 0, y = -panelOffsetHeightPx.value.roundToInt()) }
+                    .offset{ IntOffset(x = 0, y = panelOffsetHeightPx.value.roundToInt()) }
                     .fillMaxWidth()
                     .height(40.dp)
                     .background(MaterialTheme.colors.primary),
