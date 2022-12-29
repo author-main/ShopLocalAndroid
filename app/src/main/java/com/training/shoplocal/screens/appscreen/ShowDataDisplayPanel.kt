@@ -104,15 +104,18 @@ fun ShowDataDisplayPanel(modifier: Modifier, hide: Boolean){
                     }
                 )
             ) {*/
-            Box (modifier = modifier
+         /*   Box(modifier = modifier
                 //.nestedScroll(nestedScrollConnection)
                /* .fillMaxWidth()
                 .height(40.dp)
                 .background(MaterialTheme.colors.primary)
               //  .offset(0.dp, animatedValue.dp)*/
-            ) {
+            ) {*/
+               /* val boxWithConstraintsScope = this
+                log("height = ${boxWithConstraintsScope.maxHeight}")*/
+
                 Row(
-                    modifier = Modifier
+                    modifier = modifier
                         // .height(intrinsicSize = IntrinsicSize.Min)
                         .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
@@ -201,7 +204,7 @@ fun ShowDataDisplayPanel(modifier: Modifier, hide: Boolean){
                             // style = MaterialTheme.typography.h4
                         )
                     }
-                }
+            //    }
 
                 //   }
           //  }
