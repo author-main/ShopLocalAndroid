@@ -34,6 +34,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
@@ -495,10 +496,15 @@ fun MainScreen(state: ModalBottomSheetState){
                     .height(40.dp)
                 )*/
                 ShowDataDisplayPanel(modifier = Modifier
-                    .offset { IntOffset(x = 0, y = panelOffsetHeightPx.value.roundToInt()) }
+                  //  .offset { IntOffset(x = 0, y = panelOffsetHeightPx.value.roundToInt()) }
+                    .graphicsLayer (
+
+
+                       translationY =  panelOffsetHeightPx.value
+                    )
                     .fillMaxWidth()
-                    //.height(IntrinsicSize.Max)
-                  //  .height(40.dp + panelOffsetHeightPx.value.dp)
+
+                    //.height(40.dp + panelOffsetHeightPx.value.dp)
                     .background(MaterialTheme.colors.primary),
                     hide = isSearchMode)
 
@@ -506,12 +512,6 @@ fun MainScreen(state: ModalBottomSheetState){
                 if (products.isNotEmpty()) {
                     LazyVerticalGrid(
                         modifier = Modifier
-                            .weight(1f)
-                           // .offset { IntOffset(x = 0, y = panelOffsetHeightPx.value.roundToInt()) }
-                            //.fillMaxSize()
-
-                            //.fillMaxWidth()
-                            //.weight(1f, fill = true)
                             .padding(horizontal = 10.dp),
                         columns = GridCells.Adaptive(minSize = 150.dp),
                         state = stateGrid,
