@@ -469,8 +469,11 @@ fun MainScreen(state: ModalBottomSheetState){
 */
             Box(
                 modifier = Modifier
+                    .nestedScroll(nestedScrollConnection)
                     .fillMaxSize()
-                    .background(BgScreenDark)
+                    .background(BgScreenDark),
+
+
             ) {
 
                /* val boxWithConstraintsScope = this
@@ -483,10 +486,10 @@ fun MainScreen(state: ModalBottomSheetState){
                     log("height = $heightConstraints")
                 }*/
 
-            Column(modifier = Modifier
+            /*Column(modifier = Modifier
                 .nestedScroll(nestedScrollConnection)
                 .fillMaxSize()
-                .background(BgScreenDark)) {
+                .background(BgScreenDark)) {*/
                 //    log ("recompose Grid")
 
               /*  Box(Modifier
@@ -495,18 +498,18 @@ fun MainScreen(state: ModalBottomSheetState){
                     .background(Color.Red)
                     .height(40.dp)
                 )*/
-                ShowDataDisplayPanel(modifier = Modifier
-                  //  .offset { IntOffset(x = 0, y = panelOffsetHeightPx.value.roundToInt()) }
-                    .graphicsLayer (
+                /*ShowDataDisplayPanel(modifier = Modifier
+                    .offset { IntOffset(x = 0, y = panelOffsetHeightPx.value.roundToInt()) }
+                   *//* .graphicsLayer (
 
 
                        translationY =  panelOffsetHeightPx.value
-                    )
+                    )*//*
                     .fillMaxWidth()
 
                     //.height(40.dp + panelOffsetHeightPx.value.dp)
                     .background(MaterialTheme.colors.primary),
-                    hide = isSearchMode)
+                    hide = isSearchMode)*/
 
 
                 if (products.isNotEmpty()) {
@@ -515,7 +518,8 @@ fun MainScreen(state: ModalBottomSheetState){
                             .padding(horizontal = 10.dp),
                         columns = GridCells.Adaptive(minSize = 150.dp),
                         state = stateGrid,
-                        contentPadding = PaddingValues(10.dp),
+                        //contentPadding = PaddingValues(10.dp),
+                        contentPadding = PaddingValues(top = 40.dp),
                         //horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         items(products, { product -> product.id }) { product ->
@@ -549,6 +553,19 @@ fun MainScreen(state: ModalBottomSheetState){
                         viewModel.getNextPortionData()
                     }
                 }
+
+                ShowDataDisplayPanel(modifier = Modifier
+                    .offset { IntOffset(x = 0, y = panelOffsetHeightPx.value.roundToInt()) }
+                    /* .graphicsLayer (
+
+
+                        translationY =  panelOffsetHeightPx.value
+                     )*/
+                    .fillMaxWidth()
+
+                    //.height(40.dp + panelOffsetHeightPx.value.dp)
+                    .background(MaterialTheme.colors.primary),
+                    hide = isSearchMode)
             }
 
                 androidx.compose.animation.AnimatedVisibility(
@@ -560,12 +577,13 @@ fun MainScreen(state: ModalBottomSheetState){
                         ShowSearchHistory(textSearch, searchState)//lastSearchQuery)
                     }
 
+
                /* if (!isSearchMode)
                     ShowDataDisplayPanel()*/
 
 
 
-            }
+                    // }
         }
 
 
