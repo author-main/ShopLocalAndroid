@@ -106,6 +106,7 @@ fun ShowDataDisplayPanel(modifier: Modifier, hide: Boolean){
                 )
             ) {*/
             Box(modifier = modifier
+             //   .background(Color.Red)
                 //.nestedScroll(nestedScrollConnection)
                /* .fillMaxWidth()
                 .height(40.dp)
@@ -114,7 +115,7 @@ fun ShowDataDisplayPanel(modifier: Modifier, hide: Boolean){
             ) {
                /* val boxWithConstraintsScope = this
                 log("height = ${boxWithConstraintsScope.maxHeight}")*/
-                log("recompose panel")
+               // log("recompose panel")
                 Row(
                     modifier = Modifier
                         .padding(horizontal = 16.dp),

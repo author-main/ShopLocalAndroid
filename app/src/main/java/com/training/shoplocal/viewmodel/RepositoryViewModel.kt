@@ -127,11 +127,12 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     }
 
     private fun getProducts(part: Int){
+       // log("portition = $part")
         if (part != 1 && loadedPortion == maxPortion) return
 
         if (!lockDB){// && loadedPortion != part) {
             lockDB = true
-            //log("portition = $part")
+
             repository.getProducts(USER_ID, part) { listProducts ->
                 lockDB = false
                 //log ("portion $part")
