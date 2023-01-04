@@ -11,6 +11,8 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -35,13 +37,14 @@ import androidx.compose.ui.unit.sp
 import com.training.shoplocal.R
 import com.training.shoplocal.classes.OrderDisplay
 import com.training.shoplocal.classes.SORT_PROPERTY
+import com.training.shoplocal.classes.SORT_TYPE
 import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.TextFieldBg
 import com.training.shoplocal.ui.theme.TextFieldFont
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
-fun ShowDataDisplayPanel(modifier: Modifier, hide: Boolean){
+fun ShowDataDisplayPanel(modifier: Modifier){//}, hide: Boolean){
     /*val panelHeightPx = with(LocalDensity.current) { 40.dp.roundToPx().toFloat() }
     val panelOffsetHeightPx = remember { mutableStateOf(0f) }
     val nestedScrollConnection = remember {
@@ -105,17 +108,8 @@ fun ShowDataDisplayPanel(modifier: Modifier, hide: Boolean){
                     }
                 )
             ) {*/
-            Box(modifier = modifier
-             //   .background(Color.Red)
-                //.nestedScroll(nestedScrollConnection)
-               /* .fillMaxWidth()
-                .height(40.dp)
-                .background(MaterialTheme.colors.primary)
-              //  .offset(0.dp, animatedValue.dp)*/
-            ) {
-               /* val boxWithConstraintsScope = this
-                log("height = ${boxWithConstraintsScope.maxHeight}")*/
-               // log("recompose panel")
+            Box(modifier = modifier) {
+
                 Row(
                     modifier = Modifier
                         .padding(horizontal = 16.dp),
@@ -129,8 +123,10 @@ fun ShowDataDisplayPanel(modifier: Modifier, hide: Boolean){
                         contentPadding = PaddingValues(horizontal = 8.dp),
                         onClick = { isShowMenu = true }) {
                         val sortText = sortItems[OrderDisplay.getInstance().getSortProperty().value]
+                        val asc = OrderDisplay.getInstance().getSortType().value == 0 // ASCENDING
                         Icon(
-                            modifier = Modifier.size(32.dp),
+                            modifier = Modifier.size(32.dp)
+                                .scale(1f, if (asc) -1f else 1f),
                             tint = TextFieldFont,
                             imageVector = ImageVector.vectorResource(R.drawable.ic_sort),
                             contentDescription = null

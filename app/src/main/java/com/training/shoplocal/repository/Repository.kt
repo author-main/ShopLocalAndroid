@@ -197,8 +197,8 @@ class Repository: DAOinterface {
 
         val order64 = encodeBase64(OrderDisplay.getOrderDislayQuery())
         val query64 = encodeBase64(query)
-        //log(query64)
-        //log(order64)
+        /*log(query64)
+        log(order64)*/
         getFoundProducts(query64, order64, portion, UUID_query, userId, action)
     }
 

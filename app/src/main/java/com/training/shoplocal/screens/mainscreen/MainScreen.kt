@@ -287,6 +287,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 val delta = available.y
                 val newOffset = panelOffsetHeightPx.value + delta
                 panelOffsetHeightPx.value = newOffset.coerceIn(-panelHeightPx, 0f)
+                // возвращает значение если оно в интервале, либо мин значение если меньше или макс значение если больше
                 return Offset.Zero
             }
         }
@@ -558,9 +559,9 @@ fun MainScreen(state: ModalBottomSheetState){
                 }
                 LaunchedEffect(nextPart.value) {
 
-                    //log("deriverd ${nextPart.value}")
+                  //  log("deriverd ${nextPart.value}")
                     if (nextPart.value) {
-                        //log("end scroll")
+                       // log("end scroll")
                       /*  try {
                             log("last ${stateGrid.layoutInfo.visibleItemsInfo.last().index}")
                         } catch (_: Exception){}*/
@@ -579,7 +580,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
                     .height(40.dp)
                     .background(MaterialTheme.colors.primary),
-                    hide = isSearchMode)
+                )//hide = isSearchMode)
         //    }
 
                 androidx.compose.animation.AnimatedVisibility(
