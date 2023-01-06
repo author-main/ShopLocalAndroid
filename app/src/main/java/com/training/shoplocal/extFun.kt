@@ -22,7 +22,7 @@ import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Base64.getEncoder
 import kotlin.math.roundToInt
-
+const val SIZE_PORTION =  6
 const val SERVER_URL            = "http://192.168.0.10"
 val DECIMAL_CEPARATOR           = DecimalFormatSymbols().decimalSeparator
 

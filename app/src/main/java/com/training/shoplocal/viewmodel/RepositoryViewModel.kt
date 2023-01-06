@@ -36,7 +36,6 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         _hiddenBottomNavigation.value = value
     }
 
-    private val SIZE_PORTION =  6
     private var loadedPortion = 0
     private val _selectedProduct = MutableStateFlow<Product>(Product())
     val selectedProduct = _selectedProduct.asStateFlow()
@@ -128,6 +127,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     private fun getProducts(part: Int){
        // log("portition = $part")
+        log("getProducts")
         if (part != 1 && loadedPortion == maxPortion) return
 
         if (!lockDB){// && loadedPortion != part) {
@@ -183,6 +183,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     @Synchronized
     fun getNextPortionData(){
+       // log("getNextPortionData")
         getProducts(getPortion()+1)
     }
 
@@ -247,10 +248,14 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
      */
 
     fun findProductsRequest(query: String){
+        log("findProductsRequest")
         val portion: Int = 1
         UUID_query = UUID.randomUUID()
-        repository.findProductsRequest(query, portion, UUID_query.toString(), USER_ID) {
-            log(it.toString())
+        repository.findProductsRequest(query, portion, UUID_query.toString(), USER_ID) {listFound ->
+
+            setSelectedProduct(Product())
+            products.value.clear()
+            _products.value = listFound.toMutableList()
         }
         /*INSERT INTO new_table_name
         SELECT labels.label,shortabstracts.ShortAbstract,images.LinkToImage,types.Type

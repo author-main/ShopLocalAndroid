@@ -229,6 +229,8 @@ fun MainScreen(state: ModalBottomSheetState){
     val viewModel: RepositoryViewModel = viewModel()
     val products: MutableList<Product> by viewModel.products.collectAsState()
     val dataSnackbar: Triple<String, Boolean, MESSAGE> by viewModel.snackbarData.collectAsState()
+
+
     val textSearch = remember {
         mutableStateOf("")
     }
@@ -529,6 +531,7 @@ fun MainScreen(state: ModalBottomSheetState){
                         contentPadding = PaddingValues(top = 40.dp),
                         //horizontalArrangement = Arrangement.SpaceBetween
                     ) {
+                        log(products)
                         items(products, { product -> product.id }) { product ->
                             //log("item${product.id}")
                             // items(products.size, key = {}) { index ->
@@ -545,27 +548,39 @@ fun MainScreen(state: ModalBottomSheetState){
                 val nextPart = remember {
                     derivedStateOf {
                         //log ("lastIndex = ${stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.index}, gridCount = ${stateGrid.layoutInfo.totalItemsCount - 1}")
-                        /*val viewOffset = stateGrid.layoutInfo.viewportEndOffset
-                        val offset = stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.offset?.y ?: 0
+                        /*val viewOffset = stateGrid.layoutInfo.viewportEndOffset // высота Grid
+                        val offset = stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.offset?.y ?: 0 // расстояние от верха item до верха grid
                         val height = stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.size?.height ?: 0
-                        log ("offset = ${viewOffset  - offset}, height $height")*/
+                        log("view offset = $viewOffset")
+                        log("last offset = $offset")
+                        log("height = $height")*/
+                        //log ("offset = ${viewOffset  - offset}, height $height")
                        /* log ("gridOffset = ${stateGrid.layoutInfo.viewportEndOffset -
                                 offset}, heightLast = ${stateGrid.layoutInfo.visibleItemsInfo.last().size.height}")*/
+                        val itemsCount = products.size
+                        val total: Int = itemsCount / SIZE_PORTION
+                        val remains    = itemsCount % SIZE_PORTION
+                        val upload = if (remains > 0)
+                                        false else
+                                     total > 0
+
+                        upload &&
                         stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.index == stateGrid.layoutInfo.totalItemsCount - 1
                                 //&& stateGrid.isScrollInProgress
+                                //&& stateGrid.layoutInfo.visibleItemsInfo.last().offset.y > 0
                                 && stateGrid.layoutInfo.viewportEndOffset - stateGrid.layoutInfo.visibleItemsInfo.last().offset.y >= stateGrid.layoutInfo.visibleItemsInfo.last().size.height / 2
 
                     }
                 }
                 LaunchedEffect(nextPart.value) {
 
-                  //  log("deriverd ${nextPart.value}")
+                    log("derived ${nextPart.value}")
                     if (nextPart.value) {
-                       // log("end scroll")
-                      /*  try {
-                            log("last ${stateGrid.layoutInfo.visibleItemsInfo.last().index}")
-                        } catch (_: Exception){}*/
-                        viewModel.getNextPortionData()
+                        if (isSearchMode)
+                            log("search mode")
+                        else
+                            viewModel.getNextPortionData()
+
                     }
                 }
 
