@@ -557,9 +557,8 @@ fun MainScreen(state: ModalBottomSheetState){
                         //log ("offset = ${viewOffset  - offset}, height $height")
                        /* log ("gridOffset = ${stateGrid.layoutInfo.viewportEndOffset -
                                 offset}, heightLast = ${stateGrid.layoutInfo.visibleItemsInfo.last().size.height}")*/
-                        val itemsCount = products.size
-                        val total: Int = itemsCount / SIZE_PORTION
-                        val remains    = itemsCount % SIZE_PORTION
+                        val total: Int = products.size / SIZE_PORTION
+                        val remains    = products.size % SIZE_PORTION
                         val upload = if (remains > 0)
                                         false else
                                      total > 0
