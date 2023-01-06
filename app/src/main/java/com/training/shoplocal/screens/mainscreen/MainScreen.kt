@@ -470,13 +470,6 @@ fun MainScreen(state: ModalBottomSheetState){
                 //ShowDataDisplayPanel(hide = isSearchMode)
         //    }
 
-        /*ShowDataDisplayPanel(modifier = Modifier
-            .offset{ IntOffset(x = 0, y = panelOffsetHeightPx.value.roundToInt()) }
-            .fillMaxWidth()
-            .height(40.dp)
-            .background(MaterialTheme.colors.primary),
-            hide = isSearchMode)
-*/
             Box(
                 modifier = Modifier
                     .padding(it)
