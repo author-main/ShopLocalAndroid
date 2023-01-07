@@ -25,7 +25,7 @@ import java.util.concurrent.Executors
 import kotlin.math.max
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
-    private var maxPortion: Int = 0
+    private var maxPortion: Int = -1
     private var UUID_query: UUID = UUID.randomUUID()
     private var lockDB = false
     //private val reflexRepository = Repository::class.java.methods
@@ -58,7 +58,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private val actionLogin: (result: Int) -> Unit = {
         val result = it > 0
         if (result) {
-            maxPortion = 0
+            maxPortion = -1
             USER_ID = it
             ScreenRouter.navigateTo(ScreenItem.MainScreen)
             getBrands()
@@ -125,14 +125,10 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
+  //  @Synchronized
     private fun getProducts(part: Int){
-       // log("portition = $part")
-        log("getProducts")
-        if (part != 1 && loadedPortion == maxPortion) return
-
-        if (!lockDB){// && loadedPortion != part) {
+        if (!lockDB){
             lockDB = true
-
             repository.getProducts(USER_ID, part) { listProducts ->
                 lockDB = false
                 //log ("portion $part")
@@ -148,7 +144,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                                     maxPortion = getPortion(count)
                                 }
                             } catch (_: Exception) {
-                                maxPortion = 0
+                                maxPortion = -1
                             }
                         }
                     }
@@ -181,19 +177,25 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    @Synchronized
+    //@Synchronized
     fun getNextPortionData(){
        // log("getNextPortionData")
-        getProducts(getPortion()+1)
+        val nextPortion = getPortion()+1
+        if (nextPortion in (loadedPortion + 1)..maxPortion)
+            getProducts(nextPortion)
     }
 
     fun saveScreenProducts(key: ScreenRouter.KEYSCREEN) {
-        repository.saveScreenProducts(key, products.value)
+        repository.saveScreenProducts(key,
+            DataScreen(maxPortion, products.value)
+        )
     }
 
     fun restoreScreenProducts(key: ScreenRouter.KEYSCREEN) {
-        _products.value = repository.restoreScreenProducts(key)//.toMutableList()
-        loadedPortion = getPortion()
+        val data = repository.restoreScreenProducts(key)
+        maxPortion = data.maxPortion
+        _products.value = data.products//repository.restoreScreenProducts(key)//.toMutableList()
+        loadedPortion = getPortion() // количество загруженных порций
     }
 
     private fun getPortion(size: Int = 0): Int{
@@ -248,7 +250,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
      */
 
     fun findProductsRequest(query: String){
-        log("findProductsRequest")
+        //log("findProductsRequest")
         val portion: Int = 1
         UUID_query = UUID.randomUUID()
         repository.findProductsRequest(query, portion, UUID_query.toString(), USER_ID) {listFound ->

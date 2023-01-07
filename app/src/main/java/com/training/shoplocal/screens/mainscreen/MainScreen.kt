@@ -16,6 +16,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
@@ -230,7 +231,6 @@ fun MainScreen(state: ModalBottomSheetState){
     val products: MutableList<Product> by viewModel.products.collectAsState()
     val dataSnackbar: Triple<String, Boolean, MESSAGE> by viewModel.snackbarData.collectAsState()
 
-
     val textSearch = remember {
         mutableStateOf("")
     }
@@ -298,13 +298,14 @@ fun MainScreen(state: ModalBottomSheetState){
 
 
 
-    val stateGrid = rememberLazyViewState(key = ScreenRouter.current.key)
+    var stateGrid = rememberLazyViewState(key = ScreenRouter.current.key)
   //  Column(modifier = Modifier.fillMaxWidth()) {
          //   Box() {
              //   ShowDataDisplayPanel(hide = isSearchMode)
 
 
     Scaffold( topBar = {
+        //log("recomposition")
 
         TopAppBar(backgroundColor = MaterialTheme.colors.primary,
                     elevation = 0.dp
@@ -331,8 +332,14 @@ fun MainScreen(state: ModalBottomSheetState){
                                 isSearchMode = false
                                 hideSearchDialog()
 //                                if (lastSearchQuery.value.isNotEmpty())
-                                if (searchState.value == SearchState.SEARCH_PROCESS)
+                                if (searchState.value == SearchState.SEARCH_PROCESS) {
                                     viewModel.restoreScreenProducts(ScreenRouter.current.key)
+                                    /*log ("firstIndex = ${stateGridData.first}, firstOffset = ${stateGridData.second}")
+                                    stateGrid = LazyGridState(
+                                        stateGridData.first,
+                                        stateGridData.second
+                                    )*/
+                                }
                                 searchState.value = SearchState.SEARCH_CANCEL
                                 textSearch.value = ""
                             },
@@ -515,6 +522,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
 
                 if (products.isNotEmpty()) {
+                    //log ("recompose grid")
                     LazyVerticalGrid(
                         modifier = Modifier
                             .padding(horizontal = 10.dp),
@@ -524,7 +532,7 @@ fun MainScreen(state: ModalBottomSheetState){
                         contentPadding = PaddingValues(top = 40.dp),
                         //horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        log(products)
+                     //   log(products)
                         items(products, { product -> product.id }) { product ->
                             //log("item${product.id}")
                             // items(products.size, key = {}) { index ->
@@ -535,8 +543,15 @@ fun MainScreen(state: ModalBottomSheetState){
                                 CardProduct(product, state = state)
                             }
                         }
+                      /*  if (restoredStateGrid != null) {
+                            stateGrid = LazyGridState(
+                                restoredStateGrid!!.firstVisibleItemIndex,
+                                restoredStateGrid!!.firstVisibleItemScrollOffset
+                            )
+                            restoredStateGrid = null
+                        }*/
                     }
-                }
+
 
                 val nextPart = remember {
                     derivedStateOf {
@@ -566,7 +581,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 }
                 LaunchedEffect(nextPart.value) {
 
-                    log("derived ${nextPart.value}")
+                   // log("derived ${nextPart.value}")
                     if (nextPart.value) {
                         if (isSearchMode)
                             log("search mode")
@@ -589,7 +604,7 @@ fun MainScreen(state: ModalBottomSheetState){
                     .background(MaterialTheme.colors.primary),
                 )//hide = isSearchMode)
         //    }
-
+                }
                 androidx.compose.animation.AnimatedVisibility(
                         visible = isFocusedSearchTextField.value,
                         enter = fadeIn(),

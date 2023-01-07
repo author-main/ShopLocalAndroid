@@ -123,24 +123,28 @@ class Repository: DAOinterface {
      */
 
 
-    private val MapScreenProducts = HashMap<ScreenRouter.KEYSCREEN, List<Product>>()
+    private val MapScreenProducts = HashMap<ScreenRouter.KEYSCREEN, DataScreen>()
     /**
      * Сохраняем текущие данные списка продуктов
      * @param key идентификатор screen
-     * @param product список продуктов текущего экрана
+     * @param data данные текущего экрана
     */
-    fun saveScreenProducts(key: ScreenRouter.KEYSCREEN, products: List<Product>) {
-        MapScreenProducts[key] = products.toList()
+    fun saveScreenProducts(key: ScreenRouter.KEYSCREEN, data: DataScreen) {
+        MapScreenProducts[key] = data.copy(products = data.products.toMutableList())//maxPortion to products.toList()
+     //   log(MapScreenProducts[key]?.products?.size.toString())
     }
     /**
      * Восстанавливаем список продуктов текущего экрана
      * @param key идентификатор screen
-     * @return список продуктов List&ltProduct&gt;
+     * @return данные текущего экрана
     */
-    fun restoreScreenProducts(key: ScreenRouter.KEYSCREEN): MutableList<Product> {
-        val list = MapScreenProducts[key]?.toMutableList() ?: mutableListOf()
+    fun restoreScreenProducts(key: ScreenRouter.KEYSCREEN): DataScreen {
+        //список продуктов List&ltProduct&gt;
+      //  log(MapScreenProducts[key]?.firstItemIndex.toString())
+        val dataScreen =
+            MapScreenProducts[key]?.copy() ?: DataScreen()
         MapScreenProducts.remove(key)
-        return list
+        return dataScreen
     }
 
 
