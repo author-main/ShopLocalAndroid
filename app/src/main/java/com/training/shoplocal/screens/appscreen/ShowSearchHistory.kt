@@ -42,6 +42,7 @@ import kotlinx.coroutines.launch
 @Composable
 //fun ShowSearchHistory(textSearch: MutableState<String>, onSearch: State<Boolean>lastSearch: State<String>){//, callback: (value: String) -> Unit){//}, history: List<String>, actionClear: () -> Unit){
 fun ShowSearchHistory(textSearch: MutableState<String>, searchState: State<SearchState>){//, callback: (value: String) -> Unit){//}, history: List<String>, actionClear: () -> Unit){
+   // log ("textSearch " + textSearch.value)
     val viewModel: RepositoryViewModel = viewModel()
 
     var filtered by remember {
@@ -71,7 +72,7 @@ fun ShowSearchHistory(textSearch: MutableState<String>, searchState: State<Searc
                     //        log(filteredList.toString())
                 }
             } else {
-                    if (searchState.value == SearchState.SEARCH_QUERY) {
+                    //if (searchState.value == SearchState.SEARCH_QUERY) {
                         filtered = false
                         try {
                             /*val list = viewModel.getSearchHistoryList()
@@ -86,7 +87,7 @@ fun ShowSearchHistory(textSearch: MutableState<String>, searchState: State<Searc
                         } catch (e: Exception) {
                             log(e.message)
                         }
-                    }
+                 //   }
             }
     }
 

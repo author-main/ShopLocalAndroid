@@ -109,10 +109,30 @@ fun Modifier.clearFocusOnKeyboardDismiss(): Modifier = composed {
 @Composable
 fun MainScreen(state: ModalBottomSheetState){
 
-  /*  @Composable
-    fun ShowFoundProducts() {
+    var isSearchMode by remember {
+        mutableStateOf(false)
+    }
 
-    }*/
+    var searchScreenDisplayed by remember {
+        mutableStateOf(false)
+    }
+
+    val isFocusedSearchTextField = remember {
+        mutableStateOf(false)
+    }
+
+    val searchState = remember {
+        mutableStateOf(SearchState.SEARCH_CANCEL)
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            isSearchMode = false
+            searchScreenDisplayed = false
+            isFocusedSearchTextField.value = false
+            searchState.value = SearchState.SEARCH_CANCEL
+        }
+    }
 
 
     @Composable
@@ -252,6 +272,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
 
 
+/*
     var isSearchMode by remember {
         mutableStateOf(false)
     }
@@ -265,15 +286,18 @@ fun MainScreen(state: ModalBottomSheetState){
         mutableStateOf(false)
     }
 
-    /*val lastSearchQuery = remember {
+    */
+/*val lastSearchQuery = remember {
         mutableStateOf("")
-    }*/
+    }*//*
+
 
     val searchState = remember {
         mutableStateOf(SearchState.SEARCH_CANCEL)
     }
 
     //val stateGrid = rememberLazyGridState()
+*/
 
     val focusManager = LocalFocusManager.current
     fun hideSearchDialog() {
@@ -362,7 +386,7 @@ fun MainScreen(state: ModalBottomSheetState){
                                     )*/
                                 }
                                 searchScreenDisplayed = false
-                                if (searchState.value == SearchState.SEARCH_QUERY)
+                               // if (searchState.value == SearchState.SEARCH_QUERY)
                                     hideSearchDialog()
                                 searchState.value = SearchState.SEARCH_CANCEL
                                 textSearch.value = ""
@@ -380,7 +404,7 @@ fun MainScreen(state: ModalBottomSheetState){
                                 isSearchMode = true
                                 //val searchStore: SearchQueryStorageInterface = SearchQueryStorage.getInstance()
                                 //lastSearchQuery.value = ""
-                                //   searchState.value = SearchState.SEARCH_QUERY
+                                searchState.value = SearchState.SEARCH_QUERY
                                 isFocusedSearchTextField.value = true
                                 viewModel.hideBottomNavigation()
                             }
@@ -436,7 +460,8 @@ fun MainScreen(state: ModalBottomSheetState){
                                 )
                             },
                             trailingIcon = {
-                                val showClearIcon = textSearch.value.isNotEmpty()
+                                val showClearIcon = textSearch.value.isNotEmpty() && searchState.value == SearchState.SEARCH_QUERY
+                              //  log(searchState.value.name)
                                 val iconSize = if (showClearIcon) 16.dp else 24.dp
                                 Icon(
                                     imageVector = if (showClearIcon)
@@ -450,8 +475,7 @@ fun MainScreen(state: ModalBottomSheetState){
                                         .clickable {
                                             if (showClearIcon) {
                                                 textSearch.value = ""
-
-                                                DialogRouter.reset()
+                                                //DialogRouter.reset()
                                                 //showSearch = false
                                             } else {
                                                 // Вызвать голосовой ввод
