@@ -114,6 +114,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
     }*/
 
+
     @Composable
     fun ShowMessageCount(value: Int = 0){
         val animated = remember{ mutableStateOf(value > 0) }
@@ -248,10 +249,18 @@ fun MainScreen(state: ModalBottomSheetState){
             }
         }
     }
+
+
+
     var isSearchMode by remember {
         mutableStateOf(false)
     }
-    
+
+    var searchScreenDisplayed by remember {
+        mutableStateOf(false)
+    }
+
+
     val isFocusedSearchTextField = remember {
         mutableStateOf(false)
     }
@@ -261,7 +270,7 @@ fun MainScreen(state: ModalBottomSheetState){
     }*/
 
     val searchState = remember {
-        mutableStateOf(SearchState.SEARCH_QUERY)
+        mutableStateOf(SearchState.SEARCH_CANCEL)
     }
 
     //val stateGrid = rememberLazyGridState()
@@ -332,14 +341,15 @@ fun MainScreen(state: ModalBottomSheetState){
                                 indication = null
                             ) {
                                 isSearchMode = false
-                                hideSearchDialog()
+                                // hideSearchDialog()
 
 //                                if (lastSearchQuery.value.isNotEmpty())
-                                if (searchState.value == SearchState.SEARCH_PROCESS) {
+                                //if (searchState.value == SearchState.SEARCH_PROCESS) {
+                                if (searchScreenDisplayed){
                                     val stateData =
                                         viewModel.restoreScreenProducts(ScreenRouter.current.key)
                                     scope.launch {
-                                       // stateGrid.animateScrollToItem(
+                                        // stateGrid.animateScrollToItem(
                                         stateGrid.scrollToItem(
                                             stateData.first,
                                             stateData.second
@@ -351,6 +361,9 @@ fun MainScreen(state: ModalBottomSheetState){
                                         stateGridData.second
                                     )*/
                                 }
+                                searchScreenDisplayed = false
+                                if (searchState.value == SearchState.SEARCH_QUERY)
+                                    hideSearchDialog()
                                 searchState.value = SearchState.SEARCH_CANCEL
                                 textSearch.value = ""
                             },
@@ -367,7 +380,7 @@ fun MainScreen(state: ModalBottomSheetState){
                                 isSearchMode = true
                                 //val searchStore: SearchQueryStorageInterface = SearchQueryStorage.getInstance()
                                 //lastSearchQuery.value = ""
-                                searchState.value = SearchState.SEARCH_QUERY
+                                //   searchState.value = SearchState.SEARCH_QUERY
                                 isFocusedSearchTextField.value = true
                                 viewModel.hideBottomNavigation()
                             }
@@ -390,15 +403,15 @@ fun MainScreen(state: ModalBottomSheetState){
                         onSearch = {
                             //   hideSearchDialog()
                             if (textSearch.value.isNotBlank()) {
-                                // viewModel.saveCurrentScreenData(stateGrid)
-                                //lastSearchQuery.value = textSearch.value
-                                searchState.value = SearchState.SEARCH_PROCESS
                                 hideSearchDialog()
-                                viewModel.saveScreenProducts(ScreenRouter.current.key,
-                                    stateGrid.firstVisibleItemIndex,
-                                    stateGrid.firstVisibleItemScrollOffset
-                                )
-                              //  stateGrid = rememberLazyViewState(key = ScreenRouter.current.key)
+                                if (!searchScreenDisplayed)
+                                    viewModel.saveScreenProducts(
+                                        ScreenRouter.current.key,
+                                        stateGrid.firstVisibleItemIndex,
+                                        stateGrid.firstVisibleItemScrollOffset
+                                    )
+                                searchState.value = SearchState.SEARCH_PROCESS
+                                searchScreenDisplayed = true
                                 viewModel.findProductsRequest(textSearch.value.trim())
                             }
                         }
