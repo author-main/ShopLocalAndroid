@@ -58,6 +58,7 @@ import com.training.shoplocal.R
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.classes.searcher.SearchState
 import com.training.shoplocal.dialogs.ShowMessage
+import com.training.shoplocal.screens.ScreenItem
 import com.training.shoplocal.screens.ScreenRouter
 import com.training.shoplocal.screens.appscreen.ShowDataDisplayPanel
 import com.training.shoplocal.screens.appscreen.ShowSearchHistory
@@ -298,7 +299,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
 
 
-    var stateGrid = rememberLazyViewState(key = ScreenRouter.current.key)
+    val stateGrid = rememberLazyViewState(ScreenRouter.current.key)
   //  Column(modifier = Modifier.fillMaxWidth()) {
          //   Box() {
              //   ShowDataDisplayPanel(hide = isSearchMode)
@@ -321,6 +322,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 if (isSearchMode) {
 //                      val list = LocalSearchStorage.current?.getQueries() ?: listOf<String>()
                     //  IconButton(onClick = {  }) {
+                    val scope = rememberCoroutineScope()
                     Icon(
                         modifier = Modifier
                             .align(Alignment.CenterVertically)
@@ -331,9 +333,18 @@ fun MainScreen(state: ModalBottomSheetState){
                             ) {
                                 isSearchMode = false
                                 hideSearchDialog()
+
 //                                if (lastSearchQuery.value.isNotEmpty())
                                 if (searchState.value == SearchState.SEARCH_PROCESS) {
-                                    viewModel.restoreScreenProducts(ScreenRouter.current.key)
+                                    val stateData =
+                                        viewModel.restoreScreenProducts(ScreenRouter.current.key)
+                                    scope.launch {
+                                       // stateGrid.animateScrollToItem(
+                                        stateGrid.scrollToItem(
+                                            stateData.first,
+                                            stateData.second
+                                        )
+                                    }
                                     /*log ("firstIndex = ${stateGridData.first}, firstOffset = ${stateGridData.second}")
                                     stateGrid = LazyGridState(
                                         stateGridData.first,
@@ -383,7 +394,11 @@ fun MainScreen(state: ModalBottomSheetState){
                                 //lastSearchQuery.value = textSearch.value
                                 searchState.value = SearchState.SEARCH_PROCESS
                                 hideSearchDialog()
-                                viewModel.saveScreenProducts(ScreenRouter.current.key)
+                                viewModel.saveScreenProducts(ScreenRouter.current.key,
+                                    stateGrid.firstVisibleItemIndex,
+                                    stateGrid.firstVisibleItemScrollOffset
+                                )
+                              //  stateGrid = rememberLazyViewState(key = ScreenRouter.current.key)
                                 viewModel.findProductsRequest(textSearch.value.trim())
                             }
                         }
@@ -580,14 +595,12 @@ fun MainScreen(state: ModalBottomSheetState){
                     }
                 }
                 LaunchedEffect(nextPart.value) {
-
                    // log("derived ${nextPart.value}")
                     if (nextPart.value) {
                         if (isSearchMode)
                             log("search mode")
                         else
                             viewModel.getNextPortionData()
-
                     }
                 }
 

@@ -1,21 +1,15 @@
 package com.training.shoplocal.repository
 
 
-import android.util.Base64
 import android.content.Context
-import androidx.compose.foundation.lazy.grid.LazyGridState
-import com.training.shoplocal.AppShopLocal.Companion.appContext
 import com.training.shoplocal.FieldFilter
 import com.training.shoplocal.classes.*
-import com.training.shoplocal.classes.downloader.ImageLinkDownloader
+import com.training.shoplocal.classes.screenhelpers.DataScreen
 import com.training.shoplocal.classes.searcher.SearchQueryStorage
 import com.training.shoplocal.encodeBase64
-import com.training.shoplocal.getCacheDirectory
-import com.training.shoplocal.log
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.screens.ScreenItem
 import com.training.shoplocal.screens.ScreenRouter
-import java.io.File
 import java.util.*
 import kotlin.collections.HashMap
 

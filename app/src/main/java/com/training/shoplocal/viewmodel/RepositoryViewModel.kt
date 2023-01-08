@@ -1,30 +1,21 @@
 package com.training.shoplocal.viewmodel
 
 import android.content.Context
-import androidx.compose.foundation.lazy.grid.LazyGridState
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.annotations.SerializedName
 import com.training.shoplocal.*
 import com.training.shoplocal.classes.*
-import com.training.shoplocal.classes.searcher.SearchQueryStorage
+import com.training.shoplocal.classes.screenhelpers.DataScreen
 import com.training.shoplocal.repository.Repository
 import com.training.shoplocal.screens.ScreenItem
 import com.training.shoplocal.screens.ScreenRouter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.net.HttpURLConnection
-import java.net.URL
 import java.util.UUID
-import java.util.concurrent.Callable
-import java.util.concurrent.Executors
-import kotlin.math.max
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
+    //private val exchangeDataMap = HashMap<ExchangeData, Boolean>()
     private var maxPortion: Int = -1
     private var UUID_query: UUID = UUID.randomUUID()
     private var lockDB = false
@@ -62,6 +53,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             USER_ID = it
             ScreenRouter.navigateTo(ScreenItem.MainScreen)
             getBrands()
+//            exchangeDataMap[ExchangeData.GET_PRODUCTS] = false
             getProducts(1)
             authorizeUser()
         }
@@ -125,13 +117,16 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-  //  @Synchronized
     private fun getProducts(part: Int){
+      // val exchangeData = exchangeDataMap[ExchangeData.GET_PRODUCTS] ?: false
         if (!lockDB){
             lockDB = true
+          //  exchangeDataMap[ExchangeData.GET_PRODUCTS] = true
             repository.getProducts(USER_ID, part) { listProducts ->
-                lockDB = false
-                //log ("portion $part")
+                //exchangeDataMap[ExchangeData.GET_PRODUCTS] = false
+                //exchangeDataMap.remove(ExchangeData.GET_PRODUCTS)
+
+                log ("portion $part")
                 if (listProducts.isNotEmpty()) {
                     if (part == 1) {
                         if (listProducts[0].name.startsWith('<')) {
@@ -152,6 +147,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                     setSelectedProduct(Product())
                     val list = _products.value.toMutableList().apply { addAll(listProducts) }
                     _products.value = list
+                    lockDB = false
                 }
             }
         }
@@ -177,25 +173,31 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    //@Synchronized
+   // @Synchronized
     fun getNextPortionData(){
        // log("getNextPortionData")
-        val nextPortion = getPortion()+1
-        if (nextPortion in (loadedPortion + 1)..maxPortion)
+       /* if (loadedPortion == 0)
+            return*/
+       val nextPortion = loadedPortion + 1//getPortion()+1
+//       log("getNextPortionData $nextPortion")
+        //if (nextPortion in (loadedPortion + 1)..maxPortion)
+        if (nextPortion <= maxPortion)
             getProducts(nextPortion)
     }
 
-    fun saveScreenProducts(key: ScreenRouter.KEYSCREEN) {
+    fun saveScreenProducts(key: ScreenRouter.KEYSCREEN, firstIndex: Int, firstOffset: Int) {
         repository.saveScreenProducts(key,
-            DataScreen(maxPortion, products.value)
+            DataScreen(firstIndex, firstOffset, maxPortion, products.value)
         )
     }
 
-    fun restoreScreenProducts(key: ScreenRouter.KEYSCREEN) {
+    fun restoreScreenProducts(key: ScreenRouter.KEYSCREEN): Pair<Int, Int> {
         val data = repository.restoreScreenProducts(key)
         maxPortion = data.maxPortion
         _products.value = data.products//repository.restoreScreenProducts(key)//.toMutableList()
         loadedPortion = getPortion() // количество загруженных порций
+        //log("firstIndex ${data.firstItemIndex}, firstOffset ${data.firstItemOffset}")
+        return data.firstItemIndex to data.firstItemOffset
     }
 
     private fun getPortion(size: Int = 0): Int{

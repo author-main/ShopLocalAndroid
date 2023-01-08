@@ -18,7 +18,7 @@ private data class ScreenData(
 fun rememberLazyViewState(key: ScreenRouter.KEYSCREEN,
                           initFirstVisibleItemIndex: Int = 0,
                           initFirstVisibleItemScrollOffset: Int = 0): LazyGridState {
-   // log("remember state")
+
      val scrollState = rememberSaveable(saver = LazyGridState.Saver) {
         val savedValue = MapScreenData[key]
         val savedIndex = savedValue?.index ?: initFirstVisibleItemIndex
@@ -34,12 +34,14 @@ fun rememberLazyViewState(key: ScreenRouter.KEYSCREEN,
 
     DisposableEffect(Unit) {
         onDispose {
-            log("dispose stateGrid")
+           // log("dispose stateGrid")
             val index  = scrollState.firstVisibleItemIndex
             val offset = scrollState.firstVisibleItemScrollOffset
             MapScreenData[key] = ScreenData(index, offset)
         }
     }
+
+//    log("state ${key.name}, scroll ${scrollState.firstVisibleItemScrollOffset}")
     return scrollState
 
 }
