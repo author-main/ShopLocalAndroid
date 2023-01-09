@@ -16,7 +16,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
@@ -33,9 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
@@ -58,7 +55,6 @@ import com.training.shoplocal.R
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.classes.searcher.SearchState
 import com.training.shoplocal.dialogs.ShowMessage
-import com.training.shoplocal.screens.ScreenItem
 import com.training.shoplocal.screens.ScreenRouter
 import com.training.shoplocal.screens.appscreen.ShowDataDisplayPanel
 import com.training.shoplocal.screens.appscreen.ShowSearchHistory
@@ -117,20 +113,20 @@ fun MainScreen(state: ModalBottomSheetState){
         mutableStateOf(false)
     }
 
-    val isFocusedSearchTextField = remember {
+    var isFocusedSearchTextField by remember {
         mutableStateOf(false)
     }
 
     val searchState = remember {
-        mutableStateOf(SearchState.SEARCH_CANCEL)
+        mutableStateOf(SearchState.SEARCH_NONE)
     }
 
     DisposableEffect(Unit) {
         onDispose {
             isSearchMode = false
             searchScreenDisplayed = false
-            isFocusedSearchTextField.value = false
-            searchState.value = SearchState.SEARCH_CANCEL
+            isFocusedSearchTextField = false
+            searchState.value = SearchState.SEARCH_NONE
         }
     }
 
@@ -302,7 +298,7 @@ fun MainScreen(state: ModalBottomSheetState){
     val focusManager = LocalFocusManager.current
     fun hideSearchDialog() {
         focusManager.clearFocus()
-        isFocusedSearchTextField.value = false
+        isFocusedSearchTextField = false
         viewModel.hideBottomNavigation(false)
     }
 
@@ -393,7 +389,7 @@ fun MainScreen(state: ModalBottomSheetState){
                                 //searchScreenDisplayed = false
                                // if (searchState.value == SearchState.SEARCH_QUERY)
                                     hideSearchDialog()
-                                searchState.value = SearchState.SEARCH_CANCEL
+                                searchState.value = SearchState.SEARCH_NONE
                                 textSearch.value = ""
                             },
                         imageVector = Icons.Filled.ArrowBack,
@@ -410,7 +406,7 @@ fun MainScreen(state: ModalBottomSheetState){
                                 //val searchStore: SearchQueryStorageInterface = SearchQueryStorage.getInstance()
                                 //lastSearchQuery.value = ""
                                 searchState.value = SearchState.SEARCH_QUERY
-                                isFocusedSearchTextField.value = true
+                                isFocusedSearchTextField = true
                                 viewModel.hideBottomNavigation()
                             }
                         }
@@ -439,7 +435,7 @@ fun MainScreen(state: ModalBottomSheetState){
                                         stateGrid.firstVisibleItemIndex,
                                         stateGrid.firstVisibleItemScrollOffset
                                     )
-                                searchState.value = SearchState.SEARCH_PROCESS
+                                searchState.value = SearchState.SEARCH_RESULT
                                 searchScreenDisplayed = true
                                 viewModel.findProductsRequest(textSearch.value.trim())
                             }
@@ -661,7 +657,7 @@ fun MainScreen(state: ModalBottomSheetState){
         //    }
                 }
                 androidx.compose.animation.AnimatedVisibility(
-                        visible = isFocusedSearchTextField.value,
+                        visible = isFocusedSearchTextField,
                         enter = fadeIn(),
                         exit = fadeOut()
                     ) {

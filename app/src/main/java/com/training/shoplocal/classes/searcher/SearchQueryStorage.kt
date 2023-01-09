@@ -4,15 +4,14 @@ package com.training.shoplocal.classes.searcher
 import com.training.shoplocal.AppShopLocal
 import com.training.shoplocal.deleteFile
 import com.training.shoplocal.fileExists
-import com.training.shoplocal.log
 import java.io.*
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 
 enum class SearchState {
     SEARCH_QUERY,
-    SEARCH_CANCEL,
-    SEARCH_PROCESS
+    SEARCH_NONE,
+    SEARCH_RESULT
 }
 
 class SearchQueryStorage: SearchQueryStorageInterface {
