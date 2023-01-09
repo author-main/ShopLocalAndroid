@@ -364,7 +364,11 @@ fun MainScreen(state: ModalBottomSheetState){
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = null
                             ) {
+
+                              //  val hideListHistory = isSearchMode && searchScreenDisplayed
+
                                 isSearchMode = false
+
                                 // hideSearchDialog()
 
 //                                if (lastSearchQuery.value.isNotEmpty())
@@ -384,8 +388,9 @@ fun MainScreen(state: ModalBottomSheetState){
                                         stateGridData.first,
                                         stateGridData.second
                                     )*/
+                                    searchScreenDisplayed = false
                                 }
-                                searchScreenDisplayed = false
+                                //searchScreenDisplayed = false
                                // if (searchState.value == SearchState.SEARCH_QUERY)
                                     hideSearchDialog()
                                 searchState.value = SearchState.SEARCH_CANCEL

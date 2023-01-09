@@ -7,6 +7,7 @@ import com.training.shoplocal.classes.*
 import com.training.shoplocal.classes.screenhelpers.DataScreen
 import com.training.shoplocal.classes.searcher.SearchQueryStorage
 import com.training.shoplocal.encodeBase64
+import com.training.shoplocal.log
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.screens.ScreenItem
 import com.training.shoplocal.screens.ScreenRouter
@@ -195,7 +196,7 @@ class Repository: DAOinterface {
 
         val order64 = encodeBase64(OrderDisplay.getOrderDislayQuery())
         val query64 = encodeBase64(query)
-        /*log(query64)
+      /*  log(query64)
         log(order64)*/
         getFoundProducts(query64, order64, portion, UUID_query, userId, action)
     }
