@@ -22,6 +22,8 @@ class SearchQueryStorage: SearchQueryStorageInterface {
         AppShopLocal.appContext().applicationInfo.dataDir + "/search.lst"
 
     override fun put(value: String) {
+        if (value.isBlank())
+            return
         if (!listSQ.contains(value)) {
             changed = true
             listSQ.add(0, value)
