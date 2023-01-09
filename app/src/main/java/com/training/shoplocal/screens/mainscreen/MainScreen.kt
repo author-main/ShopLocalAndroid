@@ -65,51 +65,14 @@ import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.roundToInt
 
-
-/*@Composable
-fun keyboardAsState(): State<Boolean> {
-    val isImeVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
-  //  log(isImeVisible.toString())
-    return rememberUpdatedState(isImeVisible)
-}*/
-
-/*@OptIn(ExperimentalLayoutApi::class)
-fun Modifier.clearFocusOnKeyboardDismiss(): Modifier = composed {
-    var isFocused by remember { mutableStateOf(false) }
-    var keyboardAppearedSinceLastFocused by remember { mutableStateOf(false) }
-    log ("isFocused $isFocused")
-    if (isFocused) {
-        val imeIsVisible = WindowInsets.isImeVisible
-        val focusManager = LocalFocusManager.current
-        LaunchedEffect(imeIsVisible) {
-            //log(imeIsVisible.toString())
-            if (imeIsVisible) {
-                keyboardAppearedSinceLastFocused = true
-            } else if (keyboardAppearedSinceLastFocused) {
-                log("clear focus")
-                focusManager.clearFocus()
-            }
-        }
-    }
-    onFocusEvent {
-        if (isFocused != it.isFocused) {
-            isFocused = it.isFocused
-            if (isFocused) {
-                keyboardAppearedSinceLastFocused = false
-            }
-        }
-    }
-}
-*/
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun MainScreen(state: ModalBottomSheetState){
 
-    /*var isSearchMode by remember {
-        mutableStateOf(false)
-    }*/
-
-    var prevSearchText = remember {
+    // Сохраняем значение textSearch перед выбором из списка,
+    // если будет нажата кнопка back в режиме списка -
+    // textSearch присваиваем старое значение prevSearchText
+    val prevSearchText = remember {
         StringBuilder("")
     }
 
