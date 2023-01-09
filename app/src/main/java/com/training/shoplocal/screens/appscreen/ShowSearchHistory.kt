@@ -34,6 +34,10 @@ import com.training.shoplocal.viewmodel.RepositoryViewModel
 //fun ShowSearchHistory(textSearch: MutableState<String>, onSearch: State<Boolean>lastSearch: State<String>){//, callback: (value: String) -> Unit){//}, history: List<String>, actionClear: () -> Unit){
 fun ShowSearchHistory(textSearch: MutableState<String>, searchState: State<SearchState>){//, callback: (value: String) -> Unit){//}, history: List<String>, actionClear: () -> Unit){
    // log ("textSearch " + textSearch.value)
+    /*val prevTextSearch = remember {
+        textSearch.value
+    }*/
+
     val viewModel: RepositoryViewModel = viewModel()
 
     var filtered by remember {
@@ -90,10 +94,13 @@ fun ShowSearchHistory(textSearch: MutableState<String>, searchState: State<Searc
 //            if (lastSearch.value.isNotBlank()) {
             if (searchState.value == SearchState.SEARCH_RESULT) {
                 //viewModel.putSearchHistoryQuery(lastSearch.value)
+               // log("dispose history list")
                 viewModel.putSearchHistoryQuery(textSearch.value.trim())
                // textSearch.value = lastSearch.value
                 //log("put search query ${lastSearch.value}")
-            }
+            } /*else {
+                textSearch.value = prevTextSearch
+            }*/
             viewModel.saveSearchHistory()
             viewModel.disposeSearchHistoryList()
             showList.clear()

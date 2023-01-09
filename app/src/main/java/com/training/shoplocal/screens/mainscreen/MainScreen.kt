@@ -105,8 +105,12 @@ fun Modifier.clearFocusOnKeyboardDismiss(): Modifier = composed {
 @Composable
 fun MainScreen(state: ModalBottomSheetState){
 
-    var isSearchMode by remember {
+    /*var isSearchMode by remember {
         mutableStateOf(false)
+    }*/
+
+    var prevSearchText = remember {
+        StringBuilder("")
     }
 
     var searchScreenDisplayed by remember {
@@ -123,7 +127,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
     DisposableEffect(Unit) {
         onDispose {
-            isSearchMode = false
+           // isSearchMode = false
             searchScreenDisplayed = false
             isFocusedSearchTextField = false
             searchState.value = SearchState.SEARCH_NONE
@@ -302,10 +306,14 @@ fun MainScreen(state: ModalBottomSheetState){
         viewModel.hideBottomNavigation(false)
     }
 
-    BackHandler(enabled = isSearchMode){
-        if (isSearchMode) {
+
+    fun isSearchMode() = searchState.value != SearchState.SEARCH_NONE
+
+    BackHandler(enabled = isSearchMode()){
+        if (isSearchMode()) {
             textSearch.value = ""
-            isSearchMode = false
+            searchState.value = SearchState.SEARCH_NONE
+            //isSearchMode = false
             hideSearchDialog()
         }
     }
@@ -348,7 +356,7 @@ fun MainScreen(state: ModalBottomSheetState){
             ) {
 
                 //if (isFocusedSearchTextField.value) {
-                if (isSearchMode) {
+                if (isSearchMode()) {
 //                      val list = LocalSearchStorage.current?.getQueries() ?: listOf<String>()
                     //  IconButton(onClick = {  }) {
                     val scope = rememberCoroutineScope()
@@ -360,37 +368,30 @@ fun MainScreen(state: ModalBottomSheetState){
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = null
                             ) {
+                                hideSearchDialog()
 
-                              //  val hideListHistory = isSearchMode && searchScreenDisplayed
-
-                                isSearchMode = false
-
-                                // hideSearchDialog()
-
-//                                if (lastSearchQuery.value.isNotEmpty())
-                                //if (searchState.value == SearchState.SEARCH_PROCESS) {
-                                if (searchScreenDisplayed){
-                                    val stateData =
-                                        viewModel.restoreScreenProducts(ScreenRouter.current.key)
-                                    scope.launch {
-                                        // stateGrid.animateScrollToItem(
-                                        stateGrid.scrollToItem(
-                                            stateData.first,
-                                            stateData.second
-                                        )
+                                if (searchScreenDisplayed) {
+                                    if (searchState.value == SearchState.SEARCH_QUERY) {
+                                        searchState.value = SearchState.SEARCH_RESULT
+                                        textSearch.value = prevSearchText.toString()
                                     }
-                                    /*log ("firstIndex = ${stateGridData.first}, firstOffset = ${stateGridData.second}")
-                                    stateGrid = LazyGridState(
-                                        stateGridData.first,
-                                        stateGridData.second
-                                    )*/
-                                    searchScreenDisplayed = false
-                                }
-                                //searchScreenDisplayed = false
-                               // if (searchState.value == SearchState.SEARCH_QUERY)
-                                    hideSearchDialog()
-                                searchState.value = SearchState.SEARCH_NONE
-                                textSearch.value = ""
+                                    else {
+                                        searchState.value = SearchState.SEARCH_NONE
+                                        searchScreenDisplayed = false
+                                        val stateData =
+                                            viewModel.restoreScreenProducts(ScreenRouter.current.key)
+                                        scope.launch {
+                                            // stateGrid.animateScrollToItem(
+                                            stateGrid.scrollToItem(
+                                                stateData.first,
+                                                stateData.second
+                                            )
+                                        }
+
+                                        textSearch.value = ""
+                                    }
+                                } else
+                                    searchState.value = SearchState.SEARCH_NONE
                             },
                         imageVector = Icons.Filled.ArrowBack,
                         contentDescription = null,
@@ -402,10 +403,13 @@ fun MainScreen(state: ModalBottomSheetState){
                     modifier = Modifier
                         .onFocusChanged {
                             if (it.isFocused) {
-                                isSearchMode = true
+                                //isSearchMode = true
                                 //val searchStore: SearchQueryStorageInterface = SearchQueryStorage.getInstance()
                                 //lastSearchQuery.value = ""
                                 searchState.value = SearchState.SEARCH_QUERY
+                                    prevSearchText.clear()
+                                    prevSearchText.append(textSearch.value)
+                                //log("prev text search = $prevSearchText")
                                 isFocusedSearchTextField = true
                                 viewModel.hideBottomNavigation()
                             }
@@ -506,7 +510,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 //  ShowMessageCount(31)
 
                 //**************************************************************************************
-                if (!isSearchMode)
+                if (!isSearchMode())
                 //if (!isFocusedSearchTextField.value)
                     ShowMessageCount(24)
 
@@ -635,7 +639,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 LaunchedEffect(nextPart.value) {
                    // log("derived ${nextPart.value}")
                     if (nextPart.value) {
-                        if (isSearchMode)
+                        if (isSearchMode())
                             log("search mode")
                         else
                             viewModel.getNextPortionData()

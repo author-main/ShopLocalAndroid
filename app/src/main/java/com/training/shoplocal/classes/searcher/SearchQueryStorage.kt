@@ -9,8 +9,8 @@ import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 
 enum class SearchState {
-    SEARCH_QUERY,
     SEARCH_NONE,
+    SEARCH_QUERY,
     SEARCH_RESULT
 }
 
