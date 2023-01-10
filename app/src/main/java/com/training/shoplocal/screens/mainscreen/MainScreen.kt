@@ -641,6 +641,9 @@ fun MainScreen(state: ModalBottomSheetState){
                         derivedStateOf {
                             //log("scroll ${verticalScrollState.value}")
                             //log("end ${stateGrid.layoutInfo.visibleItemsInfo}")
+                            try {
+                                log("offset ${stateGrid.layoutInfo.visibleItemsInfo.last().offset.y}")
+                            } catch(_: Exception){}
                             stateGrid.firstVisibleItemScrollOffset > 0
                         }
                     }
