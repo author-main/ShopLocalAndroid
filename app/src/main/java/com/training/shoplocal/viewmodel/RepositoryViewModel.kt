@@ -117,6 +117,30 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
+    /**
+     * Получить max число порций, количество записей возвращается в первой строке результа
+     * выборки продуктов в формате &lt;count&gt; name
+     * @paran value первый элемент списка продуктов
+     * @return Pair<max, name>, где max - число порций, name - наименование продукта
+     */
+    private fun getMaxPortion(value: String): Pair<Int, String>{
+        var calcMaxPortion = 0
+        var name = ""
+        if (value.startsWith('<')) {
+            val index = value.indexOf('>')
+            try {
+                if (index != -1) {
+                    val count = value.substring(1, index).toInt()
+                    name = value.substring(index + 1)
+                    calcMaxPortion = getPortion(count)
+                }
+            } catch (_: Exception) {
+            }
+        }
+        return calcMaxPortion to name
+    }
+
+
     private fun getProducts(part: Int){
       // val exchangeData = exchangeDataMap[ExchangeData.GET_PRODUCTS] ?: false
         if (!lockDB){
@@ -126,10 +150,12 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                 //exchangeDataMap[ExchangeData.GET_PRODUCTS] = false
                 //exchangeDataMap.remove(ExchangeData.GET_PRODUCTS)
 
-                log ("portion $part")
                 if (listProducts.isNotEmpty()) {
                     if (part == 1) {
-                        if (listProducts[0].name.startsWith('<')) {
+                        val extractedData = getMaxPortion(listProducts[0].name)
+                        maxPortion              = extractedData.first
+                        listProducts[0].name    = extractedData.second
+                      /*  if (listProducts[0].name.startsWith('<')) {
                             val index = listProducts[0].name.indexOf('>')
                             try {
                                 if (index != -1) {
@@ -141,7 +167,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                             } catch (_: Exception) {
                                 maxPortion = -1
                             }
-                        }
+                        }*/
                     }
                     loadedPortion = part
                     setSelectedProduct(Product())
@@ -173,14 +199,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-   // @Synchronized
     fun getNextPortionData(){
-       // log("getNextPortionData")
-       /* if (loadedPortion == 0)
-            return*/
        val nextPortion = loadedPortion + 1//getPortion()+1
-//       log("getNextPortionData $nextPortion")
-        //if (nextPortion in (loadedPortion + 1)..maxPortion)
         if (nextPortion <= maxPortion)
             getProducts(nextPortion)
     }
@@ -251,15 +271,20 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
      *  End Блок методов для управления журналом поисковых запросов
      */
 
-    fun findProductsRequest(query: String){
-        //log("findProductsRequest")
-        val portion: Int = 1
+    fun findProductsRequest(query: String, portion: Int = 1){
         UUID_query = UUID.randomUUID()
         repository.findProductsRequest(query, portion, UUID_query.toString(), USER_ID) {listFound ->
-
             setSelectedProduct(Product())
             products.value.clear()
-            _products.value = listFound.toMutableList()
+            if (listFound.isNotEmpty()) {
+                _products.value = listFound.toMutableList()
+                if (portion == 1) {
+                    val extractedData = getMaxPortion(listFound[0].name)
+                    maxPortion = extractedData.first
+                    listFound[0].name = extractedData.second
+                    //log("maxportion $maxPortion")
+                }
+            }
         }
         /*INSERT INTO new_table_name
         SELECT labels.label,shortabstracts.ShortAbstract,images.LinkToImage,types.Type
