@@ -641,19 +641,6 @@ fun MainScreen(state: ModalBottomSheetState){
 
                     val changeVisibleStateFAB = remember {
                         derivedStateOf {
-                            //log("scroll ${verticalScrollState.value}")
-                            //log("end ${stateGrid.layoutInfo.visibleItemsInfo}")
-                            try {
-                                /*with(stateGrid.layoutInfo) {
-                                    val itemSize = visibleItemsInfo.first().size
-                                    val itemScrollOffset = viewportEndOffset - itemSize.
-                                    log("offset $itemScrollOffset")
-                                }*/
-                                if (stateGrid.isScrollInProgress) {
-                                  //  stateGrid.scroll {  }
-                                }
-                             //   log("offset ${stateGrid.layoutInfo.}")
-                            } catch(_: Exception){}
                             stateGrid.firstVisibleItemScrollOffset > 0
                         }
                     }
