@@ -303,6 +303,8 @@ fun MainScreen(state: ModalBottomSheetState){
                 // возвращает значение если оно в интервале, либо мин значение если меньше или макс значение если больше
                 return Offset.Zero
             }
+
+
         }
     }
 
@@ -642,7 +644,15 @@ fun MainScreen(state: ModalBottomSheetState){
                             //log("scroll ${verticalScrollState.value}")
                             //log("end ${stateGrid.layoutInfo.visibleItemsInfo}")
                             try {
-                                log("offset ${stateGrid.layoutInfo.visibleItemsInfo.last().offset.y}")
+                                /*with(stateGrid.layoutInfo) {
+                                    val itemSize = visibleItemsInfo.first().size
+                                    val itemScrollOffset = viewportEndOffset - itemSize.
+                                    log("offset $itemScrollOffset")
+                                }*/
+                                if (stateGrid.isScrollInProgress) {
+                                  //  stateGrid.scroll {  }
+                                }
+                             //   log("offset ${stateGrid.layoutInfo.}")
                             } catch(_: Exception){}
                             stateGrid.firstVisibleItemScrollOffset > 0
                         }
