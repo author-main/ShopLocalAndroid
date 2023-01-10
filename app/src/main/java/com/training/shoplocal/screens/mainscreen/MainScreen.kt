@@ -601,12 +601,8 @@ fun MainScreen(state: ModalBottomSheetState){
                 }
                 LaunchedEffect(nextPart.value) {
                    // log("derived ${nextPart.value}")
-                    if (nextPart.value) {
-                        if (isSearchMode())
-                            log("search mode")
-                        else
-                            viewModel.getNextPortionData()
-                    }
+                    if (nextPart.value)
+                        viewModel.getNextPortionData(isSearchMode())
                 }
 
                 ShowDataDisplayPanel(modifier = Modifier

@@ -54,6 +54,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             ScreenRouter.navigateTo(ScreenItem.MainScreen)
             getBrands()
 //            exchangeDataMap[ExchangeData.GET_PRODUCTS] = false
+            loadedPortion = 0
             getProducts(1)
             authorizeUser()
         }
@@ -173,8 +174,9 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                     setSelectedProduct(Product())
                     val list = _products.value.toMutableList().apply { addAll(listProducts) }
                     _products.value = list
-                    lockDB = false
+
                 }
+                lockDB = false
             }
         }
     }
@@ -199,10 +201,14 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    fun getNextPortionData(){
+    fun getNextPortionData(searchMode: Boolean){
        val nextPortion = loadedPortion + 1//getPortion()+1
-        if (nextPortion <= maxPortion)
-            getProducts(nextPortion)
+        if (nextPortion <= maxPortion) {
+            if (searchMode) {
+
+            } else
+                getProducts(nextPortion)
+        }
     }
 
     fun saveScreenProducts(key: ScreenRouter.KEYSCREEN, firstIndex: Int, firstOffset: Int) {
@@ -271,8 +277,16 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
      *  End Блок методов для управления журналом поисковых запросов
      */
 
-    fun findProductsRequest(query: String, portion: Int = 1){
-        UUID_query = UUID.randomUUID()
+    fun findProductsRequest(query: String, value: Int = 0){
+        var portion = value
+        if (value == 0) {
+            loadedPortion = 0
+            UUID_query = UUID.randomUUID()
+            portion = 1
+            lockDB = false
+        }
+        if (lockDB) return
+        lockDB = true
         repository.findProductsRequest(query, portion, UUID_query.toString(), USER_ID) {listFound ->
             setSelectedProduct(Product())
             products.value.clear()
@@ -284,7 +298,9 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                     listFound[0].name = extractedData.second
                     //log("maxportion $maxPortion")
                 }
+                loadedPortion = portion
             }
+            lockDB = false
         }
         /*INSERT INTO new_table_name
         SELECT labels.label,shortabstracts.ShortAbstract,images.LinkToImage,types.Type
