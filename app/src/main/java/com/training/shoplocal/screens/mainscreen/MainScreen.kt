@@ -10,9 +10,10 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.*
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -26,13 +27,20 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
@@ -77,6 +85,10 @@ fun MainScreen(state: ModalBottomSheetState){
     }
 
     var searchScreenDisplayed by remember {
+        mutableStateOf(false)
+    }
+
+    var showFloatingButton by remember {
         mutableStateOf(false)
     }
 
@@ -268,8 +280,6 @@ fun MainScreen(state: ModalBottomSheetState){
         isFocusedSearchTextField = false
         viewModel.hideBottomNavigation(false)
     }
-
-
     fun isSearchMode() = searchState.value != SearchState.SEARCH_NONE
 
     BackHandler(enabled = isSearchMode()){
@@ -305,9 +315,62 @@ fun MainScreen(state: ModalBottomSheetState){
              //   ShowDataDisplayPanel(hide = isSearchMode)
 
 
-    Scaffold( topBar = {
-        //log("recomposition")
+    val visibleFAB = MutableTransitionState(false)
+    @Composable
+    fun AnimatedFloatingActionButton(){
+     // val scope = rememberCoroutineScope()
+//     val visible = MutableTransitionState(false)
+      visibleFAB.targetState = showFloatingButton
+      /*val animate = remember{ Animatable(0f) }
+      val scaleButton = if (show) animate.value else 0f
+      LaunchedEffect(Unit) {
+          scope.launch {
+              animate.animateTo(
+                  targetValue = scaleButton,
+                  animationSpec = tween(500)
+              )
+          }
+      }*/
 
+      androidx.compose.animation.AnimatedVisibility(
+          visibleState = visibleFAB,
+          enter = scaleIn(
+              animationSpec = tween(
+                  durationMillis = 200,
+                  easing = LinearEasing
+              )
+          ),
+          exit =  scaleOut(
+              animationSpec = tween(
+                  durationMillis = 100,
+                  easing = LinearEasing
+              )
+          )
+      ) {
+
+          FloatingActionButton(//modifier = Modifier
+             // .graphicsLayer(scaleX = scaleButton, scaleY = scaleButton),
+              backgroundColor = SelectedItem,
+              content = {
+
+
+                  Image(
+                      Icons.Filled.ArrowBack,
+                      modifier = Modifier.rotate(90f),
+                      contentDescription = null,
+                      colorFilter = ColorFilter.tint(TextFieldFont)
+                  )
+              },
+              onClick = {}
+          )
+      }
+    }
+
+    Scaffold(
+        floatingActionButton = {
+           AnimatedFloatingActionButton()
+        },
+        topBar = {
         TopAppBar(backgroundColor = MaterialTheme.colors.primary,
                     elevation = 0.dp
         ) {
@@ -337,8 +400,7 @@ fun MainScreen(state: ModalBottomSheetState){
                                     if (searchState.value == SearchState.SEARCH_QUERY) {
                                         searchState.value = SearchState.SEARCH_RESULT
                                         textSearch.value = prevSearchText.toString()
-                                    }
-                                    else {
+                                    } else {
                                         searchState.value = SearchState.SEARCH_NONE
                                         searchScreenDisplayed = false
                                         val stateData =
@@ -370,8 +432,8 @@ fun MainScreen(state: ModalBottomSheetState){
                                 //val searchStore: SearchQueryStorageInterface = SearchQueryStorage.getInstance()
                                 //lastSearchQuery.value = ""
                                 searchState.value = SearchState.SEARCH_QUERY
-                                    prevSearchText.clear()
-                                    prevSearchText.append(textSearch.value)
+                                prevSearchText.clear()
+                                prevSearchText.append(textSearch.value)
                                 //log("prev text search = $prevSearchText")
                                 isFocusedSearchTextField = true
                                 viewModel.hideBottomNavigation()
@@ -496,9 +558,10 @@ fun MainScreen(state: ModalBottomSheetState){
 
                 //ShowDataDisplayPanel(hide = isSearchMode)
         //    }
-
+            //val verticalScrollState = rememberScrollState()
             Box(
                 modifier = Modifier
+                   // .verticalScroll(verticalScrollState)
                     .padding(it)
                     .nestedScroll(nestedScrollConnection)
                     .fillMaxSize()
@@ -540,12 +603,14 @@ fun MainScreen(state: ModalBottomSheetState){
                     .background(MaterialTheme.colors.primary),
                     hide = isSearchMode)*/
 
-
+              //  val verticalScrollState = rememberScrollState()
                 if (products.isNotEmpty()) {
                     //log ("recompose grid")
+
                     LazyVerticalGrid(
                         modifier = Modifier
                             .padding(horizontal = 10.dp),
+                          //  .verticalScroll(verticalScrollState),
                         columns = GridCells.Adaptive(minSize = 150.dp),
                         state = stateGrid,
                         //contentPadding = PaddingValues(10.dp),
@@ -572,9 +637,22 @@ fun MainScreen(state: ModalBottomSheetState){
                         }*/
                     }
 
+                    val changeVisibleStateFAB = remember {
+                        derivedStateOf {
+                            //log("scroll ${verticalScrollState.value}")
+                            //log("end ${stateGrid.layoutInfo.visibleItemsInfo}")
+                            stateGrid.firstVisibleItemScrollOffset > 0
+                        }
+                    }
+
+                LaunchedEffect(changeVisibleStateFAB.value) {
+                    showFloatingButton = changeVisibleStateFAB.value
+                }
+
 
                 val nextPart = remember {
                     derivedStateOf {
+                        //log("offset ${stateGrid.firstVisibleItemScrollOffset}")
                         //log ("lastIndex = ${stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.index}, gridCount = ${stateGrid.layoutInfo.totalItemsCount - 1}")
                         /*val viewOffset = stateGrid.layoutInfo.viewportEndOffset // высота Grid
                         val offset = stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.offset?.y ?: 0 // расстояние от верха item до верха grid
@@ -599,11 +677,12 @@ fun MainScreen(state: ModalBottomSheetState){
 
                     }
                 }
+
                 LaunchedEffect(nextPart.value) {
-                   // log("derived ${nextPart.value}")
                     if (nextPart.value)
                         viewModel.getNextPortionData(isSearchMode())
                 }
+
 
                 ShowDataDisplayPanel(modifier = Modifier
                     .offset { IntOffset(x = 0, y = panelOffsetHeightPx.value.roundToInt()) }
