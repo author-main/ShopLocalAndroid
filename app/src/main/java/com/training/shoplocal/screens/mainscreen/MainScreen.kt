@@ -651,7 +651,6 @@ fun MainScreen(state: ModalBottomSheetState){
                             val prevFirstOffset = prevStateScroll.second
                             val firstIndex  = stateGrid.firstVisibleItemIndex
                             val firstOffset = stateGrid.firstVisibleItemScrollOffset
-                            prevStateScroll = firstIndex to firstOffset
                             val upperLimit = firstOffset == 0 && firstIndex == 0
                             var scrollUp = false
                             if (!upperLimit) {
@@ -661,12 +660,15 @@ fun MainScreen(state: ModalBottomSheetState){
                                                    else
                                                         firstOffset - prevFirstOffset
                                 if (deltaOffset < 0 || deltaIndex < 0) {
-                                    //log ("firstIndex = $firstIndex, prev = $prevFirstIndex")
-                                    //log ("firstOffset = $firstOffset, prev = $prevFirstOffset")
+                                    /*log ("firstIndex = $firstIndex, prev = $prevFirstIndex")
+                                    log ("firstOffset = $firstOffset, prev = $prevFirstOffset")*/
                                     scrollUp = true
                                 }
                             }
-                            //prevStateScroll = firstIndex to firstOffset
+                            /*if (upperLimit)
+                                prevStateScroll = 0 to 0
+                            else*/
+                                prevStateScroll = firstIndex to firstOffset
                             scrollUp
                         }
                     }
