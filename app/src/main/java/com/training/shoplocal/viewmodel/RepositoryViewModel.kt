@@ -148,33 +148,16 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             lockDB = true
           //  exchangeDataMap[ExchangeData.GET_PRODUCTS] = true
             repository.getProducts(USER_ID, part) { listProducts ->
-                //exchangeDataMap[ExchangeData.GET_PRODUCTS] = false
-                //exchangeDataMap.remove(ExchangeData.GET_PRODUCTS)
-
                 if (listProducts.isNotEmpty()) {
                     if (part == 1) {
                         val extractedData = getMaxPortion(listProducts[0].name)
                         maxPortion              = extractedData.first
                         listProducts[0].name    = extractedData.second
-                      /*  if (listProducts[0].name.startsWith('<')) {
-                            val index = listProducts[0].name.indexOf('>')
-                            try {
-                                if (index != -1) {
-                                    val count = listProducts[0].name.substring(1, index).toInt()
-                                    val name = listProducts[0].name.substring(index + 1)
-                                    listProducts[0].name = name
-                                    maxPortion = getPortion(count)
-                                }
-                            } catch (_: Exception) {
-                                maxPortion = -1
-                            }
-                        }*/
                     }
                     loadedPortion = part
                     setSelectedProduct(Product())
                     val list = _products.value.toMutableList().apply { addAll(listProducts) }
                     _products.value = list
-
                 }
                 lockDB = false
             }
@@ -284,20 +267,22 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             UUID_query = UUID.randomUUID()
             portion = 1
             lockDB = false
+            _products.value.clear()
+            //log("clear products")
         }
         if (lockDB) return
         lockDB = true
         repository.findProductsRequest(query, portion, UUID_query.toString(), USER_ID) {listFound ->
             setSelectedProduct(Product())
-            products.value.clear()
             if (listFound.isNotEmpty()) {
-                _products.value = listFound.toMutableList()
+                //_products.value = listFound.toMutableList()
+                //log("get portion $portion")
                 if (portion == 1) {
                     val extractedData = getMaxPortion(listFound[0].name)
                     maxPortion = extractedData.first
                     listFound[0].name = extractedData.second
-                    //log("maxportion $maxPortion")
                 }
+                _products.value = _products.value.toMutableList().apply { addAll(listFound) }
                 loadedPortion = portion
             }
             lockDB = false

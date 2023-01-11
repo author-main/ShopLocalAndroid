@@ -71,15 +71,19 @@ import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun MainScreen(state: ModalBottomSheetState){
-
+    val scope = rememberCoroutineScope()
     // Сохраняем значение textSearch перед выбором из списка,
     // если будет нажата кнопка back в режиме списка -
     // textSearch присваиваем старое значение prevSearchText
+    var prevStateScroll = remember {
+        Pair<Int, Int>(0,0)
+    }
     val prevSearchText = remember {
         StringBuilder("")
     }
@@ -128,7 +132,6 @@ fun MainScreen(state: ModalBottomSheetState){
         }*/
 
         val MAX_SIZE = 32f
-        val scope = rememberCoroutineScope()
         val animate  = remember{ Animatable(0f) }
         val animate1 = remember{ Animatable(0f) }
         val animate2 = remember{ Animatable(0f) }
@@ -319,7 +322,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
     val visibleFAB = MutableTransitionState(false)
     @Composable
-    fun AnimatedFloatingActionButton(){
+    fun AnimatedFloatingActionButton(action: () -> Unit){
      // val scope = rememberCoroutineScope()
 //     val visible = MutableTransitionState(false)
       visibleFAB.targetState = showFloatingButton
@@ -363,14 +366,21 @@ fun MainScreen(state: ModalBottomSheetState){
                       colorFilter = ColorFilter.tint(TextFieldFont)
                   )
               },
-              onClick = {}
+              onClick = {action()}
           )
       }
     }
 
     Scaffold(
         floatingActionButton = {
-           AnimatedFloatingActionButton()
+           AnimatedFloatingActionButton(){
+               scope.launch {
+                   stateGrid.animateScrollToItem(
+                       0,
+                       0
+                   )
+               }
+           }
         },
         topBar = {
         TopAppBar(backgroundColor = MaterialTheme.colors.primary,
@@ -561,17 +571,17 @@ fun MainScreen(state: ModalBottomSheetState){
                 //ShowDataDisplayPanel(hide = isSearchMode)
         //    }
             //val verticalScrollState = rememberScrollState()
-            Box(
+        Box(
                 modifier = Modifier
-                   // .verticalScroll(verticalScrollState)
+                    //.verticalScroll(verticalScrollState)
                     .padding(it)
                     .nestedScroll(nestedScrollConnection)
                     .fillMaxSize()
                     .background(BgScreenDark),
             ) {
 
-               /* val boxWithConstraintsScope = this
-                log("height = ${boxWithConstraintsScope.maxHeight}")*/
+               // val boxWithConstraintsScope = this
+                //log("height = ${boxWithConstraintsScope.maxHeight}")*/
                /* var heightConstraints by remember {
                     mutableStateOf(boxWithConstraintsScope.maxHeight)
                 }
@@ -605,14 +615,14 @@ fun MainScreen(state: ModalBottomSheetState){
                     .background(MaterialTheme.colors.primary),
                     hide = isSearchMode)*/
 
-              //  val verticalScrollState = rememberScrollState()
-                if (products.isNotEmpty()) {
-                    //log ("recompose grid")
 
+                if (products.isNotEmpty()) {
+                   // val verticalScrollState = rememberScrollState()
                     LazyVerticalGrid(
                         modifier = Modifier
                             .padding(horizontal = 10.dp),
-                          //  .verticalScroll(verticalScrollState),
+                    //        .verticalScroll(verticalScrollState, true)
+                    //        .height(boxWithConstraintsScope.maxHeight),
                         columns = GridCells.Adaptive(minSize = 150.dp),
                         state = stateGrid,
                         //contentPadding = PaddingValues(10.dp),
@@ -641,7 +651,27 @@ fun MainScreen(state: ModalBottomSheetState){
 
                     val changeVisibleStateFAB = remember {
                         derivedStateOf {
-                            stateGrid.firstVisibleItemScrollOffset > 0
+                            val prevFirstIndex  = prevStateScroll.first
+                            val prevFirstOffset = prevStateScroll.second
+                            val firstIndex  = stateGrid.firstVisibleItemIndex
+                            val firstOffset = stateGrid.firstVisibleItemScrollOffset
+                            prevStateScroll = firstIndex to firstOffset
+                            val upperLimit = firstOffset == 0 && firstIndex == 0
+                            var scrollUp = false
+                            if (!upperLimit) {
+                                val deltaIndex = firstIndex - prevFirstIndex
+                                val deltaOffset  = if (firstIndex > prevFirstIndex)
+                                                        0
+                                                   else
+                                                        firstOffset - prevFirstOffset
+                                if (deltaOffset < 0 || deltaIndex < 0) {
+                                    //log ("firstIndex = $firstIndex, prev = $prevFirstIndex")
+                                    //log ("firstOffset = $firstOffset, prev = $prevFirstOffset")
+                                    scrollUp = true
+                                }
+                            }
+                            //prevStateScroll = firstIndex to firstOffset
+                            scrollUp
                         }
                     }
 
