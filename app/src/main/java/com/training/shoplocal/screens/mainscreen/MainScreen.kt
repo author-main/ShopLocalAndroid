@@ -665,10 +665,7 @@ fun MainScreen(state: ModalBottomSheetState){
                                     scrollUp = true
                                 }
                             }
-                            /*if (upperLimit)
-                                prevStateScroll = 0 to 0
-                            else*/
-                                prevStateScroll = firstIndex to firstOffset
+                            prevStateScroll = firstIndex to firstOffset
                             scrollUp
                         }
                     }
