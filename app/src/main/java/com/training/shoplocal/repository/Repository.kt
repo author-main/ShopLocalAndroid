@@ -193,7 +193,7 @@ class Repository: DAOinterface {
         orderDisplay.setCategory(3)
         orderDisplay.setFavorite(1)
         orderDisplay.setPriceRange(10.00f to 100.00f)*/
-
+        log(UUID_query)
         val order64 = encodeBase64(OrderDisplay.getOrderDislayQuery())
         val query64 = encodeBase64(query)
       /*  log(query64)
