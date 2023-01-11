@@ -395,9 +395,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
                 //if (isFocusedSearchTextField.value) {
                 if (isSearchMode()) {
-//                      val list = LocalSearchStorage.current?.getQueries() ?: listOf<String>()
-                    //  IconButton(onClick = {  }) {
-                    val scope = rememberCoroutineScope()
+                    //val scope = rememberCoroutineScope()
                     Icon(
                         modifier = Modifier
                             .align(Alignment.CenterVertically)
@@ -407,7 +405,6 @@ fun MainScreen(state: ModalBottomSheetState){
                                 indication = null
                             ) {
                                 hideSearchDialog()
-
                                 if (searchScreenDisplayed) {
                                     if (searchState.value == SearchState.SEARCH_QUERY) {
                                         searchState.value = SearchState.SEARCH_RESULT
@@ -418,7 +415,6 @@ fun MainScreen(state: ModalBottomSheetState){
                                         val stateData =
                                             viewModel.restoreScreenProducts(ScreenRouter.current.key)
                                         scope.launch {
-                                            // stateGrid.animateScrollToItem(
                                             stateGrid.scrollToItem(
                                                 stateData.first,
                                                 stateData.second
