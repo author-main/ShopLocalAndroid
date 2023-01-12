@@ -16,8 +16,9 @@ import java.util.UUID
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     //private val exchangeDataMap = HashMap<ExchangeData, Boolean>()
+//    private val UUID_TIMESTAMP =  System.nanoTime()
     private var maxPortion: Int = -1
-    private var UUID_QUERY: UUID = UUID.randomUUID()
+    private val UUID_QUERY: UUID = UUID.randomUUID()
     private var lockDB = false
     //private val reflexRepository = Repository::class.java.methods
     //log(reflexRepository.toString())
