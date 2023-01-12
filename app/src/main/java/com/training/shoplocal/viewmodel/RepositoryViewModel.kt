@@ -17,7 +17,7 @@ import java.util.UUID
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     //private val exchangeDataMap = HashMap<ExchangeData, Boolean>()
     private var maxPortion: Int = -1
-    private var UUID_query: UUID = UUID.randomUUID()
+    private var UUID_QUERY: UUID = UUID.randomUUID()
     private var lockDB = false
     //private val reflexRepository = Repository::class.java.methods
     //log(reflexRepository.toString())
@@ -264,7 +264,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         var portion = value
         if (value == 0) {
             loadedPortion = 0
-            UUID_query = UUID.randomUUID()
+            UUID_QUERY = UUID.randomUUID()
             portion = 1
             lockDB = false
             _products.value.clear()
@@ -272,7 +272,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         }
         if (lockDB) return
         lockDB = true
-        repository.findProductsRequest(query, portion, UUID_query.toString(), USER_ID) {listFound ->
+        repository.findProductsRequest(query, portion, UUID_QUERY.toString(), USER_ID) { listFound ->
             setSelectedProduct(Product())
             if (listFound.isNotEmpty()) {
                 //_products.value = listFound.toMutableList()
