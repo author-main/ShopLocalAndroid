@@ -185,11 +185,11 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    fun getNextPortionData(searchMode: Boolean){
+    fun getNextPortionData(searchMode: Boolean, textSearch: String){
        val nextPortion = loadedPortion + 1//getPortion()+1
         if (nextPortion <= maxPortion) {
             if (searchMode) {
-
+                findProductsRequest(textSearch, nextPortion)
             } else
                 getProducts(nextPortion)
         }
