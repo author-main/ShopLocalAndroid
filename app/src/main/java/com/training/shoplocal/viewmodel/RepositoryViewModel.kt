@@ -264,7 +264,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         var portion = value
         if (value == 0) {
             loadedPortion = 0
-            UUID_QUERY = UUID.randomUUID()
+            //UUID_QUERY = UUID.randomUUID()
             portion = 1
             lockDB = false
             _products.value.clear()
