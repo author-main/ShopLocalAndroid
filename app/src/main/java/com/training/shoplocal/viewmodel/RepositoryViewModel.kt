@@ -190,8 +190,9 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         if (nextPortion <= maxPortion) {
             if (searchMode) {
                 findProductsRequest(textSearch, nextPortion)
-            } else
+            } else {
                 getProducts(nextPortion)
+            }
         }
     }
 

@@ -705,8 +705,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
                 LaunchedEffect(nextPart.value) {
                     if (nextPart.value)
-                        if (isSearchMode())
-                            viewModel.getNextPortionData(isSearchMode(), textSearch.value.trim())
+                        viewModel.getNextPortionData(isSearchMode(), textSearch.value.trim())
                 }
 
 
