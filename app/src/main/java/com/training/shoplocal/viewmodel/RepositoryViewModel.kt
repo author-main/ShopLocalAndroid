@@ -270,6 +270,11 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
      */
 
     fun findProductsRequest(query: String, value: Int = 0){
+/*        val list = _products.value.toMutableList()
+        list.addAll(_products.value)
+        _products.value = mutableListOf()
+        _products.value = list
+        return*/
         if (lockDB) return
         var portion = value
         if (value == 0) {

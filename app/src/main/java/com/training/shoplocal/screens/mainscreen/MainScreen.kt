@@ -452,8 +452,8 @@ fun MainScreen(state: ModalBottomSheetState){
                     modifier = Modifier
                         .onFocusChanged {
                             if (it.isFocused) {
-                                /*prevStateScroll = Pair<Int, Int>(0,0)
-                                showFloatingButton = false*/
+                               // prevStateScroll = Pair<Int, Int>(0,0)
+                                showFloatingButton = false
 
 
                                 //isSearchMode = true
@@ -681,6 +681,7 @@ fun MainScreen(state: ModalBottomSheetState){
                         }*/
                     }
 
+                    if (!isFocusedSearchTextField) {
                     val changeVisibleStateFAB = remember {
                         derivedStateOf {
                             val prevFirstIndex  = prevStateScroll.first
@@ -707,13 +708,13 @@ fun MainScreen(state: ModalBottomSheetState){
 
                             scrollUp
                         }
-                    }
 
+                    }
                 LaunchedEffect(changeVisibleStateFAB.value) {
                     showFloatingButton = changeVisibleStateFAB.value
                 }
 
-
+                    }
                 val nextPart = remember {
                     derivedStateOf {
                         //log("offset ${stateGrid.firstVisibleItemScrollOffset}")
