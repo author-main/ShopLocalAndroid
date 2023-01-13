@@ -435,6 +435,10 @@ fun MainScreen(state: ModalBottomSheetState){
                     modifier = Modifier
                         .onFocusChanged {
                             if (it.isFocused) {
+                                /*prevStateScroll = Pair<Int, Int>(0,0)
+                                showFloatingButton = false*/
+
+
                                 //isSearchMode = true
                                 //val searchStore: SearchQueryStorageInterface = SearchQueryStorage.getInstance()
                                 //lastSearchQuery.value = ""
@@ -467,7 +471,6 @@ fun MainScreen(state: ModalBottomSheetState){
                         onSearch = {
                             //   hideSearchDialog()
                             if (textSearch.value.isNotBlank()) {
-                                //prevStateScroll = Pair<Int, Int>(0,0)
                                 hideSearchDialog()
                                 if (!searchScreenDisplayed) {
                                     viewModel.saveScreenProducts(
