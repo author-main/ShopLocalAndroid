@@ -270,6 +270,12 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
      */
 
     fun findProductsRequest(query: String, value: Int = 0){
+        if (value == -1) {
+            repository.findProductsRequest(query, 0, UUID_QUERY, USER_ID){}
+            return
+        }
+
+
 /*        val list = _products.value.toMutableList()
         list.addAll(_products.value)
         _products.value = mutableListOf()
