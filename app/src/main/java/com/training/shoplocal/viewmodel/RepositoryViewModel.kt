@@ -322,4 +322,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                 AND labels.Resource=types.Resource;*/
     }
 
+    fun clearResultSearch(){
+        findProductsRequest("*", -1)
+    }
+
  }

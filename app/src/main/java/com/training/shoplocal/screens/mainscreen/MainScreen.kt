@@ -429,7 +429,7 @@ fun MainScreen(state: ModalBottomSheetState){
                                     } else {
                                         searchState.value = SearchState.SEARCH_NONE
                                         searchScreenDisplayed = false
-                                        viewModel.findProductsRequest("*", -1) // удаляем результаты последнего запроса
+                                        viewModel.clearResultSearch() // удаляем результаты последнего запроса в БД на сервере
                                         val firstIndex =
                                             viewModel.restoreScreenProducts(ScreenRouter.current.key)
                                         scope.launch {
