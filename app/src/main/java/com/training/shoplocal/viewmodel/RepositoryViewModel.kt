@@ -295,7 +295,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         //log ("find portion = $portion")
         //repository.findProductsRequest(query, portion, UUID_QUERY.toString(), USER_ID) { listFound ->
             repository.findProductsRequest(query, portion, UUID_QUERY, USER_ID) { listFound ->
-                log ("size ${listFound.size}")
+             //   log ("size ${listFound.size}")
                 setSelectedProduct(Product())
                 if (listFound.isNotEmpty()) {
                     //_products.value = listFound.toMutableList()
@@ -310,7 +310,6 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                     _products.value = list
                     loadedPortion = portion
                 } else {
-                    log("empty $portion")
                     if (portion == 1)
                         _products.value = mutableListOf()
                 }
