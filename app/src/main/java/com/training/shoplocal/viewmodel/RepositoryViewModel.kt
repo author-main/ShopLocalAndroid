@@ -288,33 +288,36 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             //UUID_QUERY = UUID.randomUUID()
             portion = 1
             lockDB = false
-            //_products.value.clear()// = mutableListOf()
+                //_products.value.clear()// = mutableListOf()
             //log("clear products")
         }
         lockDB = true
         //log ("find portion = $portion")
         //repository.findProductsRequest(query, portion, UUID_QUERY.toString(), USER_ID) { listFound ->
-        repository.findProductsRequest(query, portion, UUID_QUERY, USER_ID) { listFound ->
-            setSelectedProduct(Product())
-            if (listFound.isNotEmpty()) {
-                //_products.value = listFound.toMutableList()
-                //log("get portion $portion")
-                if (portion == 1) {
-                    _products.value.clear()
-                    val extractedData = getMaxPortion(listFound[0].name)
-                    maxPortion = extractedData.first
-                    listFound[0].name = extractedData.second
+            repository.findProductsRequest(query, portion, UUID_QUERY, USER_ID) { listFound ->
+                log ("size ${listFound.size}")
+                setSelectedProduct(Product())
+                if (listFound.isNotEmpty()) {
+                    //_products.value = listFound.toMutableList()
+                    //log("get portion $portion")
+                    if (portion == 1) {
+                        val extractedData = getMaxPortion(listFound[0].name)
+                        maxPortion = extractedData.first
+                        listFound[0].name = extractedData.second
+                        _products.value.clear()
+                    }
+                    val list = _products.value.toMutableList().apply { addAll(listFound) }
+                    _products.value = list
+                    loadedPortion = portion
+                } else {
+                    log("empty $portion")
+                    if (portion == 1)
+                        _products.value = mutableListOf()
                 }
-                val list = _products.value.toMutableList().apply { addAll(listFound) }
-                _products.value = list
-                loadedPortion = portion
-            } else {
-                if (portion == 1)
-                    _products.value = mutableListOf()
+                lockDB = false
+                //log("get portion $portion")
             }
-            lockDB = false
-            //log("get portion $portion")
-        }
+
         /*INSERT INTO new_table_name
         SELECT labels.label,shortabstracts.ShortAbstract,images.LinkToImage,types.Type
         FROM ner.images,ner.labels,ner.shortabstracts,ner.types

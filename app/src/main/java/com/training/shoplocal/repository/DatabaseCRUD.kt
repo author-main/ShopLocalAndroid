@@ -29,9 +29,9 @@ class DatabaseCRUD: DatabaseCRUDInterface {
             override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
 
                     response.body()?.let {
-                        if (it.isNotEmpty()) {
+                       // if (it.isNotEmpty()) {
                             action.invoke(it)
-                        }
+                       // }
                     }
             }
 
@@ -59,14 +59,17 @@ class DatabaseCRUD: DatabaseCRUDInterface {
             userid,
             object: retrofit2.Callback<List<Product>>{
             override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
-                response.body()?.let {
-                    if (it.isNotEmpty()) {
-                        action.invoke(it)
+                    //log("response  " + response.body()?.toString())
+                    response.body()?.let {
+                     //   if (it.isNotEmpty()) {
+                            //log("found ok")
+                            action.invoke(it)
+                     //   }
                     }
-                }
             }
 
             override fun onFailure(call: Call<List<Product>>, t: Throwable) {
+                log("found failure")
                 action.invoke(mutableListOf<Product>())
             }
         })
