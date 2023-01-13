@@ -23,7 +23,7 @@ fun rememberLazyViewState(key: ScreenRouter.KEYSCREEN,
         val savedValue = MapScreenData[key]
         val savedIndex = savedValue?.index ?: initFirstVisibleItemIndex
         val savedOffset = savedValue?.offset ?: initFirstVisibleItemScrollOffset
-
+        //log("saveIndex = $savedIndex, saveOffset = $savedOffset")
         LazyGridState(
             savedIndex,
             savedOffset
@@ -37,6 +37,7 @@ fun rememberLazyViewState(key: ScreenRouter.KEYSCREEN,
            // log("dispose stateGrid")
             val index  = scrollState.firstVisibleItemIndex
             val offset = scrollState.firstVisibleItemScrollOffset
+            //log("dispose: saveIndex = $index, saveOffset = $offset")
             MapScreenData[key] = ScreenData(index, offset)
         }
     }

@@ -189,6 +189,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
        val nextPortion = loadedPortion + 1//getPortion()+1
         if (nextPortion <= maxPortion) {
             if (searchMode) {
+                //log("next portion = $nextPortion, max portion = $maxPortion")
                 findProductsRequest(textSearch, nextPortion)
             } else {
                 getProducts(nextPortion)
@@ -196,19 +197,20 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    fun saveScreenProducts(key: ScreenRouter.KEYSCREEN, firstIndex: Int, firstOffset: Int) {
+    fun saveScreenProducts(key: ScreenRouter.KEYSCREEN, firstIndex: Int) {
         repository.saveScreenProducts(key,
-            DataScreen(firstIndex, firstOffset, maxPortion, products.value)
+//            DataScreen(firstIndex, firstOffset, maxPortion, products.value)
+            DataScreen(firstIndex, maxPortion, products.value)
         )
     }
 
-    fun restoreScreenProducts(key: ScreenRouter.KEYSCREEN): Pair<Int, Int> {
+    fun restoreScreenProducts(key: ScreenRouter.KEYSCREEN): Int{//Pair<Int, Int> {
         val data = repository.restoreScreenProducts(key)
         maxPortion = data.maxPortion
         _products.value = data.products//repository.restoreScreenProducts(key)//.toMutableList()
         loadedPortion = getPortion() // количество загруженных порций
         //log("firstIndex ${data.firstItemIndex}, firstOffset ${data.firstItemOffset}")
-        return data.firstItemIndex to data.firstItemOffset
+        return data.firstItemIndex// to data.firstItemOffset
     }
 
     private fun getPortion(size: Int = 0): Int{
@@ -265,15 +267,17 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     fun findProductsRequest(query: String, value: Int = 0){
         var portion = value
         if (value == 0) {
+            log ("find init")
             loadedPortion = 0
             //UUID_QUERY = UUID.randomUUID()
             portion = 1
             lockDB = false
-            _products.value.clear()
+            _products.value = mutableListOf()
             //log("clear products")
         }
         if (lockDB) return
         lockDB = true
+        //log ("find portion = $portion")
         //repository.findProductsRequest(query, portion, UUID_QUERY.toString(), USER_ID) { listFound ->
         repository.findProductsRequest(query, portion, UUID_QUERY, USER_ID) { listFound ->
             setSelectedProduct(Product())
@@ -285,7 +289,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                     maxPortion = extractedData.first
                     listFound[0].name = extractedData.second
                 }
-                _products.value = _products.value.toMutableList().apply { addAll(listFound) }
+                val list = _products.value.toMutableList().apply { addAll(listFound) }
+                _products.value = list
                 loadedPortion = portion
             }
             lockDB = false

@@ -313,8 +313,8 @@ fun MainScreen(state: ModalBottomSheetState){
 
 
 
-
     val stateGrid = rememberLazyViewState(ScreenRouter.current.key)
+    log("remember first index ${stateGrid.firstVisibleItemIndex}")
   //  Column(modifier = Modifier.fillMaxWidth()) {
          //   Box() {
              //   ShowDataDisplayPanel(hide = isSearchMode)
@@ -376,7 +376,6 @@ fun MainScreen(state: ModalBottomSheetState){
            AnimatedFloatingActionButton(){
                scope.launch {
                    stateGrid.animateScrollToItem(
-                       0,
                        0
                    )
                }
@@ -412,12 +411,11 @@ fun MainScreen(state: ModalBottomSheetState){
                                     } else {
                                         searchState.value = SearchState.SEARCH_NONE
                                         searchScreenDisplayed = false
-                                        val stateData =
+                                        val firstItemIndex =
                                             viewModel.restoreScreenProducts(ScreenRouter.current.key)
                                         scope.launch {
                                             stateGrid.scrollToItem(
-                                                stateData.first,
-                                                stateData.second
+                                                firstItemIndex
                                             )
                                         }
 
@@ -466,15 +464,21 @@ fun MainScreen(state: ModalBottomSheetState){
                             //   hideSearchDialog()
                             if (textSearch.value.isNotBlank()) {
                                 hideSearchDialog()
-                                if (!searchScreenDisplayed)
+                                if (!searchScreenDisplayed) {
                                     viewModel.saveScreenProducts(
                                         ScreenRouter.current.key,
-                                        stateGrid.firstVisibleItemIndex,
-                                        stateGrid.firstVisibleItemScrollOffset
+                                        stateGrid.firstVisibleItemIndex
+                                        //stateGrid.firstVisibleItemScrollOffset
                                     )
+                                }
                                 searchState.value = SearchState.SEARCH_RESULT
                                 searchScreenDisplayed = true
+                              /*  if (products.isNotEmpty())
+                                scope.launch {
+                                    stateGrid.scrollToItem(0)
+                                }*/
                                 viewModel.findProductsRequest(textSearch.value.trim())
+
                             }
                         }
                     ),
@@ -614,6 +618,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
                 if (products.isNotEmpty()) {
                    // val verticalScrollState = rememberScrollState()
+                    //log("first item - ${stateGrid.firstVisibleItemIndex}")
                     LazyVerticalGrid(
                         modifier = Modifier
                             .padding(horizontal = 10.dp),
@@ -696,7 +701,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
                         upload &&
                         stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.index == stateGrid.layoutInfo.totalItemsCount - 1
-                                //&& stateGrid.isScrollInProgress
+                                && stateGrid.isScrollInProgress
                                 //&& stateGrid.layoutInfo.visibleItemsInfo.last().offset.y > 0
                                 && stateGrid.layoutInfo.viewportEndOffset - stateGrid.layoutInfo.visibleItemsInfo.last().offset.y >= stateGrid.layoutInfo.visibleItemsInfo.last().size.height / 2
 
