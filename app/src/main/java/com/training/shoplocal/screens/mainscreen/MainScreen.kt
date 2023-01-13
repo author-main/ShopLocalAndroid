@@ -622,7 +622,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
                 if (products.isNotEmpty()) {
                    // val verticalScrollState = rememberScrollState()
-                    log("first item - ${stateGrid.firstVisibleItemIndex}")
+                    //log("first item - ${stateGrid.firstVisibleItemIndex}")
                     LazyVerticalGrid(
                         modifier = Modifier
                             .padding(horizontal = 10.dp),
