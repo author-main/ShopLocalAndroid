@@ -202,14 +202,14 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    fun saveScreenProducts(key: ScreenRouter.KEYSCREEN, firstIndex: Int) {
+    fun saveScreenProducts(key: ScreenRouter.KEYSCREEN, firstIndex: Int) {//, firstOffset: Int) {
         repository.saveScreenProducts(key,
 //            DataScreen(firstIndex, firstOffset, maxPortion, products.value)
             DataScreen(firstIndex, maxPortion, products.value)
         )
     }
 
-    fun restoreScreenProducts(key: ScreenRouter.KEYSCREEN): Int{//Pair<Int, Int> {
+    fun restoreScreenProducts(key: ScreenRouter.KEYSCREEN): Int{//} Pair<Int, Int> {
         val data = repository.restoreScreenProducts(key)
         maxPortion = data.maxPortion
         _products.value = data.products//repository.restoreScreenProducts(key)//.toMutableList()
@@ -277,7 +277,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             //UUID_QUERY = UUID.randomUUID()
             portion = 1
             lockDB = false
-            _products.value.clear()// = mutableListOf()
+            //_products.value.clear()// = mutableListOf()
             //log("clear products")
         }
         lockDB = true
@@ -289,6 +289,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                 //_products.value = listFound.toMutableList()
                 //log("get portion $portion")
                 if (portion == 1) {
+                    _products.value.clear()
                     val extractedData = getMaxPortion(listFound[0].name)
                     maxPortion = extractedData.first
                     listFound[0].name = extractedData.second
@@ -301,6 +302,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                     _products.value = mutableListOf()
             }
             lockDB = false
+            //log("get portion $portion")
         }
         /*INSERT INTO new_table_name
         SELECT labels.label,shortabstracts.ShortAbstract,images.LinkToImage,types.Type

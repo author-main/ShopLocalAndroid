@@ -105,6 +105,23 @@ fun MainScreen(state: ModalBottomSheetState){
         mutableStateOf(SearchState.SEARCH_NONE)
     }
 
+
+    /*val showSearchResult = remember {
+        derivedStateOf {
+            searchState.value == SearchState.SEARCH_RESULT || searchScreenDisplayed
+        }
+    }*/
+
+    /*log ("prevSearchText $prevSearchText")
+    log ("searchScreenDisplayed $searchScreenDisplayed")
+
+    log ("showFloatingButton $showFloatingButton")
+
+    log ("isFocusedSearchTextField $isFocusedSearchTextField")
+
+    log ("searchState  ${searchState.value.name}")*/
+
+
     DisposableEffect(Unit) {
         onDispose {
            // isSearchMode = false
@@ -315,7 +332,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
 
     val stateGrid = rememberLazyViewState(ScreenRouter.current.key)
-    //log("remember first index ${stateGrid.firstVisibleItemIndex}")
+ //   log("remember first index ${stateGrid.firstVisibleItemIndex}")
   //  Column(modifier = Modifier.fillMaxWidth()) {
          //   Box() {
              //   ShowDataDisplayPanel(hide = isSearchMode)
@@ -412,11 +429,11 @@ fun MainScreen(state: ModalBottomSheetState){
                                     } else {
                                         searchState.value = SearchState.SEARCH_NONE
                                         searchScreenDisplayed = false
-                                        val firstItemIndex =
+                                        val firstIndex =
                                             viewModel.restoreScreenProducts(ScreenRouter.current.key)
                                         scope.launch {
                                             stateGrid.scrollToItem(
-                                                firstItemIndex
+                                                firstIndex
                                             )
                                         }
 
@@ -469,9 +486,13 @@ fun MainScreen(state: ModalBottomSheetState){
                     ),
                     keyboardActions = KeyboardActions(
                         onSearch = {
+                            if (products.isNotEmpty())
+                                scope.launch {
+                                    stateGrid.scrollToItem(0)
+                                }
                             //   hideSearchDialog()
                             if (textSearch.value.isNotBlank()) {
-                                hideSearchDialog()
+
                                 if (!searchScreenDisplayed) {
                                     viewModel.saveScreenProducts(
                                         ScreenRouter.current.key,
@@ -479,14 +500,15 @@ fun MainScreen(state: ModalBottomSheetState){
                                         //stateGrid.firstVisibleItemScrollOffset
                                     )
                                 }
+
+                                hideSearchDialog()
+                                viewModel.findProductsRequest(textSearch.value.trim())
                                 searchState.value = SearchState.SEARCH_RESULT
                                 searchScreenDisplayed = true
-                              /*  if (products.isNotEmpty())
-                                scope.launch {
-                                    stateGrid.scrollToItem(0)
-                                }*/
-                                viewModel.findProductsRequest(textSearch.value.trim())
-
+                                /*if (products.isNotEmpty())
+                                    scope.launch {
+                                        stateGrid.scrollToItem(0)
+                                    }*/
                             }
                         }
                     ),
@@ -626,7 +648,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
                 if (products.isNotEmpty()) {
                    // val verticalScrollState = rememberScrollState()
-                    //log("first item - ${stateGrid.firstVisibleItemIndex}")
+                    //log("first Index = ${stateGrid.firstVisibleItemIndex}")
                     LazyVerticalGrid(
                         modifier = Modifier
                             .padding(horizontal = 10.dp),
@@ -649,6 +671,7 @@ fun MainScreen(state: ModalBottomSheetState){
                                 CardProduct(product, state = state)
                             }
                         }
+
                       /*  if (restoredStateGrid != null) {
                             stateGrid = LazyGridState(
                                 restoredStateGrid!!.firstVisibleItemIndex,
@@ -720,8 +743,9 @@ fun MainScreen(state: ModalBottomSheetState){
                 }
 
                 LaunchedEffect(nextPart.value) {
-                    if (nextPart.value)
+                    if (nextPart.value) {
                         viewModel.getNextPortionData(isSearchMode(), textSearch.value.trim())
+                    }
                 }
 
 
