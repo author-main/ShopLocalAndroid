@@ -265,16 +265,16 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
      */
 
     fun findProductsRequest(query: String, value: Int = 0){
+        if (lockDB) return
         var portion = value
         if (value == 0) {
             loadedPortion = 0
             //UUID_QUERY = UUID.randomUUID()
             portion = 1
             lockDB = false
-            _products.value = mutableListOf()
+            _products.value.clear()// = mutableListOf()
             //log("clear products")
         }
-        if (lockDB) return
         lockDB = true
         //log ("find portion = $portion")
         //repository.findProductsRequest(query, portion, UUID_QUERY.toString(), USER_ID) { listFound ->

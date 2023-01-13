@@ -437,6 +437,9 @@ fun MainScreen(state: ModalBottomSheetState){
                                 //isSearchMode = true
                                 //val searchStore: SearchQueryStorageInterface = SearchQueryStorage.getInstance()
                                 //lastSearchQuery.value = ""
+                                /*scope.launch {
+                                    stateGrid.scrollToItem(0)
+                                }*/
                                 searchState.value = SearchState.SEARCH_QUERY
                                 prevSearchText.clear()
                                 prevSearchText.append(textSearch.value)
@@ -618,7 +621,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
                 if (products.isNotEmpty()) {
                    // val verticalScrollState = rememberScrollState()
-                    //log("first item - ${stateGrid.firstVisibleItemIndex}")
+                    log("first item - ${stateGrid.firstVisibleItemIndex}")
                     LazyVerticalGrid(
                         modifier = Modifier
                             .padding(horizontal = 10.dp),
