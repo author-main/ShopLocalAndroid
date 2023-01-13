@@ -467,6 +467,7 @@ fun MainScreen(state: ModalBottomSheetState){
                         onSearch = {
                             //   hideSearchDialog()
                             if (textSearch.value.isNotBlank()) {
+                                //prevStateScroll = Pair<Int, Int>(0,0)
                                 hideSearchDialog()
                                 if (!searchScreenDisplayed) {
                                     viewModel.saveScreenProducts(

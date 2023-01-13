@@ -12,11 +12,12 @@ import com.training.shoplocal.screens.ScreenRouter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.util.UUID
+import java.util.*
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
-    //private val exchangeDataMap = HashMap<ExchangeData, Boolean>()
-    private val UUID_QUERY =  System.nanoTime().toString()
+    /*var deviceUuid =
+        UUID(androidId.hashCode(), tmDevice.hashCode() as Long shl 32 or tmSerial.hashCode())*/
+    private val UUID_QUERY = System.nanoTime().toString()
     private var maxPortion: Int = -1
     //private val UUID_QUERY: String = UUID.randomUUID().toString()
     private var lockDB = false
