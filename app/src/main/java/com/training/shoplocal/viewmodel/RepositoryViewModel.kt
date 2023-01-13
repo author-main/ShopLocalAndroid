@@ -267,7 +267,6 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     fun findProductsRequest(query: String, value: Int = 0){
         var portion = value
         if (value == 0) {
-            log ("find init")
             loadedPortion = 0
             //UUID_QUERY = UUID.randomUUID()
             portion = 1

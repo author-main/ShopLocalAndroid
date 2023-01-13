@@ -314,7 +314,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
 
     val stateGrid = rememberLazyViewState(ScreenRouter.current.key)
-    log("remember first index ${stateGrid.firstVisibleItemIndex}")
+    //log("remember first index ${stateGrid.firstVisibleItemIndex}")
   //  Column(modifier = Modifier.fillMaxWidth()) {
          //   Box() {
              //   ShowDataDisplayPanel(hide = isSearchMode)
@@ -657,6 +657,8 @@ fun MainScreen(state: ModalBottomSheetState){
                             val firstIndex  = stateGrid.firstVisibleItemIndex
                             val firstOffset = stateGrid.firstVisibleItemScrollOffset
                             val upperLimit = firstOffset == 0 && firstIndex == 0
+                            /*if (upperLimit)
+                                log("upper limit")*/
                             var scrollUp = false
                             if (!upperLimit) {
                                 val deltaIndex = firstIndex - prevFirstIndex
@@ -671,6 +673,7 @@ fun MainScreen(state: ModalBottomSheetState){
                                 }
                             }
                             prevStateScroll = firstIndex to firstOffset
+
                             scrollUp
                         }
                     }
