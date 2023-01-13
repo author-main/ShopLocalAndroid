@@ -155,11 +155,15 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                         val extractedData = getMaxPortion(listProducts[0].name)
                         maxPortion              = extractedData.first
                         listProducts[0].name    = extractedData.second
+                        _products.value.clear()
                     }
                     loadedPortion = part
                     setSelectedProduct(Product())
                     val list = _products.value.toMutableList().apply { addAll(listProducts) }
                     _products.value = list
+                } else {
+                    if (part == 1)
+                        _products.value = mutableListOf()
                 }
                 lockDB = false
             }
@@ -292,6 +296,9 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                 val list = _products.value.toMutableList().apply { addAll(listFound) }
                 _products.value = list
                 loadedPortion = portion
+            } else {
+                if (portion == 1)
+                    _products.value = mutableListOf()
             }
             lockDB = false
         }
