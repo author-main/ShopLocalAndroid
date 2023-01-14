@@ -14,7 +14,7 @@ sealed class ScreenItem(val key: ScreenRouter.KEYSCREEN) {
 }
 
 object ScreenRouter {
-    enum class KEYSCREEN {LOGIN, MAIN, CATALOG, CART, PROFILE}
+    enum class KEYSCREEN(value: Int) {LOGIN(0), MAIN(1), CATALOG(2), CART(3), PROFILE(4)}
     var current : ScreenItem by mutableStateOf(ScreenItem.LoginScreen)
     fun reset(){
         current = ScreenItem.LoginScreen
