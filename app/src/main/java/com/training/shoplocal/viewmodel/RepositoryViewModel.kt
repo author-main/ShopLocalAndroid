@@ -147,7 +147,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     private fun getProducts(part: Int){
       // val exchangeData = exchangeDataMap[ExchangeData.GET_PRODUCTS] ?: false
-        if (!lockDB){
+        if (lockDB) return
             lockDB = true
           //  exchangeDataMap[ExchangeData.GET_PRODUCTS] = true
             repository.getProducts(USER_ID, part) { listProducts ->
@@ -168,7 +168,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                 }
                 lockDB = false
             }
-        }
+
     }
 
     private fun getBrands(){

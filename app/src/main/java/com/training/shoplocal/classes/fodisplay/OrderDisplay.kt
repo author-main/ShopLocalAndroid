@@ -41,7 +41,7 @@ class OrderDisplay: ProviderDataDisplay{
             sortData.sortProperty = value
         else
             invertSortType()
-        updateState()
+      //  updateState()
     }
 
     override fun setBrend(value: Int) {
