@@ -35,9 +35,8 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.training.shoplocal.R
-import com.training.shoplocal.classes.OrderDisplay
-import com.training.shoplocal.classes.SORT_PROPERTY
-import com.training.shoplocal.classes.SORT_TYPE
+import com.training.shoplocal.classes.fodisplay.OrderDisplay
+import com.training.shoplocal.classes.fodisplay.SORT_PROPERTY
 import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.TextFieldBg
 import com.training.shoplocal.ui.theme.TextFieldFont

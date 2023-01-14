@@ -1,19 +1,16 @@
-package com.training.shoplocal.classes
+package com.training.shoplocal.classes.fodisplay
 
 import androidx.compose.runtime.*
-import com.training.shoplocal.FieldFilter
-import com.training.shoplocal.log
 import com.training.shoplocal.screens.ScreenItem
-import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
   Класс для выборки данных (product) из БД (таблица products),
  * определяет тип сортировки и фильтр выборки по параметрам продукта
  */
 
-const val ANY_VALUE =    -1
+/*const val ANY_VALUE =    -1
 enum class SORT_TYPE(val value: Int)     {ASCENDING(0), DESCENDING(1)}
-enum class SORT_PROPERTY(val value: Int) {PRICE(0), POPULAR(1), RATING(2)}
+enum class SORT_PROPERTY(val value: Int) {PRICE(0), POPULAR(1), RATING(2)}*/
 
 class OrderDisplay{
     private var completeUpdate = true
@@ -140,6 +137,11 @@ class OrderDisplay{
 
 
     }
+
+
+
+
+
 }
 
 /*data class SortData(private var sortType: SORT_TYPE             = SORT_TYPE.ASCENDING,

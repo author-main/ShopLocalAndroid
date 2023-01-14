@@ -1,6 +1,5 @@
 package com.training.shoplocal.screens.appscreen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
@@ -10,22 +9,11 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.training.shoplocal.classes.OrderDisplay
-import com.training.shoplocal.classes.Product
+import com.training.shoplocal.classes.fodisplay.OrderDisplay
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
-import com.training.shoplocal.classes.searcher.SearchQueryStorage
-import com.training.shoplocal.classes.searcher.SearchQueryStorageInterface
-import com.training.shoplocal.log
 import com.training.shoplocal.screens.*
-import com.training.shoplocal.screens.appscreen.BottomNavigationBar
-import com.training.shoplocal.screens.appscreen.BottomNavigationItem
-import com.training.shoplocal.screens.appscreen.Navigation
 import com.training.shoplocal.screens.mainscreen.MainScreen
-import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 
 //val LocalSearchStorage = staticCompositionLocalOf<SearchQueryStorageInterface?> { error("")}

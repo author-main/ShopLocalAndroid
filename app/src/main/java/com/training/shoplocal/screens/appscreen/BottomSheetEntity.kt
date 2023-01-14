@@ -1,6 +1,5 @@
 package com.training.shoplocal.screens.appscreen
 
-import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,11 +15,8 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.R
-import com.training.shoplocal.classes.OrderDisplay
-import com.training.shoplocal.classes.Product
 import com.training.shoplocal.log
 import com.training.shoplocal.screens.*
-import com.training.shoplocal.screens.mainscreen.MainScreen
 import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.ui.theme.TextFieldBg
 import com.training.shoplocal.ui.theme.TextFieldFont

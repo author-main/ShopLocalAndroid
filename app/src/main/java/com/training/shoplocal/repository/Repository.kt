@@ -2,12 +2,14 @@ package com.training.shoplocal.repository
 
 
 import android.content.Context
-import com.training.shoplocal.FieldFilter
 import com.training.shoplocal.classes.*
+import com.training.shoplocal.classes.fodisplay.FieldFilter
+import com.training.shoplocal.classes.fodisplay.OrderDisplay
+import com.training.shoplocal.classes.fodisplay.SORT_PROPERTY
+import com.training.shoplocal.classes.fodisplay.SORT_TYPE
 import com.training.shoplocal.classes.screenhelpers.DataScreen
 import com.training.shoplocal.classes.searcher.SearchQueryStorage
 import com.training.shoplocal.encodeBase64
-import com.training.shoplocal.log
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.screens.ScreenItem
 import com.training.shoplocal.screens.ScreenRouter

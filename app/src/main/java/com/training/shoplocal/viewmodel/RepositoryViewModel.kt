@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.training.shoplocal.*
 import com.training.shoplocal.classes.*
+import com.training.shoplocal.classes.fodisplay.FieldFilter
 import com.training.shoplocal.classes.screenhelpers.DataScreen
 import com.training.shoplocal.repository.Repository
 import com.training.shoplocal.screens.ScreenItem
