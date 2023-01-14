@@ -64,7 +64,8 @@ class Repository: DAOinterface {
     }
 
     fun getProducts(id: Int, part: Int, action: (products: List<Product>) -> Unit){
-        val order64 = encodeBase64(OrderDisplay.getOrderDislayQuery())
+        //val order64 = encodeBase64(OrderDisplay.getOrderDislayQuery())
+        val order64 = encodeBase64(OrderDisplay.getDataSearchQuery())
         //log(order64)
         databaseCRUD.getProducts(id, part, order64, action)
     }
@@ -154,9 +155,10 @@ class Repository: DAOinterface {
             FieldFilter.CATEGORY      -> orderDisplay.getCategory()
             FieldFilter.FAVORITE      -> orderDisplay.getFavorite()
             FieldFilter.PRICE_RANGE   -> orderDisplay.getPriceRange()
-            FieldFilter.SCREEN  -> orderDisplay.getScreenData()
+            FieldFilter.SCREEN        -> orderDisplay.getScreen()
         }
     }
+
 
     fun<T> setOrderDisplay(field: FieldFilter, value: T){
         val orderDisplay = OrderDisplay.getInstance()
@@ -166,8 +168,11 @@ class Repository: DAOinterface {
             FieldFilter.BREND         -> orderDisplay.setBrend(value as Int)
             FieldFilter.CATEGORY      -> orderDisplay.setCategory(value as Int)
             FieldFilter.FAVORITE      -> orderDisplay.setFavorite(value as Int)
-            FieldFilter.PRICE_RANGE   -> orderDisplay.setPriceRange(value as Pair<Float, Float>)
-            FieldFilter.SCREEN        -> orderDisplay.setScreenData(value as ScreenItem)
+            FieldFilter.PRICE_RANGE   -> {
+                val rangePrice: Pair<Float, Float> = value as Pair<Float, Float>
+                orderDisplay.setPriceRange(rangePrice.first, rangePrice.second)
+            }
+            FieldFilter.SCREEN        -> orderDisplay.setScreen(value as Int)
         }
     }
 
@@ -196,7 +201,7 @@ class Repository: DAOinterface {
         orderDisplay.setFavorite(1)
         orderDisplay.setPriceRange(10.00f to 100.00f)*/
         //log(UUID_query)
-        val order64 = encodeBase64(OrderDisplay.getOrderDislayQuery())
+        val order64 = encodeBase64(OrderDisplay.getDataSearchQuery())
         val query64 = encodeBase64(query)
       /*  log(query64)
         log(order64)*/

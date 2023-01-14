@@ -1,5 +1,6 @@
 package com.training.shoplocal.classes.fodisplay
 
+import androidx.compose.runtime.*
 import com.training.shoplocal.log
 import com.training.shoplocal.screens.ScreenItem
 
@@ -18,12 +19,13 @@ enum class SORT_TYPE(val value: Int)     {ASCENDING(0), DESCENDING(1)}
 enum class SORT_PROPERTY(val value: Int) {PRICE(0), POPULAR(1), RATING(2)}
 
 interface ProviderDataDisplay {
+    var state: MutableState<Boolean>
     fun setSortType(value: SORT_TYPE)
     fun setSortProperty(value: SORT_PROPERTY)
     fun setBrend(value: Int)
     fun setCategory(value: Int)
     fun setFavorite(value: Int)
-    fun setPriceRange(value: Pair<Float, Float>)
+    fun setPriceRange(valueFrom: Float, valueTo: Float)
     fun setScreen(value: Int)
 
     fun getSortType():      SORT_TYPE

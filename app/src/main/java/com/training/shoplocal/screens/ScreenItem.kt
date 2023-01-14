@@ -14,7 +14,7 @@ sealed class ScreenItem(val key: ScreenRouter.KEYSCREEN) {
 }
 
 object ScreenRouter {
-    enum class KEYSCREEN(value: Int) {LOGIN(0), MAIN(1), CATALOG(2), CART(3), PROFILE(4)}
+    enum class KEYSCREEN(val value: Int) {LOGIN(0), MAIN(1), CATALOG(2), CART(3), PROFILE(4)}
     var current : ScreenItem by mutableStateOf(ScreenItem.LoginScreen)
     fun reset(){
         current = ScreenItem.LoginScreen
@@ -23,4 +23,6 @@ object ScreenRouter {
         if (current != destination)
             current = destination
     }
+    fun getKeyValue(): Int =
+        current.key.value
 }

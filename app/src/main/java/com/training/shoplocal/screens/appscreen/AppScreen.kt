@@ -44,9 +44,13 @@ fun AppScreen(){
                           .padding(it)
                   ) {
                           Navigation(navController)
+                          fun setOrderDisplayScreen(){
+                              OrderDisplay.getInstance().setScreen(ScreenRouter.getKeyValue())
+                          }
                           when (ScreenRouter.current) {
                               ScreenItem.MainScreen -> {
-                                        OrderDisplay.getInstance().setScreenData(ScreenItem.MainScreen)
+                                  setOrderDisplayScreen()
+                                        //OrderDisplay.getInstance().setScreen(ScreenRouter.getKeyValue())
                                         ImageLinkDownloader.cancel()
                                         MainScreen(state)
                                 //        log("mainscreen")
@@ -54,17 +58,20 @@ fun AppScreen(){
 
                               }
                               ScreenItem.CatalogScreen -> {
-                                  OrderDisplay.getInstance().setScreenData(ScreenItem.CatalogScreen)
+                                  setOrderDisplayScreen()
+                                  //OrderDisplay.getInstance().setScreen(ScreenRouter.getKeyValue())
                                   ImageLinkDownloader.cancel()
                                   CatalogScreen()
                               }
                               ScreenItem.CartScreen -> {
-                                  OrderDisplay.getInstance().setScreenData(ScreenItem.CartScreen)
+                                  setOrderDisplayScreen()
+                                  //OrderDisplay.getInstance().setScreen(ScreenRouter.getKeyValue())
                                   ImageLinkDownloader.cancel()
                                   CartScreen()
                               }
                               ScreenItem.ProfileScreen -> {
-                                  OrderDisplay.getInstance().setScreenData(ScreenItem.ProfileScreen)
+                                  setOrderDisplayScreen()
+                                  //OrderDisplay.getInstance().setScreen(ScreenRouter.getKeyValue())
                                   ImageLinkDownloader.cancel()
                                   ProfileScreen()
                               }

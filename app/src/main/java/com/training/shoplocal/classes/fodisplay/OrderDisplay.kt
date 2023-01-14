@@ -12,21 +12,7 @@ import com.training.shoplocal.screens.ScreenItem
 enum class SORT_TYPE(val value: Int)     {ASCENDING(0), DESCENDING(1)}
 enum class SORT_PROPERTY(val value: Int) {PRICE(0), POPULAR(1), RATING(2)}*/
 
-class OrderDisplay{
-    private var completeUpdate = true
-    var state by mutableStateOf(false)
-    private fun updateState(){
-        if (completeUpdate)
-            state = !state
-    }
-    fun beginUpdate(){
-        completeUpdate = false
-    }
-    fun endUpdate(){
-        completeUpdate = true
-        updateState()
-    }
-
+class OrderDisplay: ProviderDataDisplay{
     data class SortData(var sortType: SORT_TYPE             = SORT_TYPE.ASCENDING,
                         var sortProperty: SORT_PROPERTY     = SORT_PROPERTY.PRICE)
 
@@ -37,12 +23,85 @@ class OrderDisplay{
         = 0.00f to 0.00f,
         var category: Int                   = ANY_VALUE
     )
+
     private val sortData                = SortData()
     private val filterData              = FilterData()
-    private var screenData: ScreenItem  = ScreenItem.MainScreen
+    private var currentScreen:Int       = ANY_VALUE
+    private var completeUpdate = true
+    //var state by mutableStateOf(false)
 
-    fun setSortType(value: SORT_TYPE){
+    override var state: MutableState<Boolean> = mutableStateOf(false)
+
+    override fun setSortType(value: SORT_TYPE) {
         sortData.sortType = value
+    }
+
+    override fun setSortProperty(value: SORT_PROPERTY) {
+        if (value != sortData.sortProperty)
+            sortData.sortProperty = value
+        else
+            invertSortType()
+        updateState()
+    }
+
+    override fun setBrend(value: Int) {
+        filterData.brend = value
+    }
+
+    override fun setCategory(value: Int) {
+        filterData.category = value
+    }
+
+    override fun setFavorite(value: Int) {
+        filterData.favorite = value
+    }
+
+    override fun setPriceRange(valueFrom: Float, valueTo: Float) {
+        filterData.priceRange = valueFrom to valueTo
+    }
+
+    override fun setScreen(value: Int) {
+        currentScreen = value
+    }
+
+    override fun getSortType(): SORT_TYPE {
+        return sortData.sortType
+    }
+
+    override fun getSortProperty(): SORT_PROPERTY {
+        return sortData.sortProperty
+    }
+
+    override fun getBrend(): Int {
+        return filterData.brend
+    }
+
+    override fun getCategory(): Int {
+        return filterData.category
+    }
+
+    override fun getFavorite(): Int {
+        return filterData.favorite
+    }
+
+    override fun getPriceRange(): Pair<Float, Float> {
+        return filterData.priceRange
+    }
+
+    override fun getScreen(): Int {
+        return currentScreen
+    }
+
+    private fun updateState(){
+        if (completeUpdate)
+            state.value = !state.value
+    }
+    fun beginUpdate(){
+        completeUpdate = false
+    }
+    fun endUpdate(){
+        completeUpdate = true
+        updateState()
     }
 
     private fun invertSortType(){
@@ -51,6 +110,51 @@ class OrderDisplay{
         else
             sortData.sortType = SORT_TYPE.ASCENDING
     }
+
+
+    companion object {
+        private lateinit var instance: ProviderDataDisplay//OrderDisplay
+        fun getInstance(): ProviderDataDisplay{//OrderDisplay {
+            if (!this::instance.isInitialized)
+                instance = OrderDisplay()
+            return instance
+        }
+
+        fun getDataSearchQuery(): String {
+            getInstance()
+            return instance.getDataSearchQuery()
+
+            /*val sort_order          = instance.getSortType().value
+            val sort_type           = instance.getSortProperty().value
+            val filter_category     = instance.getCategory()
+            val filter_brend        = instance.getBrend()
+            val filter_favorite     = instance.getFavorite()
+            val current_screen      = instance.getScreen()
+            val filter_price        = run {
+                val value: Pair<Float, Float>   = instance.getPriceRange()
+                "${value.first}-${value.second}"
+            }
+            /** Порядок для извлечения в PHP:
+             *  sort_order:         0 - ASCENDING, 1 - DESCENDING
+             *  sort_type:          0 POPULAR, 1 - RATING, 2 - PRICE
+             *  filter_category:    ID категории продукта
+             *  filter_brand:       ID бренда
+             *  filter_favorite:    0 - все продукты, 1 - избранное
+             *  filter_price:       интервал цен, н/р 1000,00-20000,00
+             *  current_screen:     текущий экран
+             */
+            //log("$sort_order $sort_type $filter_category $filter_brend $filter_favorite $filter_price $current_screen")
+            return "$sort_order $sort_type $filter_category $filter_brend $filter_favorite $filter_price $current_screen"*/
+        }
+
+
+
+
+    }
+
+
+
+    /*
 
     fun setSortProperty(value: SORT_PROPERTY){
         if (value != sortData.sortProperty)
@@ -139,7 +243,7 @@ class OrderDisplay{
     }
 
 
-
+*/
 
 
 }
