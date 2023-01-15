@@ -15,6 +15,7 @@ enum class FieldFilter {
     SCREEN
 }
 const val ANY_VALUE =    -1
+
 enum class SORT_TYPE(val value: Int)     {ASCENDING(0), DESCENDING(1)}
 enum class SORT_PROPERTY(val value: Int) {PRICE(0), POPULAR(1), RATING(2)}
 
