@@ -78,6 +78,7 @@ fun MainScreen(state: ModalBottomSheetState){
     // Сохраняем значение textSearch перед выбором из списка,
     // если будет нажата кнопка back в режиме списка -
     // textSearch присваиваем старое значение prevSearchText
+
     var prevStateScroll = remember {
         Pair<Int, Int>(0,0)
     }
@@ -86,6 +87,10 @@ fun MainScreen(state: ModalBottomSheetState){
     }
 
     var searchScreenDisplayed by remember {
+        mutableStateOf(false)
+    }
+
+    var filterScreenDisplayed by remember {
         mutableStateOf(false)
     }
 
@@ -761,6 +766,7 @@ fun MainScreen(state: ModalBottomSheetState){
                     .height(40.dp)
                     .background(MaterialTheme.colors.primary),
                 ) {
+                    filterScreenDisplayed = true
                     viewModel.putComposeViewStack(ComposeView.FILTER)
                     viewModel.hideBottomNavigation()
                 }
