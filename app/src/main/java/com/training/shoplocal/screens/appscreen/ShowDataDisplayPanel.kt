@@ -34,16 +34,20 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.R
+import com.training.shoplocal.classes.ComposeView
 import com.training.shoplocal.classes.fodisplay.OrderDisplay
 import com.training.shoplocal.classes.fodisplay.SORT_PROPERTY
 import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.TextFieldBg
 import com.training.shoplocal.ui.theme.TextFieldFont
+import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
-fun ShowDataDisplayPanel(modifier: Modifier){//}, hide: Boolean){
+fun ShowDataDisplayPanel(modifier: Modifier, showFilterView: () -> Unit){//}, hide: Boolean){
+//    val viewModel: RepositoryViewModel = viewModel()
     /*val panelHeightPx = with(LocalDensity.current) { 40.dp.roundToPx().toFloat() }
     val panelOffsetHeightPx = remember { mutableStateOf(0f) }
     val nestedScrollConnection = remember {
@@ -145,6 +149,8 @@ fun ShowDataDisplayPanel(modifier: Modifier){//}, hide: Boolean){
                         border = BorderStroke(0.dp, Color.Transparent),
                         contentPadding = PaddingValues(horizontal = 8.dp),
                         onClick = {
+                            showFilterView()
+                            //viewModel.putComposeViewStack(ComposeView.FILTER)
                         }) {
                         Icon(
                             modifier = Modifier.size(32.dp),

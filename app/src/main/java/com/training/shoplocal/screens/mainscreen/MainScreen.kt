@@ -760,8 +760,11 @@ fun MainScreen(state: ModalBottomSheetState){
 
                     .height(40.dp)
                     .background(MaterialTheme.colors.primary),
-                )//hide = isSearchMode)
-        //    }
+                ) {
+                        viewModel.putComposeViewStack(ComposeView.FILTER)
+                }
+
+
                 }
                 androidx.compose.animation.AnimatedVisibility(
                         visible = isFocusedSearchTextField,
