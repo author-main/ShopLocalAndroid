@@ -46,6 +46,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
@@ -403,6 +404,21 @@ fun MainScreen(state: ModalBottomSheetState){
            }
         },
         topBar = {
+            @Composable
+        fun BackButton(modifier: Modifier, onClick: () -> Unit){
+                Icon(modifier = modifier
+                    .padding(end = 8.dp)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) {
+                        onClick()
+                    },
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = null,
+                    tint = TextFieldFont
+                )
+        }
         TopAppBar(backgroundColor = MaterialTheme.colors.primary,
                     elevation = 0.dp
         ) {
@@ -413,46 +429,50 @@ fun MainScreen(state: ModalBottomSheetState){
                 horizontalArrangement = Arrangement.End
             ) {
                 if (filterScreenDisplayed) {
-
+                    BackButton(
+                        modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                    ) {
+                        hideSearchDialog()
+                        filterScreenDisplayed = false
+                    }
+                    Text(modifier = Modifier.weight(1f),
+                        text = stringResource(R.string.text_filter),
+                        color = TextFieldFont,
+                        fontSize = 17.sp
+                    )
                 } else {
-                    //if (isFocusedSearchTextField.value) {
+
+
                     if (isSearchMode()) {
                         //val scope = rememberCoroutineScope()
-                        Icon(
+                        BackButton(
                             modifier = Modifier
                                 .align(Alignment.CenterVertically)
-                                .padding(end = 8.dp)
-                                .clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = null
-                                ) {
-                                    hideSearchDialog()
-                                    if (searchScreenDisplayed) {
-                                        if (searchState.value == SearchState.SEARCH_QUERY) {
-                                            searchState.value = SearchState.SEARCH_RESULT
-                                            textSearch.value = prevSearchText.toString()
-                                        } else {
-                                            searchState.value = SearchState.SEARCH_NONE
-                                            searchScreenDisplayed = false
-                                            viewModel.clearResultSearch() // удаляем результаты последнего запроса в БД на сервере
-                                            val firstIndex =
-                                                viewModel.restoreScreenProducts(ScreenRouter.current.key)
-                                            scope.launch {
-                                                stateGrid.scrollToItem(
-                                                    firstIndex
-                                                )
-                                            }
-
-                                            textSearch.value = ""
-                                        }
-                                    } else {
-                                        searchState.value = SearchState.SEARCH_NONE
+                        ) {
+                            hideSearchDialog()
+                            if (searchScreenDisplayed) {
+                                if (searchState.value == SearchState.SEARCH_QUERY) {
+                                    searchState.value = SearchState.SEARCH_RESULT
+                                    textSearch.value = prevSearchText.toString()
+                                } else {
+                                    searchState.value = SearchState.SEARCH_NONE
+                                    searchScreenDisplayed = false
+                                    viewModel.clearResultSearch() // удаляем результаты последнего запроса в БД на сервере
+                                    val firstIndex =
+                                        viewModel.restoreScreenProducts(ScreenRouter.current.key)
+                                    scope.launch {
+                                        stateGrid.scrollToItem(
+                                            firstIndex
+                                        )
                                     }
-                                },
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = null,
-                            tint = TextFieldFont
-                        )
+
+                                    textSearch.value = ""
+                                }
+                            } else {
+                                searchState.value = SearchState.SEARCH_NONE
+                            }
+                        }
                     }
                     //**************************************************************************************
                     BasicTextField(
