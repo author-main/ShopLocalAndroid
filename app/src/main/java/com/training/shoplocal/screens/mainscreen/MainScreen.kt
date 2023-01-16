@@ -761,7 +761,8 @@ fun MainScreen(state: ModalBottomSheetState){
                     .height(40.dp)
                     .background(MaterialTheme.colors.primary),
                 ) {
-                        viewModel.putComposeViewStack(ComposeView.FILTER)
+                    viewModel.putComposeViewStack(ComposeView.FILTER)
+                    viewModel.hideBottomNavigation()
                 }
 
 
