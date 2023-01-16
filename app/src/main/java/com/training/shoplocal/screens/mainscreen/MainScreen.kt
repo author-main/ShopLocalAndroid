@@ -61,6 +61,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.*
 import com.training.shoplocal.R
+import com.training.shoplocal.classes.ComposeView
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.classes.searcher.SearchState
 import com.training.shoplocal.dialogs.ShowMessage
@@ -299,6 +300,7 @@ fun MainScreen(state: ModalBottomSheetState){
     fun hideSearchDialog() {
         focusManager.clearFocus()
         isFocusedSearchTextField = false
+        viewModel.popComposeViewStack()
         viewModel.hideBottomNavigation(false)
     }
     fun isSearchMode() = searchState.value != SearchState.SEARCH_NONE
@@ -440,8 +442,9 @@ fun MainScreen(state: ModalBottomSheetState){
 
                                         textSearch.value = ""
                                     }
-                                } else
+                                } else {
                                     searchState.value = SearchState.SEARCH_NONE
+                                }
                             },
                         imageVector = Icons.Filled.ArrowBack,
                         contentDescription = null,
@@ -455,8 +458,7 @@ fun MainScreen(state: ModalBottomSheetState){
                             if (it.isFocused) {
                                // prevStateScroll = Pair<Int, Int>(0,0)
                                 showFloatingButton = false
-
-
+                                viewModel.pushComposeViewStack(ComposeView.SEARCH_EDITVALUE)
                                 //isSearchMode = true
                                 //val searchStore: SearchQueryStorageInterface = SearchQueryStorage.getInstance()
                                 //lastSearchQuery.value = ""
@@ -503,6 +505,7 @@ fun MainScreen(state: ModalBottomSheetState){
                                 }
 
                                 hideSearchDialog()
+                                viewModel.pushComposeViewStack(ComposeView.SEARCH)
                                 viewModel.findProductsRequest(textSearch.value.trim())
                                 searchState.value = SearchState.SEARCH_RESULT
                                 searchScreenDisplayed = true

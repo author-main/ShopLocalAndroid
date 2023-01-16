@@ -16,6 +16,9 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
+    val composeViewStack = Stack<ComposeView>().apply {
+        push(ComposeView.LOGIN)
+    }
     /*var deviceUuid =
         UUID(androidId.hashCode(), tmDevice.hashCode() as Long shl 32 or tmSerial.hashCode())*/
     private val UUID_QUERY = System.nanoTime().toString()
@@ -55,6 +58,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             maxPortion = -1
             USER_ID = it
             ScreenRouter.navigateTo(ScreenItem.MainScreen)
+            composeViewStack.pop()
+            pushComposeViewStack(ComposeView.MAIN)
             getBrands()
 //            exchangeDataMap[ExchangeData.GET_PRODUCTS] = false
             loadedPortion = 0
@@ -328,5 +333,19 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     fun clearResultSearch(){
         findProductsRequest("*", -1)
     }
+
+    fun pushComposeViewStack(value: ComposeView) {
+        val equalValue = composeViewStack.isNotEmpty() && composeViewStack.peek() == value
+        if (!equalValue)
+            composeViewStack.push(value)
+        //log(composeViewStack)
+    }
+
+    fun popComposeViewStack(): ComposeView {
+        //val value = composeViewStack.pop()
+        //log(composeViewStack)
+        return composeViewStack.pop()
+    }
+
 
  }

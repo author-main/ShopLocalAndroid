@@ -23,7 +23,7 @@ import java.text.DecimalFormatSymbols
 import java.util.Base64.getEncoder
 import kotlin.math.roundToInt
 const val SIZE_PORTION =  6     //количество записей в порции при подгрузке сиаска продуктов из БД
-const val SERVER_URL            = "http://192.168.0.10"
+const val SERVER_URL            = "http://192.168.1.10"
 val DECIMAL_CEPARATOR           = DecimalFormatSymbols().decimalSeparator
 
 /*enum class Error {
@@ -86,7 +86,7 @@ fun getFormattedPrice(value: Float): String{
     val result = value.roundToInt()
     val dec = DecimalFormat("#,###.00")
     dec.roundingMode = RoundingMode.HALF_EVEN
-    return dec.format(result) + "P"
+    return dec.format(result) + getStringResource(R.string.currency)
 }
 
 fun getSalePrice(price: Float, discount: Int): String{
