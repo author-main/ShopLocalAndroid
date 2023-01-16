@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
-    val composeViewStack = Stack<ComposeView>().apply {
+    private val composeViewStack = Stack<ComposeView>().apply {
         push(ComposeView.LOGIN)
     }
     /*var deviceUuid =
@@ -59,7 +59,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             USER_ID = it
             ScreenRouter.navigateTo(ScreenItem.MainScreen)
             composeViewStack.pop()
-            pushComposeViewStack(ComposeView.MAIN)
+            putComposeViewStack(ComposeView.MAIN)
             getBrands()
 //            exchangeDataMap[ExchangeData.GET_PRODUCTS] = false
             loadedPortion = 0
@@ -334,17 +334,21 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         findProductsRequest("*", -1)
     }
 
-    fun pushComposeViewStack(value: ComposeView) {
+    fun putComposeViewStack(value: ComposeView) {
         val equalValue = composeViewStack.isNotEmpty() && composeViewStack.peek() == value
         if (!equalValue)
             composeViewStack.push(value)
         //log(composeViewStack)
     }
 
-    fun popComposeViewStack(): ComposeView {
+    fun removeComposeViewStack(): ComposeView {
         //val value = composeViewStack.pop()
         //log(composeViewStack)
         return composeViewStack.pop()
+    }
+
+    fun getComposeViewStack(): ComposeView {
+        return composeViewStack.peek()
     }
 
 

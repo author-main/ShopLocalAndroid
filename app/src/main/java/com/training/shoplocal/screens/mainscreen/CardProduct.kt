@@ -45,7 +45,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.*
 import com.training.shoplocal.AppShopLocal.Companion.appContext
 import com.training.shoplocal.R
+import com.training.shoplocal.classes.DECIMAL_CEPARATOR
+import com.training.shoplocal.classes.EMPTY_IMAGE
 import com.training.shoplocal.classes.Product
+import com.training.shoplocal.classes.SERVER_URL
 import com.training.shoplocal.classes.downloader.Callback
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 import com.training.shoplocal.screens.appscreen.BottomSheet
@@ -252,7 +255,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){
         Array<Pair<IMAGE_STATE, ImageBitmap>>(countItems) {
         IMAGE_STATE.NONE to EMPTY_IMAGE
     }}
-    val context = LocalContext.current
+    //val context = LocalContext.current
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
     val visible = remember{MutableTransitionState(false)}
     val animateSize = remember{mutableStateOf(Size.Zero)}

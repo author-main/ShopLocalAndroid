@@ -29,8 +29,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
-import com.training.shoplocal.MESSAGE
 import com.training.shoplocal.R
+import com.training.shoplocal.classes.MESSAGE
 import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel

@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -28,9 +27,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,10 +34,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
@@ -62,7 +56,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.*
 import com.training.shoplocal.R
 import com.training.shoplocal.classes.ComposeView
+import com.training.shoplocal.classes.MESSAGE
 import com.training.shoplocal.classes.Product
+import com.training.shoplocal.classes.SIZE_PORTION
 import com.training.shoplocal.classes.searcher.SearchState
 import com.training.shoplocal.dialogs.ShowMessage
 import com.training.shoplocal.screens.ScreenRouter
@@ -73,7 +69,6 @@ import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
@@ -300,7 +295,7 @@ fun MainScreen(state: ModalBottomSheetState){
     fun hideSearchDialog() {
         focusManager.clearFocus()
         isFocusedSearchTextField = false
-        viewModel.popComposeViewStack()
+        viewModel.removeComposeViewStack()
         viewModel.hideBottomNavigation(false)
     }
     fun isSearchMode() = searchState.value != SearchState.SEARCH_NONE
@@ -458,7 +453,7 @@ fun MainScreen(state: ModalBottomSheetState){
                             if (it.isFocused) {
                                // prevStateScroll = Pair<Int, Int>(0,0)
                                 showFloatingButton = false
-                                viewModel.pushComposeViewStack(ComposeView.SEARCH_EDITVALUE)
+                                viewModel.putComposeViewStack(ComposeView.SEARCH_EDITVALUE)
                                 //isSearchMode = true
                                 //val searchStore: SearchQueryStorageInterface = SearchQueryStorage.getInstance()
                                 //lastSearchQuery.value = ""
@@ -505,7 +500,7 @@ fun MainScreen(state: ModalBottomSheetState){
                                 }
 
                                 hideSearchDialog()
-                                viewModel.pushComposeViewStack(ComposeView.SEARCH)
+                                viewModel.putComposeViewStack(ComposeView.SEARCH)
                                 viewModel.findProductsRequest(textSearch.value.trim())
                                 searchState.value = SearchState.SEARCH_RESULT
                                 searchScreenDisplayed = true

@@ -7,7 +7,7 @@ import android.security.keystore.KeyProperties
 import android.security.keystore.KeyProperties.KEY_ALGORITHM_RSA
 import android.util.Base64
 import com.training.shoplocal.AppShopLocal.Companion.appContext
-import com.training.shoplocal.FILE_PREFERENCES
+import com.training.shoplocal.classes.FILE_PREFERENCES
 import java.security.KeyPairGenerator
 import java.security.KeyStore
 import java.security.PrivateKey

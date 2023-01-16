@@ -5,8 +5,6 @@ import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.training.shoplocal.AppShopLocal
-import com.training.shoplocal.FILE_PREFERENCES
-
 
 data class User (
     @SerializedName("id")           var id: Int?,

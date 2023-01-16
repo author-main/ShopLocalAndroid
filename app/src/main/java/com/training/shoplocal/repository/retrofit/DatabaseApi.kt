@@ -1,9 +1,9 @@
 package com.training.shoplocal.repository.retrofit
 
 import com.google.gson.GsonBuilder
-import com.training.shoplocal.SERVER_URL
 import com.training.shoplocal.classes.Brand
 import com.training.shoplocal.classes.Product
+import com.training.shoplocal.classes.SERVER_URL
 import com.training.shoplocal.classes.User
 import com.training.shoplocal.log
 import retrofit2.Call

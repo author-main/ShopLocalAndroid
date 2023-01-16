@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.ImageBitmapConfig
 import com.training.shoplocal.AppShopLocal.Companion.appContext
+import com.training.shoplocal.classes.DEFAULT_STRRESOURCE_VALUE
 import com.training.shoplocal.ui.theme.SelectedItem
 import com.training.shoplocal.ui.theme.TextFieldBg
 import java.math.RoundingMode
@@ -22,25 +23,6 @@ import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Base64.getEncoder
 import kotlin.math.roundToInt
-const val SIZE_PORTION =  6     //количество записей в порции при подгрузке сиаска продуктов из БД
-const val SERVER_URL            = "http://192.168.1.10"
-val DECIMAL_CEPARATOR           = DecimalFormatSymbols().decimalSeparator
-
-/*enum class Error {
-    NO_CONNECTION,      // нет соединения
-    IMAGE_NOTFOUND,     // файл изображения не найден
-    IMAGE_NOTLOADED     // ошибка в процессе загрузки
-}*/
-
-val EMPTY_IMAGE = ImageBitmap(1,1, hasAlpha = true, config = ImageBitmapConfig.Argb8888)
-val TEXT_BOTTOMNAVIGATION: Array<String> = AppShopLocal.appContext().resources.getStringArray(R.array.bottom_navigation_items)
-const val DEFAULT_STRRESOURCE_VALUE  = ""
-const val FILE_PREFERENCES      = "settings"
-enum class MESSAGE(@DrawableRes val icon: Int, val color: Color) {
-    ERROR   (R.drawable.ic_error,           SelectedItem),
-    INFO    (R.drawable.ic_notifications,   TextFieldBg),
-    WARNING (R.drawable.ic_warning,         TextFieldBg)
-}
 
 fun getStringResource(@StringRes id: Int): String =
     try {

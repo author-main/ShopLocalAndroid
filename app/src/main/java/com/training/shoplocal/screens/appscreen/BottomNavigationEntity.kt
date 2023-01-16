@@ -25,7 +25,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.training.shoplocal.R
-import com.training.shoplocal.TEXT_BOTTOMNAVIGATION
+import com.training.shoplocal.classes.TEXT_BOTTOMNAVIGATION
 import com.training.shoplocal.log
 import com.training.shoplocal.screens.*
 import com.training.shoplocal.screens.mainscreen.MainScreen

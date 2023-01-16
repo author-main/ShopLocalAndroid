@@ -23,9 +23,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.training.shoplocal.MESSAGE
 import com.training.shoplocal.buttonpanel.ButtonPasswordPanel
 import com.training.shoplocal.buttonpanel.ButtonUserAccessPanel
+import com.training.shoplocal.classes.MESSAGE
 import com.training.shoplocal.dialogs.ShowMessage
 import com.training.shoplocal.log
 import com.training.shoplocal.loginview.LoginView
