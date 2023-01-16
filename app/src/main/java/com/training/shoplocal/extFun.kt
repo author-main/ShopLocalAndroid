@@ -8,22 +8,15 @@ import android.util.Base64
 import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.ImageBitmapConfig
 import com.training.shoplocal.AppShopLocal.Companion.appContext
-import com.training.shoplocal.classes.DEFAULT_STRRESOURCE_VALUE
-import com.training.shoplocal.ui.theme.SelectedItem
-import com.training.shoplocal.ui.theme.TextFieldBg
 import java.math.RoundingMode
 import java.nio.charset.Charset
 import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
-import java.util.Base64.getEncoder
 import kotlin.math.roundToInt
 
+const val DEFAULT_STRRESOURCE_VALUE  = ""
 fun getStringResource(@StringRes id: Int): String =
     try {
         AppShopLocal.appContext().getString(id)
