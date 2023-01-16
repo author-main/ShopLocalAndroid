@@ -63,6 +63,7 @@ import com.training.shoplocal.classes.searcher.SearchState
 import com.training.shoplocal.dialogs.ShowMessage
 import com.training.shoplocal.screens.ScreenRouter
 import com.training.shoplocal.screens.appscreen.ShowDataDisplayPanel
+import com.training.shoplocal.screens.appscreen.ShowFilterDisplay
 import com.training.shoplocal.screens.appscreen.ShowSearchHistory
 import com.training.shoplocal.screens.remember.rememberLazyViewState
 import com.training.shoplocal.ui.theme.*
@@ -456,7 +457,7 @@ fun MainScreen(state: ModalBottomSheetState){
                     modifier = Modifier
                         .onFocusChanged {
                             if (it.isFocused) {
-                               // prevStateScroll = Pair<Int, Int>(0,0)
+                                // prevStateScroll = Pair<Int, Int>(0,0)
                                 showFloatingButton = false
                                 viewModel.putComposeViewStack(ComposeView.SEARCH_EDITVALUE)
                                 //isSearchMode = true
@@ -773,6 +774,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
 
                 }
+
                 androidx.compose.animation.AnimatedVisibility(
                         visible = isFocusedSearchTextField,
                         enter = fadeIn(),
@@ -781,6 +783,14 @@ fun MainScreen(state: ModalBottomSheetState){
                         //if (isFocusedSearchTextField.value) {
                         ShowSearchHistory(textSearch, searchState)//lastSearchQuery)
                     }
+
+            androidx.compose.animation.AnimatedVisibility(
+                visible = filterScreenDisplayed,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                ShowFilterDisplay()
+            }
 
 //}
                /* if (!isSearchMode)
