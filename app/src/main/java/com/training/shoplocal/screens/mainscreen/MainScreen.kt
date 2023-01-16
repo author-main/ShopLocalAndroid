@@ -791,6 +791,7 @@ fun MainScreen(state: ModalBottomSheetState){
                     .height(40.dp)
                     .background(MaterialTheme.colors.primary),
                 ) {
+                    showFloatingButton = false
                     filterScreenDisplayed = true
                     viewModel.putComposeViewStack(ComposeView.FILTER)
                     viewModel.hideBottomNavigation()
