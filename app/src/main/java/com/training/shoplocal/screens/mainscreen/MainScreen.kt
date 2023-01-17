@@ -763,7 +763,7 @@ fun MainScreen(state: ModalBottomSheetState){
                                         false else
                                      total > 0
 
-                        upload &&
+                       viewModel.nextPortionAvailable() && upload &&
                         stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.index == stateGrid.layoutInfo.totalItemsCount - 1
                                 && stateGrid.isScrollInProgress
                                 //&& stateGrid.layoutInfo.visibleItemsInfo.last().offset.y > 0
@@ -774,6 +774,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
                 LaunchedEffect(nextPart.value) {
                     if (nextPart.value) {
+                        //log("next portion")
                         viewModel.getNextPortionData(isSearchMode(), textSearch.value.trim())
                     }
                 }
