@@ -10,6 +10,7 @@ import com.training.shoplocal.classes.fodisplay.SORT_TYPE
 import com.training.shoplocal.classes.screenhelpers.DataScreen
 import com.training.shoplocal.classes.searcher.SearchQueryStorage
 import com.training.shoplocal.encodeBase64
+import com.training.shoplocal.log
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.screens.ScreenItem
 import com.training.shoplocal.screens.ScreenRouter
@@ -65,7 +66,8 @@ class Repository: DAOinterface {
 
     fun getProducts(id: Int, part: Int, action: (products: List<Product>) -> Unit){
         //val order64 = encodeBase64(OrderDisplay.getOrderDislayQuery())
-        val order64 = encodeBase64(OrderDisplay.getDataSearchQuery())
+        //log(OrderDisplay.getFilterQuery())
+        val order64 = encodeBase64(OrderDisplay.getFilterQuery())
         //log(order64)
         databaseCRUD.getProducts(id, part, order64, action)
     }
@@ -156,6 +158,7 @@ class Repository: DAOinterface {
             FieldFilter.FAVORITE      -> orderDisplay.getFavorite()
             FieldFilter.PRICE_RANGE   -> orderDisplay.getPriceRange()
             FieldFilter.SCREEN        -> orderDisplay.getScreen()
+            FieldFilter.DISCOUNT      -> orderDisplay.getDiscount()
         }
     }
 
@@ -172,6 +175,7 @@ class Repository: DAOinterface {
                 val rangePrice: Pair<Float, Float> = value as Pair<Float, Float>
                 orderDisplay.setPriceRange(rangePrice.first, rangePrice.second)
             }
+            FieldFilter.DISCOUNT      -> orderDisplay.setDiscount(value as Int)
             FieldFilter.SCREEN        -> orderDisplay.setScreen(value as Int)
         }
     }
@@ -201,7 +205,7 @@ class Repository: DAOinterface {
         orderDisplay.setFavorite(1)
         orderDisplay.setPriceRange(10.00f to 100.00f)*/
         //log(UUID_query)
-        val order64 = encodeBase64(OrderDisplay.getDataSearchQuery())
+        val order64 = encodeBase64(OrderDisplay.getFilterQuery())
         val query64 = encodeBase64(query)
       /*  log(query64)
         log(order64)*/

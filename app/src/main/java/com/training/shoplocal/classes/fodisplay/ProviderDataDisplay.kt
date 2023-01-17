@@ -12,6 +12,7 @@ enum class FieldFilter {
     CATEGORY,
     FAVORITE,
     PRICE_RANGE,
+    DISCOUNT,
     SCREEN
 }
 const val ANY_VALUE =    -1
@@ -28,6 +29,7 @@ interface ProviderDataDisplay {
     fun setFavorite(value: Int)
     fun setPriceRange(valueFrom: Float, valueTo: Float)
     fun setScreen(value: Int)
+    fun setDiscount(value: Int)
 
     fun getSortType():      SORT_TYPE
     fun getSortProperty():  SORT_PROPERTY
@@ -36,8 +38,9 @@ interface ProviderDataDisplay {
     fun getFavorite():      Int
     fun getPriceRange():    Pair<Float, Float>
     fun getScreen():        Int
+    fun getDiscount():      Int
 
-    fun getDataSearchQuery(): String {
+    fun getFilterQuery(): String {
         val sort_order          = getSortType().value
         val sort_type           = getSortProperty().value
         val filter_category     = getCategory()
@@ -47,7 +50,8 @@ interface ProviderDataDisplay {
             val value: Pair<Float, Float>   = getPriceRange()
             "${value.first}-${value.second}"
         }
-        val screen = getScreen()
+        val filter_discount = getDiscount()
+        val filter_screen = getScreen()
         /** Порядок для извлечения в PHP:
          *  sort_order:         0 - ASCENDING, 1 - DESCENDING
          *  sort_type:          0 POPULAR, 1 - RATING, 2 - PRICE
@@ -55,9 +59,10 @@ interface ProviderDataDisplay {
          *  filter_brand:       ID бренда
          *  filter_favorite:    0 - все продукты, 1 - избранное
          *  filter_price:       интервал цен, н/р 1000,00-20000,00
-         *  current_screen:     текущий экран
+         *  filter_discount:    скидка
+         *  filrter_screen:     текущий экран
          */
-        return "$sort_order $sort_type $filter_category $filter_brend $filter_favorite $filter_price $screen"
+        return "$sort_order $sort_type $filter_category $filter_brend $filter_favorite $filter_price $filter_discount $filter_screen"
     }
 
 

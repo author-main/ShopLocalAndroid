@@ -1,6 +1,7 @@
 package com.training.shoplocal.classes.fodisplay
 
 import androidx.compose.runtime.*
+import com.training.shoplocal.log
 import com.training.shoplocal.screens.ScreenItem
 
 /**
@@ -21,7 +22,8 @@ class OrderDisplay: ProviderDataDisplay{
         var favorite: Int                   = 0,
         var priceRange: Pair<Float, Float>
         = 0.00f to 0.00f,
-        var category: Int                   = ANY_VALUE
+        var category: Int                   = ANY_VALUE,
+        var discount: Int                   = 0
     )
 
     private val sortData                = SortData()
@@ -29,6 +31,15 @@ class OrderDisplay: ProviderDataDisplay{
     private var currentScreen:Int       = ANY_VALUE
     private var completeUpdate = true
     //var state by mutableStateOf(false)
+
+
+    override fun setDiscount(value: Int) {
+        filterData.discount = value
+    }
+
+    override fun getDiscount(): Int {
+        return filterData.discount
+    }
 
     override var state: MutableState<Boolean> = mutableStateOf(false)
 
@@ -61,6 +72,7 @@ class OrderDisplay: ProviderDataDisplay{
     }
 
     override fun setScreen(value: Int) {
+        //log("set current screen $value")
         currentScreen = value
     }
 
@@ -120,9 +132,9 @@ class OrderDisplay: ProviderDataDisplay{
             return instance
         }
 
-        fun getDataSearchQuery(): String {
+        fun getFilterQuery(): String {
             getInstance()
-            return instance.getDataSearchQuery()
+            return instance.getFilterQuery()
 
             /*val sort_order          = instance.getSortType().value
             val sort_type           = instance.getSortProperty().value

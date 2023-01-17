@@ -713,11 +713,12 @@ fun MainScreen(state: ModalBottomSheetState){
                     if (!isFocusedSearchTextField) {
                     val changeVisibleStateFAB = remember {
                         derivedStateOf {
+                            val firstVisible = stateGrid.layoutInfo.visibleItemsInfo.isNotEmpty() && stateGrid.layoutInfo.visibleItemsInfo.first().index == 0
                             val prevFirstIndex  = prevStateScroll.first
                             val prevFirstOffset = prevStateScroll.second
                             val firstIndex  = stateGrid.firstVisibleItemIndex
                             val firstOffset = stateGrid.firstVisibleItemScrollOffset
-                            val upperLimit = firstOffset == 0 && firstIndex == 0
+                            val upperLimit = firstVisible && firstOffset == 0 && firstIndex == 0
                             /*if (upperLimit)
                                 log("upper limit")*/
                             var scrollUp = false

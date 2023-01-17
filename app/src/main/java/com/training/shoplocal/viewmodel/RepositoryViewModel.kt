@@ -58,6 +58,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             maxPortion = -1
             USER_ID = it
             ScreenRouter.navigateTo(ScreenItem.MainScreen)
+            setOrderDisplay(FieldFilter.SCREEN, ScreenItem.MainScreen.key.value)
             composeViewStack.pop()
             putComposeViewStack(ComposeView.MAIN)
             getBrands()
@@ -111,7 +112,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         repository.getOrderDisplay(field)
 
 
-    fun<T> setOrderDisplay(field: FieldFilter, value: T){
+    private fun<T> setOrderDisplay(field: FieldFilter, value: T){
         repository.setOrderDisplay(field, value)
     }
 
