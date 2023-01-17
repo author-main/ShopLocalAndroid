@@ -353,7 +353,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){
                             )
                         ) {
                             val lazyRowState = rememberLazyListState()
-                            val needDownloadImages = remember {
+                          /*  val needDownloadImages = remember {
                                 derivedStateOf {
                                                 (countItems > 1
                                                 && (lazyRowState.firstVisibleItemIndex == 0
@@ -367,7 +367,11 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){
                                             || lazyRowState.firstVisibleItemScrollOffset > 0)
                                 }
                             }
-                            if (needDownloadImages.value || uploaded.value) {
+                            //if (needDownloadImages.value || uploaded.value) {*/
+                            LaunchedEffect(Unit){
+                            //if (needDownloadImages.value) {
+                               // val str = product.linkimages?.get(0) ?: ""
+                               // log("need download $str}")
                                     product.linkimages?.let { items ->
                                         for (i in 1 until countItems) {
                                             if (listImages[i].first == IMAGE_STATE.NONE) {
