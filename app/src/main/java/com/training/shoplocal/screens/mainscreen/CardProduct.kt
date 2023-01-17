@@ -294,6 +294,11 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){
             // Если не нужно уменьшать изображение,
             // используйте ImageLinkDownload.downloadImage вместо
             // ImageLinkDownload.downloadCardImage
+
+           /* imageLink?.let{
+                log(it)
+            }*/
+
              ImageLinkDownloader.downloadCardImage(
                 imageLink?.let { "$SERVER_URL/images/$it" }, object : Callback {
                     override fun onComplete(image: Bitmap) {
@@ -304,7 +309,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){
                     }
 
                     override fun onFailure() {
-                        log("product id = ${product.id} failure")
+                       // log("product id = ${product.id} failure")
                         // здесь можно установить картинку по умолчанию,
                         // в случае если картинка не загрузилась
                         //listImages[0] = ваше изображение

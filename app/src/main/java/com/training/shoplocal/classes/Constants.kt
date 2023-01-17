@@ -20,6 +20,8 @@ enum class ComposeView {
     SEARCH,
     FILTER
 }
+const val SIZE_MEMORYCACHE =  8 // значение в Мб
+const val SIZE_DRIVECACHE =  50 // значение в Мб
 const val SIZE_PORTION =  6     //количество записей в порции при подгрузке сиаска продуктов из БД
 const val SERVER_URL            = "http://192.168.1.10"
 val DECIMAL_CEPARATOR           = DecimalFormatSymbols().decimalSeparator

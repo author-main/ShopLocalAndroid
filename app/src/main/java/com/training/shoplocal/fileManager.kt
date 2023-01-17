@@ -3,6 +3,7 @@ package com.training.shoplocal
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import com.training.shoplocal.classes.SIZE_DRIVECACHE
 import java.io.File
 import java.io.FileFilter
 import java.io.IOException
@@ -14,7 +15,7 @@ import kotlin.math.roundToInt
 
 val CART_IMAGE_SIZE = 150.Px
 const val HASH_LENGTH = 32
-const val CACHE_SIZE  = 50 * 1024 * 1024  // 50Мб
+const val CACHE_SIZE  = SIZE_DRIVECACHE * 1024 * 1024  // 50Мб
 const val EXT_CACHETEMPFILE = "t"
 enum class StateEntry(val value: String){
     CLEAN   ("CLEAN "), // файл кэша свободен

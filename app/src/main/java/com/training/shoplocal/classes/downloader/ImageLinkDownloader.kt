@@ -30,11 +30,16 @@ class ImageLinkDownloader private constructor() {
 
     @Synchronized
     private fun downloadImage(link: String, reduce: Boolean, callback: Callback) {
-
+        val md5link = md5(link)
+        val bitmapMemory = MemoryCache.get(md5link)
+        if (bitmapMemory != null) {
+           // log ("from memory cache $md5link")
+            callback.onComplete(bitmapMemory)
+            return
+        }
         /*Handler(Looper.getMainLooper()).post {
             Thread.sleep(4000)
         }*/
-
         val iterator = listDownloadTask.iterator()
         while (iterator.hasNext()) {
             if (iterator.next().value.isDone) iterator.remove()
@@ -43,7 +48,10 @@ class ImageLinkDownloader private constructor() {
         val timestamp = cacheStorage?.getTimestamp(link) ?: 0L
         val task = DownloadImageTask(link, reduce) { bitmap, fileTimestamp ->
             bitmap?.let {
-                val filesize = getFileSize("$cachedir${md5(link)}")
+                //val md5link = md5(link)
+                MemoryCache.put(md5link, it)
+                //log ("to memory cache $md5link")
+                val filesize = getFileSize("$cachedir$md5link")
                 cacheStorage?.let { storage ->
                     if (timestamp != fileTimestamp) {
                         if (storage.placed(filesize))
