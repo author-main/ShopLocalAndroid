@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.training.shoplocal.ui.theme.BgScreenDark
 import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.ui.theme.TextFieldBg
 
@@ -14,7 +15,7 @@ import com.training.shoplocal.ui.theme.TextFieldBg
 fun ShowFilterDisplay(){
     Box(modifier = Modifier
         .fillMaxSize()
-        .background(PrimaryDark)
+        .background(BgScreenDark)
     ){
 
     }
