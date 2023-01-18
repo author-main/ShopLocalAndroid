@@ -50,6 +50,7 @@ import com.training.shoplocal.classes.EMPTY_IMAGE
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.classes.SERVER_URL
 import com.training.shoplocal.classes.downloader.Callback
+import com.training.shoplocal.classes.downloader.ExtBitmap
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 import com.training.shoplocal.screens.appscreen.BottomSheet
 import com.training.shoplocal.ui.theme.*
@@ -301,10 +302,9 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){
 
              ImageLinkDownloader.downloadCardImage(
                 imageLink?.let { "$SERVER_URL/images/$it" }, object : Callback {
-                    override fun onComplete(image: Bitmap) {
-                        //log("product id = ${product.id} reload image")
-                       // bitmap.value = image.asImageBitmap()
-                        listImages[0] = IMAGE_STATE.COMPLETED to image.asImageBitmap()
+                    override fun onComplete(image: ExtBitmap) {
+                        //log("загружено из ${image.source.name}")
+                        listImages[0] = IMAGE_STATE.COMPLETED to image.bitmap!!.asImageBitmap()
                         downloadedImage.value = true
                     }
 
@@ -380,10 +380,10 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){
                                                 ImageLinkDownloader.downloadCardImage(
                                                     "$SERVER_URL/images/$itemImageLink",
                                                     object : Callback {
-                                                        override fun onComplete(image: Bitmap) {
+                                                        override fun onComplete(image: ExtBitmap) {
                                                           //  log ("product ${product.id}, loaded image $i")
                                                             listImages[i] =
-                                                                IMAGE_STATE.COMPLETED to image.asImageBitmap()
+                                                                IMAGE_STATE.COMPLETED to image.bitmap!!.asImageBitmap()
                                                         }
 
                                                         override fun onFailure() {

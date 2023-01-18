@@ -132,4 +132,9 @@ fun loadBitmap(filename: String, reduce: Boolean = false): Bitmap?{
     }
 }
 
+fun fileNameFromPath(path: String): String {
+    val file = File(path)
+    return file.name
+}
+
 

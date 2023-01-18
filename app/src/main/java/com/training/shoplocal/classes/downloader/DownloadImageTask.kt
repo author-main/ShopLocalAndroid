@@ -4,23 +4,33 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Handler
 import android.os.Looper
+import androidx.compose.ui.graphics.asAndroidBitmap
 import com.training.shoplocal.*
+import com.training.shoplocal.classes.EMPTY_IMAGE
 import java.io.FileOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
-class DownloadImageTask(private val link: String, private val reduce: Boolean, val callback: (bitmap: Bitmap?, timestamp: Long) -> Unit): DownloadTask<Bitmap?>
+class DownloadImageTask(private val link: String, private val reduce: Boolean, val callback: (extBitmap: ExtBitmap, timestamp: Long) -> Unit): DownloadTask<ExtBitmap>
 {
     private var cacheTimestamp: Long = 0L
     fun setCacheTimestamp(timestamp: Long){
         cacheTimestamp   = timestamp
     }
-    override fun download(link: String): Bitmap? {
+    override fun download(link: String): ExtBitmap {
+        val fileNameLink = fileNameFromPath(link)
+        var source = Source.SERVER
         val BUFFER_SIZE = 32768
-        val hash = md5(link)
+        //val hash = md5(link)
+        val hash = md5(fileNameLink)
         var bitmap: Bitmap? = null
         val filename    = getCacheDirectory() + hash//md5(link)
         val filenameTmp = "$filename.$EXT_CACHETEMPFILE"
+        /*log("filenamelink = $fileNameLink")
+        log("filename = $filename")
+        log("filenametmp = $filenameTmp")*/
+
+
         val conn = URL(link).openConnection() as HttpURLConnection
         var fileTimestamp = cacheTimestamp
         try {
@@ -45,25 +55,35 @@ class DownloadImageTask(private val link: String, private val reduce: Boolean, v
                     bitmap = loadBitmap(filenameTmp, reduce)//decodeStream(conn.inputStream)
                     renameFile(filenameTmp, filename)
                     fileTimestamp = timestamp
-                    //log("$hash - загружено из Инет")
+                //    log("$hash - загружено из Инет")
                 }
             }
-        } catch (_: Exception) {
+        } catch (_: Exception) {}
+
+        if (bitmap == null) {
+            source = Source.DRIVE_CACHE
+            bitmap = loadBitmap(filename, reduce)
+            //log("$hash - загружено из DriveCache")
         }
 
-        if (bitmap == null)
-           bitmap = loadBitmap(filename, reduce)
+        if (bitmap == null) {
+            bitmap = EMPTY_IMAGE.asAndroidBitmap()
+            source = Source.NONE
+         //   log("$hash - ошибка загрузки")
+        /*    source = Source.DRIVE_CACHE
+            bitmap = loadBitmap(filename, reduce)*/
+        }
 
         /*Handler(Looper.getMainLooper()).post {
             Thread.sleep(3000)
             callback(bitmap, fileTimestamp)
         }*/
        // for (i in 1..1000000000){}
-        callback(bitmap, fileTimestamp)
-        return null//bitmap
+        callback(ExtBitmap(bitmap, source), fileTimestamp)
+        return ExtBitmap(null, Source.NONE)
     }
 
-    override fun call(): Bitmap? {
+    override fun call(): ExtBitmap {
         return download(this.link)
      //   uiHandler.post { // обновление View только в главном потоке
         /*if (image == null)

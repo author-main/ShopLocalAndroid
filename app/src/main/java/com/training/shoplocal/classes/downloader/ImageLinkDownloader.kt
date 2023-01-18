@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.os.Handler
 import android.os.Looper
 import com.training.shoplocal.*
+import com.training.shoplocal.classes.EMPTY_IMAGE
 import kotlinx.coroutines.delay
 import java.io.IOException
 import java.net.HttpURLConnection
@@ -11,12 +12,20 @@ import java.net.URL
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
 
+enum class Source {
+    NONE,         // ошибка загрузки
+    MEMORY_CACHE, // загружено из кеша памяти
+    DRIVE_CACHE,  // загружено из кеша устройства
+    SERVER        // загружено с сервера
+}
+data class ExtBitmap(var bitmap: Bitmap?, var source: Source)
+
 class ImageLinkDownloader private constructor() {
     private var cachedir: String? = null
     private var cacheStorage: ImageCache? = null
     private val executorService =
         Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
-    private val listDownloadTask: HashMap<String, Future<Bitmap?>> = hashMapOf()
+    private val listDownloadTask: HashMap<String, Future<ExtBitmap>> = hashMapOf()
     private fun normalizeJournal() {
         cacheStorage?.normalizeJournal()
     }
@@ -30,11 +39,13 @@ class ImageLinkDownloader private constructor() {
 
     @Synchronized
     private fun downloadImage(link: String, reduce: Boolean, callback: Callback) {
-        val md5link = md5(link)
+        //val md5link = md5(link)
+        val md5link = md5(fileNameFromPath(link))
         val bitmapMemory = MemoryCache.get(md5link)
         if (bitmapMemory != null) {
             //log ("from memory cache $md5link")
-            callback.onComplete(bitmapMemory)
+            val extBitmap = ExtBitmap(bitmapMemory, Source.MEMORY_CACHE)
+            callback.onComplete(extBitmap)
             return
         }
         /*Handler(Looper.getMainLooper()).post {
@@ -46,10 +57,13 @@ class ImageLinkDownloader private constructor() {
         }
         cacheStorage?.put(link)
         val timestamp = cacheStorage?.getTimestamp(link) ?: 0L
-        val task = DownloadImageTask(link, reduce) { bitmap, fileTimestamp ->
-            bitmap?.let {
+        val task = DownloadImageTask(link, reduce) { extBitmap, fileTimestamp ->
+            extBitmap.let {
                 //val md5link = md5(link)
-                MemoryCache.put(md5link, it)
+                it.bitmap?.let {uploaded ->
+                    MemoryCache.put(md5link, uploaded)
+                }
+
                 //log ("to memory cache $md5link")
                 val filesize = getFileSize("$cachedir$md5link")
                 cacheStorage?.let { storage ->
