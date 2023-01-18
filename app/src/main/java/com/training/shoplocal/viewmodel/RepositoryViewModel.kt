@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.training.shoplocal.*
 import com.training.shoplocal.classes.*
+import com.training.shoplocal.classes.downloader.MemoryCache
 import com.training.shoplocal.classes.fodisplay.FieldFilter
 import com.training.shoplocal.classes.screenhelpers.DataScreen
 import com.training.shoplocal.repository.Repository
@@ -356,6 +357,21 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     fun getComposeViewStack(): ComposeView {
         return composeViewStack.peek()
+    }
+
+    fun existImageCache(filename: String?):Boolean {
+        if (filename == null)
+            return false
+        val hash = md5(filename)
+        var exist = false
+        if (MemoryCache.exist(hash))
+            exist = true
+        else {
+            val pathFile = getCacheDirectory() + filename
+            if (fileExists(pathFile))
+                exist = true
+        }
+        return exist
     }
 
 

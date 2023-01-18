@@ -52,6 +52,7 @@ import com.training.shoplocal.classes.SERVER_URL
 import com.training.shoplocal.classes.downloader.Callback
 import com.training.shoplocal.classes.downloader.ExtBitmap
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
+import com.training.shoplocal.classes.downloader.Source
 import com.training.shoplocal.screens.appscreen.BottomSheet
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
@@ -340,14 +341,27 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){
                     },
                     contentAlignment = Alignment.Center
                     ) {
-                    if (!downloadedImage.value) {
-                        AnimateLinkDownload(animateSize.value)
+                    //val existCache = viewModel.existImageCache(imageLink)
+//                    if (!downloadedImage.value && !existCache) {
+                    val showDownloadProcess = remember {
+                        derivedStateOf {
+                            !downloadedImage.value && !viewModel.existImageCache(imageLink)
+                        }
                     }
+                    //if (!downloadedImage.value) {
+                    if (showDownloadProcess.value)
+                        AnimateLinkDownload(animateSize.value)
+                        /*val visibleAnimation = remember {
+                            derivedStateOf {
+                                visible.targetState && !existCache
+                            }
+                        }*/
+
                         androidx.compose.animation.AnimatedVisibility(
                             visibleState = visible,
                             enter = fadeIn(
                                 animationSpec = tween(
-                                    durationMillis = 150,
+                                    durationMillis = if (!showDownloadProcess.value) 0 else 100,
                                     easing = LinearEasing
                                 )
                             )

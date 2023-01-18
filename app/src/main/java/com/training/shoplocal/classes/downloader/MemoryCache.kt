@@ -26,6 +26,8 @@ class MemoryCache {
     private fun remove(key: String) {
         cache.remove(key)
     }
+    private fun exist(key: String) =
+        cache.get(key) != null
 
     companion object {
         private lateinit var instance: MemoryCache
@@ -44,6 +46,10 @@ class MemoryCache {
         fun remove(key: String) {
             getInstance()
             instance.remove(key)
+        }
+        fun exist(key:String): Boolean {
+            getInstance()
+            return instance.exist(key)
         }
     }
 }
