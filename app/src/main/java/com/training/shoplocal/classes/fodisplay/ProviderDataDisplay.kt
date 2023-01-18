@@ -53,14 +53,14 @@ interface ProviderDataDisplay {
         val filter_discount = getDiscount()
         val filter_screen = getScreen()
         /** Порядок для извлечения в PHP:
-         *  sort_order:         0 - ASCENDING, 1 - DESCENDING
-         *  sort_type:          0 POPULAR, 1 - RATING, 2 - PRICE
-         *  filter_category:    ID категории продукта
-         *  filter_brand:       ID бренда
-         *  filter_favorite:    0 - все продукты, 1 - избранное
-         *  filter_price:       интервал цен, н/р 1000,00-20000,00
-         *  filter_discount:    скидка
-         *  filrter_screen:     текущий экран
+         *  0 - sort_order:         0 - ASCENDING, 1 - DESCENDING
+         *  1 - sort_type:          0 POPULAR, 1 - RATING, 2 - PRICE
+         *  2 - filter_category:    ID категории продукта
+         *  3 - filter_brand:       ID бренда
+         *  4 - filter_favorite:    0 - все продукты, 1 - избранное
+         *  5 - filter_price:       интервал цен, н/р 1000,00-20000,00
+         *  6 - filter_discount:    скидка
+         *  7 - filrter_screen:     текущий экран
          */
         return "$sort_order $sort_type $filter_category $filter_brend $filter_favorite $filter_price $filter_discount $filter_screen"
     }
