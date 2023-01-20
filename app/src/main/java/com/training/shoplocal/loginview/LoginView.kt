@@ -72,12 +72,11 @@ fun LoginView(state: LoginViewState) {
 
 
     if (state.isPressedButtons() && state.isFocused()) {
-//    if (stateFocused.value){
         focusManager.clearFocus(true)
         state.setPressedButtons(false)
         state.setFocus(false)
-//        return
     }
+
     //log("recomposition")
     //val passwordState = rememberSaveable(saver = PasswordViewState.Saver) { state }
     val chars = state.getPasswordChar()
