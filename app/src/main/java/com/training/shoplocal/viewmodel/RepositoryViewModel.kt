@@ -11,9 +11,9 @@ import com.training.shoplocal.classes.screenhelpers.DataScreen
 import com.training.shoplocal.repository.Repository
 import com.training.shoplocal.screens.ScreenItem
 import com.training.shoplocal.screens.ScreenRouter
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 import java.util.*
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
@@ -157,12 +157,16 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         if (lockDB) return
             lockDB = true
           //  exchangeDataMap[ExchangeData.GET_PRODUCTS] = true
+
+
+            /*val coroutine = CoroutineScope(Job() + Dispatchers.IO)
+        coroutine.launch {*/
             repository.getProducts(USER_ID, part) { listProducts ->
                 if (listProducts.isNotEmpty()) {
                     if (part == 1) {
                         val extractedData = getMaxPortion(listProducts[0].name)
-                        maxPortion              = extractedData.first
-                        listProducts[0].name    = extractedData.second
+                        maxPortion = extractedData.first
+                        listProducts[0].name = extractedData.second
                         _products.value.clear()
                     }
                     loadedPortion = part
@@ -174,8 +178,9 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                         _products.value = mutableListOf()
                 }
                 lockDB = false
-            }
+            //}
 
+        }
     }
 
     private fun getBrands(){

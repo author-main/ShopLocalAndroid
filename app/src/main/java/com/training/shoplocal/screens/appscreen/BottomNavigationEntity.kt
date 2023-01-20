@@ -29,9 +29,7 @@ import com.training.shoplocal.classes.TEXT_BOTTOMNAVIGATION
 import com.training.shoplocal.log
 import com.training.shoplocal.screens.*
 import com.training.shoplocal.screens.mainscreen.MainScreen
-import com.training.shoplocal.ui.theme.TextBrand
-import com.training.shoplocal.ui.theme.TextFieldFont
-import com.training.shoplocal.ui.theme.TextOrange
+import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
@@ -92,7 +90,7 @@ fun IconWithText(value: BottomNavigationItemData, selected: Boolean = false,
         horizontalAlignment = Alignment.CenterHorizontally
     )
     {
-        val color = if (selected) TextOrange
+        val color = if (selected) SelectedItemBottomNavi//TextOrange
         else TextFieldFont
         Icon(painterResource(id = value.icon),
             tint = color,

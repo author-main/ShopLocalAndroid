@@ -322,7 +322,8 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){
             }*/
 
              ImageLinkDownloader.downloadCardImage(
-                imageLink?.let { "$SERVER_URL/images/${it.link}" }, object : Callback {
+                 imageLink?.let { "$SERVER_URL/images/${it.link}" },
+                 object : Callback {
                     override fun onComplete(image: ExtBitmap) {
                         //log("загружено из ${image.source.name}")
                         listImages[0] = IMAGE_STATE.COMPLETED to image.bitmap!!.asImageBitmap()
