@@ -1,5 +1,8 @@
 package com.training.shoplocal.screens.appscreen
 
+import androidx.compose.animation.core.Easing
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import com.training.shoplocal.R
 import androidx.compose.foundation.background
@@ -62,7 +65,8 @@ fun ShowSearchHistory(textSearch: MutableState<String>, searchState: State<Searc
                 showList.apply {
                     clear()
                     addAll(viewModel.getSearchHistoryList().filter { text ->
-                        text.startsWith(query, true)
+                        text.contains(query, true)
+                    //startsWith(query, true)
                     })
                     //        log(filteredList.toString())
                 }
@@ -132,11 +136,24 @@ fun ShowSearchHistory(textSearch: MutableState<String>, searchState: State<Searc
                 .padding(vertical = 8.dp)
             ){
                 itemsIndexed(showList){index, line ->
-                    Column() {
+                    Column(
+                        modifier = Modifier
+                                  .animateItemPlacement(
+                                      /*  animationSpec = tween(
+                                            delayMillis = 150,
+                                            easing = FastOutLinearInEasing
+                                        )*/
+                                    )
+                    ) {
                         Row(
                             modifier = Modifier//.height(32.dp)
                                 //   .padding(vertical = 8.dp)
-                                .animateItemPlacement()
+                      /*          .animateItemPlacement(
+                                    animationSpec = tween(
+                                        delayMillis = 1200,
+                                        easing = FastOutLinearInEasing
+                                    )
+                                )*/
                                 .clickable {
                                     textSearch.value = line
                                     //callback(line)

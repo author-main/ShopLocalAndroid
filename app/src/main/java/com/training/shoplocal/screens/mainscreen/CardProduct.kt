@@ -372,11 +372,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){
                     //if (!downloadedImage.value) {
                     if (showDownloadProcess.value)
                         AnimateLinkDownload(animateSize.value)
-                        /*val visibleAnimation = remember {
-                            derivedStateOf {
-                                visible.targetState && !existCache
-                            }
-                        }*/
+
 
                         androidx.compose.animation.AnimatedVisibility(
                             visibleState = visible,
