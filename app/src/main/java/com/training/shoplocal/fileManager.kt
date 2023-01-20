@@ -23,6 +23,8 @@ enum class StateEntry(val value: String){
     REMOVE  ("REMOVE")  // удалить сведения, файл из кэша
 }
 
+val CACHE_DIR = getCacheDirectory()
+
 fun renameFile(source: String, dest: String){
     renameFile(File(source), File(dest))
 }

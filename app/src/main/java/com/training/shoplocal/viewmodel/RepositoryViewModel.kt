@@ -359,15 +359,18 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         return composeViewStack.peek()
     }
 
-    fun existImageCache(filename: String?):Boolean {
+    fun existImageCache(filename: String?, convert: Boolean = false):Boolean {
         if (filename == null)
             return false
-        val hash = md5(filename)
+        val hash = if (convert)
+            md5(filename) else filename
+        //log("hash = $hash")
         var exist = false
         if (MemoryCache.exist(hash))
             exist = true
         else {
-            val pathFile = getCacheDirectory() + filename
+            val pathFile = CACHE_DIR + filename //getCacheDirectory() + filename
+          //  log("path = $pathFile")
             if (fileExists(pathFile))
                 exist = true
         }

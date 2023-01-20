@@ -174,9 +174,20 @@ fun StarPanel(count: Float){
     }
 }
 
+data class ImageLink(val link: String, val md5: String)
+
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun CardProduct(product: Product, state: ModalBottomSheetState){
+
+    val linkImages: List<ImageLink> = remember {
+        val list = mutableListOf<ImageLink>()
+        product.linkimages?.forEach {
+            list.add(ImageLink(it, md5(it)))
+        }
+       // log("links = ${list.toString()}")
+        list.toList()
+    }
     val viewModel: RepositoryViewModel = viewModel()
     val brand: String = product.brand?.let { viewModel.getBrand(it) } ?: ""
     val scope = rememberCoroutineScope()
@@ -243,8 +254,17 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){
         )
     }
 
-    fun getLinkImage(index: Int, images: List<String>?): String?{
+/*    fun getLinkImage(index: Int, images: List<String>?): String?{
         return images?.let{
+            if (index < it.size)
+                it[index]
+            else
+                null
+        }
+    }*/
+
+    fun getLinkImage(index: Int): ImageLink?{
+        return linkImages.let{
             if (index < it.size)
                 it[index]
             else
@@ -261,7 +281,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
     val visible = remember{MutableTransitionState(false)}
     val animateSize = remember{mutableStateOf(Size.Zero)}
-    val imageLink = getLinkImage(0, product.linkimages)
+    val imageLink = getLinkImage(0)//, product.linkimages)
 
     val downloadedImage = remember {
         mutableStateOf(
@@ -302,7 +322,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){
             }*/
 
              ImageLinkDownloader.downloadCardImage(
-                imageLink?.let { "$SERVER_URL/images/$it" }, object : Callback {
+                imageLink?.let { "$SERVER_URL/images/${it.link}" }, object : Callback {
                     override fun onComplete(image: ExtBitmap) {
                         //log("загружено из ${image.source.name}")
                         listImages[0] = IMAGE_STATE.COMPLETED to image.bitmap!!.asImageBitmap()
@@ -345,7 +365,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){
 //                    if (!downloadedImage.value && !existCache) {
                     val showDownloadProcess = remember {
                         derivedStateOf {
-                            !downloadedImage.value && !viewModel.existImageCache(imageLink)
+                            !downloadedImage.value && !viewModel.existImageCache(imageLink?.md5)
                         }
                     }
                     //if (!downloadedImage.value) {
@@ -389,10 +409,10 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){
                                     product.linkimages?.let { items ->
                                         for (i in 1 until countItems) {
                                             if (listImages[i].first == IMAGE_STATE.NONE) {
-                                                val itemImageLink = getLinkImage(i, items)
+                                                val itemImageLink = getLinkImage(i)//, items)
                                                 listImages[i] = IMAGE_STATE.PROCESS to EMPTY_IMAGE
                                                 ImageLinkDownloader.downloadCardImage(
-                                                    "$SERVER_URL/images/$itemImageLink",
+                                                    "$SERVER_URL/images/${itemImageLink?.link}",
                                                     object : Callback {
                                                         override fun onComplete(image: ExtBitmap) {
                                                           //  log ("product ${product.id}, loaded image $i")
