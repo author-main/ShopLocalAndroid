@@ -452,8 +452,8 @@ fun MainScreen(state: ModalBottomSheetState){
                             hideSearchDialog()
                             if (searchScreenDisplayed) {
                                 if (searchState.value == SearchState.SEARCH_QUERY) {
-                                    textSearch.value = prevSearchText.toString()
                                     searchState.value = SearchState.SEARCH_RESULT
+                                    textSearch.value = prevSearchText.toString()
                                 } else {
                                     viewModel.clearResultSearch() // удаляем результаты последнего запроса в БД на сервере
                                     val firstIndex =
@@ -464,12 +464,12 @@ fun MainScreen(state: ModalBottomSheetState){
                                         )
                                     }
                                         searchScreenDisplayed = false
-                                        textSearch.value = ""
                                         searchState.value = SearchState.SEARCH_NONE
+                                        textSearch.value = ""
                                 }
                             } else {
-                                textSearch.value = ""
                                 searchState.value = SearchState.SEARCH_NONE
+                                textSearch.value = ""
                             }
                         }
                     }

@@ -122,7 +122,7 @@ fun loadBitmap(filename: String, reduce: Boolean = false): Bitmap?{
             val reduceSize = option.outWidth.coerceAtLeast(option.outHeight).toDouble()
             val inSampleSize = (reduceSize / CART_IMAGE_SIZE).roundToInt()
             //log("inSampleSize = $inSampleSize, bitmapWidth = ${option.outWidth}")
-           // option.inSampleSize = inSampleSize * 2
+            option.inSampleSize = inSampleSize * 2
             option.inJustDecodeBounds = false
         }
         option.inPreferredConfig = Bitmap.Config.ARGB_8888
