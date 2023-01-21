@@ -1,8 +1,8 @@
 package com.training.shoplocal.classes.fodisplay
 
 import androidx.compose.runtime.*
+import com.training.shoplocal.classes.DECIMAL_SEPARATOR
 import com.training.shoplocal.log
-import com.training.shoplocal.screens.ScreenItem
 
 
 enum class FieldFilter {
@@ -15,7 +15,6 @@ enum class FieldFilter {
     DISCOUNT,
     SCREEN
 }
-const val ANY_VALUE =    -1
 
 enum class SORT_TYPE(val value: Int)     {ASCENDING(0), DESCENDING(1)}
 enum class SORT_PROPERTY(val value: Int) {PRICE(0), POPULAR(1), RATING(2)}
@@ -24,8 +23,8 @@ interface ProviderDataDisplay {
     var state: MutableState<Boolean>
     fun setSortType(value: SORT_TYPE)
     fun setSortProperty(value: SORT_PROPERTY)
-    fun setBrend(value: Int)
-    fun setCategory(value: Int)
+    fun setBrend(value: String)
+    fun setCategory(value: String)
     fun setFavorite(value: Int)
     fun setPriceRange(valueFrom: Float, valueTo: Float)
     fun setScreen(value: Int)
@@ -33,8 +32,8 @@ interface ProviderDataDisplay {
 
     fun getSortType():      SORT_TYPE
     fun getSortProperty():  SORT_PROPERTY
-    fun getBrend():         Int
-    fun getCategory():      Int
+    fun getBrend():         String
+    fun getCategory():      String
     fun getFavorite():      Int
     fun getPriceRange():    Pair<Float, Float>
     fun getScreen():        Int

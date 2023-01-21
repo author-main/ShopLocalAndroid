@@ -11,18 +11,19 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.ImageBitmap
 import com.training.shoplocal.AppShopLocal.Companion.appContext
+import com.training.shoplocal.classes.EMPTY_STRING
 import java.math.RoundingMode
 import java.nio.charset.Charset
 import java.text.DecimalFormat
 import kotlin.math.roundToInt
 
-const val DEFAULT_STRRESOURCE_VALUE  = ""
+//const val DEFAULT_STRRESOURCE_VALUE  = ""
 fun getStringResource(@StringRes id: Int): String =
     try {
         AppShopLocal.appContext().getString(id)
     }
     catch (e: Exception){
-        DEFAULT_STRRESOURCE_VALUE
+        EMPTY_STRING
     }
 
 fun<T> log(value: T?) {

@@ -3,8 +3,6 @@ package com.training.shoplocal.screens.mainscreen
 import androidx.compose.ui.platform.LocalDensity
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.LinearGradient
-import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.*
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.*
@@ -14,30 +12,23 @@ import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.node.modifierElementOf
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
@@ -45,24 +36,18 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.*
 import com.training.shoplocal.AppShopLocal.Companion.appContext
 import com.training.shoplocal.R
-import com.training.shoplocal.classes.DECIMAL_CEPARATOR
+import com.training.shoplocal.classes.DECIMAL_SEPARATOR
 import com.training.shoplocal.classes.EMPTY_IMAGE
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.classes.SERVER_URL
 import com.training.shoplocal.classes.downloader.Callback
 import com.training.shoplocal.classes.downloader.ExtBitmap
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
-import com.training.shoplocal.classes.downloader.Source
-import com.training.shoplocal.screens.appscreen.BottomSheet
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import java.io.IOException
-import java.lang.Math.sqrt
 import java.math.RoundingMode
 import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
 
 private enum class IMAGE_STATE {
     NONE,
@@ -135,7 +120,7 @@ fun StarPanel(count: Float){
     val df = DecimalFormat("#.#")
     df.roundingMode = RoundingMode.HALF_EVEN
     //val rounded = df.format(count)
-    val partNumber = df.format(count).split(DECIMAL_CEPARATOR)
+    val partNumber = df.format(count).split(DECIMAL_SEPARATOR)
     val intPart = partNumber[0].toInt()
     val floatPart = if (partNumber.size == 2) partNumber[1].toInt() else 0
     val starPart = intPart + 1

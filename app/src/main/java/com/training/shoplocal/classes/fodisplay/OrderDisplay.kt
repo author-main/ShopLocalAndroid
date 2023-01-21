@@ -1,6 +1,8 @@
 package com.training.shoplocal.classes.fodisplay
 
 import androidx.compose.runtime.*
+import com.training.shoplocal.classes.ANY_VALUE
+import com.training.shoplocal.classes.EMPTY_STRING
 import com.training.shoplocal.log
 import com.training.shoplocal.screens.ScreenItem
 
@@ -18,11 +20,11 @@ class OrderDisplay: ProviderDataDisplay{
                         var sortProperty: SORT_PROPERTY     = SORT_PROPERTY.PRICE)
 
     data class FilterData(
-        var brend: Int                      = ANY_VALUE,
+        var brend: String                   = ANY_VALUE.toString(),
         var favorite: Int                   = 0,
         var priceRange: Pair<Float, Float>
         = 0.00f to 0.00f,
-        var category: Int                   = ANY_VALUE,
+        var category: String                = ANY_VALUE.toString(),
         var discount: Int                   = 0
     )
 
@@ -55,11 +57,11 @@ class OrderDisplay: ProviderDataDisplay{
       //  updateState()
     }
 
-    override fun setBrend(value: Int) {
+    override fun setBrend(value: String) {
         filterData.brend = value
     }
 
-    override fun setCategory(value: Int) {
+    override fun setCategory(value: String) {
         filterData.category = value
     }
 
@@ -84,11 +86,11 @@ class OrderDisplay: ProviderDataDisplay{
         return sortData.sortProperty
     }
 
-    override fun getBrend(): Int {
+    override fun getBrend(): String {
         return filterData.brend
     }
 
-    override fun getCategory(): Int {
+    override fun getCategory(): String {
         return filterData.category
     }
 
