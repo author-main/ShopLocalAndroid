@@ -450,13 +450,6 @@ fun MainScreen(state: ModalBottomSheetState){
                                 .align(Alignment.CenterVertically)
                         ) {
                             hideSearchDialog()
-                            /*var exitEditQuery = false
-                            if (searchState.value == SearchState.SEARCH_QUERY) {
-                                exitEditQuery = true
-                            }*/
-                            /* if (searchScreenDisplayed && exitEditQuery)
-                                searchState.value = SearchState.SEARCH_RESULT*/
-
                             if (searchScreenDisplayed) {
                                 if (searchState.value == SearchState.SEARCH_QUERY) {
                                     textSearch.value = prevSearchText.toString()
@@ -470,19 +463,15 @@ fun MainScreen(state: ModalBottomSheetState){
                                             firstIndex
                                         )
                                     }
-                                    searchScreenDisplayed = false
-                                    textSearch.value = ""
-                                    searchState.value = SearchState.SEARCH_NONE
+                                        searchScreenDisplayed = false
+                                        textSearch.value = ""
+                                        searchState.value = SearchState.SEARCH_NONE
                                 }
                             } else {
                                 textSearch.value = ""
                                 searchState.value = SearchState.SEARCH_NONE
                             }
-                        }/* else {
-
-                                searchState.value = SearchState.SEARCH_NONE
-                            }*/
-                      //  }
+                        }
                     }
                     //**************************************************************************************
                     BasicTextField(
