@@ -450,13 +450,18 @@ fun MainScreen(state: ModalBottomSheetState){
                                 .align(Alignment.CenterVertically)
                         ) {
                             hideSearchDialog()
+                            /*var exitEditQuery = false
+                            if (searchState.value == SearchState.SEARCH_QUERY) {
+                                exitEditQuery = true
+                            }*/
+                            /* if (searchScreenDisplayed && exitEditQuery)
+                                searchState.value = SearchState.SEARCH_RESULT*/
+
                             if (searchScreenDisplayed) {
                                 if (searchState.value == SearchState.SEARCH_QUERY) {
-                                    searchState.value = SearchState.SEARCH_RESULT
                                     textSearch.value = prevSearchText.toString()
+                                    searchState.value = SearchState.SEARCH_RESULT
                                 } else {
-                                    searchState.value = SearchState.SEARCH_NONE
-                                    searchScreenDisplayed = false
                                     viewModel.clearResultSearch() // удаляем результаты последнего запроса в БД на сервере
                                     val firstIndex =
                                         viewModel.restoreScreenProducts(ScreenRouter.current.key)
@@ -465,13 +470,19 @@ fun MainScreen(state: ModalBottomSheetState){
                                             firstIndex
                                         )
                                     }
-
+                                    searchScreenDisplayed = false
                                     textSearch.value = ""
+                                    searchState.value = SearchState.SEARCH_NONE
                                 }
                             } else {
+                                textSearch.value = ""
                                 searchState.value = SearchState.SEARCH_NONE
                             }
-                        }
+                        }/* else {
+
+                                searchState.value = SearchState.SEARCH_NONE
+                            }*/
+                      //  }
                     }
                     //**************************************************************************************
                     BasicTextField(
