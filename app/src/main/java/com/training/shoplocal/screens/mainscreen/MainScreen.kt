@@ -46,7 +46,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
@@ -481,7 +480,7 @@ fun MainScreen(state: ModalBottomSheetState){
                                 if (it.isFocused) {
                                     // prevStateScroll = Pair<Int, Int>(0,0)
                                     showFloatingButton = false
-                                    viewModel.putComposeViewStack(ComposeView.SEARCH_EDITVALUE)
+                                    viewModel.putComposeViewStack(ComposeView.SEARCH_EDIT)
                                     //isSearchMode = true
                                     //val searchStore: SearchQueryStorageInterface = SearchQueryStorage.getInstance()
                                     //lastSearchQuery.value = ""

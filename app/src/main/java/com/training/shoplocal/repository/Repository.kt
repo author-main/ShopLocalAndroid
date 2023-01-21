@@ -10,11 +10,8 @@ import com.training.shoplocal.classes.fodisplay.SORT_TYPE
 import com.training.shoplocal.classes.screenhelpers.DataScreen
 import com.training.shoplocal.classes.searcher.SearchQueryStorage
 import com.training.shoplocal.encodeBase64
-import com.training.shoplocal.log
 import com.training.shoplocal.loginview.LoginViewState
-import com.training.shoplocal.screens.ScreenItem
 import com.training.shoplocal.screens.ScreenRouter
-import java.util.*
 import kotlin.collections.HashMap
 
 class Repository: DAOinterface {
@@ -168,8 +165,8 @@ class Repository: DAOinterface {
         when (field) {
             FieldFilter.SORT_TYPE     -> orderDisplay.setSortType(value as SORT_TYPE)
             FieldFilter.SORT_PROPERTY -> orderDisplay.setSortProperty(value as SORT_PROPERTY)
-            FieldFilter.BREND         -> orderDisplay.setBrend(value as Int)
-            FieldFilter.CATEGORY      -> orderDisplay.setCategory(value as Int)
+            FieldFilter.BREND         -> orderDisplay.setBrend(value as String)
+            FieldFilter.CATEGORY      -> orderDisplay.setCategory(value as String)
             FieldFilter.FAVORITE      -> orderDisplay.setFavorite(value as Int)
             FieldFilter.PRICE_RANGE   -> {
                 val rangePrice: Pair<Float, Float> = value as Pair<Float, Float>
@@ -194,7 +191,6 @@ class Repository: DAOinterface {
      * @param portion порция (часть) подгружаемых данных, значение -1 - инициализация выполнения поискового запроса
      * @param UUID_query уникальный id запроса
      * @param userId id пользователя
-     * @param order порядок и фильтр отображения списка продуктов
      */
     fun findProductsRequest(query: String, portion: Int, UUID_query: String, userId: Int, action: (products: List<Product>) -> Unit ){
         /*val orderDisplay = OrderDisplay.getInstance()
