@@ -91,7 +91,7 @@ fun ShowSearchHistory(textSearch: MutableState<String>, searchState: State<Searc
                                     //log("restore history")
                                 }
                         } catch (e: Exception) {
-                            log(e.message)
+                           // log(e.message)
                         }
                  //   }
             }
