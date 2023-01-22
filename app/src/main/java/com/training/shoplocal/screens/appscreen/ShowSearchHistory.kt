@@ -43,9 +43,9 @@ fun ShowSearchHistory(textSearch: MutableState<String>, searchState: State<Searc
 
     val viewModel: RepositoryViewModel = viewModel()
 
-    var filtered by remember {
+    /*var filtered by remember {
         mutableStateOf(true)
-    }
+    }*/
 
     val showList = remember {
         mutableStateListOf<String>()
@@ -58,10 +58,17 @@ fun ShowSearchHistory(textSearch: MutableState<String>, searchState: State<Searc
         }
     }*/
 
-    LaunchedEffect(textSearch.value) {
+    val isFiltered = remember {
+        derivedStateOf {
+            textSearch.value.isNotBlank() && searchState.value != SearchState.SEARCH_NONE
+        }
+    }
+
+    //LaunchedEffect(textSearch.value) {
+    LaunchedEffect(isFiltered.value){
             val query = textSearch.value
             if (query.isNotBlank()) {
-                filtered = true
+             //   filtered = true
                 showList.apply {
                     clear()
                     addAll(viewModel.getSearchHistoryList().filter { text ->
@@ -72,7 +79,7 @@ fun ShowSearchHistory(textSearch: MutableState<String>, searchState: State<Searc
                 }
             } else {
                     //if (searchState.value == SearchState.SEARCH_QUERY) {
-                        filtered = false
+                     //   filtered = false
                         try {
                             /*val list = viewModel.getSearchHistoryList()
                 log ("historySize = ${list.size}")*/
@@ -171,7 +178,8 @@ fun ShowSearchHistory(textSearch: MutableState<String>, searchState: State<Searc
                                 fontSize = 14.sp/*,
                                 fontFamily = textFont*/
                             )
-                            if (!filtered)
+                            //if (!filtered)
+                            if (!isFiltered.value)
                             Icon(
                                 modifier = Modifier
                                     //.align(Alignment.CenterVertically)
