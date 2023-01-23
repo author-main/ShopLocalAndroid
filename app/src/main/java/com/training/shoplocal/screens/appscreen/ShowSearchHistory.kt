@@ -81,25 +81,12 @@ fun ShowSearchHistory(textSearch: MutableState<String>, searchState: State<Searc
     DisposableEffect(Unit) {
         showList.addAll(viewModel.getSearchHistoryList(true))
         initHistoryList = true
-        //loadHistoryList(true)
         onDispose(){
-            //textSearch.value = ""
-//            if (lastSearch.value.isNotBlank()) {
-            if (searchState.value == SearchState.SEARCH_RESULT) {
-                //viewModel.putSearchHistoryQuery(lastSearch.value)
-               // log("dispose history list")
+            if (searchState.value == SearchState.SEARCH_RESULT)
                 viewModel.putSearchHistoryQuery(textSearch.value.trim())
-               // textSearch.value = lastSearch.value
-                //log("put search query ${lastSearch.value}")
-            } /*else {
-                textSearch.value = prevTextSearch
-            }*/
             viewModel.saveSearchHistory()
             viewModel.disposeSearchHistoryList()
-           // log("dispose history")
             showList.clear()
-//            filtered = false
-
         }
     }
     //val textFont = FontFamily(Font(R.font.robotocondensed_light))
