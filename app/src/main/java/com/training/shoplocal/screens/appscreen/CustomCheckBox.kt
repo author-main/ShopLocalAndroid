@@ -28,6 +28,7 @@ fun CustomCheckBox(style: CheckedStyle = CheckedStyle(), text: String, checked: 
         mutableStateOf(checked)
     }
     Row(modifier = Modifier
+        .background(Color.Red)
         .toggleable(value = isChecked,role = Role.Checkbox){
             isChecked = it
         },

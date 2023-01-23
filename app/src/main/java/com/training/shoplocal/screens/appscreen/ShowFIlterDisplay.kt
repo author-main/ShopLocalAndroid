@@ -66,6 +66,7 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                     .weight(0.1f),
                 //elevation = 4.dp,
                 //shape = RoundedCornerShape(20.dp),
+
                 backgroundColor = PrimaryDark,
             ) {
                 showDiscount(value = 20)
