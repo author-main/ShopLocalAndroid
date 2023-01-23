@@ -40,7 +40,9 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
 
     @Composable
     fun showDiscount(value: Int){
+        CustomCheckBox(){checked ->
 
+        }
     }
 
     @Composable
