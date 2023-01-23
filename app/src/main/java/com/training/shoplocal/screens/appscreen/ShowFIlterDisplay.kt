@@ -12,8 +12,30 @@ import com.training.shoplocal.ui.theme.BgScreenDark
 import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.ui.theme.TextFieldBg
 
+data class ItemFilter(
+    val id: Int,
+    val name: String,
+    val header: Boolean = false,
+    val linkImage: String,
+    var selected: Boolean = false
+)
+
 @Composable
 fun ShowFilterDisplay(){
+    @Composable
+    fun showRangePrice(valueFrom: Float, valueTo: Float){
+
+    }
+
+    @Composable
+    fun showDiscount(value: Int){
+
+    }
+
+    @Composable
+    fun showFilterItem(item: ItemFilter, onClick: () -> Unit){
+
+    }
     Box(modifier = Modifier
         .fillMaxSize()
         .background(BgScreenDark)
