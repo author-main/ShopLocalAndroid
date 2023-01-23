@@ -469,6 +469,7 @@ fun MainScreen(state: ModalBottomSheetState){
                                         textSearch.value = ""
                                 }
                             } else {
+                              // log("back")
                                 searchState.value = SearchState.SEARCH_NONE
                                 textSearch.value = ""
                             }
@@ -529,6 +530,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
                                     hideSearchDialog()
                                     viewModel.putComposeViewStack(ComposeView.SEARCH)
+                                   // log("text search = ${textSearch.value.trim()}")
                                     viewModel.findProductsRequest(textSearch.value.trim())
                                     searchState.value = SearchState.SEARCH_RESULT
                                     searchScreenDisplayed = true

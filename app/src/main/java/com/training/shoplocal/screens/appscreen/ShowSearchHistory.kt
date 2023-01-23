@@ -43,63 +43,45 @@ fun ShowSearchHistory(textSearch: MutableState<String>, searchState: State<Searc
 
     val viewModel: RepositoryViewModel = viewModel()
 
-    /*var filtered by remember {
-        mutableStateOf(true)
+  /*  var filtered by remember {
+        mutableStateOf(false)
     }*/
+
+    var initHistoryList by remember {
+        mutableStateOf(false)
+    }
 
     val showList = remember {
         mutableStateListOf<String>()
     }
 
-   /* LaunchedEffect(lastSearch.value) {
-        log("put ${lastSearch.value}")
-        if (lastSearch.value.isNotBlank()) {
-            viewModel.putSearchHistoryQuery(lastSearch.value)
-        }
-    }*/
-
-    val isFiltered = remember {
-        derivedStateOf {
-            textSearch.value.isNotBlank() && searchState.value != SearchState.SEARCH_NONE
-        }
-    }
-
-    //LaunchedEffect(textSearch.value) {
-    LaunchedEffect(isFiltered.value){
-            val query = textSearch.value
-            if (query.isNotBlank()) {
-             //   filtered = true
-                showList.apply {
-                    clear()
-                    addAll(viewModel.getSearchHistoryList().filter { text ->
-                        text.contains(query, true)
-                    //startsWith(query, true)
-                    })
-                    //        log(filteredList.toString())
-                }
-            } else {
-                    //if (searchState.value == SearchState.SEARCH_QUERY) {
-                     //   filtered = false
-                        try {
-                            /*val list = viewModel.getSearchHistoryList()
-                log ("historySize = ${list.size}")*/
-                            if (!showList.containsAll(viewModel.getSearchHistoryList()))
-                                showList.apply {
-                                    clear()
-                                    //val list = viewModel.getSearchHistoryList()
-                                    addAll(viewModel.getSearchHistoryList())
-                                    //log("restore history")
-                                }
-                        } catch (e: Exception) {
-                           // log(e.message)
-                        }
-                 //   }
+    if (initHistoryList && searchState.value != SearchState.SEARCH_NONE) {
+        if (textSearch.value.isNotBlank()) {
+            val query = textSearch.value.trim()
+            showList.apply {
+                clear()
+                addAll(viewModel.getSearchHistoryList().filter { text ->
+                    text.contains(query, true)
+                })
             }
+        } else {
+            try {
+                if (!showList.containsAll(viewModel.getSearchHistoryList()))
+                    showList.apply {
+                        clear()
+                        addAll(viewModel.getSearchHistoryList())
+                    }
+            } catch (_: Exception) {
+                showList.clear()
+            }
+            //filtered = false
+        }
     }
 
-    //log("search ${textSearch.value}")
     DisposableEffect(Unit) {
         showList.addAll(viewModel.getSearchHistoryList(true))
+        initHistoryList = true
+        //loadHistoryList(true)
         onDispose(){
             //textSearch.value = ""
 //            if (lastSearch.value.isNotBlank()) {
@@ -114,7 +96,9 @@ fun ShowSearchHistory(textSearch: MutableState<String>, searchState: State<Searc
             }*/
             viewModel.saveSearchHistory()
             viewModel.disposeSearchHistoryList()
+           // log("dispose history")
             showList.clear()
+//            filtered = false
 
         }
     }
@@ -179,7 +163,8 @@ fun ShowSearchHistory(textSearch: MutableState<String>, searchState: State<Searc
                                 fontFamily = textFont*/
                             )
                             //if (!filtered)
-                            if (!isFiltered.value)
+                            //if (!isFiltered.value)
+                          //  if (searchState.value == SearchState.SEARCH_QUERY)
                             Icon(
                                 modifier = Modifier
                                     //.align(Alignment.CenterVertically)
