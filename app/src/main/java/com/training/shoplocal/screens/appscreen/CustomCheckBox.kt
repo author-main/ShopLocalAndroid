@@ -16,12 +16,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.training.shoplocal.ui.theme.TextBrand
-import com.training.shoplocal.ui.theme.TextFieldBg
-import com.training.shoplocal.ui.theme.TextFieldFont
-import com.training.shoplocal.ui.theme.TextPrice
+import com.training.shoplocal.ui.theme.*
 
-data class CheckedStyle(var border: Dp = 2.dp, var borderColor: Color = TextFieldFont, var backgroundColor: Color = TextFieldBg,
+data class CheckedStyle(var border: Dp = 2.dp, var borderColor: Color = TextFieldFont, var backgroundColor: Color = CheckBoxBg,
                         var checkmarkColor: Color = TextPrice, var selectedBackgroundColor: Color = TextBrand,
                         var textColor: Color = TextFieldFont)
 
@@ -38,7 +35,7 @@ fun CustomCheckBox(style: CheckedStyle = CheckedStyle(), text: String, checked: 
         Box(
             modifier = Modifier
                 .clip(CircleShape)
-                .requiredSize(15.dp)
+                .requiredSize(17.dp)
                 .background(if (isChecked) style.selectedBackgroundColor else style.borderColor)
                 .padding(if (isChecked) 0.dp else style.border)
                 .clip(CircleShape)
