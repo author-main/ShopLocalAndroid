@@ -59,6 +59,7 @@ import com.training.shoplocal.classes.ComposeView
 import com.training.shoplocal.classes.MESSAGE
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.classes.SIZE_PORTION
+import com.training.shoplocal.classes.fodisplay.OrderDisplay
 import com.training.shoplocal.classes.searcher.SearchState
 import com.training.shoplocal.dialogs.ShowMessage
 import com.training.shoplocal.screens.ScreenRouter
@@ -815,7 +816,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 enter = fadeIn(),
                 exit = fadeOut()
             ) {
-                ShowFilterDisplay()
+                ShowFilterDisplay(OrderDisplay.getInstance())
             }
 
 //}
