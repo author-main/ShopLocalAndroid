@@ -58,11 +58,12 @@ fun mToast(value: String){
     Toast.makeText(appContext(), value, Toast.LENGTH_LONG).show()
 }
 
-fun getFormattedPrice(value: Float): String{
+fun getFormattedPrice(value: Float, currency: Boolean = true): String{
     val result = value.roundToInt()
     val dec = DecimalFormat("#,###.00")
     dec.roundingMode = RoundingMode.HALF_EVEN
-    return dec.format(result) + getStringResource(R.string.currency)
+    val currencyString = if (currency) getStringResource(R.string.currency) else ""
+    return dec.format(result) + currencyString
 }
 
 fun getSalePrice(price: Float, discount: Int): String{

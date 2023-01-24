@@ -26,6 +26,7 @@ import com.training.shoplocal.ui.theme.BgScreenDark
 import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.ui.theme.TextFieldBg
 import com.training.shoplocal.R
+import com.training.shoplocal.getFormattedPrice
 import com.training.shoplocal.ui.theme.TextFieldFont
 
 const val CATEGORY_ITEM = -1
@@ -49,7 +50,66 @@ data class ItemFilter(
 fun ShowFilterDisplay(filter: ProviderDataDisplay){
     @Composable
     fun showRangePrice(valueFrom: Float, valueTo: Float){
-
+        var startValue by remember {
+            mutableStateOf(getFormattedPrice(valueFrom, false))
+        }
+        var endValue by remember {
+            mutableStateOf(getFormattedPrice(valueTo, false))
+        }
+        Column() {
+            Text(
+                modifier = Modifier.padding(end = 8.dp),
+                text = "${stringResource(id = R.string.text_price)}, ${stringResource(id = R.string.text_currency)}",
+                color = TextFieldFont
+            )
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(all = 8.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                TextField(
+                    value = startValue,
+                    onValueChange = {
+                        startValue = it
+                    },
+                    modifier = Modifier.width(120.dp),
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = TextFieldFont,
+                        backgroundColor = TextFieldBg,
+                        cursorColor = TextFieldFont,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent
+                    ),
+                    shape = RoundedCornerShape(16.dp),
+                    singleLine = true,
+                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
+                )
+                Text(
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    text = "-",
+                    color = TextFieldFont
+                )
+                TextField(
+                    value = endValue,
+                    onValueChange = {
+                        endValue = it
+                    },
+                    modifier = Modifier.width(120.dp),
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = TextFieldFont,
+                        backgroundColor = TextFieldBg,
+                        cursorColor = TextFieldFont,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent
+                    ),
+                    shape = RoundedCornerShape(16.dp),
+                    singleLine = true,
+                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
+                )
+            }
+        }
     }
 
     @Composable
@@ -89,9 +149,6 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                 text = "%",
                 color = TextFieldFont
             )
-
-
-
 
             CustomCheckBox(
                 modifier = Modifier.padding(start = 24.dp),
@@ -136,6 +193,7 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                     .weight(0.13f),
                 backgroundColor = PrimaryDark
             ) {
+                showRangePrice(valueFrom = 500f, valueTo = 2000f)
             }
             Spacer(modifier = Modifier.height(8.dp))
             Card(
