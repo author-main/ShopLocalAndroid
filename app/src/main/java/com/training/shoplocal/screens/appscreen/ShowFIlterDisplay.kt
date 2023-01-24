@@ -65,11 +65,44 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
         return null
     }
     @Composable
+    fun NumberTextField(modifier: Modifier, value: MutableState<String>, len: Int){
+        TextField(
+            modifier = modifier,
+            value = value.value,
+            onValueChange = {
+                val newValue = checkNumberValue(it, len)
+                if (newValue != null)
+                    value.value = newValue
+            },
+            leadingIcon = { Text(text = stringResource(id = R.string.text_to),
+                color = TextFieldFont.copy(alpha = 0.5f)
+            ) },
+            colors = TextFieldDefaults.textFieldColors(
+                textColor = TextFieldFont,
+                backgroundColor = TextFieldBg,
+                cursorColor = TextFieldFont,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            shape = RoundedCornerShape(16.dp),
+            singleLine = true,
+            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done, keyboardType = KeyboardType.Number),
+            keyboardActions = KeyboardActions (
+                onDone = {
+                    focusManager.clearFocus(true)
+                }
+            )
+        )
+    }
+
+
+    @Composable
     fun showRangePrice(valueFrom: Float, valueTo: Float){
-        var startValue by remember {
+        val startValue = remember {
             mutableStateOf(valueFrom.toInt().toString())
         }
-        var endValue by remember {
+        val endValue = remember {
             mutableStateOf(valueTo.toInt().toString())
         }
         Column(
@@ -88,7 +121,8 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                TextField(
+                NumberTextField(modifier = Modifier.weight(0.5f), value = startValue, len = 6)
+                /*TextField(
                     modifier = Modifier.weight(0.5f),
                     value = startValue,
                     onValueChange = {
@@ -116,14 +150,15 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                             focusManager.clearFocus(true)
                         }
                     )
-                )
+                )*/
                 /*Text(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     text = "-",
                     color = TextFieldFont
                 )*/
                 Spacer(modifier = Modifier.width(8.dp))
-                TextField(
+                NumberTextField(modifier = Modifier.weight(0.5f), value = endValue, len = 6)
+                /*TextField(
                     modifier = Modifier.weight(0.5f),
                     value = endValue,
                     onValueChange = {
@@ -151,14 +186,14 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                             focusManager.clearFocus(true)
                         }
                     )
-                )
+                )*/
             }
         }
     }
 
     @Composable
     fun showDiscount(value: Int){
-        var discount by remember {
+        val discount = remember {
             mutableStateOf("2")
         }
         Row(modifier = Modifier
@@ -172,8 +207,8 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                 text = stringResource(id = R.string.text_discount),
                 color = TextFieldFont
             )
-
-            TextField(
+            NumberTextField(modifier = Modifier.weight(0.5f), value = discount, len = 2)
+           /* TextField(
                 modifier =
                 Modifier
                     .onFocusChanged {
@@ -219,7 +254,7 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                         focusManager.clearFocus(true)//moveFocus(FocusDirection.Down)
                     }
                 )
-            )
+            )*/
             Text(
                 modifier = Modifier.padding(start = 4.dp),
                 text = "%",
