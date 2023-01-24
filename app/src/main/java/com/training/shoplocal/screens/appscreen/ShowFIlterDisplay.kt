@@ -16,6 +16,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.node.modifierElementOf
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -28,6 +29,7 @@ import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.ui.theme.TextFieldBg
 import com.training.shoplocal.R
 import com.training.shoplocal.getFormattedPrice
+import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.TextFieldFont
 
 const val CATEGORY_ITEM = -1
@@ -49,13 +51,25 @@ data class ItemFilter(
 
 @Composable
 fun ShowFilterDisplay(filter: ProviderDataDisplay){
+    val focusManager = LocalFocusManager.current
+    fun checkNumberValue(value: String, len: Int): String {
+        if (!value.contains(".") && !value.contains(",") && !value.contains("-") && value.length <= len) {
+            val number = try {
+                value.toInt()
+            } catch (_: java.lang.Exception) {
+                0
+            }
+            return number.toString()
+        }
+        return value
+    }
     @Composable
     fun showRangePrice(valueFrom: Float, valueTo: Float){
         var startValue by remember {
-            mutableStateOf(getFormattedPrice(valueFrom, false))
+            mutableStateOf(valueFrom.toInt().toString())
         }
         var endValue by remember {
-            mutableStateOf(getFormattedPrice(valueTo, false))
+            mutableStateOf(valueTo.toInt().toString())
         }
         Column(
             modifier = Modifier
@@ -77,7 +91,7 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                     modifier = Modifier.weight(0.5f),
                     value = startValue,
                     onValueChange = {
-                        startValue = it
+                        startValue = checkNumberValue(it, 6)
                     },
                     //modifier = Modifier.width(120.dp),
                     leadingIcon = { Text(text = stringResource(id = R.string.text_from),
@@ -104,7 +118,7 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                     modifier = Modifier.weight(0.5f),
                     value = endValue,
                     onValueChange = {
-                        endValue = it
+                        endValue = checkNumberValue(it, 6)
                     },
                     //modifier = Modifier.width(120.dp),
                     leadingIcon = { Text(text = stringResource(id = R.string.text_to),
@@ -143,12 +157,27 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
             )
 
             TextField(
+                modifier =
+                Modifier
+                    .onFocusChanged {
+
+                    }
+                    .weight(1f),
                 value = discount,
                 onValueChange = {
-                    discount = it
+                    discount = checkNumberValue(it, 2)
+
+
+                    /*if (!it.contains(".") && !it.contains(",") && !it.contains("-") && it.length <= 2) {
+                        val number = try {
+                            it.toInt()
+                        } catch (_: java.lang.Exception) {
+                            0
+                        }
+                        discount = number.toString()
+                    }*/
                 },
-                modifier = Modifier.weight(1f),
-                    //.width(90.dp),
+
                 colors = TextFieldDefaults.textFieldColors(
                     textColor = TextFieldFont,
                     backgroundColor = TextFieldBg,
@@ -162,6 +191,12 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                 shape = RoundedCornerShape(16.dp),
                 singleLine = true,
                 textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done, keyboardType = KeyboardType.Number),
+                keyboardActions = KeyboardActions (
+                    onDone = {
+                        focusManager.clearFocus(true)//moveFocus(FocusDirection.Down)
+                    }
+                )
             )
             Text(
                 modifier = Modifier.padding(start = 4.dp),
