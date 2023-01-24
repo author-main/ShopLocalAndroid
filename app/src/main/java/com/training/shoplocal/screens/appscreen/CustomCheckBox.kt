@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.training.shoplocal.ui.theme.*
@@ -23,16 +24,16 @@ data class CheckedStyle(var border: Dp = 2.dp, var borderColor: Color = TextFiel
                         var textColor: Color = TextFieldFont)
 
 @Composable
-fun CustomCheckBox(style: CheckedStyle = CheckedStyle(), text: String, checked: Boolean = false, onChecked: (value: Boolean) -> Unit){
+fun CustomCheckBox(modifier: Modifier,style: CheckedStyle = CheckedStyle(), text: String, checked: Boolean = false, onChecked: (value: Boolean) -> Unit){
     var isChecked by remember {
         mutableStateOf(checked)
     }
-    Row(modifier = Modifier
-        .background(Color.Red)
+    Row(modifier = modifier
         .toggleable(value = isChecked,role = Role.Checkbox){
             isChecked = it
         },
-            verticalAlignment = Alignment.CenterVertically) {
+          verticalAlignment = Alignment.CenterVertically
+    ){
         Box(
             modifier = Modifier
                 .clip(CircleShape)
@@ -51,6 +52,9 @@ fun CustomCheckBox(style: CheckedStyle = CheckedStyle(), text: String, checked: 
         }
         Text(modifier = Modifier.padding(start = 6.dp),
             text = text,
-        color = style.textColor)
+            color = style.textColor,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
     }
 }
