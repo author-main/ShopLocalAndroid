@@ -52,7 +52,8 @@ data class ItemFilter(
 @Composable
 fun ShowFilterDisplay(filter: ProviderDataDisplay){
     val focusManager = LocalFocusManager.current
-    fun checkNumberValue(value: String, len: Int): String {
+    fun checkNumberValue(value: String, len: Int): String? {
+        //log("len = $len")
         if (!value.contains(".") && !value.contains(",") && !value.contains("-") && value.length <= len) {
             val number = try {
                 value.toInt()
@@ -61,7 +62,7 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
             }
             return number.toString()
         }
-        return value
+        return null
     }
     @Composable
     fun showRangePrice(valueFrom: Float, valueTo: Float){
@@ -91,7 +92,9 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                     modifier = Modifier.weight(0.5f),
                     value = startValue,
                     onValueChange = {
-                        startValue = checkNumberValue(it, 6)
+                        val newValue = checkNumberValue(it, 6)
+                        if (newValue != null)
+                            startValue = newValue
                     },
                     //modifier = Modifier.width(120.dp),
                     leadingIcon = { Text(text = stringResource(id = R.string.text_from),
@@ -107,6 +110,12 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                     shape = RoundedCornerShape(16.dp),
                     singleLine = true,
                     textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done, keyboardType = KeyboardType.Number),
+                    keyboardActions = KeyboardActions (
+                        onDone = {
+                            focusManager.clearFocus(true)
+                        }
+                    )
                 )
                 /*Text(
                     modifier = Modifier.padding(horizontal = 8.dp),
@@ -118,7 +127,9 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                     modifier = Modifier.weight(0.5f),
                     value = endValue,
                     onValueChange = {
-                        endValue = checkNumberValue(it, 6)
+                        val newValue = checkNumberValue(it, 6)
+                        if (newValue != null)
+                            endValue = newValue
                     },
                     //modifier = Modifier.width(120.dp),
                     leadingIcon = { Text(text = stringResource(id = R.string.text_to),
@@ -134,6 +145,12 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                     shape = RoundedCornerShape(16.dp),
                     singleLine = true,
                     textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done, keyboardType = KeyboardType.Number),
+                    keyboardActions = KeyboardActions (
+                        onDone = {
+                            focusManager.clearFocus(true)
+                        }
+                    )
                 )
             }
         }
@@ -165,7 +182,12 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                     .weight(1f),
                 value = discount,
                 onValueChange = {
-                    discount = checkNumberValue(it, 2)
+
+                    val newValue = checkNumberValue(it, 2)
+                    if (newValue != null)
+                        discount = newValue
+
+                    //discount = checkNumberValue(it, 2)
 
 
                     /*if (!it.contains(".") && !it.contains(",") && !it.contains("-") && it.length <= 2) {
