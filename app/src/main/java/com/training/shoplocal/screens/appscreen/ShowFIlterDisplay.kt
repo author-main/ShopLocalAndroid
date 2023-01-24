@@ -116,12 +116,7 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
 
     @Composable
     fun showRangePrice(){//valueFrom: Float, valueTo: Float){
-      /*  val startValue = remember {
-            mutableStateOf(editFilter.priceRange.first.toInt().toString())
-        }
-        val endValue = remember {
-            mutableStateOf(editFilter.priceRange.second.toInt().toString())
-        }*/
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -143,75 +138,14 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                     val second = editFilter.priceRange.second
                     editFilter.priceRange = it.toFloat() to second
                 }
-                /*TextField(
-                    modifier = Modifier.weight(0.5f),
-                    value = startValue,
-                    onValueChange = {
-                        val newValue = checkNumberValue(it, 6)
-                        if (newValue != null)
-                            startValue = newValue
-                    },
-                    //modifier = Modifier.width(120.dp),
-                    leadingIcon = { Text(text = stringResource(id = R.string.text_from),
-                        color = TextFieldFont.copy(alpha = 0.5f)
-                    ) },
-                    colors = TextFieldDefaults.textFieldColors(
-                        textColor = TextFieldFont,
-                        backgroundColor = TextFieldBg,
-                        cursorColor = TextFieldFont,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent
-                    ),
-                    shape = RoundedCornerShape(16.dp),
-                    singleLine = true,
-                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done, keyboardType = KeyboardType.Number),
-                    keyboardActions = KeyboardActions (
-                        onDone = {
-                            focusManager.clearFocus(true)
-                        }
-                    )
-                )*/
-                /*Text(
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                    text = "-",
-                    color = TextFieldFont
-                )*/
+
                 Spacer(modifier = Modifier.width(8.dp))
                 NumberTextField(modifier = Modifier.weight(0.5f), value = editFilter.priceRange.second.toInt().toString(),
                     stringResource(id = R.string.text_to), len = 6) {
                     val first = editFilter.priceRange.first
                     editFilter.priceRange = first to it.toFloat()
                 }
-                /*TextField(
-                    modifier = Modifier.weight(0.5f),
-                    value = endValue,
-                    onValueChange = {
-                        val newValue = checkNumberValue(it, 6)
-                        if (newValue != null)
-                            endValue = newValue
-                    },
-                    //modifier = Modifier.width(120.dp),
-                    leadingIcon = { Text(text = stringResource(id = R.string.text_to),
-                        color = TextFieldFont.copy(alpha = 0.5f)
-                    ) },
-                    colors = TextFieldDefaults.textFieldColors(
-                        textColor = TextFieldFont,
-                        backgroundColor = TextFieldBg,
-                        cursorColor = TextFieldFont,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent
-                    ),
-                    shape = RoundedCornerShape(16.dp),
-                    singleLine = true,
-                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done, keyboardType = KeyboardType.Number),
-                    keyboardActions = KeyboardActions (
-                        onDone = {
-                            focusManager.clearFocus(true)
-                        }
-                    )
-                )*/
+
             }
         }
     }
@@ -219,9 +153,6 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
     @Composable
     fun showDiscount(value: Int){
 
-        /*val discount = remember {
-            mutableStateOf(editFilter.discount.toString())
-        }*/
         Row(modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp, horizontal = 16.dp),
@@ -237,53 +168,7 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                 label = stringResource(id = R.string.text_from),len = 2) {
                 editFilter.discount = it.toInt()
             }
-           /* TextField(
-                modifier =
-                Modifier
-                    .onFocusChanged {
 
-                    }
-                    .weight(1f),
-                value = discount,
-                onValueChange = {
-
-                    val newValue = checkNumberValue(it, 2)
-                    if (newValue != null)
-                        discount = newValue
-
-                    //discount = checkNumberValue(it, 2)
-
-
-                    /*if (!it.contains(".") && !it.contains(",") && !it.contains("-") && it.length <= 2) {
-                        val number = try {
-                            it.toInt()
-                        } catch (_: java.lang.Exception) {
-                            0
-                        }
-                        discount = number.toString()
-                    }*/
-                },
-
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = TextFieldFont,
-                    backgroundColor = TextFieldBg,
-                    cursorColor = TextFieldFont,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                ),
-                leadingIcon = { Text(text = stringResource(id = R.string.text_from),
-                    color = TextFieldFont.copy(alpha = 0.5f)
-                ) },
-                shape = RoundedCornerShape(16.dp),
-                singleLine = true,
-                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done, keyboardType = KeyboardType.Number),
-                keyboardActions = KeyboardActions (
-                    onDone = {
-                        focusManager.clearFocus(true)//moveFocus(FocusDirection.Down)
-                    }
-                )
-            )*/
             Text(
                 modifier = Modifier.padding(start = 4.dp),
                 text = "%",
