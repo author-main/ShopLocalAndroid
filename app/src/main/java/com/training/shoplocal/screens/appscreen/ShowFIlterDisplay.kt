@@ -28,6 +28,7 @@ import com.training.shoplocal.ui.theme.BgScreenDark
 import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.ui.theme.TextFieldBg
 import com.training.shoplocal.R
+import com.training.shoplocal.classes.ANY_VALUE
 import com.training.shoplocal.getFormattedPrice
 import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.TextFieldFont
@@ -51,6 +52,15 @@ data class ItemFilter(
 
 @Composable
 fun ShowFilterDisplay(filter: ProviderDataDisplay){
+    val editFilter = remember {
+        OrderDisplay.FilterData(
+            brend       = filter.getBrend(),
+            favorite    = filter.getFavorite(),
+            priceRange  = filter.getPriceRange(),
+            category    = filter.getCategory(),
+            discount    = filter.getDiscount()
+        )
+    }
     val focusManager = LocalFocusManager.current
     fun checkNumberValue(value: String, len: Int): String? {
         //log("len = $len")
@@ -65,14 +75,17 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
         return null
     }
     @Composable
-    fun NumberTextField(modifier: Modifier, value: MutableState<String>, len: Int){
+    fun NumberTextField(modifier: Modifier, value: MutableState<String>, len: Int, onChange: (text: String) ->Unit){
         TextField(
             modifier = modifier,
             value = value.value,
             onValueChange = {
                 val newValue = checkNumberValue(it, len)
-                if (newValue != null)
+                if (newValue != null) {
                     value.value = newValue
+                    onChange(newValue)
+                }
+
             },
             leadingIcon = { Text(text = stringResource(id = R.string.text_to),
                 color = TextFieldFont.copy(alpha = 0.5f)
@@ -98,12 +111,12 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
 
 
     @Composable
-    fun showRangePrice(valueFrom: Float, valueTo: Float){
+    fun showRangePrice(){//valueFrom: Float, valueTo: Float){
         val startValue = remember {
-            mutableStateOf(valueFrom.toInt().toString())
+            mutableStateOf(editFilter.priceRange.first.toInt().toString())
         }
         val endValue = remember {
-            mutableStateOf(valueTo.toInt().toString())
+            mutableStateOf(editFilter.priceRange.second.toInt().toString())
         }
         Column(
             modifier = Modifier
@@ -121,7 +134,10 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                NumberTextField(modifier = Modifier.weight(0.5f), value = startValue, len = 6)
+                NumberTextField(modifier = Modifier.weight(0.5f), value = startValue, len = 6) {
+                    val second = editFilter.priceRange.second
+                    editFilter.priceRange = it.toFloat() to second
+                }
                 /*TextField(
                     modifier = Modifier.weight(0.5f),
                     value = startValue,
@@ -157,7 +173,10 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                     color = TextFieldFont
                 )*/
                 Spacer(modifier = Modifier.width(8.dp))
-                NumberTextField(modifier = Modifier.weight(0.5f), value = endValue, len = 6)
+                NumberTextField(modifier = Modifier.weight(0.5f), value = endValue, len = 6) {
+                    val first = editFilter.priceRange.first
+                    editFilter.priceRange = first to it.toFloat()
+                }
                 /*TextField(
                     modifier = Modifier.weight(0.5f),
                     value = endValue,
@@ -193,8 +212,9 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
 
     @Composable
     fun showDiscount(value: Int){
+
         val discount = remember {
-            mutableStateOf("2")
+            mutableStateOf(editFilter.discount.toString())
         }
         Row(modifier = Modifier
             .fillMaxWidth()
@@ -207,7 +227,9 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                 text = stringResource(id = R.string.text_discount),
                 color = TextFieldFont
             )
-            NumberTextField(modifier = Modifier.weight(0.5f), value = discount, len = 2)
+            NumberTextField(modifier = Modifier.weight(0.5f), value = discount, len = 2) {
+                editFilter.discount = it.toInt()
+            }
            /* TextField(
                 modifier =
                 Modifier
@@ -264,8 +286,9 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
             CustomCheckBox(
                 modifier = Modifier.padding(start = 24.dp),
                 text = stringResource(id = R.string.text_favorite),
-                checked = false
+                checked = editFilter.favorite == 1
             ) { checked ->
+                editFilter.favorite = if (checked) 1 else ANY_VALUE
                 focusManager.clearFocus(true)
             }
         }
@@ -302,7 +325,7 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                     .fillMaxWidth(),*/
                 backgroundColor = PrimaryDark
             ) {
-                showRangePrice(valueFrom = 500f, valueTo = 2000f)
+                showRangePrice()//valueFrom = 500f, valueTo = 2000f)
             }
             Spacer(modifier = Modifier.height(8.dp))
             Card(

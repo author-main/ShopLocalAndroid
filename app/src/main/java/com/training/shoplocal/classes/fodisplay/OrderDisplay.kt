@@ -35,6 +35,7 @@ class OrderDisplay: ProviderDataDisplay{
     //var state by mutableStateOf(false)
 
 
+
     override fun setDiscount(value: Int) {
         filterData.discount = value
     }
