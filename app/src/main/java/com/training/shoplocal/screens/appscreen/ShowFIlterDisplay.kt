@@ -15,6 +15,7 @@ import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.node.modifierElementOf
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -56,25 +57,29 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
         var endValue by remember {
             mutableStateOf(getFormattedPrice(valueTo, false))
         }
-        Column() {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+        ) {
             Text(
-                modifier = Modifier.padding(end = 8.dp),
+                modifier = Modifier.padding(bottom = 8.dp),
                 text = "${stringResource(id = R.string.text_price)}, ${stringResource(id = R.string.text_currency)}",
                 color = TextFieldFont
             )
             Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(all = 8.dp),
+               // modifier = Modifier
+               //     .padding(all = 8.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 TextField(
+                    modifier = Modifier.weight(0.5f),
                     value = startValue,
                     onValueChange = {
                         startValue = it
                     },
-                    modifier = Modifier.width(120.dp),
+                    //modifier = Modifier.width(120.dp),
                     colors = TextFieldDefaults.textFieldColors(
                         textColor = TextFieldFont,
                         backgroundColor = TextFieldBg,
@@ -92,11 +97,12 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                     color = TextFieldFont
                 )
                 TextField(
+                    modifier = Modifier.weight(0.5f),
                     value = endValue,
                     onValueChange = {
                         endValue = it
                     },
-                    modifier = Modifier.width(120.dp),
+                    //modifier = Modifier.width(120.dp),
                     colors = TextFieldDefaults.textFieldColors(
                         textColor = TextFieldFont,
                         backgroundColor = TextFieldBg,
@@ -118,7 +124,7 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
             mutableStateOf("2")
         }
         Row(modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .padding(all = 8.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
@@ -166,16 +172,15 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
     }
 
     Box(modifier = Modifier
-        .fillMaxSize()
+        //.fillMaxSize()
         .background(BgScreenDark)
     ){
         Column(modifier = Modifier
             .fillMaxSize()
             .padding(all = 16.dp)) {
             Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(0.13f),
+                /*modifier = Modifier
+                    .fillMaxWidth(),*/
                 //elevation = 4.dp,
                 //shape = RoundedCornerShape(20.dp),
 
@@ -188,9 +193,8 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
             }
             Spacer(modifier = Modifier.height(8.dp))
             Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(0.13f),
+               /* modifier = Modifier
+                    .fillMaxWidth(),*/
                 backgroundColor = PrimaryDark
             ) {
                 showRangePrice(valueFrom = 500f, valueTo = 2000f)
@@ -199,7 +203,9 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(0.74f),
+                    .weight(1f)
+                ,
+
                 backgroundColor = PrimaryDark
             ) {
             }
