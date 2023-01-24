@@ -179,8 +179,7 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                 )*/
                 Spacer(modifier = Modifier.width(8.dp))
                 NumberTextField(modifier = Modifier.weight(0.5f), value = editFilter.priceRange.second.toInt().toString(),
-                    stringResource(id = R.string.text_to),
-                    len = 6) {
+                    stringResource(id = R.string.text_to), len = 6) {
                     val first = editFilter.priceRange.first
                     editFilter.priceRange = first to it.toFloat()
                 }
@@ -235,8 +234,7 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                 color = TextFieldFont
             )
             NumberTextField(modifier = Modifier.weight(0.5f), value = editFilter.discount.toString(),
-                label = stringResource(id = R.string.text_from),
-                len = 2) {
+                label = stringResource(id = R.string.text_from),len = 2) {
                 editFilter.discount = it.toInt()
             }
            /* TextField(
