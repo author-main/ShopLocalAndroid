@@ -231,7 +231,7 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                 text = stringResource(id = R.string.text_favorite),
                 checked = false
             ) { checked ->
-
+                focusManager.clearFocus(true)
             }
         }
     }

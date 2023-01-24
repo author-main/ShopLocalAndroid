@@ -31,6 +31,7 @@ fun CustomCheckBox(modifier: Modifier,style: CheckedStyle = CheckedStyle(), text
     Row(modifier = modifier
         .toggleable(value = isChecked,role = Role.Checkbox){
             isChecked = it
+            onChecked(it)
         },
           verticalAlignment = Alignment.CenterVertically
     ){
