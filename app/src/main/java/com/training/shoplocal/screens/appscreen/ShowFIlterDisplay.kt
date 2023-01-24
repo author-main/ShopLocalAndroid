@@ -80,6 +80,9 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                         startValue = it
                     },
                     //modifier = Modifier.width(120.dp),
+                    leadingIcon = { Text(text = stringResource(id = R.string.text_from),
+                        color = TextFieldFont.copy(alpha = 0.5f)
+                    ) },
                     colors = TextFieldDefaults.textFieldColors(
                         textColor = TextFieldFont,
                         backgroundColor = TextFieldBg,
@@ -91,11 +94,12 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                     singleLine = true,
                     textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
                 )
-                Text(
+                /*Text(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     text = "-",
                     color = TextFieldFont
-                )
+                )*/
+                Spacer(modifier = Modifier.width(8.dp))
                 TextField(
                     modifier = Modifier.weight(0.5f),
                     value = endValue,
@@ -103,6 +107,9 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                         endValue = it
                     },
                     //modifier = Modifier.width(120.dp),
+                    leadingIcon = { Text(text = stringResource(id = R.string.text_to),
+                        color = TextFieldFont.copy(alpha = 0.5f)
+                    ) },
                     colors = TextFieldDefaults.textFieldColors(
                         textColor = TextFieldFont,
                         backgroundColor = TextFieldBg,
@@ -125,20 +132,23 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
         }
         Row(modifier = Modifier
             .fillMaxWidth()
-            .padding(all = 8.dp),
+            .padding(vertical = 8.dp, horizontal = 16.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 modifier = Modifier.padding(end = 8.dp),
-                text = "${stringResource(id = R.string.text_discount)} ${stringResource(id = R.string.text_from)}",
+                text = stringResource(id = R.string.text_discount),
                 color = TextFieldFont
             )
 
-            TextField(value = discount, onValueChange = {
-                discount = it
-            },
-                modifier = Modifier.width(80.dp),
+            TextField(
+                value = discount,
+                onValueChange = {
+                    discount = it
+                },
+                modifier = Modifier.weight(1f),
+                    //.width(90.dp),
                 colors = TextFieldDefaults.textFieldColors(
                     textColor = TextFieldFont,
                     backgroundColor = TextFieldBg,
@@ -146,6 +156,9 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent
                 ),
+                leadingIcon = { Text(text = stringResource(id = R.string.text_from),
+                    color = TextFieldFont.copy(alpha = 0.5f)
+                ) },
                 shape = RoundedCornerShape(16.dp),
                 singleLine = true,
                 textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
