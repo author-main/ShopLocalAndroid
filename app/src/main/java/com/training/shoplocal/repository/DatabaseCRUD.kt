@@ -1,6 +1,7 @@
 package com.training.shoplocal.repository
 
 import com.training.shoplocal.classes.Brand
+import com.training.shoplocal.classes.Category
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.log
 import com.training.shoplocal.repository.retrofit.DatabaseApi
@@ -9,17 +10,32 @@ import retrofit2.Response
 
 class DatabaseCRUD: DatabaseCRUDInterface {
 
+    override fun getCategories(action: (categories: List<Category>) -> Unit) {
+        DatabaseApi.getCategories(object: retrofit2.Callback<List<Category>>{
+            override fun onResponse(call: Call<List<Category>>, response: Response<List<Category>>) {
+                response.body()?.let {
+                    action.invoke(
+                        it.ifEmpty { listOf() }
+                    )
+                }
+            }
+            override fun onFailure(call: Call<List<Category>>, t: Throwable) {
+                action.invoke(listOf<Category>())
+            }
+        })
+    }
+
     override fun getBrands(action: (brands: List<Brand>) -> Unit) {
         DatabaseApi.getBrands(object: retrofit2.Callback<List<Brand>>{
             override fun onResponse(call: Call<List<Brand>>, response: Response<List<Brand>>) {
                 response.body()?.let {
-                    if (it.isNotEmpty()) {
-                        val outlist = it
-                        action.invoke(outlist)
-                    }
+                    action.invoke(
+                        it.ifEmpty { listOf() }
+                    )
                 }
             }
             override fun onFailure(call: Call<List<Brand>>, t: Throwable) {
+                action.invoke(listOf<Brand>())
             }
         })
     }

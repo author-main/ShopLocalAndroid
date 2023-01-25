@@ -49,6 +49,8 @@
     <string name="text_to">до</string>
     <string name="text_price">Цена</string>
     <string name="text_currency">руб</string>
+    <string name="text_category">Категория</string>
+    <string name="text_brend">Бренд</string>
 
 
 </resources>

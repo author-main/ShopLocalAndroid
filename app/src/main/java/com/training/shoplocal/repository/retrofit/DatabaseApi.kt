@@ -1,10 +1,7 @@
 package com.training.shoplocal.repository.retrofit
 
 import com.google.gson.GsonBuilder
-import com.training.shoplocal.classes.Brand
-import com.training.shoplocal.classes.Product
-import com.training.shoplocal.classes.SERVER_URL
-import com.training.shoplocal.classes.User
+import com.training.shoplocal.classes.*
 import com.training.shoplocal.log
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -121,6 +118,17 @@ object DatabaseApi {
            // log(e.message ?: "error")
         }
     }
+
+    fun getCategories(callback: retrofit2.Callback<List<Category>>){
+        try {
+            val call: retrofit2.Call<List<Category>> = service!!.getCategories()
+            call.enqueue(callback)
+        } catch(e: Exception){
+            // log(e.message ?: "error")
+        }
+    }
+
+
 
 
 

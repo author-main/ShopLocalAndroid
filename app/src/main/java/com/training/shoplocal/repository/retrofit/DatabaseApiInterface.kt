@@ -2,6 +2,7 @@ package com.training.shoplocal.repository.retrofit
 
 import com.google.gson.annotations.SerializedName
 import com.training.shoplocal.classes.Brand
+import com.training.shoplocal.classes.Category
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.classes.User
 import retrofit2.Call
@@ -36,6 +37,9 @@ interface DatabaseApiInterface {
 
     @GET("/api/get_brands")
     fun getBrands(): Call<List<Brand>>
+
+    @GET("/api/get_categories")
+    fun getCategories(): Call<List<Category>>
 
     /**
      *  Используем response без обработки результата запроса.

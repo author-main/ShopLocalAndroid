@@ -22,6 +22,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.classes.fodisplay.OrderDisplay
 import com.training.shoplocal.classes.fodisplay.ProviderDataDisplay
 import com.training.shoplocal.ui.theme.BgScreenDark
@@ -29,29 +31,62 @@ import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.ui.theme.TextFieldBg
 import com.training.shoplocal.R
 import com.training.shoplocal.classes.ANY_VALUE
+import com.training.shoplocal.classes.BREND_ITEM
+import com.training.shoplocal.classes.CATEGORY_ITEM
+import com.training.shoplocal.classes.NO_OPEN_ITEM
+import com.training.shoplocal.classes.fodisplay.ItemFilter
 import com.training.shoplocal.getFormattedPrice
 import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.TextFieldFont
+import com.training.shoplocal.viewmodel.RepositoryViewModel
 
-const val CATEGORY_ITEM = -1
-const val BRAND_ITEM    = -2
-
-data class ItemFilter(
+/*data class ItemFilter(
     val id: Int,
     val name: String,
-    val linkImage: String,
     var selected: Boolean = false
 ) {
+
     fun isHeader() =
         id < 0
     fun isCategory() =
         id == CATEGORY_ITEM
     fun isBrand() =
         id == BRAND_ITEM
-}
+}*/
 
 @Composable
 fun ShowFilterDisplay(filter: ProviderDataDisplay){
+    val viewModel: RepositoryViewModel = viewModel()
+    val items: MutableList<ItemFilter> = remember {
+        viewModel.getSectionFilter().toMutableList()
+    }
+    fun checkSelectedItems(sectionId: Int, ids: String) {
+        if (ids != "-1") {
+            val itemsId = ids.split(',')
+            items.filter { it -> it.parent == sectionId}.forEach{item ->
+                for (id in itemsId) {
+                    if (item.id == id.toInt()) {
+                        item.selected = true
+                        break
+                    }
+                }
+            }
+        }
+    }
+
+
+    DisposableEffect(Unit) {
+        checkSelectedItems(BREND_ITEM, filter.getBrend())
+        checkSelectedItems(CATEGORY_ITEM, filter.getCategory())
+        onDispose {
+            items.clear()
+        }
+    }
+
+
+    var openSection by remember {
+        mutableStateOf(NO_OPEN_ITEM)
+    }
     val editFilter = remember {
         OrderDisplay.FilterData(
             brend       = filter.getBrend(),

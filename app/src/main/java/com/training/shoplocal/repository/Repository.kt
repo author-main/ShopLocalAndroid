@@ -73,8 +73,8 @@ class Repository: DAOinterface {
         databaseCRUD.getBrands(action)
     }
 
-    fun getCategories() {
-        databaseCRUD.getCategories()
+    fun getCategories(action: (categories: List<Category>) -> Unit) {
+        databaseCRUD.getCategories(action)
     }
 
     suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte){

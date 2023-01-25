@@ -7,6 +7,7 @@ import com.training.shoplocal.*
 import com.training.shoplocal.classes.*
 import com.training.shoplocal.classes.downloader.MemoryCache
 import com.training.shoplocal.classes.fodisplay.FieldFilter
+import com.training.shoplocal.classes.fodisplay.ItemFilter
 import com.training.shoplocal.classes.screenhelpers.DataScreen
 import com.training.shoplocal.repository.Repository
 import com.training.shoplocal.screens.ScreenItem
@@ -15,6 +16,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.util.*
+import kotlin.collections.HashMap
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private val composeViewStack = Stack<ComposeView>().apply {
@@ -45,7 +47,10 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     }
 
     private var USER_ID: Int = -1
-    private var brands = listOf<Brand>()
+    private var brands = hashMapOf<Int, Brand>()
+        //listOf<Brand>()
+    private var categories = hashMapOf<Int, Category>()
+        //listOf<Category>()
 
     /*private val _products = MutableStateFlow<MutableList<Product>>(mutableListOf<Product>())
     val products = _products.asStateFlow()*/
@@ -63,6 +68,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             composeViewStack.pop()
             putComposeViewStack(ComposeView.MAIN)
             getBrands()
+            getCategories()
 //            exchangeDataMap[ExchangeData.GET_PRODUCTS] = false
             loadedPortion = 0
             getProducts(1)
@@ -184,13 +190,63 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     }
 
     private fun getBrands(){
-        repository.getBrands() { it ->
-            brands = it
+        repository.getBrands() { list ->
+            brands = list.associateBy { it.id } as HashMap<Int, Brand>
+        }
+    }
+
+    private fun getCategories(){
+        repository.getCategories() { list ->
+            categories = list.associateBy { it.id } as HashMap<Int, Category>
         }
     }
 
     fun getBrand(id: Int) =
-        brands.find {it.id == id}?.name ?: ""
+        brands[id]?.name ?: EMPTY_STRING
+        //brands.find {it.id == id}?.name ?: ""
+
+    fun getCategory(id: Int) =
+        categories[id]?.name ?: EMPTY_STRING
+        //categories.find {it.id == id}?.name ?: ""
+
+
+    fun getSectionFilter(): List<ItemFilter>{
+        val list = mutableListOf<ItemFilter>()
+        list.add(
+            ItemFilter(
+                id = CATEGORY_ITEM,
+                name = getStringResource(R.string.text_category),
+                CATEGORY_ITEM
+            )
+        )
+        categories.forEach {
+            list.add(
+                ItemFilter(
+                    id = it.key,
+                    name = it.value.name,
+                    CATEGORY_ITEM
+                )
+            )
+        }
+        list.add(
+            ItemFilter(
+                id = BREND_ITEM,
+                name = getStringResource(R.string.text_brend),
+                BREND_ITEM
+            )
+        )
+        brands.forEach {
+            list.add(
+                ItemFilter(
+                    id = it.key,
+                    name = it.value.name,
+                    BREND_ITEM
+                )
+            )
+        }
+        return list
+    }
+
 
     fun setProductFavorite(id: Int, value: Boolean){
         val favorite: Byte = if (value) 1 else 0
