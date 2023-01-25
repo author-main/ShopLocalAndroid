@@ -342,7 +342,9 @@ fun MainScreen(state: ModalBottomSheetState){
              //   ShowDataDisplayPanel(hide = isSearchMode)
 
 
-    val visibleFAB = MutableTransitionState(false)
+    val visibleFAB = remember {
+        MutableTransitionState(false)
+    }
     @Composable
     fun AnimatedFloatingActionButton(action: () -> Unit){
      // val scope = rememberCoroutineScope()

@@ -242,10 +242,11 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
 
     @Composable
     fun showSectionItems(section: Int, list: List<ItemFilter>){
-        val visibleItem = MutableTransitionState(false)
-        //log("section = $section, ${visibleItem.targetState}")
-      //  log("selected ${section.selected}")
-        visibleItem.targetState = openSection == section
+        val expanded = openSection == section
+        val visibleItem = remember {
+            MutableTransitionState(false)
+        }
+        visibleItem.targetState = expanded
         androidx.compose.animation.AnimatedVisibility(
             visibleState = visibleItem,
             enter = expandVertically(
@@ -253,13 +254,13 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                     durationMillis = 150,
                     easing = LinearEasing
                 )
-            )/*,
-            exit =  shrinkVertically(
+            ),
+            exit =  shrinkVertically  (
                 animationSpec = tween(
-                    durationMillis = 500,
+                    durationMillis = 150,
                     easing = LinearEasing
                 )
-            )*/
+            )
         ) {
             Column() {
                 list.forEach { item ->
@@ -291,14 +292,14 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable(
-                    interactionSource = interactionSource,
-                    indication = null
-                ) {
-                    openSection = if (openSection != sectionId)
-                        sectionId
-                    else
-                        NO_OPEN_ITEM
-                }
+                        interactionSource = interactionSource,
+                        indication = null
+                    ) {
+                        openSection = if (openSection != sectionId)
+                            sectionId
+                        else
+                            NO_OPEN_ITEM
+                    }
             ) {
                 val expanded = openSection == sectionId
                 val fontcolor = if (expanded) SelectedItem else TextFieldFont
