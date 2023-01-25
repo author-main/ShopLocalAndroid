@@ -7,7 +7,7 @@ import com.training.shoplocal.classes.CATEGORY_ITEM
 data class ItemFilter(
     val id: Int,
     val name: String,
-    val parent: Int,
+    //val parent: Int,
     var selected: Boolean = false
 ) {
 

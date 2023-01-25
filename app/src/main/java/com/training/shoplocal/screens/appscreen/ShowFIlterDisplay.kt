@@ -39,6 +39,7 @@ import com.training.shoplocal.getFormattedPrice
 import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.TextFieldFont
 import com.training.shoplocal.viewmodel.RepositoryViewModel
+import java.util.*
 
 /*data class ItemFilter(
     val id: Int,
@@ -57,20 +58,26 @@ import com.training.shoplocal.viewmodel.RepositoryViewModel
 @Composable
 fun ShowFilterDisplay(filter: ProviderDataDisplay){
     val viewModel: RepositoryViewModel = viewModel()
-    val items: MutableList<ItemFilter> = remember {
-        viewModel.getSectionFilter().toMutableList()
+    val items = remember {
+        viewModel.getSectionFilter()
     }
     fun checkSelectedItems(sectionId: Int, ids: String) {
         if (ids != "-1") {
-            val itemsId = ids.split(',')
-            items.filter { it -> it.parent == sectionId}.forEach{item ->
+            val itemsId = ids.split(',').map { it.toInt() }
+            val list = items[sectionId]?.filter { it -> it.id in itemsId } ?: listOf()
+            list.forEach {item ->
+                item.selected = true
+            }
+
+            //find { it -> it.id.toString() in itemsId}.
+            /*list?.forEach {item ->
                 for (id in itemsId) {
                     if (item.id == id.toInt()) {
                         item.selected = true
                         break
                     }
                 }
-            }
+            }*/
         }
     }
 
@@ -78,6 +85,7 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
     DisposableEffect(Unit) {
         checkSelectedItems(BREND_ITEM, filter.getBrend())
         checkSelectedItems(CATEGORY_ITEM, filter.getCategory())
+       // log(items)
         onDispose {
             items.clear()
         }

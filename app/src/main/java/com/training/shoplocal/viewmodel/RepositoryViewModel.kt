@@ -210,41 +210,42 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         //categories.find {it.id == id}?.name ?: ""
 
 
-    fun getSectionFilter(): List<ItemFilter>{
-        val list = mutableListOf<ItemFilter>()
-        list.add(
+    fun getSectionFilter(): HashMap<Int, MutableList<ItemFilter>>{
+        val map = kotlin.collections.HashMap<Int, MutableList<ItemFilter>>()
+
+/*        val categoryKey =
             ItemFilter(
                 id = CATEGORY_ITEM,
-                name = getStringResource(R.string.text_category),
-                CATEGORY_ITEM
-            )
-        )
+                name = getStringResource(R.string.text_category)
+            )*/
+        val list = mutableListOf<ItemFilter>()
         categories.forEach {
             list.add(
                 ItemFilter(
                     id = it.key,
-                    name = it.value.name,
-                    CATEGORY_ITEM
+                    name = it.value.name
                 )
             )
         }
-        list.add(
+        map[CATEGORY_ITEM] = list.toMutableList()
+
+
+       /* val brendKey =
             ItemFilter(
                 id = BREND_ITEM,
-                name = getStringResource(R.string.text_brend),
-                BREND_ITEM
-            )
-        )
+                name = getStringResource(R.string.text_brend)
+            )*/
+        list.clear()
         brands.forEach {
             list.add(
                 ItemFilter(
                     id = it.key,
-                    name = it.value.name,
-                    BREND_ITEM
+                    name = it.value.name
                 )
             )
         }
-        return list
+        map[BREND_ITEM] = list
+        return map
     }
 
 
