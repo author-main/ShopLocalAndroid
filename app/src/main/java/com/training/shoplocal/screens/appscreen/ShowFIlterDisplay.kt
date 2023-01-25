@@ -1,23 +1,34 @@
 package com.training.shoplocal.screens.appscreen
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.animation.*
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.node.modifierElementOf
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -26,9 +37,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.classes.fodisplay.OrderDisplay
 import com.training.shoplocal.classes.fodisplay.ProviderDataDisplay
-import com.training.shoplocal.ui.theme.BgScreenDark
-import com.training.shoplocal.ui.theme.PrimaryDark
-import com.training.shoplocal.ui.theme.TextFieldBg
 import com.training.shoplocal.R
 import com.training.shoplocal.classes.ANY_VALUE
 import com.training.shoplocal.classes.BREND_ITEM
@@ -37,7 +45,7 @@ import com.training.shoplocal.classes.NO_OPEN_ITEM
 import com.training.shoplocal.classes.fodisplay.ItemFilter
 import com.training.shoplocal.getFormattedPrice
 import com.training.shoplocal.log
-import com.training.shoplocal.ui.theme.TextFieldFont
+import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import java.util.*
 
@@ -55,6 +63,7 @@ import java.util.*
         id == BRAND_ITEM
 }*/
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ShowFilterDisplay(filter: ProviderDataDisplay){
     val viewModel: RepositoryViewModel = viewModel()
@@ -64,6 +73,7 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
     fun checkSelectedItems(sectionId: Int, ids: String) {
         if (ids != "-1") {
             val itemsId = ids.split(',').map { it.toInt() }
+            //val entry = items.entries.filter { it -> it.key.id == sectionId }
             val list = items[sectionId]?.filter { it -> it.id in itemsId } ?: listOf()
             list.forEach {item ->
                 item.selected = true
@@ -95,6 +105,7 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
     var openSection by remember {
         mutableStateOf(NO_OPEN_ITEM)
     }
+
     val editFilter = remember {
         OrderDisplay.FilterData(
             brend       = filter.getBrend(),
@@ -230,10 +241,92 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
     }
 
     @Composable
-    fun showFilterItem(item: ItemFilter, onClick: () -> Unit){
-
+    fun showSectionItems(section: Int, list: List<ItemFilter>){
+        val visibleItem = MutableTransitionState(false)
+        //log("section = $section, ${visibleItem.targetState}")
+      //  log("selected ${section.selected}")
+        visibleItem.targetState = openSection == section
+        androidx.compose.animation.AnimatedVisibility(
+            visibleState = visibleItem,
+            enter = expandVertically(
+                animationSpec = tween(
+                    durationMillis = 150,
+                    easing = LinearEasing
+                )
+            )/*,
+            exit =  shrinkVertically(
+                animationSpec = tween(
+                    durationMillis = 500,
+                    easing = LinearEasing
+                )
+            )*/
+        ) {
+            Column() {
+                list.forEach { item ->
+                    CustomCheckBox(
+                        modifier = Modifier
+                            .padding(start = 32.dp)
+                            .height(36.dp)
+                            .fillMaxWidth(), text = item.name,
+                        checked = item.selected
+                    ) { checked ->
+                        item.selected = checked
+                       // log(items)
+                    }
+                }
+            }
+        }
     }
 
+    @Composable
+    fun showSectionHeader(sectionId: Int){
+        val nameSection = when (sectionId) {
+            CATEGORY_ITEM -> stringResource(id = R.string.text_category)
+            BREND_ITEM -> stringResource(id = R.string.text_brend)
+            else -> null
+        }
+        if (nameSection != null) {
+            val interactionSource = remember { MutableInteractionSource() }
+            Row(verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(
+                    interactionSource = interactionSource,
+                    indication = null
+                ) {
+                    openSection = if (openSection != sectionId)
+                        sectionId
+                    else
+                        NO_OPEN_ITEM
+                }
+            ) {
+                val expanded = openSection == sectionId
+                val fontcolor = if (expanded) SelectedItem else TextFieldFont
+                if (!expanded)
+                Image(
+                    Icons.Filled.KeyboardArrowDown,
+                    //modifier = Modifier.rotate(90f),
+                    modifier = Modifier.size(16.dp),
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(fontcolor)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    modifier = Modifier.padding(vertical = 4.dp), text = nameSection,
+                    color = fontcolor, fontWeight = if (expanded) FontWeight.Medium else FontWeight.Normal
+                )
+
+        }
+        } /*else {
+          CustomCheckBox(modifier = Modifier
+              .padding(start = 32.dp)
+              .height(36.dp)
+              .fillMaxWidth()
+              , text = item.name) { checked ->
+                    item.selected = checked
+          }
+        }*/
+    }
     Box(modifier = Modifier
         //.fillMaxSize()
         .background(BgScreenDark)
@@ -271,6 +364,88 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
 
                 backgroundColor = PrimaryDark
             ) {
+                val scrollState = rememberScrollState()
+                Box(modifier = Modifier
+                    .padding(all = 16.dp)) {
+                    Column(
+                        modifier = Modifier
+                            .verticalScroll(scrollState)
+                            .fillMaxWidth()
+                    ) {
+                        items.forEach { entry ->
+                            /*val entrySection = when (entry.key) {
+                                CATEGORY_ITEM -> {
+                                    ItemFilter(
+                                        CATEGORY_ITEM,
+                                        stringResource(id = R.string.text_category),
+                                    )
+                                }
+                                BREND_ITEM -> {
+                                    ItemFilter(BREND_ITEM, stringResource(id = R.string.text_brend))
+                                }
+                                else -> null
+                            }*/
+                            if (entry.key < 0) {
+                                showSectionHeader(entry.key)
+                                showSectionItems(entry.key, entry.value)
+                            }
+
+                            /*entrySection?.let { section ->
+                                showSectionHeader(section)
+                                showSectionItems(section, entry.value)
+                            }*/
+                        }
+
+                       /* items.forEach { entry ->
+                            val entrySection = when (entry.key) {
+                                CATEGORY_ITEM -> {
+                                    ItemFilter(
+                                        CATEGORY_ITEM,
+                                        stringResource(id = R.string.text_category)
+                                    )
+                                }
+                                BREND_ITEM -> {
+                                    ItemFilter(BREND_ITEM, stringResource(id = R.string.text_brend))
+                                }
+                                else -> null
+                            }
+
+
+                            entrySection?.let { section ->
+                                showFilterItem(section)
+                                //visibleItem.targetState = openSection == section.id
+                                    androidx.compose.animation.AnimatedVisibility(
+                                        visibleState = visibleItem,
+                                        enter = scaleIn(
+                                            animationSpec = tween(
+                                                durationMillis = 200,
+                                                easing = LinearEasing
+                                            )
+                                        ),
+                                        exit =  scaleOut(
+                                            animationSpec = tween(
+                                                durationMillis = 100,
+                                                easing = LinearEasing
+                                            )
+                                        )
+                                    ) {
+                                        Column() {
+                                            entry.value.forEach { item ->
+                                                showFilterItem(item)
+                                            }
+                                        }
+                                    }
+
+
+
+
+
+
+                            }
+                        }*/
+
+                    }
+                }
             }
         }
     }

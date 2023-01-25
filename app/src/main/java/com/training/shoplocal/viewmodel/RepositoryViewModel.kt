@@ -213,7 +213,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     fun getSectionFilter(): HashMap<Int, MutableList<ItemFilter>>{
         val map = kotlin.collections.HashMap<Int, MutableList<ItemFilter>>()
 
-/*        val categoryKey =
+       /* val categoryKey =
             ItemFilter(
                 id = CATEGORY_ITEM,
                 name = getStringResource(R.string.text_category)
