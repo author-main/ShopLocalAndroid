@@ -53,6 +53,7 @@
     <string name="text_brend">Бренд</string>
     <string name="text_reset">Сбросить</string>
     <string name="text_perform">Применить</string>
+    <string name="text_viewmode">Вид</string>
 
 
 </resources>
