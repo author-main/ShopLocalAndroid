@@ -77,6 +77,33 @@ import kotlin.math.roundToInt
 @Composable
 fun MainScreen(state: ModalBottomSheetState){
     val scope = rememberCoroutineScope()
+    val stateGrid = rememberLazyViewState(ScreenRouter.current.key)
+    val context = LocalContext.current
+    val viewModel: RepositoryViewModel = viewModel()
+    val products: MutableList<Product> by viewModel.products.collectAsState()
+    val dataSnackbar: Triple<String, Boolean, MESSAGE> by viewModel.snackbarData.collectAsState()
+
+    var isFocusedSearchTextField by remember {
+        mutableStateOf(false)
+    }
+
+    val searchState = remember {
+        mutableStateOf(SearchState.SEARCH_NONE)
+    }
+
+    val textSearch = remember {
+        mutableStateOf("")
+    }
+
+    val focusManager = LocalFocusManager.current
+    fun hideSearchDialog() {
+        focusManager.clearFocus()
+        isFocusedSearchTextField = false
+        viewModel.removeComposeViewStack()
+        viewModel.hideBottomNavigation(false)
+    }
+    fun isSearchMode() = searchState.value != SearchState.SEARCH_NONE
+
     // Сохраняем значение textSearch перед выбором из списка,
     // если будет нажата кнопка back в режиме списка -
     // textSearch присваиваем старое значение prevSearchText
@@ -100,13 +127,7 @@ fun MainScreen(state: ModalBottomSheetState){
         mutableStateOf(false)
     }
 
-    var isFocusedSearchTextField by remember {
-        mutableStateOf(false)
-    }
 
-    val searchState = remember {
-        mutableStateOf(SearchState.SEARCH_NONE)
-    }
 
 
     /*val showSearchResult = remember {
@@ -131,6 +152,30 @@ fun MainScreen(state: ModalBottomSheetState){
             searchScreenDisplayed = false
             isFocusedSearchTextField = false
             searchState.value = SearchState.SEARCH_NONE
+        }
+    }
+
+
+    fun findProducts(recognizer: Boolean = false){
+/*        if (products.isNotEmpty())
+            LaunchedEffect(Unit) {
+                scope.launch {
+                    stateGrid.scrollToItem(0)
+                }
+            }*/
+        if (textSearch.value.isNotBlank()) {
+            if (!searchScreenDisplayed) {
+                viewModel.saveScreenProducts(
+                    ScreenRouter.current.key,
+                    stateGrid.firstVisibleItemIndex
+                )
+            }
+            if (!recognizer)
+                hideSearchDialog()
+            viewModel.putComposeViewStack(ComposeView.SEARCH)
+            viewModel.findProductsRequest(textSearch.value.trim())
+            searchState.value = SearchState.SEARCH_RESULT
+            searchScreenDisplayed = true
         }
     }
 
@@ -247,14 +292,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 }
             }
     }
-    val context = LocalContext.current
-    val viewModel: RepositoryViewModel = viewModel()
-    val products: MutableList<Product> by viewModel.products.collectAsState()
-    val dataSnackbar: Triple<String, Boolean, MESSAGE> by viewModel.snackbarData.collectAsState()
 
-    val textSearch = remember {
-        mutableStateOf("")
-    }
     val startLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {it ->
@@ -262,8 +300,11 @@ fun MainScreen(state: ModalBottomSheetState){
             it.data?.let{ data ->
                 (data.extras?.getStringArrayList(RecognizerIntent.EXTRA_RESULTS)).let { matches ->
                     val value = matches?.get(0)
-                    if (!value.isNullOrEmpty())
+                    if (!value.isNullOrEmpty()) {
                         textSearch.value = value
+                        if (searchState.value != SearchState.SEARCH_QUERY)
+                            findProducts(true)
+                    }
                 }
             }
         }
@@ -298,14 +339,7 @@ fun MainScreen(state: ModalBottomSheetState){
     //val stateGrid = rememberLazyGridState()
 */
 
-    val focusManager = LocalFocusManager.current
-    fun hideSearchDialog() {
-        focusManager.clearFocus()
-        isFocusedSearchTextField = false
-        viewModel.removeComposeViewStack()
-        viewModel.hideBottomNavigation(false)
-    }
-    fun isSearchMode() = searchState.value != SearchState.SEARCH_NONE
+
 
     BackHandler(enabled = isSearchMode()){
         if (isSearchMode()) {
@@ -335,7 +369,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
 
 
-    val stateGrid = rememberLazyViewState(ScreenRouter.current.key)
+
  //   log("remember first index ${stateGrid.firstVisibleItemIndex}")
   //  Column(modifier = Modifier.fillMaxWidth()) {
          //   Box() {
@@ -515,11 +549,15 @@ fun MainScreen(state: ModalBottomSheetState){
                         ),
                         keyboardActions = KeyboardActions(
                             onSearch = {
-                                if (products.isNotEmpty())
+                                findProducts()
+
+                                /*if (products.isNotEmpty())
                                     scope.launch {
                                         stateGrid.scrollToItem(0)
-                                    }
+                                    }*/
                                 //   hideSearchDialog()
+
+                             /*
                                 if (textSearch.value.isNotBlank()) {
 
                                     if (!searchScreenDisplayed) {
@@ -540,7 +578,7 @@ fun MainScreen(state: ModalBottomSheetState){
                                     scope.launch {
                                         stateGrid.scrollToItem(0)
                                     }*/
-                                }
+                                }*/
                             }
                         ),
                         decorationBox = { innerTextField ->
