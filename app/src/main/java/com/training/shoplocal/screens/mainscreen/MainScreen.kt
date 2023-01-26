@@ -831,14 +831,6 @@ fun MainScreen(state: ModalBottomSheetState){
                         OrderDisplay.setFilter(filter)
                 }
             }
-
-//}
-               /* if (!isSearchMode)
-                    ShowDataDisplayPanel()*/
-
-
-
-                    // }
         }
 
 
