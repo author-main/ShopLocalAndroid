@@ -136,16 +136,28 @@ class OrderDisplay: ProviderDataDisplay{
             || filter.category          != filterData.category
             || filter.discount          != filterData.discount
         )*/
-        if (!equalsFilter(filter)){
+
+       /* if (!equalsFilter(filter)){
+            filterData = filter
+            result = true
+        }*/
+
+        if (filterData != filter) {
             filterData = filter
             result = true
         }
+
+
         //log("reset $result")
         return result
     }
 
-    override fun equalsFilter(filter: FilterData) =
-        filterData == filter
+    override fun equalsFilterData(filter: FilterData) =
+        filterData.equalsFilterData(filter)
+
+    override fun equalsFilterViewMode(filter: FilterData) =
+        filterData.equalsFilterViewMode(filter)
+
 
     override fun setFilter(filter: FilterData) {
         filterData = filter
@@ -169,9 +181,14 @@ class OrderDisplay: ProviderDataDisplay{
             instance.setFilter(filter)
         }
 
-        fun equalsFilter(filter: FilterData): Boolean {
+        fun equalsFilterData(filter: FilterData): Boolean {
             getInstance()
-            return instance.equalsFilter(filter)
+            return instance.equalsFilterData(filter)
+        }
+
+        fun equalsFilterViewMode(filter: FilterData): Boolean {
+            getInstance()
+            return instance.equalsFilterViewMode(filter)
         }
 
         fun getFilterQuery(): String {

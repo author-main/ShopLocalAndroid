@@ -279,6 +279,11 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay, reset: () -> Unit, perform: (
     }
 
     @Composable
+    fun showViewMode(){
+
+    }
+
+    @Composable
     fun showSectionItems(section: Int, list: List<ItemFilter>){
         val expanded = openSection == section
         val visibleItem = remember {
@@ -373,6 +378,14 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay, reset: () -> Unit, perform: (
         Column(modifier = Modifier
             .fillMaxSize()
             .padding(all = 16.dp)) {
+            Card(
+                backgroundColor = PrimaryDark
+            ) {
+
+                showViewMode()
+
+            }
+            Spacer(modifier = Modifier.height(8.dp))
             Card(
                 /*modifier = Modifier
                     .fillMaxWidth(),*/

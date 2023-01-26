@@ -13,13 +13,20 @@ data class FilterData(
 ) {
     override fun equals(other: Any?): Boolean {
         val filter = other as FilterData
-        return     filter.viewmode          == viewmode
-                && filter.brend             == brend
+        return  equalsFilterData(filter) && equalsFilterViewMode(filter)
+    }
+
+    fun equalsFilterData(filter: FilterData): Boolean {
+        return  filter.brend                == brend
                 && filter.favorite          == favorite
                 && filter.priceRange.first  == priceRange.first
                 && filter.priceRange.second == priceRange.second
                 && filter.category          == category
                 && filter.discount          == discount
+    }
+
+    fun equalsFilterViewMode(filter: FilterData): Boolean {
+        return  filter.viewmode          == viewmode
     }
 
     override fun hashCode(): Int {
