@@ -280,13 +280,11 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay, reset: () -> Unit, perform: (
 
     @Composable
     fun showViewMode(){
-        Column(modifier = Modifier.fillMaxWidth()
-            .padding(vertical = 8.dp, horizontal = 16.dp)
+        Row(modifier = Modifier.fillMaxWidth()
+            .padding(vertical = 8.dp, horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ){
             Text(text = stringResource(id = R.string.text_viewmode), color = TextFieldFont)
-            Row(){
-
-            }
         }
     }
 
