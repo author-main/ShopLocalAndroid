@@ -16,6 +16,7 @@ enum class FieldFilter {
     SCREEN
 }
 
+enum class VIEW_MODE(val value: Int)     {CARD(0), ROW(1)}
 enum class SORT_TYPE(val value: Int)     {ASCENDING(0), DESCENDING(1)}
 enum class SORT_PROPERTY(val value: Int) {PRICE(0), POPULAR(1), RATING(2)}
 
@@ -24,6 +25,7 @@ interface ProviderDataDisplay {
     fun equalsFilter(filter:FilterData): Boolean
     fun setFilter(filter:FilterData)
     fun resetFilter(): Boolean
+    fun setViewMode(value: VIEW_MODE)
     fun setSortType(value: SORT_TYPE)
     fun setSortProperty(value: SORT_PROPERTY)
     fun setBrend(value: String)
@@ -33,6 +35,7 @@ interface ProviderDataDisplay {
     fun setScreen(value: Int)
     fun setDiscount(value: Int)
 
+    fun getViewMode():      VIEW_MODE
     fun getSortType():      SORT_TYPE
     fun getSortProperty():  SORT_PROPERTY
     fun getBrend():         String

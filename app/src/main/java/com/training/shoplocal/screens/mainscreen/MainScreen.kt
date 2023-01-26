@@ -865,8 +865,10 @@ fun MainScreen(state: ModalBottomSheetState){
                     }
                 }) {filter ->
                     filterScreenDisplayed = false
-                    if (!OrderDisplay.equalsFilter(filter))
+                    if (!OrderDisplay.equalsFilter(filter)) {
+                        log("filter $filter")
                         OrderDisplay.setFilter(filter)
+                    }
                 }
             }
         }

@@ -29,6 +29,11 @@ class OrderDisplay: ProviderDataDisplay{
     //var state by mutableStateOf(false)
 
 
+    override fun setViewMode(value: VIEW_MODE) {
+        filterData.viewmode = value
+    }
+
+    override fun getViewMode() = filterData.viewmode
 
     override fun setDiscount(value: Int) {
         filterData.discount = value
