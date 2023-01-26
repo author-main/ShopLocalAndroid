@@ -1,5 +1,6 @@
 package com.training.shoplocal.classes.fodisplay
 
+import android.provider.ContactsContract.Data
 import androidx.compose.runtime.*
 import com.training.shoplocal.classes.ANY_VALUE
 import com.training.shoplocal.classes.EMPTY_STRING
@@ -19,17 +20,10 @@ class OrderDisplay: ProviderDataDisplay{
     data class SortData(var sortType: SORT_TYPE             = SORT_TYPE.ASCENDING,
                         var sortProperty: SORT_PROPERTY     = SORT_PROPERTY.PRICE)
 
-    data class FilterData(
-        var brend: String                   = ANY_VALUE.toString(),
-        var favorite: Int                   = 0,
-        var priceRange: Pair<Float, Float>
-        = 0.00f to 0.00f,
-        var category: String                = ANY_VALUE.toString(),
-        var discount: Int                   = 0
-    )
+
 
     private val sortData                = SortData()
-    private val filterData              = FilterData()
+    private var filterData              = FilterData()
     private var currentScreen:Int       = ANY_VALUE
     private var completeUpdate = true
     //var state by mutableStateOf(false)
@@ -126,6 +120,31 @@ class OrderDisplay: ProviderDataDisplay{
             sortData.sortType = SORT_TYPE.ASCENDING
     }
 
+    override fun resetFilter(): Boolean {
+        var result = false
+        val filter = FilterData()
+        log("filter Data = $filterData")
+        /*if (   filter.brend             != filterData.brend
+            || filter.favorite          != filterData.favorite
+            || filter.priceRange.first  != filterData.priceRange.first
+            || filter.priceRange.second != filterData.priceRange.second
+            || filter.category          != filterData.category
+            || filter.discount          != filterData.discount
+        )*/
+        if (!equalsFilter(filter)){
+            filterData = filter
+            result = true
+        }
+        //log("reset $result")
+        return result
+    }
+
+    override fun equalsFilter(filter: FilterData) =
+        filterData == filter
+
+    override fun setFilter(filter: FilterData) {
+        filterData = filter
+    }
 
     companion object {
         private lateinit var instance: ProviderDataDisplay//OrderDisplay
@@ -133,6 +152,21 @@ class OrderDisplay: ProviderDataDisplay{
             if (!this::instance.isInitialized)
                 instance = OrderDisplay()
             return instance
+        }
+
+        fun resetFilter(): Boolean {
+            getInstance()
+            return instance.resetFilter()
+        }
+
+        fun setFilter(filter: FilterData){
+            getInstance()
+            instance.setFilter(filter)
+        }
+
+        fun equalsFilter(filter: FilterData): Boolean {
+            getInstance()
+            return instance.equalsFilter(filter)
         }
 
         fun getFilterQuery(): String {

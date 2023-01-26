@@ -51,6 +51,8 @@
     <string name="text_currency">руб</string>
     <string name="text_category">Категория</string>
     <string name="text_brend">Бренд</string>
+    <string name="text_reset">Сбросить</string>
+    <string name="text_perform">Применить</string>
 
 
 </resources>

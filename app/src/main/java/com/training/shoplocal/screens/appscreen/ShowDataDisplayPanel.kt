@@ -88,7 +88,7 @@ fun ShowDataDisplayPanel(modifier: Modifier, showFilterView: () -> Unit){//}, hi
      //   if (isShowPanel) {
             val font = remember { FontFamily(Font(R.font.roboto_light)) }
             val sortItems = stringArrayResource(id = R.array.sort_items)
-            val duration = 1300
+            //val duration = 1300
         /*    AnimatedVisibility(
                 visible = !hide,
 

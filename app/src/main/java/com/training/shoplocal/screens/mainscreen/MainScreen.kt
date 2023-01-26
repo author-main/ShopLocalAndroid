@@ -820,7 +820,16 @@ fun MainScreen(state: ModalBottomSheetState){
                 enter = fadeIn(),
                 exit = fadeOut()
             ) {
-                ShowFilterDisplay(OrderDisplay.getInstance())
+                ShowFilterDisplay(OrderDisplay.getInstance(), reset = {
+                    filterScreenDisplayed = false
+                    if (OrderDisplay.resetFilter()) {
+                        log("reset filter")
+                    }
+                }) {filter ->
+                    filterScreenDisplayed = false
+                    if (!OrderDisplay.equalsFilter(filter))
+                        OrderDisplay.setFilter(filter)
+                }
             }
 
 //}

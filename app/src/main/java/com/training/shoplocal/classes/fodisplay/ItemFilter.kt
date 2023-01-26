@@ -10,11 +10,11 @@ data class ItemFilter(
     //val parent: Int,
     var selected: Boolean = false
 ) {
-
+/*
     fun isHeader() =
         id < 0
     fun isCategory() =
         id == CATEGORY_ITEM
     fun isBrand() =
-        id == BREND_ITEM
+        id == BREND_ITEM*/
 }

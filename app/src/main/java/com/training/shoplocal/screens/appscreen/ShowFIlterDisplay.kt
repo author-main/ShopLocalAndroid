@@ -25,23 +25,25 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.node.modifierElementOf
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.classes.fodisplay.OrderDisplay
 import com.training.shoplocal.classes.fodisplay.ProviderDataDisplay
 import com.training.shoplocal.R
-import com.training.shoplocal.classes.ANY_VALUE
-import com.training.shoplocal.classes.BREND_ITEM
-import com.training.shoplocal.classes.CATEGORY_ITEM
-import com.training.shoplocal.classes.NO_OPEN_ITEM
+import com.training.shoplocal.classes.*
+import com.training.shoplocal.classes.fodisplay.FilterData
 import com.training.shoplocal.classes.fodisplay.ItemFilter
 import com.training.shoplocal.getFormattedPrice
 import com.training.shoplocal.log
@@ -65,10 +67,19 @@ import java.util.*
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun ShowFilterDisplay(filter: ProviderDataDisplay){
+fun ShowFilterDisplay(filter: ProviderDataDisplay, reset: () -> Unit, perform: (filter: FilterData)->Unit){
     val viewModel: RepositoryViewModel = viewModel()
     val items = remember {
         viewModel.getSectionFilter()
+    }
+    val editFilter = remember {
+        FilterData(
+            brend       = filter.getBrend(),
+            favorite    = filter.getFavorite(),
+            priceRange  = filter.getPriceRange(),
+            category    = filter.getCategory(),
+            discount    = filter.getDiscount()
+        )
     }
     fun checkSelectedItems(sectionId: Int, ids: String) {
         if (ids != "-1") {
@@ -106,15 +117,7 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
         mutableStateOf(NO_OPEN_ITEM)
     }
 
-    val editFilter = remember {
-        OrderDisplay.FilterData(
-            brend       = filter.getBrend(),
-            favorite    = filter.getFavorite(),
-            priceRange  = filter.getPriceRange(),
-            category    = filter.getCategory(),
-            discount    = filter.getDiscount()
-        )
-    }
+
     val focusManager = LocalFocusManager.current
     fun checkNumberValue(value: String, len: Int): String? {
         //log("len = $len")
@@ -128,6 +131,41 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
         }
         return null
     }
+    @Composable
+    fun showButtonPanel(){
+        val font = remember { FontFamily(Font(R.font.roboto_light)) }
+        Row(modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center){
+            Button(onClick = {
+                reset()
+            },
+                //shape = RoundedCornerShape(32.dp),
+                colors = ButtonDefaults.buttonColors(backgroundColor = TextFieldBg)
+            ){
+                Text(text= stringResource(id = R.string.text_reset),
+                    color = TextLightGray,
+                    fontFamily = font,
+                    letterSpacing = 0.sp
+                )
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            Button(onClick = {
+                val listBrand = items[BREND_ITEM]?.filter {it.selected}?. map { it.id }?.joinToString(",") ?: ANY_VALUE.toString()
+                editFilter.brend = listBrand.ifEmpty { ANY_VALUE.toString() }
+                val listCategory = items[CATEGORY_ITEM]?.filter {it.selected}?. map { it.id }?.joinToString(",") ?: ANY_VALUE.toString()
+                editFilter.category = listCategory.ifEmpty { ANY_VALUE.toString() }
+                perform(editFilter)
+            },
+               // shape = RoundedCornerShape(32.dp),
+                colors = ButtonDefaults.buttonColors(backgroundColor = TextBrand)
+            ){
+                Text(text= stringResource(id = R.string.text_perform), color = TextLightGray,
+                    fontFamily = font,
+                    letterSpacing = 0.sp)
+            }
+        }
+    }
+
     @Composable
     fun NumberTextField(modifier: Modifier, value: String, label: String, len: Int, onChange: (text: String) ->Unit){
         var number by remember{
@@ -448,6 +486,8 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay){
                     }
                 }
             }
+            Spacer(modifier = Modifier.height(8.dp))
+            showButtonPanel()
         }
     }
 }
