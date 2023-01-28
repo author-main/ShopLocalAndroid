@@ -867,7 +867,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
                     }
                     //if (OrderDisplay.resetFilter()) {
-                        //log("reset $result")
+                    log("reset $result, order display = ${OrderDisplay.getFilter()}")
                     //}
                 }) {filter ->
                     filterScreenDisplayed = false

@@ -134,6 +134,7 @@ class OrderDisplay: ProviderDataDisplay{
         val filter = FilterData()
         val changedFilter   = if (!equalsFilterData(filter))     CHANGED_FILTER   else NO_CHANGED
         val changedViewMode = if (!equalsFilterViewMode(filter)) CHANGED_VIEWMODE else NO_CHANGED
+        filterData = filter
         return if (changedFilter < 0) changedViewMode else CHANGED_FILTER
 
 
@@ -172,6 +173,8 @@ class OrderDisplay: ProviderDataDisplay{
         filterData = filter
     }
 
+    override fun getFilter() = filterData
+
     companion object {
         private lateinit var instance: ProviderDataDisplay//OrderDisplay
         fun getInstance(): ProviderDataDisplay{//OrderDisplay {
@@ -203,6 +206,11 @@ class OrderDisplay: ProviderDataDisplay{
         fun equalsFilterViewMode(filter: FilterData): Boolean {
             getInstance()
             return instance.equalsFilterViewMode(filter)
+        }
+
+        fun getFilter(): FilterData {
+            getInstance()
+            return instance.getFilter()
         }
 
         fun getFilterQuery(): String {

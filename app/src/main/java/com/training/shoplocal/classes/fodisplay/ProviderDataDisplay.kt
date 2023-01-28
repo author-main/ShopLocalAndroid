@@ -22,6 +22,7 @@ enum class SORT_PROPERTY(val value: Int) {PRICE(0), POPULAR(1), RATING(2)}
 
 interface ProviderDataDisplay {
     var state: MutableState<Boolean>
+    fun getFilter(): FilterData
     fun equalsFilterData(filter:FilterData): Boolean
     fun equalsFilterViewMode(filter:FilterData): Boolean
     fun setFilter(filter:FilterData)
