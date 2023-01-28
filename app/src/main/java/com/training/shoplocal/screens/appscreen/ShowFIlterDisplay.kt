@@ -25,6 +25,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.node.modifierElementOf
@@ -39,14 +40,15 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.blue
+import androidx.core.graphics.green
+import androidx.core.graphics.red
+import androidx.core.graphics.toColor
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.training.shoplocal.classes.fodisplay.OrderDisplay
-import com.training.shoplocal.classes.fodisplay.ProviderDataDisplay
 import com.training.shoplocal.R
 import com.training.shoplocal.classes.*
-import com.training.shoplocal.classes.fodisplay.FilterData
-import com.training.shoplocal.classes.fodisplay.ItemFilter
+import com.training.shoplocal.classes.fodisplay.*
 import com.training.shoplocal.getFormattedPrice
 import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.*
@@ -76,6 +78,7 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay, reset: () -> Unit, perform: (
     }
     val editFilter = remember {
         FilterData(
+            viewmode    = filter.getViewMode(),
             brend       = filter.getBrend(),
             favorite    = filter.getFavorite(),
             priceRange  = filter.getPriceRange(),
@@ -282,6 +285,46 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay, reset: () -> Unit, perform: (
 
     @Composable
     fun showViewMode(){
+        var mode by remember {
+            mutableStateOf(filter.getViewMode())
+        }
+        @Composable
+        fun ModeButton(modifier: Modifier, modeview: VIEW_MODE){
+            val unselectedBgColor = remember {
+                val hsv = FloatArray(3)
+                android.graphics.Color.colorToHSV(TextFieldBg.toArgb(), hsv)
+                hsv[2] *= 0.8f
+                val currentColor = android.graphics.Color.HSVToColor(hsv)
+                Color(currentColor.red, currentColor.green, currentColor.blue)
+            }
+            val bgcolor = if (modeview == mode)
+                TextFieldBg
+            else
+                unselectedBgColor
+
+            val iconcolor = if (modeview == mode)
+                SelectedItemBottomNavi
+            else
+                TextFieldFont
+            val srcImage = if (modeview == VIEW_MODE.CARD)
+                R.drawable.ic_cardmode
+            else
+                R.drawable.ic_rowmode
+            OutlinedButton(onClick = {
+                mode = modeview
+                editFilter.viewmode = modeview
+            }, modifier = modifier,
+                border = BorderStroke(0.dp, TextFieldBg),
+                colors = ButtonDefaults.buttonColors(backgroundColor = bgcolor
+                )
+            ) {
+                Icon(imageVector = ImageVector.vectorResource(srcImage),
+                    contentDescription = null,
+                    tint = iconcolor//TextFieldFont
+                )
+            }
+        }
+
         Row(modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp, horizontal = 16.dp),
@@ -290,21 +333,9 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay, reset: () -> Unit, perform: (
             Text(text = stringResource(id = R.string.text_viewmode), modifier = Modifier.padding(end = 8.dp), color = TextFieldFont)
             Row(modifier = Modifier.weight(1f),
             horizontalArrangement = Arrangement.SpaceBetween) {
-                OutlinedButton(onClick = { }, modifier = Modifier.weight(0.5f),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = TextFieldBg)
-                    ) {
-                    Icon(imageVector = ImageVector.vectorResource(R.drawable.ic_cardmode),
-                        contentDescription = null
-                    )
-                }
+                ModeButton(modifier = Modifier.weight(0.5f), VIEW_MODE.CARD)
                 Spacer(modifier = Modifier.width(8.dp))
-                OutlinedButton(onClick = { }, modifier = Modifier.weight(0.5f),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = TextFieldBg),
-                    ) {
-                    Icon(imageVector = ImageVector.vectorResource(R.drawable.ic_rowmode),
-                        contentDescription = null
-                    )
-                }
+                ModeButton(modifier = Modifier.weight(0.5f), VIEW_MODE.ROW)
             }
         }
     }
