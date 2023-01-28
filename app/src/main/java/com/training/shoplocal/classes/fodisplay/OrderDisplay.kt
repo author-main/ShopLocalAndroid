@@ -125,10 +125,19 @@ class OrderDisplay: ProviderDataDisplay{
             sortData.sortType = SORT_TYPE.ASCENDING
     }
 
-    override fun resetFilter(): Boolean {
-        var result = false
+    override fun resetFilter(): Int {
+        val CHANGED_FILTER   =  0
+        val CHANGED_VIEWMODE =  1
+        val NO_CHANGED       = -1
+
+      //  var result = false
         val filter = FilterData()
-        log("filter Data = $filterData")
+        val changedFilter   = if (!equalsFilterData(filter))     CHANGED_FILTER   else NO_CHANGED
+        val changedViewMode = if (!equalsFilterViewMode(filter)) CHANGED_VIEWMODE else NO_CHANGED
+        return if (changedFilter < 0) changedViewMode else CHANGED_FILTER
+
+
+    //    log("filter Data = $filterData")
         /*if (   filter.brend             != filterData.brend
             || filter.favorite          != filterData.favorite
             || filter.priceRange.first  != filterData.priceRange.first
@@ -142,14 +151,14 @@ class OrderDisplay: ProviderDataDisplay{
             result = true
         }*/
 
-        if (filterData != filter) {
+      /*  if (filterData != filter) {
             filterData = filter
             result = true
-        }
+        }*/
 
 
         //log("reset $result")
-        return result
+     //   return result
     }
 
     override fun equalsFilterData(filter: FilterData) =
@@ -171,7 +180,7 @@ class OrderDisplay: ProviderDataDisplay{
             return instance
         }
 
-        fun resetFilter(): Boolean {
+        fun resetFilter(): Int {
             getInstance()
             return instance.resetFilter()
         }

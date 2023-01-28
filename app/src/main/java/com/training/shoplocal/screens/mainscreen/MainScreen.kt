@@ -860,9 +860,15 @@ fun MainScreen(state: ModalBottomSheetState){
             ) {
                 ShowFilterDisplay(OrderDisplay.getInstance(), reset = {
                     filterScreenDisplayed = false
-                    if (OrderDisplay.resetFilter()) {
-                        log("reset filter")
+                    val result = OrderDisplay.resetFilter()
+                    if (result == 0) {           // CHANGED_FILTER   =  0
+
+                    } else if (result == 1) {    // CHANGED_VIEWMODE =  1
+
                     }
+                    //if (OrderDisplay.resetFilter()) {
+                        //log("reset $result")
+                    //}
                 }) {filter ->
                     filterScreenDisplayed = false
                     val changedFilterData   = !OrderDisplay.equalsFilterData(filter)

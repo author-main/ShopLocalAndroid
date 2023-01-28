@@ -25,7 +25,7 @@ interface ProviderDataDisplay {
     fun equalsFilterData(filter:FilterData): Boolean
     fun equalsFilterViewMode(filter:FilterData): Boolean
     fun setFilter(filter:FilterData)
-    fun resetFilter(): Boolean
+    fun resetFilter(): Int
     fun setViewMode(value: VIEW_MODE)
     fun setSortType(value: SORT_TYPE)
     fun setSortProperty(value: SORT_PROPERTY)
