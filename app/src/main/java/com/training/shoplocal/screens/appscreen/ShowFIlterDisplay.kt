@@ -25,10 +25,12 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.node.modifierElementOf
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -280,11 +282,30 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay, reset: () -> Unit, perform: (
 
     @Composable
     fun showViewMode(){
-        Row(modifier = Modifier.fillMaxWidth()
+        Row(modifier = Modifier
+            .fillMaxWidth()
             .padding(vertical = 8.dp, horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ){
-            Text(text = stringResource(id = R.string.text_viewmode), color = TextFieldFont)
+            Text(text = stringResource(id = R.string.text_viewmode), modifier = Modifier.padding(end = 8.dp), color = TextFieldFont)
+            Row(modifier = Modifier.weight(1f),
+            horizontalArrangement = Arrangement.SpaceBetween) {
+                OutlinedButton(onClick = { }, modifier = Modifier.weight(0.5f),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = TextFieldBg)
+                    ) {
+                    Icon(imageVector = ImageVector.vectorResource(R.drawable.ic_cardmode),
+                        contentDescription = null
+                    )
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                OutlinedButton(onClick = { }, modifier = Modifier.weight(0.5f),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = TextFieldBg),
+                    ) {
+                    Icon(imageVector = ImageVector.vectorResource(R.drawable.ic_rowmode),
+                        contentDescription = null
+                    )
+                }
+            }
         }
     }
 
