@@ -868,8 +868,13 @@ fun MainScreen(state: ModalBottomSheetState){
                     val changedFilterData   = !OrderDisplay.equalsFilterData(filter)
                     val changedViewModeData = !OrderDisplay.equalsFilterViewMode(filter)
                     if (changedFilterData) {
-                        log("filter $filter")
+                        log("change filter $filter")
                         OrderDisplay.setFilter(filter)
+                    } else {
+                        if (changedViewModeData) {
+                            log("change viewmode $filter")
+                            OrderDisplay.setViewMode(filter.viewmode)
+                        }
                     }
                 }
             }
