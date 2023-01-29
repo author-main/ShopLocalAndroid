@@ -19,6 +19,7 @@ import java.util.*
 import kotlin.collections.HashMap
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
+    //var SIZE_PORTION = 10
     private val composeViewStack = Stack<ComposeView>().apply {
         push(ComposeView.LOGIN)
     }
@@ -32,6 +33,9 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     //log(reflexRepository.toString())
     private val _hiddenBottomNavigation = MutableStateFlow<Boolean>(false)
     val hiddenBottomNavigation = _hiddenBottomNavigation.asStateFlow()
+  /*  fun setPortionDataDB(value: Int) {
+        SIZE_PORTION = value
+    }*/
     fun hideBottomNavigation(value: Boolean = true) {
         _hiddenBottomNavigation.value = value
     }

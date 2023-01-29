@@ -3,6 +3,7 @@ package com.training.shoplocal.screens.mainscreen
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.icu.number.IntegerWidth
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import androidx.activity.compose.BackHandler
@@ -40,6 +41,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
@@ -76,6 +78,12 @@ import kotlin.math.roundToInt
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun MainScreen(state: ModalBottomSheetState){
+    /*var heightCard by remember {
+        mutableStateOf(0)
+    }*/
+    /*var portition by remember { // подгрузка данных порциями равными portion
+        mutableStateOf(0)
+    }*/
     val scope = rememberCoroutineScope()
     val stateGrid = rememberLazyViewState(ScreenRouter.current.key)
     val context = LocalContext.current
@@ -350,8 +358,9 @@ fun MainScreen(state: ModalBottomSheetState){
         }
     }
 
+    val localDensity = LocalDensity.current
 
-    val panelHeightPx = with(LocalDensity.current) { 40.dp.roundToPx().toFloat() }
+    val panelHeightPx = with(localDensity) { 40.dp.roundToPx().toFloat() }
     val panelOffsetHeightPx = remember { mutableStateOf(0f) }
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
@@ -672,7 +681,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 //ShowDataDisplayPanel(hide = isSearchMode)
         //    }
             //val verticalScrollState = rememberScrollState()
-        Box(
+        Box(//WithConstraints(
                 modifier = Modifier
                     //.verticalScroll(verticalScrollState)
                     .padding(it)
@@ -680,8 +689,7 @@ fun MainScreen(state: ModalBottomSheetState){
                     .fillMaxSize()
                     .background(BgScreenDark),
             ) {
-
-               // val boxWithConstraintsScope = this
+                //val boxScope = this
                 //log("height = ${boxWithConstraintsScope.maxHeight}")*/
                /* var heightConstraints by remember {
                     mutableStateOf(boxWithConstraintsScope.maxHeight)
@@ -690,6 +698,15 @@ fun MainScreen(state: ModalBottomSheetState){
                     heightConstraints = boxWithConstraintsScope.maxHeight
                     log("height = $heightConstraints")
                 }*/
+
+            /*val heightConstraints = remember {
+                boxScope.maxHeight
+            }
+
+            LaunchedEffect(Unit) {
+//                heightConstraints = boxScope.maxHeight
+                log("height = ${heightConstraints.value}")
+            }*/
 
             /*Column(modifier = Modifier
                 .nestedScroll(nestedScrollConnection)
@@ -720,6 +737,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 if (products.isNotEmpty()) {
                    // val verticalScrollState = rememberScrollState()
                     //log("first Index = ${stateGrid.firstVisibleItemIndex}")
+                    //var calcHeight = 0
                     LazyVerticalGrid(
                         modifier = Modifier
                             .padding(horizontal = 10.dp),
@@ -739,7 +757,11 @@ fun MainScreen(state: ModalBottomSheetState){
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceEvenly
                             ) {
-                                CardProduct(product, state = state)
+                             //   calcHeight = 0
+                                CardProduct(/*modifier = Modifier.onGloballyPositioned { coordinates ->
+                                    calcHeight = coordinates.size.height
+                                },*/
+                                product, state = state)
                             }
                         }
 
@@ -751,6 +773,13 @@ fun MainScreen(state: ModalBottomSheetState){
                             restoredStateGrid = null
                         }*/
                     }
+                    /*LaunchedEffect(Unit) {
+                        val boxHeight = with(localDensity) { boxScope.maxHeight.roundToPx().toFloat() }
+                        if (calcHeight != 0) {
+                            viewModel.setPortionDataDB(2 + (boxHeight / calcHeight).roundToInt() * 2)
+                           // log("box = $boxHeight, card = $calcHeight, portition = $portition")
+                        }
+                    }*/
 
                     if (!isFocusedSearchTextField) {
                     val changeVisibleStateFAB = remember {
@@ -789,6 +818,9 @@ fun MainScreen(state: ModalBottomSheetState){
                     }
                 val nextPart = remember {
                     derivedStateOf {
+                        //val portition = if (stateGrid.layoutInfo.visibleItemsInfo.isNotEmpty() && stateGrid.firstVisibleItemIndex == 0 && stateGrid.firstVisibleItemScrollOffset == 0) stateGrid.layoutInfo.visibleItemsInfo.size else 0
+                        //val portition = boxScope.maxHeight//stateGrid.layoutInfo.visibleItemsInfo.size
+                        //log ("portition = $portition")
                         //log("offset ${stateGrid.firstVisibleItemScrollOffset}")
                         //log ("lastIndex = ${stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.index}, gridCount = ${stateGrid.layoutInfo.totalItemsCount - 1}")
                         /*val viewOffset = stateGrid.layoutInfo.viewportEndOffset // высота Grid
@@ -800,7 +832,7 @@ fun MainScreen(state: ModalBottomSheetState){
                         //log ("offset = ${viewOffset  - offset}, height $height")
                        /* log ("gridOffset = ${stateGrid.layoutInfo.viewportEndOffset -
                                 offset}, heightLast = ${stateGrid.layoutInfo.visibleItemsInfo.last().size.height}")*/
-                        val total: Int = products.size / SIZE_PORTION
+                        val total: Int = products.size /SIZE_PORTION
                         val remains    = products.size % SIZE_PORTION
                         val upload = if (remains > 0)
                                         false else
@@ -818,6 +850,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 LaunchedEffect(nextPart.value) {
                     if (nextPart.value) {
                         //log("next portion")
+                        //log("portition = $portition")
                         viewModel.getNextPortionData(isSearchMode(), textSearch.value.trim())
                     }
                 }
@@ -871,15 +904,20 @@ fun MainScreen(state: ModalBottomSheetState){
                     //}
                 }) {filter ->
                     filterScreenDisplayed = false
+
                     val changedFilterData   = !OrderDisplay.equalsFilterData(filter)
                     val changedViewModeData = !OrderDisplay.equalsFilterViewMode(filter)
                     if (changedFilterData) {
-                        log("change filter $filter")
+                        //log("change filter $filter")
                         OrderDisplay.setFilter(filter)
+                        val order64 = encodeBase64(OrderDisplay.getFilterQuery())
+                        log(OrderDisplay.getFilterQuery())
                     } else {
                         if (changedViewModeData) {
-                            log("change viewmode $filter")
+                            //log("change viewmode $filter")
                             OrderDisplay.setViewMode(filter.viewmode)
+                            /*val order64 = encodeBase64(OrderDisplay.getFilterQuery())
+                            log(OrderDisplay.getFilterQuery())*/
                         }
                     }
                 }
@@ -887,6 +925,10 @@ fun MainScreen(state: ModalBottomSheetState){
         }
 
 
+    }
+
+    SideEffect {
+        //log ("heightCard = $heightCard")
     }
 
     if (dataSnackbar.second) {

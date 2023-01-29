@@ -29,6 +29,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
@@ -55,6 +56,7 @@ private enum class IMAGE_STATE {
     COMPLETED,
     FAILURE
 }
+const val CARD_SIZE = 150
 
 @Composable
 fun AnimateLinkDownload(componentSize: Size) {
@@ -163,7 +165,7 @@ data class ImageLink(val link: String, val md5: String)
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun CardProduct(product: Product, state: ModalBottomSheetState){
+fun CardProduct(product: Product, state: ModalBottomSheetState) {
 
     val linkImages: List<ImageLink> = remember {
         val list = mutableListOf<ImageLink>()
@@ -327,15 +329,21 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){
         }
     } else
         visible.targetState = true
-    Box(modifier = Modifier
-        .width(150.dp)
+    Box(
+        modifier = Modifier
+        .width(CARD_SIZE.dp)
+       /* .onGloballyPositioned { coordinates ->
+            heightCard = coordinates.size.height
+          //  log ("height = ${heightCard.Dp}")
+                //animateSize.value = coordinates.size.toSize()
+        }*/
         .padding(vertical = 10.dp))
         {
-        Column(
-        )
-        {
+
+
+        Column(){
             Card(modifier = Modifier
-                .requiredSize(150.dp)
+                .size(CARD_SIZE.dp)
                 .padding(bottom = 8.dp),
                 backgroundColor = BgCard,
                 shape = RoundedCornerShape(8.dp)
@@ -494,6 +502,13 @@ fun CardProduct(product: Product, state: ModalBottomSheetState){
             // * >
             StarPanel(product.star)
         }
-    }
 
-}
+          /*  val boxScope = this
+            LaunchedEffect(Unit) {
+                heightConstraints = boxScope.maxHeight
+                log("height card = $heightConstraints")
+            }*/
+
+            //log ("height = $cardHeight")*/
+    }
+ }
