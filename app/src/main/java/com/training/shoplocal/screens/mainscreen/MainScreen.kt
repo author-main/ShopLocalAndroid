@@ -28,6 +28,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -427,6 +428,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
 
                   Image(
+//                      imageVector = Icons.Filled.KeyboardArrowUp,
                       Icons.Filled.ArrowBack,
                       modifier = Modifier.rotate(90f),
                       contentDescription = null,
@@ -806,14 +808,22 @@ fun MainScreen(state: ModalBottomSheetState){
                                 }
                             }
                             prevStateScroll = firstIndex to firstOffset
-
+                            //log ("scrollup = $scrollUp")
+                          //  showFloatingButton = scrollUp
                             scrollUp
                         }
 
                     }
-                LaunchedEffect(changeVisibleStateFAB.value) {
+
+                       /*LaunchedEffect(changeVisibleStateFAB.value) {
+                           log("fab ${changeVisibleStateFAB.value}")*/
+                           showFloatingButton = changeVisibleStateFAB.value
+                      // }
+
+                /*LaunchedEffect(changeVisibleStateFAB.value) {
+                    log("fab ${changeVisibleStateFAB.value}")
                     showFloatingButton = changeVisibleStateFAB.value
-                }
+                }*/
 
                     }
                 val nextPart = remember {
@@ -847,13 +857,13 @@ fun MainScreen(state: ModalBottomSheetState){
                     }
                 }
 
-                LaunchedEffect(nextPart.value) {
+               // LaunchedEffect(nextPart.value) {
                     if (nextPart.value) {
                         //log("next portion")
                         //log("portition = $portition")
                         viewModel.getNextPortionData(isSearchMode(), textSearch.value.trim())
                     }
-                }
+               // }
 
 
                 ShowDataDisplayPanel(modifier = Modifier
@@ -925,10 +935,6 @@ fun MainScreen(state: ModalBottomSheetState){
         }
 
 
-    }
-
-    SideEffect {
-        //log ("heightCard = $heightCard")
     }
 
     if (dataSnackbar.second) {
