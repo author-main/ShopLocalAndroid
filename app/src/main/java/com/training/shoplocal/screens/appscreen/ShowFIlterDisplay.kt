@@ -314,7 +314,7 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay, reset: () -> Unit, perform: (
                 mode = modeview
                 editFilter.viewmode = modeview
             }, modifier = modifier,
-                border = BorderStroke(0.dp, TextFieldBg),
+                border = BorderStroke(0.dp, bgcolor),
                 colors = ButtonDefaults.buttonColors(backgroundColor = bgcolor
                 )
             ) {
