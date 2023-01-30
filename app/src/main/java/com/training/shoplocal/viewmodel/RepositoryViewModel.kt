@@ -350,7 +350,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
      */
 
     fun findProductsRequest(query: String, value: Int = 0){
-        if (value == -1) {
+        if (value == -1) { //  Очистка результатов поиcка в BD
             repository.findProductsRequest(query, 0, UUID_QUERY, USER_ID){}
             return
         }
