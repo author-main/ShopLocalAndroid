@@ -311,6 +311,7 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay, reset: () -> Unit, perform: (
             else
                 R.drawable.ic_rowmode
             OutlinedButton(onClick = {
+                focusManager.clearFocus(true)
                 mode = modeview
                 editFilter.viewmode = modeview
             }, modifier = modifier,

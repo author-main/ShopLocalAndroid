@@ -910,7 +910,9 @@ fun MainScreen(state: ModalBottomSheetState){
 
                     }
                     //if (OrderDisplay.resetFilter()) {
-                    log("reset $result, order display = ${OrderDisplay.getFilter()}")
+                   /* log("reset $result, order display = ${OrderDisplay.getFilter()}")
+                    val order64 = encodeBase64(OrderDisplay.getFilterQuery())*/
+                   // log(order64)
                     //}
                 }) {filter ->
                     filterScreenDisplayed = false
@@ -920,8 +922,8 @@ fun MainScreen(state: ModalBottomSheetState){
                     if (changedFilterData) {
                         //log("change filter $filter")
                         OrderDisplay.setFilter(filter)
-                        val order64 = encodeBase64(OrderDisplay.getFilterQuery())
-                        log(OrderDisplay.getFilterQuery())
+                        /*val order64 = encodeBase64(OrderDisplay.getFilterQuery())
+                        log(order64)*/
                     } else {
                         if (changedViewModeData) {
                             //log("change viewmode $filter")
