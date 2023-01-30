@@ -3,7 +3,6 @@ package com.training.shoplocal.screens.mainscreen
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.icu.number.IntegerWidth
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import androidx.activity.compose.BackHandler
@@ -28,7 +27,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,7 +40,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
@@ -79,6 +76,7 @@ import kotlin.math.roundToInt
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun MainScreen(state: ModalBottomSheetState){
+    var heightGrid = 0
     /*var heightCard by remember {
         mutableStateOf(0)
     }*/
@@ -105,12 +103,14 @@ fun MainScreen(state: ModalBottomSheetState){
     }
 
     val focusManager = LocalFocusManager.current
-    fun hideSearchDialog() {
+
+    fun showBottomNavigation() {
         focusManager.clearFocus()
         isFocusedSearchTextField = false
         viewModel.removeComposeViewStack()
-        viewModel.hideBottomNavigation(false)
+        viewModel.showBottomNavigation()
     }
+
     fun isSearchMode() = searchState.value != SearchState.SEARCH_NONE
 
     // Сохраняем значение textSearch перед выбором из списка,
@@ -180,7 +180,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 )
             }
             if (!recognizer)
-                hideSearchDialog()
+                showBottomNavigation()
             viewModel.putComposeViewStack(ComposeView.SEARCH)
             viewModel.findProductsRequest(textSearch.value.trim())
             searchState.value = SearchState.SEARCH_RESULT
@@ -355,12 +355,11 @@ fun MainScreen(state: ModalBottomSheetState){
             textSearch.value = ""
             searchState.value = SearchState.SEARCH_NONE
             //isSearchMode = false
-            hideSearchDialog()
+            showBottomNavigation()
         }
     }
 
     val localDensity = LocalDensity.current
-
     val panelHeightPx = with(localDensity) { 40.dp.roundToPx().toFloat() }
     val panelOffsetHeightPx = remember { mutableStateOf(0f) }
     val nestedScrollConnection = remember {
@@ -480,7 +479,7 @@ fun MainScreen(state: ModalBottomSheetState){
                         modifier = Modifier
                         .align(Alignment.CenterVertically)
                     ) {
-                        hideSearchDialog()
+                        showBottomNavigation()
                         filterScreenDisplayed = false
                     }
                     Text(modifier = Modifier.weight(1f),
@@ -497,7 +496,7 @@ fun MainScreen(state: ModalBottomSheetState){
                             modifier = Modifier
                                 .align(Alignment.CenterVertically)
                         ) {
-                            hideSearchDialog()
+                            showBottomNavigation()
                             if (searchScreenDisplayed) {
                                 if (searchState.value == SearchState.SEARCH_QUERY) {
                                     searchState.value = SearchState.SEARCH_RESULT
@@ -691,7 +690,13 @@ fun MainScreen(state: ModalBottomSheetState){
                     .fillMaxSize()
                     .background(BgScreenDark),
             ) {
-                //val boxScope = this
+                /*val boxScope = this
+                LaunchedEffect(Unit) {
+                    heightGrid = with(localDensity) {
+                        boxScope.maxHeight.roundToPx()
+                    }
+                }
+                log("heightGrid = $heightGrid")*/
                 //log("height = ${boxWithConstraintsScope.maxHeight}")*/
                /* var heightConstraints by remember {
                     mutableStateOf(boxWithConstraintsScope.maxHeight)
@@ -857,13 +862,15 @@ fun MainScreen(state: ModalBottomSheetState){
                     }
                 }
 
-               // LaunchedEffect(nextPart.value) {
+                LaunchedEffect(nextPart.value) {
+
                     if (nextPart.value) {
                         //log("next portion")
                         //log("portition = $portition")
+                       // log("next portion = ${nextPart.value}")
                         viewModel.getNextPortionData(isSearchMode(), textSearch.value.trim())
                     }
-               // }
+                }
 
 
                 ShowDataDisplayPanel(modifier = Modifier
@@ -903,6 +910,7 @@ fun MainScreen(state: ModalBottomSheetState){
             ) {
                 ShowFilterDisplay(OrderDisplay.getInstance(), reset = {
                     filterScreenDisplayed = false
+                    showBottomNavigation()
                     val result = OrderDisplay.resetFilter()
                     if (result == 0) {           // CHANGED_FILTER   =  0
 
@@ -916,7 +924,7 @@ fun MainScreen(state: ModalBottomSheetState){
                     //}
                 }) {filter ->
                     filterScreenDisplayed = false
-
+                    showBottomNavigation()
                     val changedFilterData   = !OrderDisplay.equalsFilterData(filter)
                     val changedViewModeData = !OrderDisplay.equalsFilterViewMode(filter)
                     OrderDisplay.setFilter(filter)

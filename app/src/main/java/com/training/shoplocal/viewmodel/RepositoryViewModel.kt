@@ -36,8 +36,12 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
   /*  fun setPortionDataDB(value: Int) {
         SIZE_PORTION = value
     }*/
-    fun hideBottomNavigation(value: Boolean = true) {
-        _hiddenBottomNavigation.value = value
+    fun hideBottomNavigation() {
+        _hiddenBottomNavigation.value = true
+    }
+
+    fun showBottomNavigation() {
+        _hiddenBottomNavigation.value = false
     }
 
     private var loadedPortion = 0
