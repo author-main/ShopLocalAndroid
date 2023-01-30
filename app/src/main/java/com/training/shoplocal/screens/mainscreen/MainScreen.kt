@@ -919,15 +919,16 @@ fun MainScreen(state: ModalBottomSheetState){
 
                     val changedFilterData   = !OrderDisplay.equalsFilterData(filter)
                     val changedViewModeData = !OrderDisplay.equalsFilterViewMode(filter)
+                    OrderDisplay.setFilter(filter)
                     if (changedFilterData) {
                         //log("change filter $filter")
-                        OrderDisplay.setFilter(filter)
+                        //OrderDisplay.setFilter(filter)
                         /*val order64 = encodeBase64(OrderDisplay.getFilterQuery())
                         log(order64)*/
                     } else {
                         if (changedViewModeData) {
                             //log("change viewmode $filter")
-                            OrderDisplay.setViewMode(filter.viewmode)
+                            //OrderDisplay.setViewMode(filter.viewmode)
                             /*val order64 = encodeBase64(OrderDisplay.getFilterQuery())
                             log(OrderDisplay.getFilterQuery())*/
                         }
