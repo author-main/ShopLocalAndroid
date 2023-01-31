@@ -165,11 +165,11 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         return calcMaxPortion to name
     }
 
-
+    @Synchronized
     private fun getProducts(part: Int){
       // val exchangeData = exchangeDataMap[ExchangeData.GET_PRODUCTS] ?: false
-        if (lockDB) return
-            lockDB = true
+      /*  if (lockDB) return
+            lockDB = true*/
           //  exchangeDataMap[ExchangeData.GET_PRODUCTS] = true
 
 
