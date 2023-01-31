@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
-import android.view.View
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -126,7 +125,7 @@ fun MainScreen(state: ModalBottomSheetState){
     // textSearch присваиваем старое значение prevSearchText
 
     var prevStateScroll = remember {
-        Pair<Int, Int>(0,0)
+        0 to 0
     }
     val prevSearchText = remember {
         StringBuilder("")
@@ -312,7 +311,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
     val startLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
-    ) {it ->
+    ) {
         if (it.resultCode == Activity.RESULT_OK) {
             it.data?.let{ data ->
                 (data.extras?.getStringArrayList(RecognizerIntent.EXTRA_RESULTS)).let { matches ->
@@ -412,7 +411,7 @@ fun MainScreen(state: ModalBottomSheetState){
           }
       }*/
 
-      androidx.compose.animation.AnimatedVisibility(
+      AnimatedVisibility(
           visibleState = visibleFAB,
           enter = scaleIn(
               animationSpec = tween(
@@ -449,7 +448,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
     Scaffold(
         floatingActionButton = {
-           AnimatedFloatingActionButton(){
+           AnimatedFloatingActionButton {
                scope.launch {
                    stateGrid.animateScrollToItem(
                        0
@@ -902,7 +901,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
                 }
 
-                androidx.compose.animation.AnimatedVisibility(
+                AnimatedVisibility(
                         visible = isFocusedSearchTextField,
                         enter = fadeIn(),
                         exit = fadeOut()
@@ -911,7 +910,7 @@ fun MainScreen(state: ModalBottomSheetState){
                         ShowSearchHistory(textSearch, searchState)//lastSearchQuery)
                     }
 
-            androidx.compose.animation.AnimatedVisibility(
+            AnimatedVisibility(
                 visible = filterScreenDisplayed,
                 enter = fadeIn(),
                 exit = fadeOut()
