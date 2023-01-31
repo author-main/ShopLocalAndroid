@@ -430,7 +430,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
           FloatingActionButton(//modifier = Modifier
              // .graphicsLayer(scaleX = scaleButton, scaleY = scaleButton),
-              backgroundColor = TextFieldBg,// SelectedItem,
+              backgroundColor = PrimaryDark,// TextFieldBg,// SelectedItem,
               content = {
 
 
