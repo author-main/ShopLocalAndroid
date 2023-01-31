@@ -320,5 +320,4 @@ fun DialogRegistration(){
         }
 
     }
-
 }

@@ -20,6 +20,12 @@ import kotlin.collections.HashMap
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     //var SIZE_PORTION = 10
+    private val _progressCRUD = MutableStateFlow<Boolean>(false)
+    val progressCRUD = _progressCRUD.asStateFlow()
+    fun showProgressCRUD(value: Boolean = true) {
+        _progressCRUD.value = value
+    }
+
     private val composeViewStack = Stack<ComposeView>().apply {
         push(ComposeView.LOGIN)
     }
@@ -175,6 +181,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
             /*val coroutine = CoroutineScope(Job() + Dispatchers.IO)
         coroutine.launch {*/
+            showProgressCRUD()
             repository.getProducts(USER_ID, part) { listProducts ->
                 if (listProducts.isNotEmpty()) {
                     if (part == 1) {
@@ -192,6 +199,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                         _products.value = mutableListOf()
                 }
                 lockDB = false
+                showProgressCRUD(false)
             //}
 
         }
@@ -365,7 +373,9 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         _products.value = mutableListOf()
         _products.value = list
         return*/
-        if (lockDB) return
+
+       // if (lockDB) return
+        showProgressCRUD()
         var portion = value
         if (value == 0) {
             loadedPortion = 0
@@ -398,6 +408,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                         _products.value = mutableListOf()
                 }
                 lockDB = false
+                showProgressCRUD(false)
             }
 
         /*INSERT INTO new_table_name

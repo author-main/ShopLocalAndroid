@@ -63,6 +63,7 @@ import com.training.shoplocal.classes.SIZE_PORTION
 import com.training.shoplocal.classes.fodisplay.OrderDisplay
 import com.training.shoplocal.classes.searcher.SearchState
 import com.training.shoplocal.dialogs.ShowMessage
+import com.training.shoplocal.dialogs.ShowProgress
 import com.training.shoplocal.screens.ScreenRouter
 import com.training.shoplocal.screens.appscreen.ShowDataDisplayPanel
 import com.training.shoplocal.screens.appscreen.ShowFilterDisplay
@@ -77,7 +78,14 @@ import kotlin.math.roundToInt
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun MainScreen(state: ModalBottomSheetState){
-    var heightGrid = 0
+    val viewModel: RepositoryViewModel = viewModel()
+    val progress by viewModel.progressCRUD.collectAsState()
+    if (progress)
+        ShowProgress()
+/*    var progress by remember {
+        mutableStateOf(false)
+    }*/
+    //var heightGrid = 0
     /*var heightCard by remember {
         mutableStateOf(0)
     }*/
@@ -87,7 +95,6 @@ fun MainScreen(state: ModalBottomSheetState){
     val scope = rememberCoroutineScope()
     val stateGrid = rememberLazyViewState(ScreenRouter.current.key)
     val context = LocalContext.current
-    val viewModel: RepositoryViewModel = viewModel()
     val products: MutableList<Product> by viewModel.products.collectAsState()
     val dataSnackbar: Triple<String, Boolean, MESSAGE> by viewModel.snackbarData.collectAsState()
 
