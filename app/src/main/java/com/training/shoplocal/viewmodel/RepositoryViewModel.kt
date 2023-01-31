@@ -184,7 +184,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                         _products.value.clear()
                     }
                     loadedPortion = part
-                    setSelectedProduct(Product())
+                    //setSelectedProduct(Product())
                     val list = _products.value.toMutableList().apply { addAll(listProducts) }
                     _products.value = list
                 } else {
@@ -380,7 +380,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         //repository.findProductsRequest(query, portion, UUID_QUERY.toString(), USER_ID) { listFound ->
             repository.findProductsRequest(query, portion, UUID_QUERY, USER_ID) { listFound ->
              //   log ("size ${listFound.size}")
-                setSelectedProduct(Product())
+                //setSelectedProduct(Product())
                 if (listFound.isNotEmpty()) {
                     //_products.value = listFound.toMutableList()
                     //log("get portion $portion")
@@ -446,5 +446,14 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         return exist
     }
 
+    fun filterProducts(searchMode: Boolean = false){
+        maxPortion = -1
+        loadedPortion = 0
+        if (searchMode) {
+
+        } else {
+            getProducts(1)
+        }
+    }
 
  }

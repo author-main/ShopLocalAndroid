@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
+import android.view.View
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -913,7 +914,7 @@ fun MainScreen(state: ModalBottomSheetState){
                     showBottomNavigation()
                     val result = OrderDisplay.resetFilter()
                     if (result == 0) {           // CHANGED_FILTER   =  0
-
+                        viewModel.filterProducts(searchScreenDisplayed)
                     } else if (result == 1) {    // CHANGED_VIEWMODE =  1
 
                     }
@@ -933,6 +934,7 @@ fun MainScreen(state: ModalBottomSheetState){
                         //OrderDisplay.setFilter(filter)
                         /*val order64 = encodeBase64(OrderDisplay.getFilterQuery())
                         log(order64)*/
+                        viewModel.filterProducts(searchScreenDisplayed)
                     } else {
                         if (changedViewModeData) {
                             //log("change viewmode $filter")
