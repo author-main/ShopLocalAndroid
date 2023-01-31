@@ -166,7 +166,9 @@ data class ImageLink(val link: String, val md5: String)
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun CardProduct(product: Product, state: ModalBottomSheetState) {
-
+    val cardproduct = remember {
+        product
+    }
     val linkImages: List<ImageLink> = remember {
         val list = mutableListOf<ImageLink>()
         product.linkimages?.forEach {
@@ -192,7 +194,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState) {
                 .border(1.dp, BorderButton, CircleShape)
                 .clickable {
                     scope.launch {
-                        viewModel.setSelectedProduct(product)
+                        viewModel.setSelectedProduct(cardproduct)
                         state.show()
                     }
                 }
@@ -200,9 +202,13 @@ fun CardProduct(product: Product, state: ModalBottomSheetState) {
     }
     @Composable
     fun ButtonFavorite(modifier: Modifier, action: (checked: Boolean)-> Unit){
+
+      /*  var checked by remember {
+            mutableStateOf(cardproduct.favorite > 0)
+        }*/
         val observeSelectedProduct = viewModel.selectedProduct.collectAsState()
-        val isFavorite = remember {
-            derivedStateOf {
+        val isfavorite = remember {
+            /*derivedStateOf {
                 if (observeSelectedProduct.value.id != -1)
                     product.favorite > 0
                 else {
@@ -211,6 +217,14 @@ fun CardProduct(product: Product, state: ModalBottomSheetState) {
                     else
                         product.favorite > 0
                 }
+            }*/
+            derivedStateOf {
+                if (cardproduct.id == observeSelectedProduct.value.id) {
+                    cardproduct.favorite = observeSelectedProduct.value.favorite
+                    observeSelectedProduct.value.favorite > 0
+                }
+                else
+                    cardproduct.favorite > 0
             }
         }
         //log ("recomposition favorite")
@@ -223,20 +237,26 @@ fun CardProduct(product: Product, state: ModalBottomSheetState) {
                 .size(24.dp)
         )
         Image(
-            painter = if (isFavorite.value) painterResource(R.drawable.ic_favorite)
-            else painterResource(R.drawable.ic_favorite_border),
+            //painter = if (isFavorite.value) painterResource(R.drawable.ic_favorite)
+            painter = if (isfavorite.value) painterResource(R.drawable.ic_favorite)
+                else painterResource(R.drawable.ic_favorite_border),
             contentDescription = null,
             contentScale = ContentScale.None,
-            colorFilter = if (isFavorite.value) ColorFilter.tint(ImageFavoriteOn)
+            colorFilter = if (isfavorite.value) ColorFilter.tint(ImageFavoriteOn)
+            //if (isFavorite.value) ColorFilter.tint(ImageFavoriteOn)
             else ColorFilter.tint(ImageFavoriteOff),
             modifier = modifier
                 .clip(CircleShape)
                 .size(24.dp)
                 .clickable/*(interactionSource = remember { MutableInteractionSource() },
                            indication = rememberRipple(radius = 16.dp)) */{
-                    val value: Byte = if (product.favorite > 0) 0 else 1
-                    product.favorite = value//if (isFavorited.value) 1 else 0
-                    action(value > 0)
+                    //val value: Byte = if (cardproduct.favorite > 0) 0 else 1
+                    cardproduct.favorite = if (cardproduct.favorite > 0) 0 else 1
+                    //product.favorite = value//if (isFavorited.value) 1 else 0
+                    val checked = cardproduct.favorite > 0
+                    //log("checked = $checked")
+                    viewModel.setSelectedProduct(cardproduct)
+                    action(checked)
                 }
         )
     }
@@ -331,13 +351,13 @@ fun CardProduct(product: Product, state: ModalBottomSheetState) {
         visible.targetState = true
     Box(
         modifier = Modifier
-        .width(CARD_SIZE.dp)
-       /* .onGloballyPositioned { coordinates ->
+            .width(CARD_SIZE.dp)
+            /* .onGloballyPositioned { coordinates ->
             heightCard = coordinates.size.height
           //  log ("height = ${heightCard.Dp}")
                 //animateSize.value = coordinates.size.toSize()
         }*/
-        .padding(vertical = 10.dp))
+            .padding(vertical = 10.dp))
         {
 
 
