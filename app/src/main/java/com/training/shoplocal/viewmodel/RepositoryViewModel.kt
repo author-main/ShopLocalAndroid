@@ -191,7 +191,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                         _products.value.clear()
                     }
                     loadedPortion = part
-                    //setSelectedProduct(Product())
+
                     val list = _products.value.toMutableList().apply { addAll(listProducts) }
                     _products.value = list
                 } else {
