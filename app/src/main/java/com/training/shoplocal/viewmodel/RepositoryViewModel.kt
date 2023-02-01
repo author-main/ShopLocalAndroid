@@ -8,6 +8,7 @@ import com.training.shoplocal.classes.*
 import com.training.shoplocal.classes.downloader.MemoryCache
 import com.training.shoplocal.classes.fodisplay.FieldFilter
 import com.training.shoplocal.classes.fodisplay.ItemFilter
+import com.training.shoplocal.classes.fodisplay.OrderDisplay
 import com.training.shoplocal.classes.screenhelpers.DataScreen
 import com.training.shoplocal.repository.Repository
 import com.training.shoplocal.screens.ScreenItem
@@ -56,7 +57,11 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     @JvmName("setSelectedProduct1")
     fun setSelectedProduct(product: Product){
-       //  log("changed Selected Product, favorite = ${product.favorite}")
+        /*if (product.favorite < 1) {
+            if (OrderDisplay.getInstance().getFavorite() == 1) {
+                _products.value.remove(product)
+            }
+        }*/
         _selectedProduct.value = product.copy(favorite = product.favorite)
     }
 
@@ -265,7 +270,34 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     }
 
 
-    fun setProductFavorite(id: Int, value: Boolean){
+    fun setProductFavorite(product: Product){
+        //val favorite: Byte = if (product.favorite > 0) 1 else 0
+        //log("favorite ${product.favorite}")
+
+        viewModelScope.launch {
+            repository.updateFavorite(USER_ID, product.id, product.favorite)
+        }
+        var currentProduct: Product? = null
+        products.value.find { it.id== product.id }?.let {
+            it.favorite = product.favorite
+            currentProduct = it
+        }
+        if (product.favorite < 1) {
+            if (OrderDisplay.getInstance().getFavorite() == 1) {
+                currentProduct?.let{
+                    //log("delete favorite item")
+                    val list = _products.value.toMutableList()
+                    list.remove(it)
+                    _products.value = list
+                }
+
+            }
+        }
+        setSelectedProduct(product)
+    }
+
+
+    /*fun setProductFavorite(id: Int, value: Boolean){
         val favorite: Byte = if (value) 1 else 0
         products.value.find { it.id== id }?.let{
             it.favorite = favorite
@@ -274,7 +306,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                 repository.updateFavorite(USER_ID, it.id, favorite)
             }
         }
-    }
+    }*/
 
     fun nextPortionAvailable() =
         loadedPortion + 1<= maxPortion

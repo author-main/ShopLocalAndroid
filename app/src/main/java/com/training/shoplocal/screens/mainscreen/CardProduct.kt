@@ -195,13 +195,14 @@ fun CardProduct(product: Product, state: ModalBottomSheetState) {
                 .clickable {
                     scope.launch {
                         viewModel.setSelectedProduct(cardproduct)
+                        //log("card favorite ${cardproduct.favorite}")
                         state.show()
                     }
                 }
         )
     }
     @Composable
-    fun ButtonFavorite(modifier: Modifier, action: (checked: Boolean)-> Unit){
+    fun ButtonFavorite(modifier: Modifier){
 
       /*  var checked by remember {
             mutableStateOf(cardproduct.favorite > 0)
@@ -253,10 +254,11 @@ fun CardProduct(product: Product, state: ModalBottomSheetState) {
                     //val value: Byte = if (cardproduct.favorite > 0) 0 else 1
                     cardproduct.favorite = if (cardproduct.favorite > 0) 0 else 1
                     //product.favorite = value//if (isFavorited.value) 1 else 0
-                    val checked = cardproduct.favorite > 0
+                    //val checked = cardproduct.favorite > 0
                     //log("checked = $checked")
-                    viewModel.setSelectedProduct(cardproduct)
-                    action(checked)
+                    //viewModel.setSelectedProduct(cardproduct)
+                    viewModel.setProductFavorite(cardproduct)
+                   // action(checked)
                 }
         )
     }
@@ -464,10 +466,10 @@ fun CardProduct(product: Product, state: ModalBottomSheetState) {
                         log("click")
                     }
                     ButtonFavorite(modifier = Modifier.align(Alignment.TopEnd)
-                    ) {
+                    )/* {
                         //log("setProductFavorite")
                         viewModel.setProductFavorite(product.id, it)
-                    }
+                    }*/
                 }
             }
 

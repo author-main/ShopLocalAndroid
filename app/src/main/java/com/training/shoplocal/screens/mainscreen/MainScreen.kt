@@ -74,7 +74,9 @@ import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.roundToInt
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class,
+    ExperimentalFoundationApi::class
+)
 @Composable
 fun MainScreen(state: ModalBottomSheetState){
     val viewModel: RepositoryViewModel = viewModel()
@@ -768,7 +770,8 @@ fun MainScreen(state: ModalBottomSheetState){
                             //log("item${product.id}")
                             // items(products.size, key = {}) { index ->
                             Row(
-                                modifier = Modifier.fillMaxWidth(),
+                                modifier = Modifier.fillMaxWidth()
+                                    .animateItemPlacement(),
                                 horizontalArrangement = Arrangement.SpaceEvenly
                             ) {
                              //   calcHeight = 0

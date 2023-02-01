@@ -131,12 +131,7 @@ private fun BottomSheetContent(state: ModalBottomSheetState){
                 0
             else
                 1
-       // log("favorite = $favorite")
-
-       // OrderDisplay.getInstance().setFavorite(favorite.toInt())
-        //log("favorite = ${OrderDisplay.getInstance().getFavorite()}")
-
-        viewModel.setProductFavorite(product.id, favorite > 0)
+        viewModel.setProductFavorite(product.copy(favorite = favorite))
         hide()
     }
     BottomSheetItem(R.drawable.ic_product_bs, textItems[2]){
