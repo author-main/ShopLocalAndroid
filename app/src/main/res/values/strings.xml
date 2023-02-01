@@ -25,6 +25,7 @@
         <item>Профиль</item>
     </string-array>
     <string-array name="bottomsheet_product_items">
+        <item>Добавить в корзину</item>
         <item>Все товары данного бренда</item>
         <item>Поместить в избранное</item>
         <item>Похожие товары</item>

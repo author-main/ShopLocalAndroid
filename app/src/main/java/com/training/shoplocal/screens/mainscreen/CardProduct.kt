@@ -20,9 +20,11 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -481,25 +483,74 @@ fun CardProduct(product: Product, state: ModalBottomSheetState) {
                 color = TextPriceDiscount)*/
 
             // < * Text Price
-                Card(
-                    modifier = Modifier.padding(top = 4.dp),
-                    backgroundColor = BgTextPrice,
-                    shape = RoundedCornerShape(6.dp)
-                ){
-                    Text(modifier = Modifier.padding(horizontal = 4.dp),
-                        fontSize = 15.sp,
-                        text = getSalePrice(product.price, product.discount),
+            Row(modifier = Modifier
+                .fillMaxSize(),
+                verticalAlignment = Alignment.CenterVertically) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Card(
+                        modifier = Modifier.padding(top = 4.dp),
+                        backgroundColor = BgTextPrice,
+                        shape = RoundedCornerShape(6.dp)
+                    ) {
+                        Text(
+                            modifier = Modifier.padding(horizontal = 4.dp),
+                            fontSize = 15.sp,
+                            text = getSalePrice(product.price, product.discount),
+                            fontWeight = FontWeight.SemiBold,
+                            color = TextPrice
+                        )
+                    }
+                    Text(
+                        modifier = Modifier.padding(top = 4.dp),
+                        fontSize = 14.sp,
+                        text = getFormattedPrice(product.price),
                         fontWeight = FontWeight.SemiBold,
-                        color = TextPrice)
+                        style = TextStyle(textDecoration = TextDecoration.LineThrough),
+                        color = TextPriceDiscount
+                    )
+                    /*val promostr: String =
+                        if (product.star >= 4)
+                            getStringResource(R.string.text_bestseller)
+                        else if (product.discount > 0)
+                            getStringResource(R.string.text_action)
+                        else
+                            ""
+                    if (promostr.isNotEmpty())
+                        Text(promostr,
+                            fontSize = 14.sp,
+                            color = TextPromotion)*/
+
                 }
-                Text(modifier = Modifier.padding(top = 4.dp),
-                    fontSize = 14.sp,
-                    text = getFormattedPrice(product.price),
-                    fontWeight = FontWeight.SemiBold,
-                    style = TextStyle(textDecoration = TextDecoration.LineThrough),
-                    color = TextPriceDiscount)
+
+                Box(Modifier
+                    //.background(Color.Red)
+                 //   .border(1.dp, TextFieldBg, CircleShape)
+                    .background(PrimaryDark, CircleShape)
+                    .clip(CircleShape)
+                    .size(32.dp)
+                    .clickable {  },
+                ) {
+                    Image(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .size(18.dp)
+                            //.padding(all = 4.dp)
+                            //.size(44.dp)
+                            /*.clickable(
+                                /* interactionSource = interactionSource,
+                            indication = null*/
+                            ) {
+
+                            }*/,
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_addcart),
+                        colorFilter = ColorFilter.tint(SelectedItemBottomNavi),
+                        contentDescription = null
+                    )
+                }
+            }
+
             val promostr: String =
-                if (product.star > 4)
+                if (product.star >= 4)
                     getStringResource(R.string.text_bestseller)
                 else if (product.discount > 0)
                     getStringResource(R.string.text_action)

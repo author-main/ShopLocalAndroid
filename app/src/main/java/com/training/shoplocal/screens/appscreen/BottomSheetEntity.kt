@@ -97,13 +97,22 @@ private fun BottomSheetContent(state: ModalBottomSheetState){
     val selectedProduct = viewModel.selectedProduct.collectAsState()
     fun hide(){
         scope.launch {
-            delay(150)
+        //    delay(150)
             state.hide()
         }
     }
 
     val textItems = stringArrayResource(id = R.array.bottomsheet_product_items)
-    BottomSheetItem(R.drawable.ic_brend_bs, textItems[0]){
+    BottomSheetItem(R.drawable.ic_addcart, textItems[0]){
+        //   MainMenuRouter.clickTo(MainMenuItem.BrandItem)
+        val product = viewModel.selectedProduct.value
+       /* val brand = product.brand ?: 0
+        if (brand > 0) {
+            log("brand $brand")
+        }*/
+        hide()
+    }
+    BottomSheetItem(R.drawable.ic_brend_bs, textItems[1]){
      //   MainMenuRouter.clickTo(MainMenuItem.BrandItem)
         val product = viewModel.selectedProduct.value
         val brand = product.brand ?: 0
@@ -115,9 +124,9 @@ private fun BottomSheetContent(state: ModalBottomSheetState){
     BottomSheetItem(R.drawable.ic_favorite_bs, run {
         //val selectedProduct = viewModel.selectedProduct.collectAsState()
         if (selectedProduct.value.favorite > 0)
-            textItems[4]
+            textItems[5]
         else
-            textItems[1]
+            textItems[2]
      /*   LocalSelectedProduct.current?.let{product ->
             if (product.favorite > 0)
                 textItems[4]
@@ -134,7 +143,7 @@ private fun BottomSheetContent(state: ModalBottomSheetState){
         viewModel.setProductFavorite(product.copy(favorite = favorite))
         hide()
     }
-    BottomSheetItem(R.drawable.ic_product_bs, textItems[2]){
+    BottomSheetItem(R.drawable.ic_product_bs, textItems[3]){
         val product = viewModel.selectedProduct.value
         val category = product.category ?: 0
         if (category > 0) {
@@ -142,7 +151,7 @@ private fun BottomSheetContent(state: ModalBottomSheetState){
         }
         hide()
     }
-    BottomSheetItem(R.drawable.ic_cancel_bs, textItems[3], divider = false){
+    BottomSheetItem(R.drawable.ic_cancel_bs, textItems[4], divider = false){
        hide()
     }
 
