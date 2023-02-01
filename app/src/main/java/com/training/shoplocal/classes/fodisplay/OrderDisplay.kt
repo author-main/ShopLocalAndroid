@@ -20,8 +20,6 @@ class OrderDisplay: ProviderDataDisplay{
     data class SortData(var sortType: SORT_TYPE             = SORT_TYPE.ASCENDING,
                         var sortProperty: SORT_PROPERTY     = SORT_PROPERTY.PRICE)
 
-
-
     private val sortData                = SortData()
     private var filterData              = FilterData()
     private var currentScreen:Int       = ANY_VALUE
