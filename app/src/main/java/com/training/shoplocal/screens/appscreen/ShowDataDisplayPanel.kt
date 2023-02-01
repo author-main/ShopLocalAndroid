@@ -46,7 +46,7 @@ import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
-fun ShowDataDisplayPanel(modifier: Modifier, showFilterView: () -> Unit){//}, hide: Boolean){
+fun ShowDataDisplayPanel(modifier: Modifier, onClick: (index: Int) -> Unit){//}, hide: Boolean){
 //    val viewModel: RepositoryViewModel = viewModel()
     /*val panelHeightPx = with(LocalDensity.current) { 40.dp.roundToPx().toFloat() }
     val panelOffsetHeightPx = remember { mutableStateOf(0f) }
@@ -124,7 +124,9 @@ fun ShowDataDisplayPanel(modifier: Modifier, showFilterView: () -> Unit){//}, hi
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
                         border = BorderStroke(0.dp, Color.Transparent),
                         contentPadding = PaddingValues(horizontal = 8.dp),
-                        onClick = { isShowMenu = true }) {
+                        onClick = {
+                            isShowMenu = true
+                        }) {
                         val sortText = sortItems[OrderDisplay.getInstance().getSortProperty().value]
                         val asc = OrderDisplay.getInstance().getSortType().value == 0 // ASCENDING
                         Icon(
@@ -149,7 +151,7 @@ fun ShowDataDisplayPanel(modifier: Modifier, showFilterView: () -> Unit){//}, hi
                         border = BorderStroke(0.dp, Color.Transparent),
                         contentPadding = PaddingValues(horizontal = 8.dp),
                         onClick = {
-                            showFilterView()
+                            onClick(1)
                             //viewModel.putComposeViewStack(ComposeView.FILTER)
                         }) {
                         Icon(
@@ -177,6 +179,7 @@ fun ShowDataDisplayPanel(modifier: Modifier, showFilterView: () -> Unit){//}, hi
                     fun changeSortProperty(value: SORT_PROPERTY) {
                         OrderDisplay.getInstance().setSortProperty(value)
                         isShowMenu = false
+                        onClick(0)
                     }
                     DropdownMenuItem(onClick = {
                         changeSortProperty(SORT_PROPERTY.PRICE)

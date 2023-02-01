@@ -22,7 +22,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     //var SIZE_PORTION = 10
     private val _progressCRUD = MutableStateFlow<Boolean>(false)
     val progressCRUD = _progressCRUD.asStateFlow()
-    fun showProgressCRUD(value: Boolean = true) {
+    private fun showProgressCRUD(value: Boolean = true) {
         _progressCRUD.value = value
     }
 
@@ -426,12 +426,12 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         val equalValue = composeViewStack.isNotEmpty() && composeViewStack.peek() == value
         if (!equalValue)
             composeViewStack.push(value)
-      //  log(composeViewStack)
+       // log(composeViewStack)
     }
 
     fun removeComposeViewStack(): ComposeView {
-//        val value = composeViewStack.pop()
-//        log(composeViewStack)
+        /*val value = composeViewStack.pop()
+        log(composeViewStack)*/
         return composeViewStack.pop()
     }
 

@@ -891,11 +891,18 @@ fun MainScreen(state: ModalBottomSheetState){
 
                     .height(40.dp)
                     .background(MaterialTheme.colors.primary),
-                ) {
-                    viewModel.hideBottomNavigation()
-                    filterScreenDisplayed = true
-                    showFloatingButton = false
-                    viewModel.putComposeViewStack(ComposeView.FILTER)
+                ) {index ->
+                    val SHOW_FILTER  = 1
+                    val CHANGE_ORDER = 0
+                    if (index == SHOW_FILTER) {
+                        viewModel.hideBottomNavigation()
+                        filterScreenDisplayed = true
+                        showFloatingButton = false
+                        viewModel.putComposeViewStack(ComposeView.FILTER)
+                    }
+                    if (index == CHANGE_ORDER) {
+                        viewModel.filterProducts(searchScreenDisplayed)
+                    }
                 }
 
 

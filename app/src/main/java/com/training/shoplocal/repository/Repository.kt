@@ -10,6 +10,7 @@ import com.training.shoplocal.classes.fodisplay.SORT_TYPE
 import com.training.shoplocal.classes.screenhelpers.DataScreen
 import com.training.shoplocal.classes.searcher.SearchQueryStorage
 import com.training.shoplocal.encodeBase64
+import com.training.shoplocal.log
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.screens.ScreenRouter
 import kotlin.collections.HashMap
