@@ -330,12 +330,14 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     fun saveScreenProducts(key: ScreenRouter.KEYSCREEN, firstIndex: Int) {//, firstOffset: Int) {
         repository.saveScreenProducts(key,
 //            DataScreen(firstIndex, firstOffset, maxPortion, products.value)
-            DataScreen(firstIndex, maxPortion, products.value)
+            DataScreen(firstIndex, maxPortion, products.value, OrderDisplay.clone())
         )
     }
 
     fun restoreScreenProducts(key: ScreenRouter.KEYSCREEN): Int{//} Pair<Int, Int> {
+    //    log("restore")
         val data = repository.restoreScreenProducts(key)
+        OrderDisplay.restoreDataDisplay(data.datadisplay)
         maxPortion = data.maxPortion
         _products.value = data.products//repository.restoreScreenProducts(key)//.toMutableList()
         loadedPortion = getPortion() // количество загруженных порций

@@ -25,7 +25,7 @@ class OrderDisplay: ProviderDataDisplay{
     private val sortData                = SortData()
     private var filterData              = FilterData()
     private var currentScreen:Int       = ANY_VALUE
-    private var completeUpdate = true
+   // private var completeUpdate = true
     //var state by mutableStateOf(false)
 
 
@@ -43,7 +43,7 @@ class OrderDisplay: ProviderDataDisplay{
         return filterData.discount
     }
 
-    override var state: MutableState<Boolean> = mutableStateOf(false)
+    //override var state: MutableState<Boolean> = mutableStateOf(false)
 
     override fun setSortType(value: SORT_TYPE) {
         sortData.sortType = value
@@ -106,7 +106,7 @@ class OrderDisplay: ProviderDataDisplay{
         return currentScreen
     }
 
-    private fun updateState(){
+    /*private fun updateState(){
         if (completeUpdate)
             state.value = !state.value
     }
@@ -116,7 +116,7 @@ class OrderDisplay: ProviderDataDisplay{
     fun endUpdate(){
         completeUpdate = true
         updateState()
-    }
+    }*/
 
     private fun invertSortType(){
         if (sortData.sortType == SORT_TYPE.ASCENDING)
@@ -177,12 +177,33 @@ class OrderDisplay: ProviderDataDisplay{
 
     companion object {
         private lateinit var instance: ProviderDataDisplay//OrderDisplay
+        //private var backupData: ProviderDataDisplay? = null
         @Synchronized
         fun getInstance(): ProviderDataDisplay{//OrderDisplay {
             if (!this::instance.isInitialized)
                 instance = OrderDisplay()
             return instance
         }
+
+        /*fun saveDataDisplay(){
+            backupData = instance
+        }*/
+
+        fun clone(): ProviderDataDisplay{
+            val dataDisplay = OrderDisplay()
+            with (dataDisplay) {
+                filterData              = instance.getFilter().copy()
+                sortData.sortType       = instance.getSortType()
+                sortData.sortProperty   = instance.getSortProperty()
+                currentScreen           = instance.getScreen()
+            }
+            return dataDisplay
+        }
+
+        fun restoreDataDisplay(backup: ProviderDataDisplay){
+                instance = backup
+        }
+
 
         fun resetFilter(): Int {
             getInstance()

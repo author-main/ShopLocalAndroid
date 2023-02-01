@@ -118,7 +118,7 @@ fun ShowDataDisplayPanel(modifier: Modifier, onClick: (index: Int) -> Unit){//},
                         .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    val recompose = OrderDisplay.getInstance().state
+                  //  val recompose = OrderDisplay.getInstance().state
                     Button(
                         elevation = null,
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),

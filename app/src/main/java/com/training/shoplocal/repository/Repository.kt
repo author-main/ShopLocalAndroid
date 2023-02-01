@@ -206,10 +206,10 @@ class Repository: DAOinterface {
         log("search query $query")*/
         val order64 = encodeBase64(OrderDisplay.getFilterQuery())
         val query64 = encodeBase64(query)
-        log("query = $query64")
+        /*log("query = $query64")
         log("filter = $order64")
         log("UUID = $UUID_query")
-        log("userid = $userId")
+        log("userid = $userId")*/
 
         getFoundProducts(query64, order64, portion, UUID_query, userId, action)
     }
