@@ -202,10 +202,15 @@ class Repository: DAOinterface {
         orderDisplay.setFavorite(1)
         orderDisplay.setPriceRange(10.00f to 100.00f)*/
         //log(UUID_query)
+        /*log("filter ${OrderDisplay.getFilterQuery()}")
+        log("search query $query")*/
         val order64 = encodeBase64(OrderDisplay.getFilterQuery())
         val query64 = encodeBase64(query)
-      /*  log(query64)
-        log(order64)*/
+        log("query = $query64")
+        log("filter = $order64")
+        log("UUID = $UUID_query")
+        log("userid = $userId")
+
         getFoundProducts(query64, order64, portion, UUID_query, userId, action)
     }
 
