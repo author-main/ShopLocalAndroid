@@ -21,6 +21,12 @@ import kotlin.collections.HashMap
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     //var SIZE_PORTION = 10
+    /*private val _accessFinger = MutableStateFlow<Boolean>(false)
+    val accessFinger = _accessFinger.asStateFlow()
+    private fun accessFingerPrint(value: Boolean) {
+        _accessFinger.value = value
+    }*/
+
     private var searchQuery: String = EMPTY_STRING
     private val _progressCRUD = MutableStateFlow<Boolean>(false)
     val progressCRUD = _progressCRUD.asStateFlow()
@@ -79,12 +85,15 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     val products = _products.asStateFlow()
 
     private val actionLogin: (result: Int) -> Unit = {
+        //log("login")
         val result = it > 0
         if (result) {
+            log("authorized")
+            //accessFingerPrint(true)
             maxPortion = -1
             USER_ID = it
-            ScreenRouter.navigateTo(ScreenItem.MainScreen)
-            setOrderDisplay(FieldFilter.SCREEN, ScreenItem.MainScreen.key.value)
+            /*ScreenRouter.navigateTo(ScreenItem.MainScreen)
+            setOrderDisplay(FieldFilter.SCREEN, ScreenItem.MainScreen.key.value)*/
             composeViewStack.pop()
             putComposeViewStack(ComposeView.MAIN)
             getBrands()

@@ -39,6 +39,16 @@ import java.time.format.TextStyle
 
 @Composable
 fun LoginView(state: LoginViewState) {
+   /* val viewModel: RepositoryViewModel = viewModel()
+    val accessFinger by viewModel.accessFinger.collectAsState()
+    log("access finger $accessFinger")*/
+  /*  LaunchedEffect(accessFinger) {
+        if (accessFinger)
+            state.fillPassword()
+    }*/
+
+
+
     @Composable
     fun textChar(value: Char, color: Color){
         Text(

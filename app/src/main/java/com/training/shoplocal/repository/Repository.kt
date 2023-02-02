@@ -47,6 +47,11 @@ class Repository: DAOinterface {
         accessUser.onLogin(action, email, password, finger)
     }
     fun onFingerPrint(action: ((result: Int) -> Unit)?, email: String) {
+      /*  val actionState : (result: Int) -> Unit = {
+            loginState.fillPassword()
+            action?.invoke(it)
+        }
+        accessUser.onFingerPrint(actionState, email)*/
         accessUser.onFingerPrint(action, email)
     }
     fun removePassword(){

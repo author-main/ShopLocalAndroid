@@ -48,6 +48,7 @@ class LoginViewState {
     fun isProgress() = progress
 
     fun showProgress(){
+        fillPassword()
         progress = true
     }
 
@@ -79,6 +80,11 @@ class LoginViewState {
         animated = false
         password = "xxxxx"
         password = ""
+    }
+
+    fun fillPassword(){
+        animated = false
+        password = "xxxxx"
     }
 
     fun setFocus(value: Boolean) {

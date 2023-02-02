@@ -56,6 +56,9 @@ fun HeaderView(modifier: Modifier){
 
 @Composable
 fun BodyView(state: LoginViewState, modifier: Modifier){
+    /*val viewModel: RepositoryViewModel = viewModel()
+    val accessFinger by viewModel.accessFinger.collectAsState()
+    log("accessFinger $accessFinger")*/
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         LoginView(state)
             //Spacer(modifier = Modifier.height(8.dp))
@@ -76,6 +79,10 @@ fun FooterView(state: LoginViewState, modifier: Modifier){
 @Composable
 fun LoginScreen(state: LoginViewState){
     val viewModel: RepositoryViewModel = viewModel()
+    /*val accessFinger by viewModel.accessFinger.collectAsState()
+    log("accessFinger $accessFinger")*/
+
+
     val dataSnackbar: Triple<String, Boolean, MESSAGE> by viewModel.snackbarData.collectAsState()
     ConstraintLayout(modifier = Modifier.background(PrimaryDark)){
         val (header, body, footer) = createRefs()
