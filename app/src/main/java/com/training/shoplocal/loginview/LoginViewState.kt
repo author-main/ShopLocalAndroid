@@ -82,9 +82,10 @@ class LoginViewState {
         password = ""
     }
 
-    fun fillPassword(){
+    private fun fillPassword(){
         animated = false
-        password = "xxxxx"
+        if (password.isBlank())
+            password = "xxxxx"
     }
 
     fun setFocus(value: Boolean) {
