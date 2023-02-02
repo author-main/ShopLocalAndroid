@@ -194,5 +194,6 @@ fun ShowSearchHistory(textSearch: MutableState<String>, searchState: State<Searc
 }
 
 
-// * Добавить индекс XAMMP -> MySQL -> Admin: ALTER TABLE `products` ADD FULLTEXT INDEX `product_search_idx` (`name` ASC, `description` ASC);
+// * Добавить индекс XAMMP -> MySQL -> Admin:
+// ALTER TABLE `products` ADD FULLTEXT INDEX `product_search_idx` (`name` ASC, `description` ASC);
 //SELECT * FROM `products` WHERE MATCH (name) AGAINST (textSearch);
