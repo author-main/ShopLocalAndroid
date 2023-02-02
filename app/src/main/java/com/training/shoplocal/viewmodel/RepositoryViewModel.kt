@@ -85,10 +85,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     val products = _products.asStateFlow()
 
     private val actionLogin: (result: Int) -> Unit = {
-        //log("login")
         val result = it > 0
         if (result) {
-            log("authorized")
             //accessFingerPrint(true)
             maxPortion = -1
             USER_ID = it
