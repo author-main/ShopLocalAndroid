@@ -60,6 +60,7 @@ import com.training.shoplocal.classes.MESSAGE
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.classes.SIZE_PORTION
 import com.training.shoplocal.classes.fodisplay.OrderDisplay
+import com.training.shoplocal.classes.fodisplay.VIEW_MODE
 import com.training.shoplocal.classes.searcher.SearchState
 import com.training.shoplocal.dialogs.ShowMessage
 import com.training.shoplocal.dialogs.ShowProgress
@@ -759,7 +760,8 @@ fun MainScreen(state: ModalBottomSheetState){
                             .padding(horizontal = 10.dp),
                     //        .verticalScroll(verticalScrollState, true)
                     //        .height(boxWithConstraintsScope.maxHeight),
-                        columns = GridCells.Adaptive(minSize = 150.dp),
+                        //columns = GridCells.Adaptive(minSize = 150.dp),
+                        columns = GridCells.Fixed(if (OrderDisplay.getViewMode() == VIEW_MODE.CARD) 2 else 1),
                         state = stateGrid,
                         //contentPadding = PaddingValues(10.dp),
                         contentPadding = PaddingValues(top = 40.dp),
@@ -778,7 +780,7 @@ fun MainScreen(state: ModalBottomSheetState){
                                 CardProduct(/*modifier = Modifier.onGloballyPositioned { coordinates ->
                                     calcHeight = coordinates.size.height
                                 },*/
-                                product, state = state)
+                                product, showMoreButton = !searchScreenDisplayed, state = state, modeview = OrderDisplay.getViewMode())
                             }
                         }
 

@@ -46,6 +46,7 @@ import com.training.shoplocal.classes.SERVER_URL
 import com.training.shoplocal.classes.downloader.Callback
 import com.training.shoplocal.classes.downloader.ExtBitmap
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
+import com.training.shoplocal.classes.fodisplay.VIEW_MODE
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.launch
@@ -58,8 +59,6 @@ private enum class IMAGE_STATE {
     COMPLETED,
     FAILURE
 }
-const val CARD_SIZE = 150
-
 @Composable
 fun AnimateLinkDownload(componentSize: Size) {
     if (componentSize.width > 0) {
@@ -167,10 +166,13 @@ data class ImageLink(val link: String, val md5: String)
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun CardProduct(product: Product, state: ModalBottomSheetState) {
+fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBottomSheetState, modeview: VIEW_MODE = VIEW_MODE.CARD) {
+    val mode_View       = rememberUpdatedState(newValue = modeview)
+    val show_MoreButton = rememberUpdatedState(newValue = showMoreButton)
     val cardproduct = remember {
         product
     }
+    val CARD_SIZE = if (mode_View.value == VIEW_MODE.CARD) 150 else 100
     val linkImages: List<ImageLink> = remember {
         val list = mutableListOf<ImageLink>()
         product.linkimages?.forEach {
@@ -260,7 +262,7 @@ fun CardProduct(product: Product, state: ModalBottomSheetState) {
                     //log("checked = $checked")
                     //viewModel.setSelectedProduct(cardproduct)
                     viewModel.setProductFavorite(cardproduct)
-                   // action(checked)
+                    // action(checked)
                 }
         )
     }
@@ -463,10 +465,14 @@ fun CardProduct(product: Product, state: ModalBottomSheetState) {
                             }
                     }
                     DiscountPanel(modifier = Modifier.align(Alignment.BottomStart), percent = product.discount)
-                    ButtonMore(modifier = Modifier.align(Alignment.BottomEnd)
-                    ) {
-                        log("click")
+                    if (show_MoreButton.value) {
+                        ButtonMore(
+                            modifier = Modifier.align(Alignment.BottomEnd)
+                        ) {
+                            log("click")
+                        }
                     }
+
                     ButtonFavorite(modifier = Modifier.align(Alignment.TopEnd)
                     )/* {
                         //log("setProductFavorite")
@@ -522,13 +528,14 @@ fun CardProduct(product: Product, state: ModalBottomSheetState) {
 
                 }
 
-                Box(Modifier
-                    //.background(Color.Red)
-                 //   .border(1.dp, TextFieldBg, CircleShape)
-                    .background(PrimaryDark, CircleShape)
-                    .clip(CircleShape)
-                    .size(32.dp)
-                    .clickable {  },
+                Box(
+                    Modifier
+                        //.background(Color.Red)
+                        //   .border(1.dp, TextFieldBg, CircleShape)
+                        .background(PrimaryDark, CircleShape)
+                        .clip(CircleShape)
+                        .size(32.dp)
+                        .clickable { },
                 ) {
                     Image(
                         modifier = Modifier

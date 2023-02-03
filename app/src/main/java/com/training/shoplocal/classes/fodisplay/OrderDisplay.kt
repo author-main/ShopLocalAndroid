@@ -218,6 +218,11 @@ class OrderDisplay: ProviderDataDisplay{
             instance.setViewMode(viewmode)
         }
 
+        fun getViewMode(): VIEW_MODE{
+            getInstance()
+            return instance.getViewMode()
+        }
+
         fun equalsFilterData(filter: FilterData): Boolean {
             getInstance()
             return instance.equalsFilterData(filter)
