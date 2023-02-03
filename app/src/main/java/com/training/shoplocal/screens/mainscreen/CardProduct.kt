@@ -464,7 +464,8 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                                 }
                             }
                     }
-                    DiscountPanel(modifier = Modifier.align(Alignment.BottomStart), percent = product.discount)
+                    if (mode_View.value == VIEW_MODE.CARD)
+                        DiscountPanel(modifier = Modifier.align(Alignment.BottomStart), percent = product.discount)
                     if (show_MoreButton.value) {
                         ButtonMore(
                             modifier = Modifier.align(Alignment.BottomEnd)
