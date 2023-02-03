@@ -511,7 +511,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
 
 
 
-    Box(
+  /*  Box(
         modifier = Modifier
             .width(CARD_SIZE.dp)
             /* .onGloballyPositioned { coordinates ->
@@ -520,24 +520,33 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                 //animateSize.value = coordinates.size.toSize()
         }*/
             .padding(vertical = 10.dp))
-        {
-        Column {
-            ProductImages()
-
-            Row(modifier = Modifier
-                .fillMaxSize(),
-                verticalAlignment = Alignment.CenterVertically) {
-                Column(modifier = Modifier.weight(1f)) {
-                    DiscountText()
-                    PriceText()
+        {*/
+        if (mode_View.value == VIEW_MODE.CARD) {
+            Column(
+                modifier = Modifier
+                    .width(CARD_SIZE.dp)
+                    .padding(vertical = 10.dp)
+            ) {
+                ProductImages()
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        DiscountText()
+                        PriceText()
+                    }
+                    CartButton()
                 }
-                CartButton()
+                ActionText()
+                BrendText()
+                DescriptionText()
+                StarPanel(cardproduct.star)
             }
+        } else
+            if (mode_View.value == VIEW_MODE.ROW) {
 
-            ActionText()
-            BrendText()
-            DescriptionText()
-            StarPanel(cardproduct.star)
-        }
-    }
+            }
+//    }
  }
