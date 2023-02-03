@@ -544,8 +544,8 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                 DescriptionText()
                 StarPanel(cardproduct.star)
             }
-        } else
-            if (mode_View.value == VIEW_MODE.ROW) {
+        } else { // VIEW_MODE.ROW
+            //if (mode_View.value == VIEW_MODE.ROW) {
 
             }
 //    }
