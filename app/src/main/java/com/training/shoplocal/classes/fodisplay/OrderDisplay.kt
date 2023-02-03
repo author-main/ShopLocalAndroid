@@ -22,7 +22,7 @@ class OrderDisplay: ProviderDataDisplay{
 
     private val sortData                = SortData()
     private var filterData              = FilterData()
-    private var currentScreen:Int       = ANY_VALUE
+    private var currentScreen:Int       = 1 //MAIN_SCREEN
    // private var completeUpdate = true
     //var state by mutableStateOf(false)
 
