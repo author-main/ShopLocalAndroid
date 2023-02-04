@@ -3,6 +3,7 @@ package com.training.shoplocal.screens.mainscreen
 import androidx.compose.ui.platform.LocalDensity
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.DiscretePathEffect
 import androidx.compose.animation.core.*
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.*
@@ -14,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Size
@@ -167,12 +169,17 @@ data class ImageLink(val link: String, val md5: String)
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBottomSheetState, modeview: VIEW_MODE = VIEW_MODE.CARD) {
+
     val mode_View       = rememberUpdatedState(newValue = modeview)
     val show_MoreButton = rememberUpdatedState(newValue = showMoreButton)
     val cardproduct = remember {
         product
     }
-    val CARD_SIZE = if (mode_View.value == VIEW_MODE.CARD) 150 else 100
+    fun isCardModeView() =
+        mode_View.value == VIEW_MODE.CARD
+    val fontsize = if (isCardModeView()) 14.sp else 13.sp
+    val fontSizeDescription = if (isCardModeView()) 15.sp else 14.sp
+    val CARD_SIZE = if (isCardModeView()) 150 else 110
     val linkImages: List<ImageLink> = remember {
         val list = mutableListOf<ImageLink>()
         cardproduct.linkimages?.forEach {
@@ -219,30 +226,33 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                     cardproduct.favorite > 0
             }
         }
-    Image(
-            painter = painterResource(R.drawable.ic_favorite),
-            contentDescription = null,
-            contentScale = ContentScale.None,
-            colorFilter = ColorFilter.tint(Color.White),
-            modifier = modifier
-                .size(24.dp)
-        )
-        Image(
-            painter = if (isfavorite.value) painterResource(R.drawable.ic_favorite)
+        Box(modifier = modifier) {
+            if (isCardModeView()){
+                Image(
+                painter = painterResource(R.drawable.ic_favorite),
+                contentDescription = null,
+                contentScale = ContentScale.None,
+                colorFilter = ColorFilter.tint(Color.White),
+                modifier = modifier
+                    .size(24.dp)
+            )}
+            Image(
+                painter = if (isfavorite.value) painterResource(R.drawable.ic_favorite)
                 else painterResource(R.drawable.ic_favorite_border),
-            contentDescription = null,
-            contentScale = ContentScale.None,
-            colorFilter = if (isfavorite.value) ColorFilter.tint(ImageFavoriteOn)
-            else ColorFilter.tint(ImageFavoriteOff),
-            modifier = modifier
-                .clip(CircleShape)
-                .size(24.dp)
-                .clickable/*(interactionSource = remember { MutableInteractionSource() },
+                contentDescription = null,
+                contentScale = ContentScale.None,
+                colorFilter = if (isfavorite.value) ColorFilter.tint(ImageFavoriteOn)
+                else ColorFilter.tint(ImageFavoriteOff),
+                modifier = modifier
+                    .clip(CircleShape)
+                    .size(24.dp)
+                    .clickable/*(interactionSource = remember { MutableInteractionSource() },
                            indication = rememberRipple(radius = 16.dp)) */{
-                    cardproduct.favorite = if (cardproduct.favorite > 0) 0 else 1
-                    viewModel.setProductFavorite(cardproduct)
-                }
-        )
+                        cardproduct.favorite = if (cardproduct.favorite > 0) 0 else 1
+                        viewModel.setProductFavorite(cardproduct)
+                    }
+            )
+        }
     }
 
 
@@ -257,7 +267,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
             }
         }
 //**************************************************************************************************
-        val countItems = product.linkimages?.size ?: 1 // у продукта должно быть хотя бы одно изображение
+        val countItems = cardproduct.linkimages?.size ?: 1 // у продукта должно быть хотя бы одно изображение
         val listImages = remember{
             Array<Pair<IMAGE_STATE, ImageBitmap>>(countItems) {
                 IMAGE_STATE.NONE to EMPTY_IMAGE
@@ -316,8 +326,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
             visible.targetState = true
 
         Card(modifier = Modifier
-            .size(CARD_SIZE.dp)
-            .padding(bottom = 8.dp),
+            .requiredSize(CARD_SIZE.dp),
             backgroundColor = BgCard,
             shape = RoundedCornerShape(8.dp)
         ) {
@@ -389,15 +398,15 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                         }
                     }
                 }
-                if (mode_View.value == VIEW_MODE.CARD)
-                    DiscountPanel(modifier = Modifier.align(Alignment.BottomStart), percent = cardproduct.discount)
+                //if (isCardModeView())
+                DiscountPanel(modifier = Modifier.align(if (isCardModeView()) Alignment.BottomStart else Alignment.TopStart), percent = cardproduct.discount)
                 if (show_MoreButton.value) {
                     ButtonMore(
                         modifier = Modifier.align(Alignment.BottomEnd)
                     )
                 }
-
-                ButtonFavorite(modifier = Modifier.align(Alignment.TopEnd)
+                if (isCardModeView())
+                    ButtonFavorite(modifier = Modifier.align(Alignment.TopEnd)
                 )/* {
                         //log("setProductFavorite")
                         viewModel.setProductFavorite(product.id, it)
@@ -452,9 +461,9 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
     }
 
     @Composable
-    fun CartButton(){
+    fun CartButton(modifier: Modifier){
         Box(
-            Modifier
+            modifier//Modifier
                 //.background(Color.Red)
                 //   .border(1.dp, TextFieldBg, CircleShape)
                 .background(PrimaryDark, CircleShape)
@@ -487,7 +496,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                 ""
         if (promostr.isNotEmpty())
             Text(promostr,
-                fontSize = 14.sp,
+                fontSize = fontsize,
                 color = TextPromotion)
 
     }
@@ -495,13 +504,16 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
     fun BrendText(){
         if (brand.isNotEmpty())
             Text(brand,
+                fontSize = fontsize,
                 color = TextBrand)
     }
 
     @Composable
     fun DescriptionText(){
-        Text(cardproduct.name,
+        Text(//modifier = Modifier.background(Color.Red),
+            text = cardproduct.name,
             fontFamily = FontFamily(Font(R.font.robotocondensed_light)),
+            fontSize = fontSizeDescription,
             color = TextDescription,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
@@ -521,13 +533,16 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
         }*/
             .padding(vertical = 10.dp))
         {*/
-        if (mode_View.value == VIEW_MODE.CARD) {
+        if (isCardModeView()) {
             Column(
                 modifier = Modifier
                     .width(CARD_SIZE.dp)
                     .padding(vertical = 10.dp)
             ) {
                 ProductImages()
+                Spacer(modifier = Modifier
+                    .height(8.dp)
+                    .fillMaxWidth())
                 Row(
                     modifier = Modifier
                         .fillMaxSize(),
@@ -537,7 +552,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                         DiscountText()
                         PriceText()
                     }
-                    CartButton()
+                    CartButton(Modifier.align(Alignment.Bottom))
                 }
                 ActionText()
                 BrendText()
@@ -546,7 +561,52 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
             }
         } else { // VIEW_MODE.ROW
             //if (mode_View.value == VIEW_MODE.ROW) {
+            Column() {
+                Row(
+                    Modifier
+                        //.background(Color.Red)
+                        .fillMaxWidth()
+                        //    .height(CARD_SIZE.dp)
+                        .padding(horizontal = 10.dp, vertical = 6.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                ) {
+                    ProductImages()
 
+                    Column(
+                        Modifier
+                            .weight(1f)
+                            .padding(start = 8.dp)
+                    ) {
+                        DescriptionText()
+                        Row() {
+                            Column(Modifier.weight(1f)) {
+                                ActionText()
+                                BrendText()
+                            }
+                            /*DiscountPanel(modifier = Modifier.align(CenterVertically),
+                                percent = cardproduct.discount)*/
+                            ButtonFavorite(modifier = Modifier.align(CenterVertically))
+                        }
+
+                        Row() {
+                            Column(Modifier.weight(1f)) {
+                                StarPanel(cardproduct.star)
+                                Row() {
+                                    DiscountText()
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    PriceText()
+                                }
+                            }
+                            CartButton(Modifier.align(Alignment.Bottom))
+                        }
+
+                    }
+                }
+                 Spacer(modifier = Modifier
+                     .height(1.dp)
+                     .fillMaxWidth()
+                     .background(PrimaryDark))
+            }
             }
 //    }
  }
