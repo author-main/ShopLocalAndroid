@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -41,10 +42,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.*
 import com.training.shoplocal.AppShopLocal.Companion.appContext
 import com.training.shoplocal.R
-import com.training.shoplocal.classes.DECIMAL_SEPARATOR
-import com.training.shoplocal.classes.EMPTY_IMAGE
-import com.training.shoplocal.classes.Product
-import com.training.shoplocal.classes.SERVER_URL
+import com.training.shoplocal.classes.*
 import com.training.shoplocal.classes.downloader.Callback
 import com.training.shoplocal.classes.downloader.ExtBitmap
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
@@ -498,14 +496,17 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
 
     @Composable
     fun PriceText(){
-        Text(
-            modifier = Modifier.padding(top = 4.dp),
-            fontSize = 14.sp,
-            text = getFormattedPrice(cardproduct.price),
-            fontWeight = FontWeight.SemiBold,
-            style = TextStyle(textDecoration = TextDecoration.LineThrough),
-            color = TextPriceDiscount
-        )
+        fun isDiscount() = cardproduct.discount > 0
+            Text(
+                modifier = Modifier.padding(top = 4.dp),
+                fontSize = fontsize,
+                text = if (isDiscount()) getFormattedPrice(cardproduct.price) else stringResource(
+                    id = R.string.text_nodiscounts
+                ),
+              //  fontWeight = FontWeight.SemiBold,
+                style = TextStyle(textDecoration = if (isDiscount()) TextDecoration.LineThrough else TextDecoration.None),
+                color = TextPriceDiscount
+            )
     }
 
     @Composable

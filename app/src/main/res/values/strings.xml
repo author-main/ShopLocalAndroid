@@ -45,6 +45,7 @@
     </string-array>
     <string name="text_filter">Фильтры</string>
     <string name="text_discount">Скидка</string>
+    <string name="text_nodiscounts">Без скидок</string>
     <string name="text_favorite">Избранное</string>
     <string name="text_from">от</string>
     <string name="text_to">до</string>
