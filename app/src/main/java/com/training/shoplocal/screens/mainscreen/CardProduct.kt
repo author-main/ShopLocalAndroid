@@ -629,6 +629,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                             /*DiscountPanel(modifier = Modifier.align(CenterVertically),
                                 percent = cardproduct.discount)*/
                             ButtonFavorite(modifier = Modifier.align(CenterVertically))
+                            Spacer(modifier = Modifier.width(4.dp))
                         }
 
                         Row() {
