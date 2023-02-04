@@ -283,11 +283,12 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
             mutableStateOf(false)
         }
 */
-        val downloadedImage = remember {
-            mutableStateOf(
+       /* val downloadedImage = remember {
+            mutableStateOf(false)
+           /* mutableStateOf(
                 (listImages[0].first == IMAGE_STATE.COMPLETED && !listImages[0].second.isEmpty()) || listImages[0].first == IMAGE_STATE.FAILURE
-            )
-        }
+            )*/
+        }*/
 
         /*val isDownload = remember {
             derivedStateOf {
@@ -313,43 +314,62 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                     listImages[i] = IMAGE_STATE.NONE to EMPTY_IMAGE
             }
         }
-        if (!downloadedImage.value) {
+
+
+        val isDownloadImage = remember {
+            derivedStateOf {
+              //  val loaded =
+                listImages[0].first == IMAGE_STATE.COMPLETED && !listImages[0].second.isEmpty()// || listImages[0].first == IMAGE_STATE.FAILURE
+              //  log("is download image = $loaded")
+              //  loaded
+            }
+        }
+
+
+//        if (!downloadedImage.value) {
+        if (!isDownloadImage.value) {
+
             // Запуск в области compose, если compose завершится. Блок внутри будет завершен без
             // утечки памяти и процессов.
             LaunchedEffect(Unit) {
                 // Если не нужно уменьшать изображение,
                 // используйте ImageLinkDownload.downloadImage вместо
                 // ImageLinkDownload.downloadCardImage
-            //    if (!isDownload.value) {
-                    log ("not download")
-                    ImageLinkDownloader.downloadCardImage(
-                        imageLink?.let { "$SERVER_URL/images/${it.link}" },
-                        object : Callback {
-                            override fun onComplete(image: ExtBitmap) {
-                                listImages[0] =
-                                    IMAGE_STATE.COMPLETED to image.bitmap!!.asImageBitmap()
-                                downloadedImage.value = true
-                                log ("load image true")
-                            }
+                //    if (!isDownload.value) {
+                //log ("not download")
+                ImageLinkDownloader.downloadCardImage(
+                    imageLink?.let { "$SERVER_URL/images/${it.link}" },
+                    object : Callback {
+                        override fun onComplete(image: ExtBitmap) {
+                            listImages[0] =
+                                IMAGE_STATE.COMPLETED to image.bitmap!!.asImageBitmap()
+                           // downloadedImage.value = true
+                           /* log("card product ${cardproduct.id}")
+                            log("${imageLink?.link} load image true")*/
+                            visible.targetState = true
+                        }
 
-                            override fun onFailure() {
-                                // здесь можно установить картинку по умолчанию,
-                                // в случае если картинка не загрузилась
-                                //listImages[0] = ваше изображение
-                                listImages[0] = IMAGE_STATE.FAILURE to EMPTY_IMAGE
-                                downloadedImage.value = false//true
-                                log ("load image false")
-                            }
-                        })
+                        override fun onFailure() {
+                            // здесь можно установить картинку по умолчанию,
+                            // в случае если картинка не загрузилась
+                            //listImages[0] = ваше изображение
+                            listImages[0] = IMAGE_STATE.FAILURE to EMPTY_IMAGE
+                            //downloadedImage.value = false//true
+                          //  log("load image false")
+                        }
+                    })
 
             }
-        } else
-            visible.targetState = true
+
+        } /*else
+            visible.targetState = true*/
 
         Card(modifier = Modifier
             .requiredSize(CARD_SIZE.dp),
+           // elevation = 3.dp,
             backgroundColor = BgCard,
-            shape = RoundedCornerShape(8.dp)
+           // border = BorderStroke(3.dp, PrimaryDark),
+            shape = RoundedCornerShape(16.dp)
         ) {
             Box(modifier = Modifier
                 .padding(8.dp)
@@ -360,11 +380,13 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
             ) {
                 val showDownloadProcess = remember {
                     derivedStateOf {
-                        !downloadedImage.value && !viewModel.existImageCache(imageLink?.md5)
+                        //!downloadedImage.value && !viewModel.existImageCache(imageLink?.md5)
+                        !isDownloadImage.value && !viewModel.existImageCache(imageLink?.md5)
                     }
                 }
                 if (showDownloadProcess.value)
                     AnimateLinkDownload(animateSize.value)
+
                 androidx.compose.animation.AnimatedVisibility(
                     visibleState = visible,
                     enter = fadeIn(
@@ -386,7 +408,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                                         "$SERVER_URL/images/${itemImageLink?.link}",
                                         object : Callback {
                                             override fun onComplete(image: ExtBitmap) {
-                                                //  log ("product ${product.id}, loaded image $i")
+//                                                log ("product ${product.id}, loaded image $i")
                                                 listImages[i] =
                                                     IMAGE_STATE.COMPLETED to image.bitmap!!.asImageBitmap()
                                             }
