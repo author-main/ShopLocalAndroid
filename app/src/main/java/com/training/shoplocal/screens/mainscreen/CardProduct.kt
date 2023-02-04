@@ -318,7 +318,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                             // в случае если картинка не загрузилась
                             //listImages[0] = ваше изображение
                             listImages[0]  = IMAGE_STATE.FAILURE to EMPTY_IMAGE
-                            downloadedImage.value = true
+                            downloadedImage.value = false//true
                         }
                     })
             }
