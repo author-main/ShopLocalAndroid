@@ -110,13 +110,18 @@ fun AnimateLinkDownload(componentSize: Size) {
 
 @Composable
 fun DiscountPanel(modifier: Modifier, percent: Int){
-    Card(modifier = modifier, backgroundColor = BgDiscount,
-    shape = RoundedCornerShape(6.dp)
-    ){
-        Text(modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp),
-            text = "-$percent%",
-            fontSize = 11.sp,
-            color = TextDiscount)
+    if (percent > 0) {
+        Card(
+            modifier = modifier, backgroundColor = BgDiscount,
+            shape = RoundedCornerShape(6.dp)
+        ) {
+            Text(
+                modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp),
+                text = "-$percent%",
+                fontSize = 11.sp,
+                color = TextDiscount
+            )
+        }
     }
 }
 
