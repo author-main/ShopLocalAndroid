@@ -503,6 +503,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                 text = if (isDiscount()) getFormattedPrice(cardproduct.price) else stringResource(
                     id = R.string.text_nodiscounts
                 ),
+
               //  fontWeight = FontWeight.SemiBold,
                 style = TextStyle(textDecoration = if (isDiscount()) TextDecoration.LineThrough else TextDecoration.None),
                 color = TextPriceDiscount
