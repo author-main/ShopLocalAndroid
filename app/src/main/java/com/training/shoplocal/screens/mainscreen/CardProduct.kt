@@ -267,7 +267,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
             }
         }
 //**************************************************************************************************
-        val countItems = cardproduct.linkimages?.size ?: 1 // у продукта должно быть хотя бы одно изображение
+        val countItems = remember {cardproduct.linkimages?.size ?: 1} // у продукта должно быть хотя бы одно изображение
         val listImages = remember{
             Array<Pair<IMAGE_STATE, ImageBitmap>>(countItems) {
                 IMAGE_STATE.NONE to EMPTY_IMAGE
@@ -278,11 +278,25 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
         val animateSize = remember{mutableStateOf(Size.Zero)}
         val imageLink = getLinkImage(0)//, product.linkimages)
 
+
+      /*  val downloadedImage = remember {
+            mutableStateOf(false)
+        }
+*/
         val downloadedImage = remember {
             mutableStateOf(
                 (listImages[0].first == IMAGE_STATE.COMPLETED && !listImages[0].second.isEmpty()) || listImages[0].first == IMAGE_STATE.FAILURE
             )
         }
+
+        /*val isDownload = remember {
+            derivedStateOf {
+                (listImages[0].first == IMAGE_STATE.COMPLETED && !listImages[0].second.isEmpty())
+                        || listImages[0].first == IMAGE_STATE.FAILURE
+            }
+        }*/
+
+
 
 
         /*val downloadedImage = remember{ mutableStateOf(
@@ -306,21 +320,28 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                 // Если не нужно уменьшать изображение,
                 // используйте ImageLinkDownload.downloadImage вместо
                 // ImageLinkDownload.downloadCardImage
-                ImageLinkDownloader.downloadCardImage(
-                    imageLink?.let { "$SERVER_URL/images/${it.link}" },
-                    object : Callback {
-                        override fun onComplete(image: ExtBitmap) {
-                            listImages[0] = IMAGE_STATE.COMPLETED to image.bitmap!!.asImageBitmap()
-                            downloadedImage.value = true
-                        }
-                        override fun onFailure() {
-                            // здесь можно установить картинку по умолчанию,
-                            // в случае если картинка не загрузилась
-                            //listImages[0] = ваше изображение
-                            listImages[0]  = IMAGE_STATE.FAILURE to EMPTY_IMAGE
-                            downloadedImage.value = false//true
-                        }
-                    })
+            //    if (!isDownload.value) {
+                    log ("not download")
+                    ImageLinkDownloader.downloadCardImage(
+                        imageLink?.let { "$SERVER_URL/images/${it.link}" },
+                        object : Callback {
+                            override fun onComplete(image: ExtBitmap) {
+                                listImages[0] =
+                                    IMAGE_STATE.COMPLETED to image.bitmap!!.asImageBitmap()
+                                downloadedImage.value = true
+                                log ("load image true")
+                            }
+
+                            override fun onFailure() {
+                                // здесь можно установить картинку по умолчанию,
+                                // в случае если картинка не загрузилась
+                                //listImages[0] = ваше изображение
+                                listImages[0] = IMAGE_STATE.FAILURE to EMPTY_IMAGE
+                                downloadedImage.value = false//true
+                                log ("load image false")
+                            }
+                        })
+
             }
         } else
             visible.targetState = true
