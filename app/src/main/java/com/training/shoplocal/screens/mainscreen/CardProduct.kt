@@ -384,9 +384,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
             ) {
                 val showDownloadProcess = remember {
                     derivedStateOf {
-                        //!downloadedImage.value && !viewModel.existImageCache(imageLink?.md5)
-                        !(listImages[0].first == IMAGE_STATE.COMPLETED && !listImages[0].second.isEmpty())
-                        //!isDownloadImage.value
+                        !isDownloadImage.value
                                 && !viewModel.existImageCache(imageLink?.md5)
                     }
                 }
