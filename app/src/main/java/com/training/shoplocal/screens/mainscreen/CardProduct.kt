@@ -181,7 +181,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
     fun isCardModeView() =
         mode_View.value == VIEW_MODE.CARD
     val fontsize = if (isCardModeView()) 14.sp else 13.sp
-    val fontSizeDescription = if (isCardModeView()) 15.sp else 14.sp
+    val fontSizeDescription = 15.sp//if (isCardModeView()) 16.sp else 15.sp
     val CARD_SIZE = if (isCardModeView()) 150 else 110
     val linkImages: List<ImageLink> = remember {
         val list = mutableListOf<ImageLink>()
