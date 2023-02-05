@@ -58,21 +58,23 @@ class DownloadImageTask(private val link: String, private val reduce: Boolean, v
                 //    log("$hash - загружено из Инет")
                 }
             }
-        } catch (_: Exception) {}
-
-        if (bitmap == null) {
-            source = Source.DRIVE_CACHE
-            bitmap = loadBitmap(filename, reduce)
-            //log("$hash - загружено из DriveCache")
+        } catch (_: Exception) {
+            //log("error image download")
         }
 
         if (bitmap == null) {
+            bitmap = loadBitmap(filename, reduce)
+            if (bitmap == null) {
+                bitmap = EMPTY_IMAGE.asAndroidBitmap()
+                source = Source.NONE
+            } else
+                source = Source.DRIVE_CACHE
+        }
+
+/*        if (bitmap == null) {
             bitmap = EMPTY_IMAGE.asAndroidBitmap()
             source = Source.NONE
-         //   log("$hash - ошибка загрузки")
-        /*    source = Source.DRIVE_CACHE
-            bitmap = loadBitmap(filename, reduce)*/
-        }
+        }*/
 
         /*Handler(Looper.getMainLooper()).post {
             Thread.sleep(3000)

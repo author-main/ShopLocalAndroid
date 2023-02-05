@@ -43,7 +43,7 @@ class ImageLinkDownloader private constructor() {
         val md5link = md5(fileNameFromPath(link))
         val bitmapMemory = MemoryCache.get(md5link)
         if (bitmapMemory != null) {
-            log ("from memory cache $md5link")
+            //log ("from memory cache $md5link")
             val extBitmap = ExtBitmap(bitmapMemory, Source.MEMORY_CACHE)
             callback.onComplete(extBitmap)
             return
