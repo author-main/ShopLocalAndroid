@@ -37,6 +37,12 @@ class LoginViewState {
 
 //    var onLogin: ((password:String) -> Boolean)? = null
 
+    fun reset(){
+        progress = false
+        errorEmail = false
+        password = ""
+    }
+
     @JvmName("getErrorEmail1")
     fun getErrorEmail() = errorEmail
 

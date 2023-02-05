@@ -141,6 +141,10 @@ class Repository: DAOinterface {
      * @param key идентификатор screen
      * @return данные текущего экрана
     */
+    fun clearMapScreenProducts(){
+        MapScreenProducts.clear()
+    }
+
     fun restoreScreenProducts(key: ScreenRouter.KEYSCREEN): DataScreen {
         //список продуктов List&ltProduct&gt;
       //  log(MapScreenProducts[key]?.firstItemIndex.toString())

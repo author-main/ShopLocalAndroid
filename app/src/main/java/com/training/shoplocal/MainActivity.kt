@@ -35,6 +35,9 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
 //        val context = LocalContext.current as FragmentActivity
 //        log("start app")
         viewModel.passContextFingerPrint(this)
+        viewModel.setOnCloseApp {
+            this.finish()
+        }
 //        val repository = AppShopLocal.appRepository();
         //val user = getUserData()
 

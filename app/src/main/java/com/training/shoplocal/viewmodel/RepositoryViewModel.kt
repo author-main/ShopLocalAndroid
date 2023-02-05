@@ -27,6 +27,18 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         _accessFinger.value = value
     }*/
 
+    private var onCloseApp: (() -> Unit)? = null
+    fun setOnCloseApp(value:() -> Unit ) {
+        onCloseApp = value
+    }
+    fun closeApp(){
+        composeViewStack.removeAllElements()
+        repository.clearMapScreenProducts()
+        repository.loginState.reset()
+        _products.value.clear()
+        onCloseApp?.invoke()
+    }
+
     private var searchQuery: String = EMPTY_STRING
     private val _progressCRUD = MutableStateFlow<Boolean>(false)
     val progressCRUD = _progressCRUD.asStateFlow()
@@ -85,6 +97,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     val products = _products.asStateFlow()
 
     private val actionLogin: (result: Int) -> Unit = {
+//        log("login")
         val result = it > 0
         if (result) {
             //accessFingerPrint(true)
