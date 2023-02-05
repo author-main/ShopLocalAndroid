@@ -347,8 +347,8 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                             listImages[0] =
                                 IMAGE_STATE.COMPLETED to image.bitmap!!.asImageBitmap()
                            // downloadedImage.value = true
-                           /* log("card product ${cardproduct.id}")
-                            log("${imageLink?.link} load image true")*/
+                          //  log("card product $listImages[0]")
+                            //log("${imageLink?.link} load image true")
                             visible.targetState = true
                         }
 
@@ -357,6 +357,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                             // в случае если картинка не загрузилась
                             //listImages[0] = ваше изображение
                             listImages[0] = IMAGE_STATE.FAILURE to EMPTY_IMAGE
+                            //log("${imageLink?.link} load image false")
                             //downloadedImage.value = false//true
                           //  log("load image false")
                         }
@@ -384,7 +385,9 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                 val showDownloadProcess = remember {
                     derivedStateOf {
                         //!downloadedImage.value && !viewModel.existImageCache(imageLink?.md5)
-                        !isDownloadImage.value && !viewModel.existImageCache(imageLink?.md5)
+                        !(listImages[0].first == IMAGE_STATE.COMPLETED && !listImages[0].second.isEmpty())
+                        //!isDownloadImage.value
+                                && !viewModel.existImageCache(imageLink?.md5)
                     }
                 }
                 if (showDownloadProcess.value)

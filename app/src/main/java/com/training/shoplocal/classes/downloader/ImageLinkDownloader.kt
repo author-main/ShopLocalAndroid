@@ -43,7 +43,7 @@ class ImageLinkDownloader private constructor() {
         val md5link = md5(fileNameFromPath(link))
         val bitmapMemory = MemoryCache.get(md5link)
         if (bitmapMemory != null) {
-            //log ("from memory cache $md5link")
+            log ("from memory cache $md5link")
             val extBitmap = ExtBitmap(bitmapMemory, Source.MEMORY_CACHE)
             callback.onComplete(extBitmap)
             return
@@ -58,9 +58,11 @@ class ImageLinkDownloader private constructor() {
         cacheStorage?.put(link)
         val timestamp = cacheStorage?.getTimestamp(link) ?: 0L
         val task = DownloadImageTask(link, reduce) { extBitmap, fileTimestamp ->
-            extBitmap.let {
+            //extBitmap.let
+            if (extBitmap.source != Source.NONE)
+            {
                 //val md5link = md5(link)
-                it.bitmap?.let {uploaded ->
+                extBitmap.bitmap?.let {uploaded ->
                     MemoryCache.put(md5link, uploaded)
                 }
 
@@ -74,13 +76,19 @@ class ImageLinkDownloader private constructor() {
                             storage.remove(link, changeState = true)
                     }
                 }
-                callback.onComplete(it)
+                callback.onComplete(extBitmap)
                 //normalizeJournal()
-            } ?: run {
+            } else {
+                cacheStorage?.remove(link, changeState = true)
+                callback.onFailure()
+            }
+
+
+                /*?: run {
                 cacheStorage?.remove(link, changeState = true)
                 callback.onFailure()
                 //normalizeJournal()
-            }
+            }*/
             normalizeJournal()
         }.apply {
             //    val time = cacheStorage?.getTimestamp(link)
