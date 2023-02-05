@@ -191,6 +191,38 @@ fun MainScreen(state: ModalBottomSheetState){
     }
 
 
+    fun backSearchMode(){
+        showBottomNavigation()
+        if (searchScreenDisplayed) {
+            if (searchState.value == SearchState.SEARCH_QUERY) {
+                searchState.value = SearchState.SEARCH_RESULT
+                textSearch.value = prevSearchText.toString()
+            } else {
+                viewModel.clearResultSearch() // удаляем результаты последнего запроса в БД на сервере
+                val firstIndex =
+                    viewModel.restoreScreenProducts(ScreenRouter.current.key)
+                scope.launch {
+                    stateGrid.scrollToItem(
+                        firstIndex
+                    )
+                }
+                searchScreenDisplayed = false
+                searchState.value = SearchState.SEARCH_NONE
+                textSearch.value = ""
+            }
+        } else {
+            // log("back")
+            searchState.value = SearchState.SEARCH_NONE
+            textSearch.value = ""
+        }
+    }
+
+    fun backFilterMode(){
+        showBottomNavigation()
+        filterScreenDisplayed = false
+    }
+
+
     fun findProducts(recognizer: Boolean = false){
 /*        if (products.isNotEmpty())
             LaunchedEffect(Unit) {
@@ -377,13 +409,18 @@ fun MainScreen(state: ModalBottomSheetState){
 
 
 
-    BackHandler(enabled = isSearchMode()){
-        if (isSearchMode()) {
+    BackHandler(enabled = true){
+        /*if (isSearchMode()) {
             textSearch.value = ""
             searchState.value = SearchState.SEARCH_NONE
             //isSearchMode = false
             showBottomNavigation()
-        }
+        }*/
+        if (filterScreenDisplayed)
+            backFilterMode()
+        else if (isSearchMode())
+            backSearchMode()
+
     }
 
 
@@ -462,7 +499,7 @@ fun MainScreen(state: ModalBottomSheetState){
            }
         },
         topBar = {
-            @Composable
+        @Composable
         fun BackButton(modifier: Modifier, onClick: () -> Unit){
                 Icon(modifier = modifier
                     .padding(end = 8.dp)
@@ -491,8 +528,9 @@ fun MainScreen(state: ModalBottomSheetState){
                         modifier = Modifier
                         .align(Alignment.CenterVertically)
                     ) {
-                        showBottomNavigation()
-                        filterScreenDisplayed = false
+                        /*showBottomNavigation()
+                        filterScreenDisplayed = false*/
+                        backFilterMode()
                     }
                     Text(modifier = Modifier.weight(1f),
                         text = stringResource(R.string.text_filter),
@@ -508,29 +546,7 @@ fun MainScreen(state: ModalBottomSheetState){
                             modifier = Modifier
                                 .align(Alignment.CenterVertically)
                         ) {
-                            showBottomNavigation()
-                            if (searchScreenDisplayed) {
-                                if (searchState.value == SearchState.SEARCH_QUERY) {
-                                    searchState.value = SearchState.SEARCH_RESULT
-                                    textSearch.value = prevSearchText.toString()
-                                } else {
-                                    viewModel.clearResultSearch() // удаляем результаты последнего запроса в БД на сервере
-                                    val firstIndex =
-                                        viewModel.restoreScreenProducts(ScreenRouter.current.key)
-                                    scope.launch {
-                                        stateGrid.scrollToItem(
-                                            firstIndex
-                                        )
-                                    }
-                                        searchScreenDisplayed = false
-                                        searchState.value = SearchState.SEARCH_NONE
-                                        textSearch.value = ""
-                                }
-                            } else {
-                              // log("back")
-                                searchState.value = SearchState.SEARCH_NONE
-                                textSearch.value = ""
-                            }
+                           backSearchMode()
                         }
                     }
                     //**************************************************************************************
