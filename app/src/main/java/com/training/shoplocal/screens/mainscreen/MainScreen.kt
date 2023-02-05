@@ -132,6 +132,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
     fun showBottomNavigation() {
         focusManager.clearFocus()
+        panelOffsetHeightPx.value = 0f
         isFocusedSearchTextField = false
         viewModel.removeComposeViewStack()
         viewModel.showBottomNavigation()
