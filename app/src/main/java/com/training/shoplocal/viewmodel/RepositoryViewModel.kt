@@ -32,10 +32,14 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         onCloseApp = value
     }
     fun closeApp(){
-        composeViewStack.removeAllElements()
-        repository.clearMapScreenProducts()
+        USER_ID = -1
         repository.loginState.reset()
         _products.value.clear()
+        repository.clearMapScreenProducts()
+        brands.values.clear()
+        categories.values.clear()
+        OrderDisplay.resetFilter()
+        composeViewStack.removeAllElements()
         onCloseApp?.invoke()
     }
 
