@@ -408,20 +408,16 @@ fun MainScreen(state: ModalBottomSheetState){
     //val stateGrid = rememberLazyGridState()
 */
 
-
+    val activity = (LocalContext.current as? Activity)
 
     BackHandler(enabled = true){
-        /*if (isSearchMode()) {
-            textSearch.value = ""
-            searchState.value = SearchState.SEARCH_NONE
-            //isSearchMode = false
-            showBottomNavigation()
-        }*/
         if (filterScreenDisplayed)
             backFilterMode()
         else if (isSearchMode())
             backSearchMode()
-
+        else {
+            activity?.finish() // закрыть приложение
+        }
     }
 
 
