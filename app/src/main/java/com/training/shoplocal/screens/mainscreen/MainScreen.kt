@@ -99,6 +99,22 @@ fun MainScreen(state: ModalBottomSheetState){
     val context = LocalContext.current
     val products: MutableList<Product> by viewModel.products.collectAsState()
     val dataSnackbar: Triple<String, Boolean, MESSAGE> by viewModel.snackbarData.collectAsState()
+    val localDensity = LocalDensity.current
+    val panelHeightPx = with(localDensity) { 40.dp.roundToPx().toFloat() }
+    val panelOffsetHeightPx = remember { mutableStateOf(0f) }
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                val delta = available.y
+                val newOffset = panelOffsetHeightPx.value + delta
+                panelOffsetHeightPx.value = newOffset.coerceIn(-panelHeightPx, 0f)
+                // возвращает значение если оно в интервале, либо мин значение если меньше или макс значение если больше
+                return Offset.Zero
+            }
+
+
+        }
+    }
 
     var isFocusedSearchTextField by remember {
         mutableStateOf(false)
@@ -194,6 +210,7 @@ fun MainScreen(state: ModalBottomSheetState){
             viewModel.putComposeViewStack(ComposeView.SEARCH)
             viewModel.findProductsRequest(textSearch.value.trim())
             searchState.value = SearchState.SEARCH_RESULT
+            panelOffsetHeightPx.value = 0f
             searchScreenDisplayed = true
         }
     }
@@ -369,22 +386,7 @@ fun MainScreen(state: ModalBottomSheetState){
         }
     }
 
-    val localDensity = LocalDensity.current
-    val panelHeightPx = with(localDensity) { 40.dp.roundToPx().toFloat() }
-    val panelOffsetHeightPx = remember { mutableStateOf(0f) }
-    val nestedScrollConnection = remember {
-        object : NestedScrollConnection {
-            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                val delta = available.y
-                val newOffset = panelOffsetHeightPx.value + delta
-                panelOffsetHeightPx.value = newOffset.coerceIn(-panelHeightPx, 0f)
-                // возвращает значение если оно в интервале, либо мин значение если меньше или макс значение если больше
-                return Offset.Zero
-            }
 
-
-        }
-    }
 
 
 
@@ -928,6 +930,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 exit = fadeOut()
             ) {
                 ShowFilterDisplay(OrderDisplay.getInstance(), reset = {
+                    panelOffsetHeightPx.value = 0f
                     filterScreenDisplayed = false
                     showBottomNavigation()
                     val result = OrderDisplay.resetFilter()
@@ -942,6 +945,7 @@ fun MainScreen(state: ModalBottomSheetState){
                    // log(order64)
                     //}
                 }) {filter ->
+                    panelOffsetHeightPx.value = 0f
                     filterScreenDisplayed = false
                     showBottomNavigation()
                     val changedFilterData   = !OrderDisplay.equalsFilterData(filter)
