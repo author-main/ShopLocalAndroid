@@ -209,6 +209,7 @@ fun MainScreen(state: ModalBottomSheetState){
         onDispose {
            // isSearchMode = false
             //searchScreenDisplayed = false
+            activeViewDisplayed = ComposeView.MAIN
             isFocusedSearchTextField = false
             searchState.value = SearchState.SEARCH_NONE
         }
