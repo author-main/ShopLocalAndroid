@@ -282,10 +282,10 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
         val imageLink = getLinkImage(0)//, product.linkimages)
 
 
-      /*  val downloadedImage = remember {
+        val downloadedImage = remember {
             mutableStateOf(false)
         }
-*/
+
        /* val downloadedImage = remember {
             mutableStateOf(false)
            /* mutableStateOf(
@@ -319,18 +319,18 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
         }
 
 
-        val isDownloadImage = remember {
+        /*val isDownloadImage = remember {
             derivedStateOf {
               //  val loaded =
                 listImages[0].first == IMAGE_STATE.COMPLETED && !listImages[0].second.isEmpty()// || listImages[0].first == IMAGE_STATE.FAILURE
               //  log("is download image = $loaded")
               //  loaded
             }
-        }
+        }*/
 
 
-//        if (!downloadedImage.value) {
-        if (!isDownloadImage.value) {
+        if (!downloadedImage.value) {
+        //if (!isDownloadImage.value) {
 
             // Запуск в области compose, если compose завершится. Блок внутри будет завершен без
             // утечки памяти и процессов.
@@ -346,9 +346,9 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                         override fun onComplete(image: ExtBitmap) {
                             listImages[0] =
                                 IMAGE_STATE.COMPLETED to image.bitmap!!.asImageBitmap()
-                           // downloadedImage.value = true
+                            downloadedImage.value = true
                           //  log("card product $listImages[0]")
-                            //log("${imageLink?.link} load image true")
+                          //  log("${imageLink?.link} load image true")
                             visible.targetState = true
                         }
 
@@ -382,12 +382,18 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                 },
                 contentAlignment = Alignment.Center
             ) {
+
+
                 val showDownloadProcess = remember {
                     derivedStateOf {
-                        !isDownloadImage.value
+                        !(listImages[0].first == IMAGE_STATE.COMPLETED && !listImages[0].second.isEmpty())
+                        //!isDownloadImage.value
+                        //!downloadedImage.value
                                 && !viewModel.existImageCache(imageLink?.md5)
                     }
                 }
+
+                //log("show download progress ${showDownloadProcess.value}")
                 if (showDownloadProcess.value)
                     AnimateLinkDownload(animateSize.value)
 
