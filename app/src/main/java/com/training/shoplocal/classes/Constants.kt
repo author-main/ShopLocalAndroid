@@ -10,8 +10,9 @@ import com.training.shoplocal.ui.theme.SelectedItem
 import com.training.shoplocal.ui.theme.TextFieldBg
 import java.text.DecimalFormatSymbols
 //---------------------------------------------------------------------------------------------
-    const val SERVER_URL = "http://192.168.1.10"
+    const val SERVER_URL = "http://192.168.0.10"
 //---------------------------------------------------------------------------------------------
+
 enum class ComposeView {
     LOGIN,
     MAIN,
@@ -20,7 +21,8 @@ enum class ComposeView {
     PROFILE,
     SEARCH_EDIT,
     SEARCH,
-    FILTER
+    FILTER,
+    DETAIL
 }
 const val CATEGORY_ITEM     = -1
 const val BREND_ITEM        = -2

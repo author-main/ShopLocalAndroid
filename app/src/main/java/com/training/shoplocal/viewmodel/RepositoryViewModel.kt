@@ -503,14 +503,21 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         val equalValue = composeViewStack.isNotEmpty() && composeViewStack.peek() == value
         if (!equalValue)
             composeViewStack.push(value)
-       // log(composeViewStack)
+        //log(composeViewStack)
     }
 
-    fun removeComposeViewStack(): ComposeView {
-        /*val value = composeViewStack.pop()
-        log(composeViewStack)*/
-        return composeViewStack.pop()
+    fun prevComposeViewStack(): ComposeView {
+        composeViewStack.pop()
+        //val value = composeViewStack.peek()
+        //log("prev $value")
+        return composeViewStack.peek()
     }
+
+/*    fun removeComposeViewStack(): ComposeView {
+        val value = composeViewStack.pop()
+        log(composeViewStack)
+        return value//composeViewStack.pop()
+    }*/
 
     fun getComposeViewStack(): ComposeView {
         return composeViewStack.peek()
