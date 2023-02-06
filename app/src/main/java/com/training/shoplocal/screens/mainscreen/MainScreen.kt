@@ -983,6 +983,7 @@ fun MainScreen(state: ModalBottomSheetState){
                     val result = OrderDisplay.resetFilter()
                     //log("result = $result")
                     if (result == 0) {           // CHANGED_FILTER   =  0
+                      //  log("result = changed data")
                         viewModel.filterProducts(searchScreenDisplayed())
                     } /*else if (result == 1) {    // CHANGED_VIEWMODE =  1
 
@@ -1004,7 +1005,7 @@ fun MainScreen(state: ModalBottomSheetState){
                         //OrderDisplay.setFilter(filter)
                         /*val order64 = encodeBase64(OrderDisplay.getFilterQuery())
                         log(order64)*/
-                       // log("result = changed data")
+                      //  log("result = changed data")
                         viewModel.filterProducts(searchScreenDisplayed())
                     } /*else {
                         if (changedViewModeData) {
