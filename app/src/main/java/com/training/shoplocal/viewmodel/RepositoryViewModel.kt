@@ -1,6 +1,11 @@
 package com.training.shoplocal.viewmodel
 
 import android.content.Context
+import android.content.Context.VIBRATOR_SERVICE
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.training.shoplocal.*
@@ -118,8 +123,20 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             getProducts(1)
             authorizeUser()
         }
-        else
+        else {
             showSnackbar(message = getStringResource(R.string.message_login_error), type = MESSAGE.ERROR)
+
+            val vibe = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                val vibratorManager =
+                    AppShopLocal.appContext().getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+                    vibratorManager.defaultVibrator
+            } else {
+                @Suppress("DEPRECATION")
+                AppShopLocal.appContext().getSystemService(VIBRATOR_SERVICE) as Vibrator
+            }
+            val effect: VibrationEffect = VibrationEffect.createOneShot(300, VibrationEffect.DEFAULT_AMPLITUDE);
+            vibe.vibrate(effect)
+        }
     }
     private val _authorizedUser = MutableStateFlow<Boolean>(false)
     val authorizedUser = _authorizedUser.asStateFlow()
@@ -150,7 +167,6 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     fun onLogin(email: String, password: String, finger: Boolean = false) {
         repository.onLogin({ result ->
             actionLogin(result)
-
         }, email, password, finger)
 
     }
