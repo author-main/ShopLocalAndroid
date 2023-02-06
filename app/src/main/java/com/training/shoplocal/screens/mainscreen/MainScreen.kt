@@ -829,7 +829,9 @@ fun MainScreen(state: ModalBottomSheetState){
                                 CardProduct(/*modifier = Modifier.onGloballyPositioned { coordinates ->
                                     calcHeight = coordinates.size.height
                                 },*/
-                                product, showMoreButton = !searchScreenDisplayed(), state = state, modeview = OrderDisplay.getViewMode())
+                                product, showMoreButton = !searchScreenDisplayed(), state = state, modeview = OrderDisplay.getViewMode()){selectedProduct ->
+                                    log(selectedProduct.name)
+                                }
                             }
                         }
 

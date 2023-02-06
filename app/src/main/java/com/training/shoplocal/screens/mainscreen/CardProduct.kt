@@ -8,6 +8,7 @@ import androidx.compose.animation.core.*
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.CircleShape
@@ -171,7 +172,7 @@ data class ImageLink(val link: String, val md5: String)
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBottomSheetState, modeview: VIEW_MODE = VIEW_MODE.CARD) {
+fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBottomSheetState, modeview: VIEW_MODE = VIEW_MODE.CARD, onClick:(product: Product) -> Unit) {
 
     val mode_View       = rememberUpdatedState(newValue = modeview)
     val show_MoreButton = rememberUpdatedState(newValue = showMoreButton)
@@ -645,11 +646,16 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
         }*/
             .padding(vertical = 10.dp))
         {*/
+        val interaction = remember { MutableInteractionSource() }
         if (isCardModeView()) {
             Column(
                 modifier = Modifier
                     .width(CARD_SIZE.dp)
                     .padding(vertical = 10.dp)
+                    .clickable(interactionSource = interaction,
+                               indication = null) {
+                        onClick(cardproduct)
+                    }
             ) {
                 ProductImages()
                 Spacer(modifier = Modifier
@@ -673,7 +679,12 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
             }
         } else { // VIEW_MODE.ROW
             //if (mode_View.value == VIEW_MODE.ROW) {
-            Column() {
+            Column(Modifier
+                .clickable(interactionSource = interaction,
+                    indication = null) {
+                    onClick(cardproduct)
+                }
+            ) {
                 Row(
                     Modifier
                         //.background(Color.Red)
