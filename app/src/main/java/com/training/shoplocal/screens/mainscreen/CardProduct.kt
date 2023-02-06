@@ -277,9 +277,9 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
             }}
         //val context = LocalContext.current
 
-        val visible = remember{MutableTransitionState(false)}
+       // val visible = remember{MutableTransitionState(false)}
         val animateSize = remember{mutableStateOf(Size.Zero)}
-        val imageLink = getLinkImage(0)//, product.linkimages)
+        //val imageLink = getLinkImage(0)//, product.linkimages)
 
 
         val downloadedImage = remember {
@@ -329,12 +329,44 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
         }*/
 
 
-        if (!downloadedImage.value) {
+     //   if (!downloadedImage.value) {
         //if (!isDownloadImage.value) {
+
+        @Composable
+        fun getCardImage(index: Int): MutableState<ImageBitmap> {
+            val imageNet = remember { mutableStateOf(EMPTY_IMAGE) }
+            LaunchedEffect(Unit) {
+                //   if (listImages[index].first == IMAGE_STATE.NONE) {
+                val itemImageLink = getLinkImage(index)//, items)
+                listImages[index] = IMAGE_STATE.PROCESS to EMPTY_IMAGE
+                ImageLinkDownloader.downloadCardImage(
+                    "$SERVER_URL/images/${itemImageLink?.link}",
+                    object : Callback {
+                        override fun onComplete(image: ExtBitmap) {
+                            imageNet.value = image.bitmap!!.asImageBitmap()
+                            //log("image download")
+                            listImages[index] =
+                                IMAGE_STATE.COMPLETED to imageNet.value//image.bitmap!!.asImageBitmap()
+                            downloadedImage.value = true
+                        }
+                        override fun onFailure() {
+                            listImages[index] =
+                                IMAGE_STATE.FAILURE to EMPTY_IMAGE
+                            downloadedImage.value = true
+                        }
+                    }
+                )
+                //  }
+            }
+            return imageNet
+        }
+
+
+            //getLinkImage(0)
 
             // Запуск в области compose, если compose завершится. Блок внутри будет завершен без
             // утечки памяти и процессов.
-            LaunchedEffect(Unit) {
+      /*      LaunchedEffect(Unit) {
                 // Если не нужно уменьшать изображение,
                 // используйте ImageLinkDownload.downloadImage вместо
                 // ImageLinkDownload.downloadCardImage
@@ -346,10 +378,11 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                         override fun onComplete(image: ExtBitmap) {
                             listImages[0] =
                                 IMAGE_STATE.COMPLETED to image.bitmap!!.asImageBitmap()
-                            downloadedImage.value = true
-                          //  log("card product $listImages[0]")
-                          //  log("${imageLink?.link} load image true")
                             visible.targetState = true
+                            //downloadedImage.value = true
+                            //  log("card product $listImages[0]")
+                            //  log("${imageLink?.link} load image true")
+
                         }
 
                         override fun onFailure() {
@@ -357,16 +390,18 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                             // в случае если картинка не загрузилась
                             //listImages[0] = ваше изображение
                             listImages[0] = IMAGE_STATE.FAILURE to EMPTY_IMAGE
+                            //visible.targetState = true
                             //log("${imageLink?.link} load image false")
                             //downloadedImage.value = false//true
-                          //  log("load image false")
+                            //  log("load image false")
                         }
                     })
 
             }
 
-        } /*else
-            visible.targetState = true*/
+            //     } /*else
+            //     visible.targetState = true*/
+*/
 
         Card(modifier = Modifier
             .requiredSize(CARD_SIZE.dp),
@@ -384,20 +419,28 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
             ) {
 
 
-                val showDownloadProcess = remember {
+              /*  val showDownloadProcess = remember {
                     derivedStateOf {
-                        !(listImages[0].first == IMAGE_STATE.COMPLETED && !listImages[0].second.isEmpty())
-                        //!isDownloadImage.value
-                        //!downloadedImage.value
-                                && !viewModel.existImageCache(imageLink?.md5)
+                  //      log("md5 = ${getLinkImage(0)?.md5}")
+                      //  val result =
+                            !(listImages[0].first == IMAGE_STATE.COMPLETED && !listImages[0].second.isEmpty())
+                                    //!isDownloadImage.value
+                                    //!downloadedImage.value
+                                  //  && !viewModel.existImageCache(getLinkImage(0)?.md5)
+                    //    log ("show progress $result")
+                    //    result
+
                     }
-                }
+                }*/
 
                 //log("show download progress ${showDownloadProcess.value}")
-                if (showDownloadProcess.value)
+               // if (showDownloadProcess.value) {
+                if (!downloadedImage.value){
+                    //log ("show progress")
                     AnimateLinkDownload(animateSize.value)
+                }
 
-                androidx.compose.animation.AnimatedVisibility(
+                /*androidx.compose.animation.AnimatedVisibility(
                     visibleState = visible,
                     enter = fadeIn(
                         animationSpec = tween(
@@ -405,11 +448,12 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                             easing = LinearEasing
                         )
                     )
-                ) {
+                ) {*/
                     val lazyRowState = rememberLazyListState()
 
-                    LaunchedEffect(Unit){
-                        cardproduct.linkimages?.let { items ->
+
+                    /*  LaunchedEffect(Unit){
+                        cardproduct.linkimages?.let { //items ->
                             for (i in 1 until countItems) {
                                 if (listImages[i].first == IMAGE_STATE.NONE) {
                                     val itemImageLink = getLinkImage(i)//, items)
@@ -418,7 +462,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                                         "$SERVER_URL/images/${itemImageLink?.link}",
                                         object : Callback {
                                             override fun onComplete(image: ExtBitmap) {
-//                                                log ("product ${product.id}, loaded image $i")
+                                                //log ("product ${product.id}, loaded image $i")
                                                 listImages[i] =
                                                     IMAGE_STATE.COMPLETED to image.bitmap!!.asImageBitmap()
                                             }
@@ -432,38 +476,49 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                                 }
                             }
                         }
-                    }
+                    }*/
                     val flingBehavior = rememberSnapFlingBehavior(lazyListState = lazyRowState)
-                    LazyRow(state = lazyRowState, modifier = Modifier.fillMaxSize(),
+                    LazyRow(
+                        state = lazyRowState, modifier = Modifier.fillMaxSize(),
                         horizontalArrangement = Arrangement.Center,
                         flingBehavior = flingBehavior
                     ) {
-                        listImages.forEach {item ->
+                        listImages.forEachIndexed { index, item ->
                             item {
                                 Image(
                                     modifier = Modifier
                                         .fillParentMaxSize()
                                         .padding(all = 8.dp),
-                                    bitmap = item.second,//bitmap.value,
+                                    bitmap = run {
+                                        if (item.first != IMAGE_STATE.COMPLETED)
+                                            getCardImage(index).value
+                                        else
+                                            item.second
+                                    },//item.second,//bitmap.value,
                                     contentDescription = null
                                 )
                             }
                         }
                     }
-                }
-                //if (isCardModeView())
-                DiscountPanel(modifier = Modifier.align(if (isCardModeView()) Alignment.BottomStart else Alignment.TopStart), percent = cardproduct.discount)
-                if (show_MoreButton.value) {
-                    ButtonMore(
-                        modifier = Modifier.align(Alignment.BottomEnd)
+                    //       }
+                    //if (isCardModeView())
+                    DiscountPanel(
+                        modifier = Modifier.align(if (isCardModeView()) Alignment.BottomStart else Alignment.TopStart),
+                        percent = cardproduct.discount
                     )
-                }
-                if (isCardModeView())
-                    ButtonFavorite(modifier = Modifier.align(Alignment.TopEnd)
-                )/* {
+                    if (show_MoreButton.value) {
+                        ButtonMore(
+                            modifier = Modifier.align(Alignment.BottomEnd)
+                        )
+                    }
+                    if (isCardModeView())
+                        ButtonFavorite(
+                            modifier = Modifier.align(Alignment.TopEnd)
+                        )/* {
                         //log("setProductFavorite")
                         viewModel.setProductFavorite(product.id, it)
                     }*/
+              //  }
             }
         }
 
