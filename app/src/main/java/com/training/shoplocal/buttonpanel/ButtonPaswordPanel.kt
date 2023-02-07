@@ -62,7 +62,6 @@ fun ButtonPasswordPanel(state: LoginViewState){
                         disabledBackgroundColor = Color.Transparent),
                         enabled = alpha == 1.0f,
                         onClick = {
-                            //viewModel.hideSnackbar()
                             if (char == ' ') {
                                 viewModel.onFingerPrint(state.getEmail())
                                 state.clearPassword()
