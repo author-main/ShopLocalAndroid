@@ -31,7 +31,6 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private fun accessFingerPrint(value: Boolean) {
         _accessFinger.value = value
     }*/
-
     private var onCloseApp: (() -> Unit)? = null
     fun setOnCloseApp(value:() -> Unit ) {
         onCloseApp = value
@@ -52,6 +51,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private val _progressCRUD = MutableStateFlow<Boolean>(false)
     val progressCRUD = _progressCRUD.asStateFlow()
     private fun showProgressCRUD(value: Boolean = true) {
+//        if (value != _progressCRUD.value)
         _progressCRUD.value = value
     }
 
@@ -106,10 +106,10 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     val products = _products.asStateFlow()
 
     private val actionLogin: (result: Int) -> Unit = {
-//        log("login")
         val result = it > 0
         if (result) {
             //accessFingerPrint(true)
+            hideSnackbar()
             maxPortion = -1
             USER_ID = it
             /*ScreenRouter.navigateTo(ScreenItem.MainScreen)
@@ -125,7 +125,6 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         }
         else {
             showSnackbar(message = getStringResource(R.string.message_login_error), type = MESSAGE.ERROR)
-
             val vibe = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 val vibratorManager =
                     AppShopLocal.appContext().getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
@@ -145,6 +144,10 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     fun showSnackbar(message: String = "", type: MESSAGE = MESSAGE.INFO, visible: Boolean = true){
         _snackbarData.value = Triple(message, visible, type)
     }
+    fun hideSnackbar(){
+        _snackbarData.value = Triple("", false, MESSAGE.INFO)
+    }
+
     private fun authorizeUser(value: Boolean = true){
         _authorizedUser.value = value
     }

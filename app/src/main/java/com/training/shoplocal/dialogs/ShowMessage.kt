@@ -38,11 +38,16 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 @Composable
+fun HideMessage(){
+    val snackbarHostState = remember { mutableStateOf(SnackbarHostState()) }
+    snackbarHostState.value.currentSnackbarData?.dismiss()
+}
+
+@Composable
 fun <T:ViewModel> ShowMessage(message: String, type: MESSAGE = MESSAGE.INFO, viewModel:T){
     //val scope = rememberCoroutineScope()
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
     val snackbarHostState = remember { mutableStateOf(SnackbarHostState()) }
-
     LaunchedEffect(null) {
         when (snackbarHostState.value.showSnackbar(message, duration = SnackbarDuration.Short)) {
             SnackbarResult.Dismissed -> {

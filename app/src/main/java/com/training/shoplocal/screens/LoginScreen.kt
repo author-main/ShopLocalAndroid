@@ -26,6 +26,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.buttonpanel.ButtonPasswordPanel
 import com.training.shoplocal.buttonpanel.ButtonUserAccessPanel
 import com.training.shoplocal.classes.MESSAGE
+import com.training.shoplocal.dialogs.HideMessage
 import com.training.shoplocal.dialogs.ShowMessage
 import com.training.shoplocal.log
 import com.training.shoplocal.loginview.LoginView
@@ -100,8 +101,12 @@ fun LoginScreen(state: LoginViewState){
             centerHorizontallyTo(parent)
         })
     }
+
+
     if (dataSnackbar.second) {
-//        log("snackbar")
         ShowMessage(message = dataSnackbar.first, viewModel = viewModel, type = dataSnackbar.third)//, type = MESSAGE.WARNING)
+    } else {
+        HideMessage()
     }
+
 }

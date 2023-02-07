@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.training.shoplocal.classes.User
+import com.training.shoplocal.log
 import com.training.shoplocal.userfingerprint.UserFingerPrint
 import com.training.shoplocal.validateMail
 
@@ -116,6 +117,11 @@ class LoginViewState {
         pressedButtons
 
     fun changeChar(value: Char){
+
+        /*if (password.length == 5) {
+            log ("key down")
+            return
+        }*/
         pressedButtons = true
          animated = false
         if (value == ' ')

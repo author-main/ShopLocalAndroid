@@ -62,6 +62,7 @@ fun ButtonPasswordPanel(state: LoginViewState){
                         disabledBackgroundColor = Color.Transparent),
                         enabled = alpha == 1.0f,
                         onClick = {
+                            //viewModel.hideSnackbar()
                             if (char == ' ') {
                                 viewModel.onFingerPrint(state.getEmail())
                                 state.clearPassword()
@@ -70,8 +71,10 @@ fun ButtonPasswordPanel(state: LoginViewState){
                             } else {
                                 state.changeChar(char)
                                 val password = state.getPassword()
-                                if (password.length == 5)
+                                if (password.length == 5) {
+                                    //log("length == 5")
                                     viewModel.onLogin(state.getEmail(), password)
+                                }
                             }
                         },
                         modifier = Modifier.size(60.dp, 60.dp),

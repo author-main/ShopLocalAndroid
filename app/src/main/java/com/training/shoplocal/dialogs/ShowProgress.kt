@@ -15,6 +15,7 @@ import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import com.training.shoplocal.DialogRouter
 import com.training.shoplocal.ui.theme.PrimaryDark
+import com.training.shoplocal.ui.theme.SelectedItemBottomNavi
 import com.training.shoplocal.ui.theme.TextLightGray
 import com.training.shoplocal.ui.theme.TextOrange
 
@@ -35,7 +36,7 @@ fun ShowProgress() {
             backgroundColor = PrimaryDark,
             contentColor = TextLightGray
         ) {*/
-            CircularProgressIndicator(color = TextOrange)
+            CircularProgressIndicator(color = SelectedItemBottomNavi)
 
     }
 }
