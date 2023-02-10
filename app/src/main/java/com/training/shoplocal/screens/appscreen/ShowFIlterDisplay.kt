@@ -382,10 +382,14 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay, reset: () -> Unit, perform: (
 
     @Composable
     fun showSectionHeader(sectionId: Int){
-        val nameSection = when (sectionId) {
-            CATEGORY_ITEM -> stringResource(id = R.string.text_category)
-            BREND_ITEM -> stringResource(id = R.string.text_brend)
-            else -> null
+        val textCategory = stringResource(id = R.string.text_category)
+        val textBrend    = stringResource(id = R.string.text_brend)
+        val nameSection = remember {
+            when (sectionId) {
+                CATEGORY_ITEM   -> textCategory//stringResource(id = R.string.text_category)
+                BREND_ITEM      -> textBrend//stringResource(id = R.string.text_brend)
+                else            -> null
+            }
         }
         if (nameSection != null) {
             val interactionSource = remember { MutableInteractionSource() }
