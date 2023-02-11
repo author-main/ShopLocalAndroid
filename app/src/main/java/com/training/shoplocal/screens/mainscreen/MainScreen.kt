@@ -129,6 +129,7 @@ fun MainScreen(state: ModalBottomSheetState){
       return activeViewDisplayed == ComposeView.SEARCH
     }
     fun filterScreenDisplayed() = activeViewDisplayed == ComposeView.FILTER
+    fun detailScreenDisplayed() = activeViewDisplayed == ComposeView.DETAIL
     fun setActiveViewDisplayed(value: ComposeView) {
         activeViewDisplayed = value
     }
@@ -248,6 +249,10 @@ fun MainScreen(state: ModalBottomSheetState){
     fun backFilterMode(){
         showBottomNavigation()
         //filterScreenDisplayed = false
+    }
+
+    fun backDetailMode(){
+        //showBottomNavigation()
     }
 
 
@@ -552,6 +557,16 @@ fun MainScreen(state: ModalBottomSheetState){
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
+                if (detailScreenDisplayed()) {
+                    BackButton(
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                    ) {
+                        /*showBottomNavigation()
+                        filterScreenDisplayed = false*/
+                        backDetailMode()
+                    }
+                } else
                 if (filterScreenDisplayed()) {
                     BackButton(
                         modifier = Modifier
@@ -567,8 +582,6 @@ fun MainScreen(state: ModalBottomSheetState){
                         fontSize = 17.sp
                     )
                 } else {
-
-
                     if (isSearchMode()) {
                         //val scope = rememberCoroutineScope()
                         BackButton(
@@ -830,6 +843,8 @@ fun MainScreen(state: ModalBottomSheetState){
                                     calcHeight = coordinates.size.height
                                 },*/
                                 product, showMoreButton = !searchScreenDisplayed(), state = state, modeview = OrderDisplay.getViewMode()){selectedProduct ->
+                                    setActiveViewDisplayed(ComposeView.DETAIL)
+                                    viewModel.putComposeViewStack(ComposeView.DETAIL)
                                     log(selectedProduct.name)
                                 }
                             }

@@ -50,6 +50,7 @@ import com.training.shoplocal.R
 import com.training.shoplocal.classes.*
 import com.training.shoplocal.classes.fodisplay.*
 import com.training.shoplocal.getFormattedPrice
+import com.training.shoplocal.getStringResource
 import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
@@ -382,10 +383,14 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay, reset: () -> Unit, perform: (
 
     @Composable
     fun showSectionHeader(sectionId: Int){
-        val nameSection = when (sectionId) {
-            CATEGORY_ITEM -> stringResource(id = R.string.text_category)
-            BREND_ITEM -> stringResource(id = R.string.text_brend)
-            else -> null
+        /*val textCategory = stringResource(id = R.string.text_category)
+        val textBrend    = stringResource(id = R.string.text_brend)*/
+        val nameSection = remember {
+            when (sectionId) {
+                CATEGORY_ITEM   -> getStringResource(R.string.text_category)//stringResource(id = R.string.text_category)
+                BREND_ITEM      -> getStringResource(R.string.text_brend)//stringResource(id = R.string.text_brend)
+                else            -> null
+            }
         }
         if (nameSection != null) {
             val interactionSource = remember { MutableInteractionSource() }
