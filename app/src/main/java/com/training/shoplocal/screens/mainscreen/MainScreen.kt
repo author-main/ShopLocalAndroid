@@ -251,6 +251,10 @@ fun MainScreen(state: ModalBottomSheetState){
         //filterScreenDisplayed = false
     }
 
+    fun backDetailMode(){
+        //showBottomNavigation()
+    }
+
 
     fun findProducts(recognizer: Boolean = false){
 /*        if (products.isNotEmpty())
@@ -554,7 +558,14 @@ fun MainScreen(state: ModalBottomSheetState){
                 horizontalArrangement = Arrangement.End
             ) {
                 if (detailScreenDisplayed()) {
-
+                    BackButton(
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                    ) {
+                        /*showBottomNavigation()
+                        filterScreenDisplayed = false*/
+                        backDetailMode()
+                    }
                 } else
                 if (filterScreenDisplayed()) {
                     BackButton(
