@@ -13,7 +13,7 @@ import java.text.DecimalFormatSymbols
     const val SERVER_URL = "http://192.168.0.10"
 //---------------------------------------------------------------------------------------------
 
-enum class ComposeView {
+enum class Container {
     LOGIN,
     MAIN,
     CATALOG,
