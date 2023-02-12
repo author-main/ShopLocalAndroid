@@ -128,6 +128,7 @@ fun MainScreen(state: ModalBottomSheetState){
         //log(" active displayer $activeViewDisplayed" )
       return activeViewDisplayed == ComposeView.SEARCH
     }
+    fun mainScreenDisplayed()   = activeViewDisplayed == ComposeView.MAIN
     fun filterScreenDisplayed() = activeViewDisplayed == ComposeView.FILTER
     fun detailScreenDisplayed() = activeViewDisplayed == ComposeView.DETAIL
     fun setActiveViewDisplayed(value: ComposeView) {
@@ -268,7 +269,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 showBottomNavigation()
 
             if (!searchScreenDisplayed()) {
-                log("saveScreenProducts")
+              //  log("saveScreenProducts")
                 viewModel.saveScreenProducts(
                     ScreenRouter.current.key,
                     stateGrid.firstVisibleItemIndex
@@ -557,6 +558,38 @@ fun MainScreen(state: ModalBottomSheetState){
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
+
+              /*  when (activeViewDisplayed) {
+                    ComposeView.DETAIL -> {
+                        BackButton(
+                            modifier = Modifier
+                                .align(Alignment.CenterVertically)
+                        ) {
+                            /*showBottomNavigation()
+                            filterScreenDisplayed = false*/
+                            backDetailMode()
+                        }
+                    }
+                    ComposeView.FILTER -> {
+                        BackButton(
+                            modifier = Modifier
+                                .align(Alignment.CenterVertically)
+                        ) {
+                            /*showBottomNavigation()
+                            filterScreenDisplayed = false*/
+                            backFilterMode()
+                        }
+                        Text(
+                            modifier = Modifier.weight(1f),
+                            text = stringResource(R.string.text_filter),
+                            color = TextFieldFont,
+                            fontSize = 17.sp
+                        )
+                    }
+
+                    else -> {}
+                }*/
+
                 if (detailScreenDisplayed()) {
                     BackButton(
                         modifier = Modifier
@@ -582,6 +615,7 @@ fun MainScreen(state: ModalBottomSheetState){
                         fontSize = 17.sp
                     )
                 } else {
+                //    log(activeViewDisplayed)
                     if (isSearchMode()) {
                         //val scope = rememberCoroutineScope()
                         BackButton(
