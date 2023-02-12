@@ -560,16 +560,6 @@ fun MainScreen(state: ModalBottomSheetState){
             ) {
 
                 when (activeViewDisplayed) {
-                    ComposeView.DETAIL -> {
-                        BackButton(
-                            modifier = Modifier
-                                .align(Alignment.CenterVertically)
-                        ) {
-                            /*showBottomNavigation()
-                            filterScreenDisplayed = false*/
-                            backDetailMode()
-                        }
-                    }
                     ComposeView.FILTER -> {
                         BackButton(
                             modifier = Modifier
@@ -586,6 +576,7 @@ fun MainScreen(state: ModalBottomSheetState){
                             fontSize = 17.sp
                         )
                     }
+                    ComposeView.DETAIL,
                     ComposeView.MAIN,
                     ComposeView.SEARCH_EDIT,
                     ComposeView.SEARCH -> {
