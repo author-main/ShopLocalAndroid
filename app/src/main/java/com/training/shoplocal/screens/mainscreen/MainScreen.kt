@@ -559,7 +559,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 horizontalArrangement = Arrangement.End
             ) {
 
-              /*  when (activeViewDisplayed) {
+                when (activeViewDisplayed) {
                     ComposeView.DETAIL -> {
                         BackButton(
                             modifier = Modifier
@@ -586,9 +586,13 @@ fun MainScreen(state: ModalBottomSheetState){
                             fontSize = 17.sp
                         )
                     }
+                    ComposeView.MAIN,
+                    ComposeView.SEARCH_EDIT,
+                    ComposeView.SEARCH -> {
 
+                    }
                     else -> {}
-                }*/
+                }
 
                 if (detailScreenDisplayed()) {
                     BackButton(
