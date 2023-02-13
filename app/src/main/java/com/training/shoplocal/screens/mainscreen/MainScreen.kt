@@ -135,14 +135,29 @@ fun MainScreen(state: ModalBottomSheetState){
     /*fun mainScreenDisplayed()   = activeContainer == Container.MAIN
     fun filterScreenDisplayed() = activeContainer == Container.FILTER
     fun detailScreenDisplayed() = activeContainer == Container.DETAIL*/
+    val focusManager = LocalFocusManager.current
+    var isFocusedSearchTextField by remember {
+        mutableStateOf(false)
+    }
+    fun showBottomNavigation() {
+        focusManager.clearFocus()
+        panelOffsetHeightPx.value = 0f
+        isFocusedSearchTextField = false
+        //viewModel.removeComposeViewStack()
+        //setActiveContainer(viewModel.prevComposeViewStack())
+        viewModel.prevComposeViewStack()
+        //log("active displayed $activeViewDisplayed")
+        viewModel.showBottomNavigation()
+    }
+
 
     fun actionBack(container: Container) {
         when (container) {
             Container.DETAIL -> {
-
+                showBottomNavigation()
             }
             Container.FILTER -> {
-
+                showBottomNavigation()
             }
             Container.SEARCH -> {
 
@@ -163,9 +178,9 @@ fun MainScreen(state: ModalBottomSheetState){
     }*/
 
 
-    var isFocusedSearchTextField by remember {
+/*    var isFocusedSearchTextField by remember {
         mutableStateOf(false)
-    }
+    }*/
 
     val searchState = remember {
         mutableStateOf(SearchState.SEARCH_NONE)
@@ -175,7 +190,7 @@ fun MainScreen(state: ModalBottomSheetState){
         mutableStateOf("")
     }
 
-    val focusManager = LocalFocusManager.current
+    /*val focusManager = LocalFocusManager.current
 
     fun showBottomNavigation() {
         focusManager.clearFocus()
@@ -186,7 +201,7 @@ fun MainScreen(state: ModalBottomSheetState){
         viewModel.prevComposeViewStack()
         //log("active displayed $activeViewDisplayed")
         viewModel.showBottomNavigation()
-    }
+    }*/
 
     fun isSearchMode() = searchState.value != SearchState.SEARCH_NONE
 
@@ -271,14 +286,14 @@ fun MainScreen(state: ModalBottomSheetState){
         showBottomNavigation()
     }
 
-    fun backFilterMode(){
+    /*fun backFilterMode(){
         showBottomNavigation()
         //filterScreenDisplayed = false
     }
 
     fun backDetailMode(){
         //showBottomNavigation()
-    }
+    }*/
 
 
     fun findProducts(recognizer: Boolean = false){
@@ -474,7 +489,7 @@ fun MainScreen(state: ModalBottomSheetState){
     BackHandler(enabled = true){
         //if (filterScreenDisplayed())
         if (isActiveContainer(Container.FILTER))
-            backFilterMode()
+            actionBack(Container.FILTER)// backFilterMode()
         else if (isSearchMode())
             backSearchMode()
         else {
@@ -617,7 +632,8 @@ fun MainScreen(state: ModalBottomSheetState){
                     ) {
                         /*showBottomNavigation()
                         filterScreenDisplayed = false*/
-                        backDetailMode()
+                        actionBack(Container.DETAIL)
+                        //backDetailMode()
                     }
                 } else
                     if (isActiveContainer(Container.FILTER)) {
@@ -627,7 +643,8 @@ fun MainScreen(state: ModalBottomSheetState){
                     ) {
                         /*showBottomNavigation()
                         filterScreenDisplayed = false*/
-                        backFilterMode()
+                        actionBack(Container.FILTER)
+                        //backFilterMode()
                     }
                     Text(modifier = Modifier.weight(1f),
                         text = stringResource(R.string.text_filter),
