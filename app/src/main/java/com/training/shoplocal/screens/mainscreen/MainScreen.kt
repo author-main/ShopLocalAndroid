@@ -124,13 +124,17 @@ fun MainScreen(state: ModalBottomSheetState){
          mutableStateOf(false)
      }*/
 
-    fun searchScreenDisplayed(): Boolean {
+    /*fun searchScreenDisplayed(): Boolean {
         //log(" active displayer $activeViewDisplayed" )
       return activeContainer == Container.SEARCH
-    }
+    }*/
 
     fun isActiveContainer(value: Container) =
         activeContainer == value
+
+    fun setActiveContainer(value: Container) {
+        viewModel.putComposeViewStack(value)
+    }
 
     /*fun mainScreenDisplayed()   = activeContainer == Container.MAIN
     fun filterScreenDisplayed() = activeContainer == Container.FILTER
@@ -148,6 +152,7 @@ fun MainScreen(state: ModalBottomSheetState){
         viewModel.prevComposeViewStack()
         //log("active displayed $activeViewDisplayed")
         viewModel.showBottomNavigation()
+       // log(activeContainer.name)
     }
 
 
@@ -169,9 +174,7 @@ fun MainScreen(state: ModalBottomSheetState){
         }
     }
 
-    fun setActiveContainer(value: Container) {
-        viewModel.putComposeViewStack(value)
-    }
+
 
   /*  fun setPrevActiveView() {
         activeViewDisplayed = ComposeView.MAIN
@@ -203,7 +206,8 @@ fun MainScreen(state: ModalBottomSheetState){
         viewModel.showBottomNavigation()
     }*/
 
-    fun isSearchMode() = searchState.value != SearchState.SEARCH_NONE
+    fun isSearchMode() = activeContainer == Container.SEARCH_EDIT || activeContainer == Container.SEARCH
+        //searchState.value != SearchState.SEARCH_NONE
 
     // Сохраняем значение textSearch перед выбором из списка,
     // если будет нажата кнопка back в режиме списка -
@@ -259,7 +263,8 @@ fun MainScreen(state: ModalBottomSheetState){
 
     fun backSearchMode(){
 
-        if (searchScreenDisplayed()) {
+      //  if (searchScreenDisplayed()) {
+        if (isActiveContainer(Container.SEARCH)) {
             if (searchState.value == SearchState.SEARCH_QUERY) {
                 searchState.value = SearchState.SEARCH_RESULT
                 textSearch.value = prevSearchText.toString()
@@ -307,7 +312,8 @@ fun MainScreen(state: ModalBottomSheetState){
             if (!recognizer)
                 showBottomNavigation()
 
-            if (!searchScreenDisplayed()) {
+           // if (!searchScreenDisplayed()) {
+            if (!isActiveContainer(Container.SEARCH)) {
               //  log("saveScreenProducts")
                 viewModel.saveScreenProducts(
                     ScreenRouter.current.key,
@@ -913,7 +919,7 @@ fun MainScreen(state: ModalBottomSheetState){
                                 CardProduct(/*modifier = Modifier.onGloballyPositioned { coordinates ->
                                     calcHeight = coordinates.size.height
                                 },*/
-                                product, showMoreButton = !searchScreenDisplayed(), state = state, modeview = OrderDisplay.getViewMode()){selectedProduct ->
+                                product, showMoreButton = !isActiveContainer(Container.SEARCH)/*searchScreenDisplayed()*/, state = state, modeview = OrderDisplay.getViewMode()){selectedProduct ->
                                     setActiveContainer(Container.DETAIL)
                                     //viewModel.putComposeViewStack(Container.DETAIL)
                                     log(selectedProduct.name)
@@ -1044,7 +1050,7 @@ fun MainScreen(state: ModalBottomSheetState){
                         //viewModel.putComposeViewStack(Container.FILTER)
                     }
                     if (index == CHANGE_ORDER) {
-                        viewModel.filterProducts(searchScreenDisplayed())
+                        viewModel.filterProducts(isActiveContainer(Container.SEARCH))//searchScreenDisplayed())
                     }
                 }
 
@@ -1073,7 +1079,7 @@ fun MainScreen(state: ModalBottomSheetState){
                     //log("result = $result")
                     if (result == 0) {           // CHANGED_FILTER   =  0
                       //  log("result = changed data")
-                        viewModel.filterProducts(searchScreenDisplayed())
+                        viewModel.filterProducts(isActiveContainer(Container.SEARCH))//searchScreenDisplayed())
                     } /*else if (result == 1) {    // CHANGED_VIEWMODE =  1
 
                     }*/
@@ -1095,7 +1101,7 @@ fun MainScreen(state: ModalBottomSheetState){
                         /*val order64 = encodeBase64(OrderDisplay.getFilterQuery())
                         log(order64)*/
                       //  log("result = changed data")
-                        viewModel.filterProducts(searchScreenDisplayed())
+                        viewModel.filterProducts(isActiveContainer(Container.SEARCH))//searchScreenDisplayed())
                     } /*else {
                         if (changedViewModeData) {
                           //  log("result = viewmode")

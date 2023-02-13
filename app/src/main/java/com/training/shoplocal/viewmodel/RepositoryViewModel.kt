@@ -509,15 +509,14 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             containerStack.push(value)
             _activeContainer.value = value
         }
-        //log(value)
+        //log(containerStack)
     }
 
     fun prevComposeViewStack(): Container {
         containerStack.pop()
         val value = containerStack.peek()
         _activeContainer.value = value
-        //log("prev $value")
-        //log(value)
+        log(containerStack)
         return value//containerStacks.peek()
     }
 
