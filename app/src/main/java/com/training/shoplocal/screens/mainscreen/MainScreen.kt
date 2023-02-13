@@ -921,7 +921,8 @@ fun MainScreen(state: ModalBottomSheetState){
                                 },*/
                                 product, showMoreButton = !isActiveContainer(Container.SEARCH)/*searchScreenDisplayed()*/, state = state, modeview = OrderDisplay.getViewMode()){selectedProduct ->
                                     setActiveContainer(Container.DETAIL)
-                                    //viewModel.putComposeViewStack(Container.DETAIL)
+                                    viewModel.hideBottomNavigation()
+                                    showFloatingButton = false
                                     log(selectedProduct.name)
                                 }
                             }

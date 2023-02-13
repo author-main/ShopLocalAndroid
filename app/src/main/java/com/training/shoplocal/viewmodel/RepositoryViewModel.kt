@@ -516,7 +516,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         containerStack.pop()
         val value = containerStack.peek()
         _activeContainer.value = value
-        log(containerStack)
+        //log(containerStack)
         return value//containerStacks.peek()
     }
 

@@ -1,5 +1,11 @@
 package com.training.shoplocal.screens.appscreen
 
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
@@ -34,8 +40,30 @@ fun AppScreen(){
               val navController = rememberNavController()
               Scaffold(bottomBar = {
                   val hiddenNavigation = viewModel.hiddenBottomNavigation.collectAsState()
-                  if (!hiddenNavigation.value)
+                  //val visible = MutableTransitionState(true)
+                  /*if (!hiddenNavigation.value)
+                      BottomNavigationBar(navController)*/
+
+
+                  androidx.compose.animation.AnimatedVisibility(
+                      visible = !hiddenNavigation.value,
+                      enter = expandVertically(
+                          animationSpec = tween(
+                              durationMillis = 70,
+                              easing = LinearEasing
+                          )
+                      ),
+                      exit =  shrinkVertically  (
+                          animationSpec = tween(
+                              durationMillis = 70,
+                              easing = LinearEasing
+                          )
+                      )
+                  ) {
                       BottomNavigationBar(navController)
+                  }
+
+
 
               }
               ) {
