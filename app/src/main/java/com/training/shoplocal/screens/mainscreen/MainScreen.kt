@@ -136,13 +136,28 @@ fun MainScreen(state: ModalBottomSheetState){
     fun filterScreenDisplayed() = activeContainer == Container.FILTER
     fun detailScreenDisplayed() = activeContainer == Container.DETAIL*/
 
-    fun actionBack(view: Container) {
+    fun actionBack(container: Container) {
+        when (container) {
+            Container.DETAIL -> {
 
+            }
+            Container.FILTER -> {
+
+            }
+            Container.SEARCH -> {
+
+            }
+            Container.SEARCH_EDIT -> {
+
+            }
+            else -> {}
+        }
     }
 
     fun setActiveContainer(value: Container) {
         viewModel.putComposeViewStack(value)
     }
+
   /*  fun setPrevActiveView() {
         activeViewDisplayed = ComposeView.MAIN
     }*/
