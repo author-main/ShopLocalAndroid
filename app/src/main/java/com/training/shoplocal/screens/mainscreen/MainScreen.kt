@@ -116,9 +116,9 @@ fun MainScreen(state: ModalBottomSheetState){
         }
     }
 
-    var activeViewDisplayed by remember {
+    val activeContainer by viewModel.activeContainer.collectAsState()/*remember {
         mutableStateOf(Container.MAIN)
-    }
+    }*/
 
     /* var searchScreenDisplayed by remember {
          mutableStateOf(false)
@@ -126,18 +126,22 @@ fun MainScreen(state: ModalBottomSheetState){
 
     fun searchScreenDisplayed(): Boolean {
         //log(" active displayer $activeViewDisplayed" )
-      return activeViewDisplayed == Container.SEARCH
+      return activeContainer == Container.SEARCH
     }
-    fun mainScreenDisplayed()   = activeViewDisplayed == Container.MAIN
-    fun filterScreenDisplayed() = activeViewDisplayed == Container.FILTER
-    fun detailScreenDisplayed() = activeViewDisplayed == Container.DETAIL
+
+    fun isActiveContainer(value: Container) =
+        activeContainer == value
+
+    /*fun mainScreenDisplayed()   = activeContainer == Container.MAIN
+    fun filterScreenDisplayed() = activeContainer == Container.FILTER
+    fun detailScreenDisplayed() = activeContainer == Container.DETAIL*/
 
     fun actionBack(view: Container) {
 
     }
 
-    fun setActiveViewDisplayed(value: Container) {
-        activeViewDisplayed = value
+    fun setActiveContainer(value: Container) {
+        viewModel.putComposeViewStack(value)
     }
   /*  fun setPrevActiveView() {
         activeViewDisplayed = ComposeView.MAIN
@@ -163,8 +167,8 @@ fun MainScreen(state: ModalBottomSheetState){
         panelOffsetHeightPx.value = 0f
         isFocusedSearchTextField = false
         //viewModel.removeComposeViewStack()
-        setActiveViewDisplayed(viewModel.prevComposeViewStack())
-        //viewModel.prevComposeViewStack()
+        //setActiveContainer(viewModel.prevComposeViewStack())
+        viewModel.prevComposeViewStack()
         //log("active displayed $activeViewDisplayed")
         viewModel.showBottomNavigation()
     }
@@ -216,7 +220,7 @@ fun MainScreen(state: ModalBottomSheetState){
         onDispose {
            // isSearchMode = false
             //searchScreenDisplayed = false
-            activeViewDisplayed = Container.MAIN
+            //activeContainer = Container.MAIN
             isFocusedSearchTextField = false
             searchState.value = SearchState.SEARCH_NONE
         }
@@ -281,11 +285,11 @@ fun MainScreen(state: ModalBottomSheetState){
                 )
             }
 
-            viewModel.putComposeViewStack(Container.SEARCH)
+            //viewModel.putComposeViewStack(Container.SEARCH)
             viewModel.findProductsRequest(textSearch.value.trim())
             searchState.value = SearchState.SEARCH_RESULT
             panelOffsetHeightPx.value = 0f
-            setActiveViewDisplayed(Container.SEARCH)
+            setActiveContainer(Container.SEARCH)
             //searchScreenDisplayed = true
         }
     }
@@ -453,7 +457,8 @@ fun MainScreen(state: ModalBottomSheetState){
     //val activity = (LocalContext.current as? Activity)
 
     BackHandler(enabled = true){
-        if (filterScreenDisplayed())
+        //if (filterScreenDisplayed())
+        if (isActiveContainer(Container.FILTER))
             backFilterMode()
         else if (isSearchMode())
             backSearchMode()
@@ -590,7 +595,7 @@ fun MainScreen(state: ModalBottomSheetState){
                     else -> {}
                 }*/
 
-                if (detailScreenDisplayed()) {
+                if (isActiveContainer(Container.DETAIL)){
                     BackButton(
                         modifier = Modifier
                             .align(Alignment.CenterVertically)
@@ -600,7 +605,7 @@ fun MainScreen(state: ModalBottomSheetState){
                         backDetailMode()
                     }
                 } else
-                if (filterScreenDisplayed()) {
+                    if (isActiveContainer(Container.FILTER)) {
                     BackButton(
                         modifier = Modifier
                         .align(Alignment.CenterVertically)
@@ -632,8 +637,8 @@ fun MainScreen(state: ModalBottomSheetState){
                                 if (it.isFocused) {
                                     // prevStateScroll = Pair<Int, Int>(0,0)
                                     showFloatingButton = false
-                                    setActiveViewDisplayed(Container.SEARCH_EDIT)
-                                    viewModel.putComposeViewStack(Container.SEARCH_EDIT)
+                                    setActiveContainer(Container.SEARCH_EDIT)
+                                    //viewModel.putComposeViewStack(Container.SEARCH_EDIT)
                                     //isSearchMode = true
                                     //val searchStore: SearchQueryStorageInterface = SearchQueryStorage.getInstance()
                                     //lastSearchQuery.value = ""
@@ -877,8 +882,8 @@ fun MainScreen(state: ModalBottomSheetState){
                                     calcHeight = coordinates.size.height
                                 },*/
                                 product, showMoreButton = !searchScreenDisplayed(), state = state, modeview = OrderDisplay.getViewMode()){selectedProduct ->
-                                    setActiveViewDisplayed(Container.DETAIL)
-                                    viewModel.putComposeViewStack(Container.DETAIL)
+                                    setActiveContainer(Container.DETAIL)
+                                    //viewModel.putComposeViewStack(Container.DETAIL)
                                     log(selectedProduct.name)
                                 }
                             }
@@ -1002,9 +1007,9 @@ fun MainScreen(state: ModalBottomSheetState){
                     if (index == SHOW_FILTER) {
                         viewModel.hideBottomNavigation()
                         //filterScreenDisplayed = true
-                        setActiveViewDisplayed(Container.FILTER)
+                        setActiveContainer(Container.FILTER)
                         showFloatingButton = false
-                        viewModel.putComposeViewStack(Container.FILTER)
+                        //viewModel.putComposeViewStack(Container.FILTER)
                     }
                     if (index == CHANGE_ORDER) {
                         viewModel.filterProducts(searchScreenDisplayed())
@@ -1024,7 +1029,7 @@ fun MainScreen(state: ModalBottomSheetState){
                     }
 
             AnimatedVisibility(
-                visible = filterScreenDisplayed(),
+                visible = isActiveContainer(Container.FILTER),
                 enter = fadeIn(),
                 exit = fadeOut()
             ) {

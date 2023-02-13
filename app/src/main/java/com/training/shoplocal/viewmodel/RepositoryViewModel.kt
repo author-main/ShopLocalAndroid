@@ -42,7 +42,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         brands.values.clear()
         categories.values.clear()
         OrderDisplay.resetFilter()
-        containerStacks.removeAllElements()
+        containerStack.removeAllElements()
         onCloseApp?.invoke()
     }
 
@@ -54,7 +54,9 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         _progressCRUD.value = value
     }
 
-    private val containerStacks = Stack<Container>().apply {
+    private val _activeContainer = MutableStateFlow(Container.LOGIN)
+    val activeContainer = _activeContainer.asStateFlow()
+    private val containerStack = Stack<Container>().apply {
         push(Container.LOGIN)
     }
     /*var deviceUuid =
@@ -113,7 +115,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             USER_ID = it
             /*ScreenRouter.navigateTo(ScreenItem.MainScreen)
             setOrderDisplay(FieldFilter.SCREEN, ScreenItem.MainScreen.key.value)*/
-            containerStacks.pop()
+            containerStack.pop()
             putComposeViewStack(Container.MAIN)
             getBrands()
             getCategories()
@@ -502,17 +504,21 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     }
 
     fun putComposeViewStack(value: Container) {
-        val equalValue = containerStacks.isNotEmpty() && containerStacks.peek() == value
-        if (!equalValue)
-            containerStacks.push(value)
-        //log(composeViewStack)
+        val equalValue = containerStack.isNotEmpty() && containerStack.peek() == value
+        if (!equalValue) {
+            containerStack.push(value)
+            _activeContainer.value = value
+        }
+        //log(value)
     }
 
     fun prevComposeViewStack(): Container {
-        containerStacks.pop()
-        //val value = composeViewStack.peek()
+        containerStack.pop()
+        val value = containerStack.peek()
+        _activeContainer.value = value
         //log("prev $value")
-        return containerStacks.peek()
+        //log(value)
+        return value//containerStacks.peek()
     }
 
 /*    fun removeComposeViewStack(): ComposeView {
@@ -521,8 +527,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         return value//composeViewStack.pop()
     }*/
 
-    fun getComposeViewStack(): Container {
-        return containerStacks.peek()
+    fun getContainerStack(): Container {
+        return _activeContainer.value//containerStack.peek()
     }
 
     fun existImageCache(filename: String?, convert: Boolean = false):Boolean {
