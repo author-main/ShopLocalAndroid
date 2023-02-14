@@ -98,7 +98,7 @@ fun TextFieldSearch(modifier: Modifier, textSearch: MutableState<String>, onSpee
                     onFocused()
                 } else if (!it.hasFocus) {
                     isFocused = false
-                    log("lost focus")
+                  //  log("lost focus")
                 }
             }
             // .weight(1f)
