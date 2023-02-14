@@ -50,12 +50,13 @@ fun PopupSearchHistory() {
             log("debug_popup windowSize $windowSize")
             log("debug_popup layoutDirection $layoutDirection")
             log("debug_popup popupContentSize $popupContentSize")
-            return IntOffset(0, anchorBounds.height)
+            return IntOffset(0, 200)
         }
     }) {
         Box(Modifier
-            .fillMaxSize()
-            .statusBarsPadding().systemBarsPadding()
+            .fillMaxWidth()
+            .height(300.dp)
+            //.statusBarsPadding().systemBarsPadding()
             .background(Color.Red)){
                 Text(text = "Checkit")
         }
