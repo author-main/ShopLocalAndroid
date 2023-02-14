@@ -637,6 +637,32 @@ fun MainScreen(state: ModalBottomSheetState){
                         actionBack(Container.DETAIL)
                         //backDetailMode()
                     }
+
+                  /*  TextFieldSearch(modifier = Modifier.weight(1f),
+                        textSearch = textSearch,
+                        onSpeechRecognizer = {
+                            val error_speechrecognizer =
+                                getStringResource(id = R.string.text_error_speechrecognizer)
+                            getSpeechInput(context)?.let { intent ->
+                                startLauncher.launch(intent)
+                            } ?: viewModel.showSnackbar(
+                                error_speechrecognizer,
+                                type = MESSAGE.ERROR
+                            )
+                        },
+                        onFocused = {
+                            showFloatingButton = false
+                            setActiveContainer(Container.SEARCH_EDIT)
+                            searchState.value = SearchState.SEARCH_QUERY
+                            prevSearchText.clear()
+                            prevSearchText.append(textSearch.value)
+                            isFocusedSearchTextField = true
+                            viewModel.hideBottomNavigation()
+                        }) {
+                        findProducts(it)
+                    }*/
+
+
                 } else
                     if (isActiveContainer(Container.FILTER)) {
                     BackButton(
@@ -653,6 +679,10 @@ fun MainScreen(state: ModalBottomSheetState){
                         color = TextFieldFont,
                         fontSize = 17.sp
                     )
+
+
+
+
                 } else {
                 //    log(activeViewDisplayed)
                     if (isSearchMode) {
