@@ -680,9 +680,6 @@ fun MainScreen(state: ModalBottomSheetState){
                         fontSize = 17.sp
                     )
 
-
-
-
                 } else {
                 //    log(activeViewDisplayed)
                     if (isSearchMode) {
