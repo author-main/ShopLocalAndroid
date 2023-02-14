@@ -670,7 +670,7 @@ fun MainScreen(state: ModalBottomSheetState){
                         }
                     }
 
-                  /*  TextFieldSearch(modifier = Modifier.weight(1f),
+                    TextFieldSearch(modifier = Modifier.weight(1f),
                         onFocused = {
                             showFloatingButton = false
                             setActiveContainer(Container.SEARCH_EDIT)
@@ -681,7 +681,7 @@ fun MainScreen(state: ModalBottomSheetState){
                             viewModel.hideBottomNavigation()
                         }) {
                         findProducts(it)
-                    }*/
+                    }
 
                     //**************************************************************************************
                     BasicTextField(
