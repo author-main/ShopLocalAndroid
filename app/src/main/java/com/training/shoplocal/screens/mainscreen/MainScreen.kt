@@ -263,9 +263,6 @@ fun MainScreen(state: ModalBottomSheetState){
 
 
     fun backSearchMode(){
-
-      //  if (searchScreenDisplayed()) {
-        if (isActiveContainer(Container.SEARCH)) {
             if (searchState.value == SearchState.SEARCH_QUERY) {
                 searchState.value = SearchState.SEARCH_RESULT
                 textSearch.value = prevSearchText.toString()
@@ -278,17 +275,9 @@ fun MainScreen(state: ModalBottomSheetState){
                         firstIndex
                     )
                 }
-                //setPrevActiveView()
-                //searchScreenDisplayed = false
-               // log("active displayed $activeViewDisplayed")
                 searchState.value = SearchState.SEARCH_NONE
                 textSearch.value = ""
             }
-        } else {
-            // log("back")
-            searchState.value = SearchState.SEARCH_NONE
-            textSearch.value = ""
-        }
         showBottomNavigation()
     }
 
@@ -671,20 +660,31 @@ fun MainScreen(state: ModalBottomSheetState){
                     }
 
                     TextFieldSearch(modifier = Modifier.weight(1f),
+                        textSearch = textSearch,
+                        onSpeechRecognizer = {
+                            val error_speechrecognizer =
+                                getStringResource(id = R.string.text_error_speechrecognizer)
+                            getSpeechInput(context)?.let { intent ->
+                                startLauncher.launch(intent)
+                            } ?: viewModel.showSnackbar(
+                                error_speechrecognizer,
+                                type = MESSAGE.ERROR
+                            )
+                        },
                         onFocused = {
-                            /*showFloatingButton = false
+                            showFloatingButton = false
                             setActiveContainer(Container.SEARCH_EDIT)
                             searchState.value = SearchState.SEARCH_QUERY
                             prevSearchText.clear()
                             prevSearchText.append(textSearch.value)
                             isFocusedSearchTextField = true
-                            viewModel.hideBottomNavigation()*/
+                            viewModel.hideBottomNavigation()
                         }) {
                         findProducts(it)
                     }
 
                     //**************************************************************************************
-                    BasicTextField(
+          /*          BasicTextField(
                         modifier = Modifier
                             .onFocusChanged {
                                 if (it.isFocused) {
@@ -818,7 +818,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
                     //val interactionSource = remember { MutableInteractionSource() }
                     //  ShowMessageCount(31)
-
+*/
                     //**************************************************************************************
                     if (!isSearchMode())
                     //if (!isFocusedSearchTextField.value)

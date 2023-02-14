@@ -14,6 +14,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.*
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
@@ -21,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
@@ -30,12 +32,14 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupPositionProvider
+import com.training.shoplocal.Dp
+import com.training.shoplocal.Px
 import com.training.shoplocal.R
 import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.TextFieldBg
 import com.training.shoplocal.ui.theme.TextFieldFont
 
-
+/*
 @Composable
 fun PopupSearchHistory() {
     //Modifier.statusBarsPadding().systemBarsPadding()
@@ -46,38 +50,46 @@ fun PopupSearchHistory() {
             layoutDirection: LayoutDirection,
             popupContentSize: IntSize
         ): IntOffset {
+            val h = anchorBounds.bottom + 8.Px
+            log("h = $h")
             log("debug_popup anchorBounds $anchorBounds")
             log("debug_popup windowSize $windowSize")
             log("debug_popup layoutDirection $layoutDirection")
             log("debug_popup popupContentSize $popupContentSize")
-            return IntOffset(0, 200)
+            return IntOffset(0, h)
         }
     }) {
         Box(Modifier
+            /*.navigationBarsPadding()
+            .statusBarsPadding().systemBarsPadding()*/
+
             .fillMaxWidth()
-            .height(600.dp)
-            //.statusBarsPadding().systemBarsPadding()
-            .background(Color.Red)){
+            .background(Color(0x77ff0000))){
                 Text(text = "Checkit")
         }
 
     }
 }
 
-
-@OptIn(ExperimentalMaterialApi::class)
+*/
+@OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
 @Composable
-fun TextFieldSearch(modifier: Modifier, query: String = "", onFocused: () -> Unit, onSearch: (query: String) -> Unit){
-    val textSearch = remember {
+fun TextFieldSearch(modifier: Modifier, textSearch: MutableState<String>, onSpeechRecognizer: () -> Unit = {},  onFocused: () -> Unit = {}, onSearch: (query: String) -> Unit){
+   /* val textSearch = remember {
         mutableStateOf(query)
-    }
+    }*/
     var isFocused by remember {
         mutableStateOf(false)
     }
-    if (isFocused) {
-        PopupSearchHistory()
-    }
+ /*   if (isFocused)
+        onFocused()
+        //PopupSearchHistory()
+    }*/
     val interactionSource = remember { MutableInteractionSource() }
+//    val keyboardController = LocalSoftwareKeyboardController.current
+
+
+
     BasicTextField(
         modifier = modifier
             .onFocusChanged {
@@ -144,16 +156,9 @@ fun TextFieldSearch(modifier: Modifier, query: String = "", onFocused: () -> Uni
                         .clickable {
                             if (showClearIcon) {
                                 textSearch.value = ""
-                                //DialogRouter.reset()
-                                //showSearch = false
                             } else {
                                 // Вызвать голосовой ввод
-                                /*  getSpeechInput(context)?.let { intent ->
-                                      startLauncher.launch(intent)
-                                  } ?: viewModel.showSnackbar(
-                                      error_speechrecognizer,
-                                      type = MESSAGE.ERROR
-                                  )*/
+                                onSpeechRecognizer()
                             }
                         }
                 )
