@@ -207,8 +207,14 @@ fun MainScreen(state: ModalBottomSheetState){
         viewModel.showBottomNavigation()
     }*/
 
-    fun isSearchMode() = activeContainer == Container.SEARCH_EDIT || activeContainer == Container.SEARCH
+    //fun isSearchMode() = activeContainer == Container.SEARCH_EDIT || activeContainer == Container.SEARCH
         //searchState.value != SearchState.SEARCH_NONE
+
+    val isSearchMode by remember {
+        derivedStateOf {
+            activeContainer == Container.SEARCH_EDIT || activeContainer == Container.SEARCH
+        }
+    }
 
     // Сохраняем значение textSearch перед выбором из списка,
     // если будет нажата кнопка back в режиме списка -
@@ -486,7 +492,7 @@ fun MainScreen(state: ModalBottomSheetState){
         //if (filterScreenDisplayed())
         if (isActiveContainer(Container.FILTER))
             actionBack(Container.FILTER)// backFilterMode()
-        else if (isSearchMode())
+        else if (isSearchMode)
             backSearchMode()
         else {
             //activity?.finish() // закрыть приложение
@@ -649,7 +655,7 @@ fun MainScreen(state: ModalBottomSheetState){
                     )
                 } else {
                 //    log(activeViewDisplayed)
-                    if (isSearchMode()) {
+                    if (isSearchMode) {
                         //val scope = rememberCoroutineScope()
                         BackButton(
                             modifier = Modifier
@@ -820,7 +826,7 @@ fun MainScreen(state: ModalBottomSheetState){
                     //  ShowMessageCount(31)
 */
                     //**************************************************************************************
-                    if (!isSearchMode())
+                    if (!isSearchMode)
                     //if (!isFocusedSearchTextField.value)
                         ShowMessageCount(24)
 
@@ -1039,7 +1045,7 @@ fun MainScreen(state: ModalBottomSheetState){
                         //log("next portion")
                         //log("portition = $portition")
                        // log("next portion = ${nextPart.value}")
-                        viewModel.getNextPortionData(isSearchMode(), textSearch.value.trim())
+                        viewModel.getNextPortionData(isSearchMode, textSearch.value.trim())
                     }
                 }
 
