@@ -54,10 +54,10 @@ fun PopupSearchHistory() {
         }
     }) {
         Box(Modifier
-            .statusBarsPadding().systemBarsPadding()
             .fillMaxSize()
+            .statusBarsPadding().systemBarsPadding()
             .background(Color.Red)){
-
+                Text(text = "Checkit")
         }
 
     }
