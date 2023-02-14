@@ -68,6 +68,7 @@ import com.training.shoplocal.screens.ScreenRouter
 import com.training.shoplocal.screens.appscreen.ShowDataDisplayPanel
 import com.training.shoplocal.screens.appscreen.ShowFilterDisplay
 import com.training.shoplocal.screens.appscreen.ShowSearchHistory
+import com.training.shoplocal.screens.appscreen.TextFieldSearch
 import com.training.shoplocal.screens.remember.rememberLazyViewState
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
@@ -301,14 +302,14 @@ fun MainScreen(state: ModalBottomSheetState){
     }*/
 
 
-    fun findProducts(recognizer: Boolean = false){
+    fun findProducts(query: String, recognizer: Boolean = false){
 /*        if (products.isNotEmpty())
             LaunchedEffect(Unit) {
                 scope.launch {
                     stateGrid.scrollToItem(0)
                 }
             }*/
-        if (textSearch.value.isNotBlank()) {
+        //if (textSearch.value.isNotBlank()) {
             if (!recognizer)
                 showBottomNavigation()
 
@@ -322,12 +323,12 @@ fun MainScreen(state: ModalBottomSheetState){
             }
 
             //viewModel.putComposeViewStack(Container.SEARCH)
-            viewModel.findProductsRequest(textSearch.value.trim())
+            viewModel.findProductsRequest(query)//textSearch.value.trim())
             searchState.value = SearchState.SEARCH_RESULT
             panelOffsetHeightPx.value = 0f
             setActiveContainer(Container.SEARCH)
             //searchScreenDisplayed = true
-        }
+       // }
     }
 
 
@@ -454,7 +455,7 @@ fun MainScreen(state: ModalBottomSheetState){
                     if (!value.isNullOrEmpty()) {
                         textSearch.value = value
                         if (searchState.value != SearchState.SEARCH_QUERY)
-                            findProducts(true)
+                            findProducts(value,true)
                     }
                 }
             }
@@ -668,6 +669,20 @@ fun MainScreen(state: ModalBottomSheetState){
                            backSearchMode()
                         }
                     }
+
+                  /*  TextFieldSearch(modifier = Modifier.weight(1f),
+                        onFocused = {
+                            showFloatingButton = false
+                            setActiveContainer(Container.SEARCH_EDIT)
+                            searchState.value = SearchState.SEARCH_QUERY
+                            prevSearchText.clear()
+                            prevSearchText.append(textSearch.value)
+                            isFocusedSearchTextField = true
+                            viewModel.hideBottomNavigation()
+                        }) {
+                        findProducts(it)
+                    }*/
+
                     //**************************************************************************************
                     BasicTextField(
                         modifier = Modifier
@@ -707,7 +722,7 @@ fun MainScreen(state: ModalBottomSheetState){
                         ),
                         keyboardActions = KeyboardActions(
                             onSearch = {
-                                findProducts()
+                                findProducts(textSearch.value)
 
                                 /*if (products.isNotEmpty())
                                     scope.launch {

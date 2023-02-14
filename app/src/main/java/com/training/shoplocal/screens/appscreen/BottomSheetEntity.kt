@@ -105,7 +105,7 @@ private fun BottomSheetContent(state: ModalBottomSheetState){
     val textItems = stringArrayResource(id = R.array.bottomsheet_product_items)
     BottomSheetItem(R.drawable.ic_addcart, textItems[0]){
         //   MainMenuRouter.clickTo(MainMenuItem.BrandItem)
-        val product = viewModel.selectedProduct.value
+        //val product = viewModel.selectedProduct.value
        /* val brand = product.brand ?: 0
         if (brand > 0) {
             log("brand $brand")
