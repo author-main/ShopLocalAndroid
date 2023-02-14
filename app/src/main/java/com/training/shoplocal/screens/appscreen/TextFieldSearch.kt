@@ -20,18 +20,49 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.*
+import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupPositionProvider
 import com.training.shoplocal.R
 import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.TextFieldBg
 import com.training.shoplocal.ui.theme.TextFieldFont
+
+
+@Composable
+fun PopupSearchHistory() {
+    //Modifier.statusBarsPadding().systemBarsPadding()
+    Popup(popupPositionProvider = object : PopupPositionProvider {
+        override fun calculatePosition(
+            anchorBounds: IntRect,
+            windowSize: IntSize,
+            layoutDirection: LayoutDirection,
+            popupContentSize: IntSize
+        ): IntOffset {
+            log("debug_popup anchorBounds $anchorBounds")
+            log("debug_popup windowSize $windowSize")
+            log("debug_popup layoutDirection $layoutDirection")
+            log("debug_popup popupContentSize $popupContentSize")
+            return IntOffset(0, anchorBounds.height)
+        }
+    }) {
+        Box(Modifier
+            .statusBarsPadding().systemBarsPadding()
+            .fillMaxSize()
+            .background(Color.Red)){
+
+        }
+
+    }
+}
+
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -43,7 +74,7 @@ fun TextFieldSearch(modifier: Modifier, query: String = "", onFocused: () -> Uni
         mutableStateOf(false)
     }
     if (isFocused) {
-
+        PopupSearchHistory()
     }
     val interactionSource = remember { MutableInteractionSource() }
     BasicTextField(

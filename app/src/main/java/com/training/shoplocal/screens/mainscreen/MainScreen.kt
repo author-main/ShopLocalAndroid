@@ -672,13 +672,13 @@ fun MainScreen(state: ModalBottomSheetState){
 
                     TextFieldSearch(modifier = Modifier.weight(1f),
                         onFocused = {
-                            showFloatingButton = false
+                            /*showFloatingButton = false
                             setActiveContainer(Container.SEARCH_EDIT)
                             searchState.value = SearchState.SEARCH_QUERY
                             prevSearchText.clear()
                             prevSearchText.append(textSearch.value)
                             isFocusedSearchTextField = true
-                            viewModel.hideBottomNavigation()
+                            viewModel.hideBottomNavigation()*/
                         }) {
                         findProducts(it)
                     }
