@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.classes.searcher.SearchState
 import com.training.shoplocal.log
+import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.ui.theme.TextFieldBg
 import com.training.shoplocal.ui.theme.TextFieldFont
 import com.training.shoplocal.viewmodel.RepositoryViewModel
@@ -92,7 +93,7 @@ fun ShowSearchHistory(textSearch: MutableState<String>, searchState: State<Searc
     //val textFont = FontFamily(Font(R.font.robotocondensed_light))
     Box(modifier = Modifier
         .fillMaxSize()
-        .background(MaterialTheme.colors.primary)
+        .background(PrimaryDark)
     ){
         //log("recompose")
         Column(Modifier.padding(vertical = 8.dp, horizontal = 16.dp)){

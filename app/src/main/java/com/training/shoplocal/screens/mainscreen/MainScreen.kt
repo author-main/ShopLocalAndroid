@@ -681,12 +681,12 @@ fun MainScreen(state: ModalBottomSheetState){
                             contentDescription = null,
                             colorFilter = ColorFilter.tint(ImageFavoriteOff),
                             modifier = Modifier
-                            .size(24.dp)
-                            .clip(CircleShape)
-                            .align(Alignment.CenterVertically)
-                            .clickable() {
+                                .size(24.dp)
+                                .clip(CircleShape)
+                                .align(Alignment.CenterVertically)
+                                .clickable() {
 
-                            }
+                                }
                         )
                     }
                     else -> {}
@@ -943,7 +943,21 @@ fun MainScreen(state: ModalBottomSheetState){
 
                 }
 
-                AnimatedVisibility(
+
+            AnimatedVisibility(
+                visible = isActiveContainer(Container.DETAIL),
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                //if (isFocusedSearchTextField.value) {
+                ShowDetailProduct(detailProduct.value)//lastSearchQuery)
+            }
+
+
+
+
+
+            AnimatedVisibility(
                         visible = isFocusedSearchTextField,
                         enter = fadeIn(),
                         exit = fadeOut()
@@ -957,6 +971,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 enter = fadeIn(),
                 exit = fadeOut()
             ) {
+                //log("container filter")
                 ShowFilterDisplay(OrderDisplay.getInstance(), reset = {
                     panelOffsetHeightPx.value = 0f
                     //filterScreenDisplayed = false
