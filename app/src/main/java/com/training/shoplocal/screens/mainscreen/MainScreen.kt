@@ -808,7 +808,7 @@ fun MainScreen(state: ModalBottomSheetState){
                                     viewModel.hideBottomNavigation()
                                     showFloatingButton = false
                                     detailProduct.value = selectedProduct
-                                    log(selectedProduct.name)
+                                    ///log(selectedProduct.name)
                                 }
                             }
                         }
