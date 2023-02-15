@@ -65,10 +65,7 @@ import com.training.shoplocal.classes.searcher.SearchState
 import com.training.shoplocal.dialogs.ShowMessage
 import com.training.shoplocal.dialogs.ShowProgress
 import com.training.shoplocal.screens.ScreenRouter
-import com.training.shoplocal.screens.appscreen.ShowDataDisplayPanel
-import com.training.shoplocal.screens.appscreen.ShowFilterDisplay
-import com.training.shoplocal.screens.appscreen.ShowSearchHistory
-import com.training.shoplocal.screens.appscreen.TextFieldSearch
+import com.training.shoplocal.screens.appscreen.*
 import com.training.shoplocal.screens.remember.rememberLazyViewState
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
@@ -82,6 +79,9 @@ import kotlin.math.roundToInt
 @Composable
 fun MainScreen(state: ModalBottomSheetState){
     val viewModel: RepositoryViewModel = viewModel()
+    val detailProduct = remember {
+        mutableStateOf(Product())
+    } //Product? = null
     val progress by viewModel.progressCRUD.collectAsState()
     if (progress)
         ShowProgress()
@@ -157,6 +157,46 @@ fun MainScreen(state: ModalBottomSheetState){
     }
 
 
+    val searchState = remember {
+        mutableStateOf(SearchState.SEARCH_NONE)
+    }
+
+    val textSearch = remember {
+        mutableStateOf("")
+    }
+
+    // Сохраняем значение textSearch перед выбором из списка,
+    // если будет нажата кнопка back в режиме списка -
+    // textSearch присваиваем старое значение prevSearchText
+
+    var prevStateScroll = remember {
+        0 to 0
+    }
+    val prevSearchText = remember {
+        StringBuilder("")
+    }
+
+
+
+    fun backSearchMode(){
+        if (searchState.value == SearchState.SEARCH_QUERY) {
+            searchState.value = SearchState.SEARCH_RESULT
+            textSearch.value = prevSearchText.toString()
+        } else {
+            viewModel.clearResultSearch() // удаляем результаты последнего запроса в БД на сервере
+            val firstIndex =
+                viewModel.restoreScreenProducts(ScreenRouter.current.key)
+            scope.launch {
+                stateGrid.scrollToItem(
+                    firstIndex
+                )
+            }
+            searchState.value = SearchState.SEARCH_NONE
+            textSearch.value = ""
+        }
+        showBottomNavigation()
+    }
+
     fun actionBack(container: Container) {
         when (container) {
             Container.DETAIL -> {
@@ -165,11 +205,9 @@ fun MainScreen(state: ModalBottomSheetState){
             Container.FILTER -> {
                 showBottomNavigation()
             }
-            Container.SEARCH -> {
-
-            }
+            Container.SEARCH,
             Container.SEARCH_EDIT -> {
-
+                backSearchMode()
             }
             else -> {}
         }
@@ -186,13 +224,13 @@ fun MainScreen(state: ModalBottomSheetState){
         mutableStateOf(false)
     }*/
 
-    val searchState = remember {
+    /*val searchState = remember {
         mutableStateOf(SearchState.SEARCH_NONE)
     }
 
     val textSearch = remember {
         mutableStateOf("")
-    }
+    }*/
 
     /*val focusManager = LocalFocusManager.current
 
@@ -216,16 +254,7 @@ fun MainScreen(state: ModalBottomSheetState){
         }
     }
 
-    // Сохраняем значение textSearch перед выбором из списка,
-    // если будет нажата кнопка back в режиме списка -
-    // textSearch присваиваем старое значение prevSearchText
 
-    var prevStateScroll = remember {
-        0 to 0
-    }
-    val prevSearchText = remember {
-        StringBuilder("")
-    }
 
 
 
@@ -268,24 +297,7 @@ fun MainScreen(state: ModalBottomSheetState){
     }
 
 
-    fun backSearchMode(){
-            if (searchState.value == SearchState.SEARCH_QUERY) {
-                searchState.value = SearchState.SEARCH_RESULT
-                textSearch.value = prevSearchText.toString()
-            } else {
-                viewModel.clearResultSearch() // удаляем результаты последнего запроса в БД на сервере
-                val firstIndex =
-                    viewModel.restoreScreenProducts(ScreenRouter.current.key)
-                scope.launch {
-                    stateGrid.scrollToItem(
-                        firstIndex
-                    )
-                }
-                searchState.value = SearchState.SEARCH_NONE
-                textSearch.value = ""
-            }
-        showBottomNavigation()
-    }
+
 
     /*fun backFilterMode(){
         showBottomNavigation()
@@ -601,18 +613,18 @@ fun MainScreen(state: ModalBottomSheetState){
                 horizontalArrangement = Arrangement.End
             ) {
 
-             /*   when (activeViewDisplayed) {
+                if (isActiveContainer(Container.FILTER) || isActiveContainer(Container.DETAIL)
+                    || isSearchMode
+                )   BackButton(
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                    ) {
+                        actionBack(activeContainer)
+                    }
+
+                when (activeContainer) {
                     Container.FILTER -> {
-                        BackButton(
-                            modifier = Modifier
-                                .align(Alignment.CenterVertically)
-                        ) {
-                            /*showBottomNavigation()
-                            filterScreenDisplayed = false*/
-                            backFilterMode()
-                        }
-                        Text(
-                            modifier = Modifier.weight(1f),
+                        Text(modifier = Modifier.weight(1f),
                             text = stringResource(R.string.text_filter),
                             color = TextFieldFont,
                             fontSize = 17.sp
@@ -620,244 +632,56 @@ fun MainScreen(state: ModalBottomSheetState){
                     }
                     Container.DETAIL,
                     Container.MAIN,
-                    Container.SEARCH_EDIT,
-                    Container.SEARCH -> {
-
-                    }
-                    else -> {}
-                }*/
-
-                if (isActiveContainer(Container.DETAIL)){
-                    BackButton(
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
-                    ) {
-                        /*showBottomNavigation()
-                        filterScreenDisplayed = false*/
-                        actionBack(Container.DETAIL)
-                        //backDetailMode()
-                    }
-
-                  /*  TextFieldSearch(modifier = Modifier.weight(1f),
-                        textSearch = textSearch,
-                        onSpeechRecognizer = {
-                            val error_speechrecognizer =
-                                getStringResource(id = R.string.text_error_speechrecognizer)
-                            getSpeechInput(context)?.let { intent ->
-                                startLauncher.launch(intent)
-                            } ?: viewModel.showSnackbar(
-                                error_speechrecognizer,
-                                type = MESSAGE.ERROR
-                            )
-                        },
-                        onFocused = {
-                            showFloatingButton = false
-                            setActiveContainer(Container.SEARCH_EDIT)
-                            searchState.value = SearchState.SEARCH_QUERY
-                            prevSearchText.clear()
-                            prevSearchText.append(textSearch.value)
-                            isFocusedSearchTextField = true
-                            viewModel.hideBottomNavigation()
-                        }) {
-                        findProducts(it)
-                    }*/
-
-
-                } else
-                    if (isActiveContainer(Container.FILTER)) {
-                    BackButton(
-                        modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                    ) {
-                        /*showBottomNavigation()
-                        filterScreenDisplayed = false*/
-                        actionBack(Container.FILTER)
-                        //backFilterMode()
-                    }
-                    Text(modifier = Modifier.weight(1f),
-                        text = stringResource(R.string.text_filter),
-                        color = TextFieldFont,
-                        fontSize = 17.sp
-                    )
-
-                } else {
-                //    log(activeViewDisplayed)
-                    if (isSearchMode) {
-                        //val scope = rememberCoroutineScope()
-                        BackButton(
-                            modifier = Modifier
-                                .align(Alignment.CenterVertically)
-                        ) {
-                           backSearchMode()
+                    Container.SEARCH,
+                    Container.SEARCH_EDIT -> {
+                        TextFieldSearch(modifier = Modifier.weight(1f),
+                            textSearch = textSearch,
+                            onSpeechRecognizer = {
+                                val error_speechrecognizer =
+                                    getStringResource(id = R.string.text_error_speechrecognizer)
+                                getSpeechInput(context)?.let { intent ->
+                                    startLauncher.launch(intent)
+                                } ?: viewModel.showSnackbar(
+                                    error_speechrecognizer,
+                                    type = MESSAGE.ERROR
+                                )
+                            },
+                            onFocused = {
+                                showFloatingButton = false
+                                setActiveContainer(Container.SEARCH_EDIT)
+                                searchState.value = SearchState.SEARCH_QUERY
+                                prevSearchText.clear()
+                                prevSearchText.append(textSearch.value)
+                                isFocusedSearchTextField = true
+                                viewModel.hideBottomNavigation()
+                            }) {
+                            findProducts(it)
                         }
                     }
-
-                    TextFieldSearch(modifier = Modifier.weight(1f),
-                        textSearch = textSearch,
-                        onSpeechRecognizer = {
-                            val error_speechrecognizer =
-                                getStringResource(id = R.string.text_error_speechrecognizer)
-                            getSpeechInput(context)?.let { intent ->
-                                startLauncher.launch(intent)
-                            } ?: viewModel.showSnackbar(
-                                error_speechrecognizer,
-                                type = MESSAGE.ERROR
-                            )
-                        },
-                        onFocused = {
-                            showFloatingButton = false
-                            setActiveContainer(Container.SEARCH_EDIT)
-                            searchState.value = SearchState.SEARCH_QUERY
-                            prevSearchText.clear()
-                            prevSearchText.append(textSearch.value)
-                            isFocusedSearchTextField = true
-                            viewModel.hideBottomNavigation()
-                        }) {
-                        findProducts(it)
-                    }
-
-                    //**************************************************************************************
-          /*          BasicTextField(
-                        modifier = Modifier
-                            .onFocusChanged {
-                                if (it.isFocused) {
-                                    // prevStateScroll = Pair<Int, Int>(0,0)
-                                    showFloatingButton = false
-                                    setActiveContainer(Container.SEARCH_EDIT)
-                                    //viewModel.putComposeViewStack(Container.SEARCH_EDIT)
-                                    //isSearchMode = true
-                                    //val searchStore: SearchQueryStorageInterface = SearchQueryStorage.getInstance()
-                                    //lastSearchQuery.value = ""
-                                    /*scope.launch {
-                                    stateGrid.scrollToItem(0)
-                                }*/
-                                    searchState.value = SearchState.SEARCH_QUERY
-                                    prevSearchText.clear()
-                                    prevSearchText.append(textSearch.value)
-                                    //log("prev text search = $prevSearchText")
-                                    isFocusedSearchTextField = true
-                                    viewModel.hideBottomNavigation()
-                                }
-                            }
-                            .weight(1f)
-                            .height(32.dp)
-                            .background(color = TextFieldBg, shape = RoundedCornerShape(32.dp)),
-                        cursorBrush = SolidColor(TextFieldFont),
-                        value = textSearch.value,
-                        textStyle = TextStyle(color = TextFieldFont),
-                        onValueChange = {
-                            textSearch.value = it
-                        },
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Search,
-                            keyboardType = KeyboardType.Text
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onSearch = {
-                                findProducts(textSearch.value)
-
-                                /*if (products.isNotEmpty())
-                                    scope.launch {
-                                        stateGrid.scrollToItem(0)
-                                    }*/
-                                //   hideSearchDialog()
-
-                             /*
-                                if (textSearch.value.isNotBlank()) {
-
-                                    if (!searchScreenDisplayed) {
-                                        viewModel.saveScreenProducts(
-                                            ScreenRouter.current.key,
-                                            stateGrid.firstVisibleItemIndex
-                                            //stateGrid.firstVisibleItemScrollOffset
-                                        )
-                                    }
-
-                                    hideSearchDialog()
-                                    viewModel.putComposeViewStack(ComposeView.SEARCH)
-                                   // log("text search = ${textSearch.value.trim()}")
-                                    viewModel.findProductsRequest(textSearch.value.trim())
-                                    searchState.value = SearchState.SEARCH_RESULT
-                                    searchScreenDisplayed = true
-                                    /*if (products.isNotEmpty())
-                                    scope.launch {
-                                        stateGrid.scrollToItem(0)
-                                    }*/
-                                }*/
-                            }
-                        ),
-                        decorationBox = { innerTextField ->
-                            val error_speechrecognizer =
-                                stringResource(id = R.string.text_error_speechrecognizer)
-                            TextFieldDefaults.TextFieldDecorationBox(
-                                value = "",
-                                placeholder = {
-                                    if (textSearch.value.isEmpty())
-                                        Text(
-                                            text = stringResource(id = R.string.text_search),
-                                            fontSize = 14.sp,
-                                            color = TextFieldFont.copy(alpha = 0.4f)
-                                        )
-                                },
-                                leadingIcon = {
-                                    Icon(
-                                        imageVector = ImageVector.vectorResource(R.drawable.ic_search),
-                                        contentDescription = null
-                                    )
-                                },
-                                trailingIcon = {
-                                    val showClearIcon =
-                                        textSearch.value.isNotEmpty() && searchState.value == SearchState.SEARCH_QUERY
-                                    //  log(searchState.value.name)
-                                    val iconSize = if (showClearIcon) 16.dp else 24.dp
-                                    Icon(
-                                        imageVector = if (showClearIcon)
-                                            ImageVector.vectorResource(R.drawable.ic_cancel_bs)
-                                        else
-                                            ImageVector.vectorResource(R.drawable.ic_microphone),
-                                        contentDescription = null,
-                                        modifier = Modifier
-                                            .clip(CircleShape)
-                                            .size(iconSize)
-                                            .clickable {
-                                                if (showClearIcon) {
-                                                    textSearch.value = ""
-                                                    //DialogRouter.reset()
-                                                    //showSearch = false
-                                                } else {
-                                                    // Вызвать голосовой ввод
-                                                    getSpeechInput(context)?.let { intent ->
-                                                        startLauncher.launch(intent)
-                                                    } ?: viewModel.showSnackbar(
-                                                        error_speechrecognizer,
-                                                        type = MESSAGE.ERROR
-                                                    )
-                                                }
-                                            }
-                                    )
-                                },
-
-                                visualTransformation = VisualTransformation.None,
-                                innerTextField = innerTextField,
-                                singleLine = true,
-                                enabled = true,
-                                interactionSource = remember {
-                                    MutableInteractionSource()
-                                },
-                                contentPadding = PaddingValues(0.dp)
-                            )
-                        })
-
-                    //val interactionSource = remember { MutableInteractionSource() }
-                    //  ShowMessageCount(31)
-*/
-                    //**************************************************************************************
-                    if (!isSearchMode)
-                    //if (!isFocusedSearchTextField.value)
-                        ShowMessageCount(24)
-
+                    else -> {}
                 }
+
+                when (activeContainer) {
+                    Container.MAIN -> ShowMessageCount(24)
+                    Container.DETAIL -> {
+                            Spacer(modifier = Modifier.width(4.dp))
+                            ButtonFavorite(
+                                modifier = Modifier
+                                    .clip(CircleShape)
+                                    .size(24.dp)
+                                    .align(Alignment.CenterVertically),
+                                checked = detailProduct.value.favorite > 0
+                            ) {
+                                detailProduct.value.favorite = if (it) 1 else 0
+                                viewModel.setProductFavorite(detailProduct.value)
+                            }
+                            Spacer(modifier = Modifier.width(4.dp))
+                    }
+                    else -> {}
+                }
+
+
+
             }
         }
     }) {
@@ -971,6 +795,7 @@ fun MainScreen(state: ModalBottomSheetState){
                                     setActiveContainer(Container.DETAIL)
                                     viewModel.hideBottomNavigation()
                                     showFloatingButton = false
+                                    detailProduct.value = selectedProduct
                                     log(selectedProduct.name)
                                 }
                             }
