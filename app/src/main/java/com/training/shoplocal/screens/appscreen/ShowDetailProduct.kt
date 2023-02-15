@@ -9,10 +9,13 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.dp
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.BgScreenDark
@@ -37,10 +40,20 @@ fun ShowDetailProduct(value: Product){
         /*LaunchedEffect(Unit) {
             requester.requestFocus()
         }*/
-        val size = this.maxWidth
-        ShowProductImages(modifier = Modifier
-            .width(size)
-            .height(size)
-            , product = product)
+        val size = this.maxWidth - 32.dp/*with(LocalDensity) {
+           32.dp.roundToPx().toFloat()
+        }*/
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(all = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            ShowProductImages(
+                modifier = Modifier
+                    .width(size)
+                    .height(size)
+                , product = product
+            )
+        }
     }
 }
