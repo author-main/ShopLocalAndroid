@@ -91,7 +91,13 @@ fun ShowSearchHistory(textSearch: MutableState<String>, searchState: State<Searc
         }
     }
     //val textFont = FontFamily(Font(R.font.robotocondensed_light))
+    val interaction = remember { MutableInteractionSource() }
     Box(modifier = Modifier
+        .clickable(
+            interactionSource = interaction,
+            indication = null,
+            onClick = {}
+        )
         .fillMaxSize()
         .background(PrimaryDark)
     ){

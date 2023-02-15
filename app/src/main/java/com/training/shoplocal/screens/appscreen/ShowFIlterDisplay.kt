@@ -73,6 +73,7 @@ import java.util.*
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ShowFilterDisplay(filter: ProviderDataDisplay, reset: () -> Unit, perform: (filter: FilterData)->Unit){
+    val interaction = remember { MutableInteractionSource() }
     val viewModel: RepositoryViewModel = viewModel()
     val items = remember {
         viewModel.getSectionFilter()
@@ -393,12 +394,12 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay, reset: () -> Unit, perform: (
             }
         }
         if (nameSection != null) {
-            val interactionSource = remember { MutableInteractionSource() }
+            //val interactionSource = remember { MutableInteractionSource() }
             Row(verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable(
-                        interactionSource = interactionSource,
+                        interactionSource = interaction,//Source,
                         indication = null
                     ) {
                         openSection = if (openSection != sectionId)
@@ -436,6 +437,11 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay, reset: () -> Unit, perform: (
     }
     Box(modifier = Modifier
         //.fillMaxSize()
+        .clickable(
+            interactionSource = interaction,
+            indication = null,
+            onClick = {}
+        )
         .background(BgScreenDark)
     ){
         Column(modifier = Modifier

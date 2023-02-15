@@ -1,6 +1,9 @@
 package com.training.shoplocal.screens.appscreen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.Interaction
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
@@ -22,9 +25,14 @@ fun ShowDetailProduct(value: Product){
         value
     }
     //val requester: FocusRequester = FocusRequester()
+    val interaction = remember { MutableInteractionSource() }
     Box(modifier = Modifier
         .fillMaxSize()
  //       .focusRequester(requester)
+        .clickable(
+            interactionSource = interaction,
+            indication = null
+        ){}
         .background(BgScreenDark)
     ){
         /*LaunchedEffect(Unit) {
