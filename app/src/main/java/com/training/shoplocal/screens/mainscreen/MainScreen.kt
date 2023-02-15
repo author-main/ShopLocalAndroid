@@ -668,7 +668,7 @@ fun MainScreen(state: ModalBottomSheetState){
                             ButtonFavorite(
                                 modifier = Modifier
                                     .clip(CircleShape)
-                                    .size(24.dp)
+                                    .size(23.dp)
                                     .align(Alignment.CenterVertically),
                                 checked = detailProduct.value.favorite > 0
                             ) {
@@ -676,6 +676,18 @@ fun MainScreen(state: ModalBottomSheetState){
                                 viewModel.setProductFavorite(detailProduct.value)
                             }
                             Spacer(modifier = Modifier.width(4.dp))
+                        Image(
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_share),
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(ImageFavoriteOff),
+                            modifier = Modifier
+                            .size(24.dp)
+                            .clip(CircleShape)
+                            .align(Alignment.CenterVertically)
+                            .clickable() {
+
+                            }
+                        )
                     }
                     else -> {}
                 }
