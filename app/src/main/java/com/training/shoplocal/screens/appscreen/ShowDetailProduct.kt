@@ -52,6 +52,7 @@ fun ShowDetailProduct(value: Product){
                 modifier = Modifier
                     .width(size)
                     .height(size)
+                    .padding(all = 8.dp)
                 , product = product
             )
         }

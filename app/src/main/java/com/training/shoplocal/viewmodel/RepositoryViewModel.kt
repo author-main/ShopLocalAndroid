@@ -530,7 +530,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         return _activeContainer.value//containerStack.peek()
     }
 
-    fun existImageCache(filename: String?, convert: Boolean = false):Boolean {
+ /*   fun existImageCache(filename: String?, convert: Boolean = false):Boolean {
         if (filename == null)
             return false
         val hash = if (convert)
@@ -546,7 +546,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                 exist = true
         }
         return exist
-    }
+    }*/
 
     fun filterProducts(searchMode: Boolean = false){
         maxPortion = -1
