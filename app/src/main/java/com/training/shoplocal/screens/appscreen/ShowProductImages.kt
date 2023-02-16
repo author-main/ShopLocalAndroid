@@ -32,16 +32,11 @@ fun ShowProductImages(modifier: Modifier, product: Product){
         }
         entries
     }*/
-    Box(modifier = modifier
-        .clip(RoundedCornerShape(8.dp))
-    ){
-        Text (text = "Checkit")
-        LazyColumn(Modifier
-            .fillMaxSize()
+
+        LazyColumn(modifier = modifier
             .background(Color.White)) {
 
         }
 
-    }
-    //log("Product ${product.name}")
+   //log("Product ${product.name}")
 }
