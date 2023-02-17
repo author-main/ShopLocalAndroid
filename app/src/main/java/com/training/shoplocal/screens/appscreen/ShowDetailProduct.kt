@@ -54,7 +54,9 @@ fun ShowDetailProduct(value: Product){
                     .height(size)
                     .padding(all = 8.dp)
                 , product = product
-            )
+            ) {
+                log("index = $it")
+            }
         }
     }
 }
