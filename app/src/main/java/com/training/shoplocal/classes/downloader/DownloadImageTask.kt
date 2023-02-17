@@ -81,6 +81,7 @@ class DownloadImageTask(private val link: String, private val reduce: Boolean, v
             callback(bitmap, fileTimestamp)
         }*/
        // for (i in 1..1000000000){}
+        //log("$link downloaded from task")
         callback(ExtBitmap(bitmap, source), fileTimestamp)
         return ExtBitmap(null, Source.NONE)
     }

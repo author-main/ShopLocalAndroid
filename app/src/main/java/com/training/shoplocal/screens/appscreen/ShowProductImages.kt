@@ -1,26 +1,28 @@
 package com.training.shoplocal.screens.appscreen
 
-import android.text.Layout.Alignment
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.ImageBitmapConfig
-import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.toSize
 import com.training.shoplocal.classes.EMPTY_IMAGE
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.classes.SERVER_URL
@@ -28,9 +30,7 @@ import com.training.shoplocal.classes.downloader.Callback
 import com.training.shoplocal.classes.downloader.ExtBitmap
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 import com.training.shoplocal.log
-import com.training.shoplocal.loginview.LoginViewState
-import com.training.shoplocal.md5
-import com.training.shoplocal.screens.mainscreen.ImageLink
+import kotlin.math.pow
 
 
 private enum class Status {
@@ -42,10 +42,57 @@ private enum class Status {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ShowProductImages(modifier: Modifier, product: Product, onChangeImage: (index: Int) -> Unit = {}){
-    data class ImageStatus (var link: String, var image: ImageBitmap = EMPTY_IMAGE, var status: Status = Status.NONE)
-    val product = remember {
-        product
+    @Composable
+    fun ProgressDownloadImage(size: Size){
+        if (size.width > 0) {
+            val dpSize = LocalDensity.current.run {
+                size.toDpSize()
+            }
+            val padding = LocalDensity.current.run {
+                16.dp.toPx()
+            }
+            val heightGradient = kotlin.math.sqrt(size.width.pow(2) +
+            size.height.pow(2)) + padding
+            val widthGradient  = 120f
+            val delta = ( heightGradient - size.height) / 2
+            val infiniteTransition = rememberInfiniteTransition()
+            val animatedPos by infiniteTransition.animateFloat(
+                initialValue = -widthGradient - delta,
+                targetValue = size.width + delta,
+                animationSpec = infiniteRepeatable(
+                    animation = tween(
+                        durationMillis = 1000,
+                        easing = FastOutLinearInEasing
+                    ),
+                    repeatMode = RepeatMode.Reverse
+                )
+            )
+            Canvas(
+                modifier = Modifier.size(dpSize)
+            ) {
+                rotate(degrees = 45f) {
+                    translate(animatedPos, -delta) {
+                        drawRect(
+                            brush = Brush.horizontalGradient(
+                                colors = listOf(
+                                    Color.White,
+                                    Color(0xFFDDDDDD),
+                                    Color.White
+                                ),
+                                startX = 0f,
+                                endX   = widthGradient
+                            ),
+                            size = Size(widthGradient, heightGradient)
+                        )
+                    }
+                }
+            }
+        }
     }
+    data class ImageStatus (var link: String, var image: ImageBitmap = EMPTY_IMAGE, var status: Status = Status.NONE)
+   /* val currentProduct = remember {
+        product
+    }*/
     val linkImages = remember {
         val entries = mutableListOf<ImageStatus>()
         product.linkimages?.forEach {
@@ -65,28 +112,36 @@ fun ShowProductImages(modifier: Modifier, product: Product, onChangeImage: (inde
 
     @Composable
     fun downloadImage(index: Int): MutableState<ImageBitmap> {
+        val isMainImage = remember{
+            index == 0
+        }
         fun checkMainImage(){
-            if (index == 0)
+            if (isMainImage)
                 downloadedMainImage = true
         }
         val downloadedImage = remember { mutableStateOf(
             ImageBitmap(1,1, hasAlpha = true, config = ImageBitmapConfig.Argb8888)
         ) }
-        val linkImage = remember{linkImages[index].apply { status = Status.LOADING }}
-        LaunchedEffect(index) {
+
+        val linkImage = remember{linkImages[index]}
+        LaunchedEffect(Unit) {
+            linkImage.status = Status.LOADING
             ImageLinkDownloader.downloadImage("$SERVER_URL/images/${linkImage.link}", callback = object: Callback{
                 override fun onComplete(image: ExtBitmap) {
                     image.bitmap?.let{
-                        //log("complete ${linkImage.link}")
-                        linkImage.image = it.asImageBitmap()
                         linkImage.status = Status.COMPLETE
                         downloadedImage.value = it.asImageBitmap()
+                        linkImage.image = it.asImageBitmap()
+                        /*if (isMainImage)
+                            downloadedMainImage = true*/
                         checkMainImage()
                     }
                 }
                 override fun onFailure() {
                     linkImage.status = Status.FAIL
                     downloadedImage.value = EMPTY_IMAGE
+                    /*if (isMainImage)
+                        downloadedMainImage = true*/
                     checkMainImage()
                 }
             }
@@ -95,62 +150,61 @@ fun ShowProductImages(modifier: Modifier, product: Product, onChangeImage: (inde
         return downloadedImage
     }
 
-    if (linkImages.size > 0) {
-        if (!downloadedMainImage) {
-            if (linkImages[0].status == Status.NONE)
-                downloadImage(0)
-        } else {
-            for (index in 1 until linkImages.size) {
-                if (linkImages[index].status == Status.NONE)
-                    downloadImage(index)
-            }
-        }
-    }
-
     val lazyRowState = rememberLazyListState()
     val flingBehavior = rememberSnapFlingBehavior(lazyListState = lazyRowState)
-    LazyRow(
-        state = lazyRowState, modifier = modifier.background(Color.White),
-        horizontalArrangement = Arrangement.Center,
-        flingBehavior = flingBehavior
+    var size by remember {
+        mutableStateOf(Size.Zero)
+    }
+    Box(
+        modifier = modifier
+            .background(Color.White)
+            .onGloballyPositioned { coordinates ->
+                size = coordinates.size.toSize()
+            }
     ) {
-        items(linkImages, {linkImage -> linkImage.link}){item ->
-            Image(
-                modifier = Modifier
-                    .fillParentMaxSize()
-                    .padding(all = 8.dp),
-                bitmap = item.image,
-                contentDescription = null
-            )
-        }
-        /*linkImages.forEach{ item ->
-            item {
+      //  log ("download = $downloadedMainImage")
+        LazyRow(
+          //  modifier = Modifier.padding(all = 8.dp),
+            state = lazyRowState,
+            horizontalArrangement = Arrangement.Center,
+            flingBehavior = flingBehavior
+        ) {
+            itemsIndexed(linkImages) { index, item ->
                 Image(
                     modifier = Modifier
                         .fillParentMaxSize()
                         .padding(all = 8.dp),
-                    bitmap = item.image,/*run {
-                        if (item.first != IMAGE_STATE.COMPLETED)
-                            getCardImage(index).value
+                    bitmap = run {
+//                        if (linkImages[index].status == Status.NONE)
+                        if (item.status == Status.NONE)
+                            downloadImage(index).value
                         else
-                            item.second
-                    },*/
+                            item.image
+                    },
                     contentDescription = null
                 )
             }
-        }*/
-    }
-
-    val indexImage = remember {
-        derivedStateOf {
-            if (lazyRowState.layoutInfo.visibleItemsInfo.isNotEmpty())
-                 lazyRowState.layoutInfo.visibleItemsInfo.first().index
-            else
-                -1
         }
-    }
-    LaunchedEffect(indexImage.value) {
-        onChangeImage(indexImage.value)
+
+         if (!downloadedMainImage)
+             Box(modifier = Modifier
+                 .clipToBounds()
+                 .fillMaxSize()
+                 .background(Color.White)) {
+                ProgressDownloadImage(size)
+             }
+
+        val indexImage = remember {
+            derivedStateOf {
+                if (lazyRowState.layoutInfo.visibleItemsInfo.isNotEmpty())
+                    lazyRowState.layoutInfo.visibleItemsInfo.first().index
+                else
+                    -1
+            }
+        }
+        LaunchedEffect(indexImage.value) {
+            onChangeImage(indexImage.value)
+        }
     }
 
 

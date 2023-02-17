@@ -48,64 +48,12 @@ import com.training.shoplocal.classes.downloader.Callback
 import com.training.shoplocal.classes.downloader.ExtBitmap
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 import com.training.shoplocal.classes.fodisplay.VIEW_MODE
+import com.training.shoplocal.screens.appscreen.ShowProductImages
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.launch
 import java.math.RoundingMode
 import java.text.DecimalFormat
-
-private enum class IMAGE_STATE {
-    NONE,
-    PROCESS,
-    COMPLETED,
-    FAILURE
-}
-@Composable
-fun AnimateLinkDownload(componentSize: Size) {
-    if (componentSize.width > 0) {
-        val dpSize = LocalDensity.current.run {
-            componentSize.toDpSize()
-        }
-        val padding = LocalDensity.current.run {
-            16.dp.toPx()
-        }
-        val heightGradient = kotlin.math.sqrt(componentSize.width * componentSize.width +
-                    componentSize.height * componentSize.height) + padding
-        val widthGradient  = 120f
-        val infiniteTransition = rememberInfiniteTransition()
-        val animatedPos by infiniteTransition.animateFloat(
-            initialValue = -2*widthGradient,
-            targetValue = componentSize.width + widthGradient,
-            animationSpec = infiniteRepeatable(
-                animation = tween(
-                    durationMillis = 1000,
-                    easing = FastOutLinearInEasing
-                ),
-                repeatMode = RepeatMode.Reverse
-            )
-        )
-        Canvas(
-            modifier = Modifier.size(dpSize)
-        ) {
-            rotate(degrees = 45f) {
-                translate(animatedPos, -100f) {
-                    drawRect(
-                        brush = Brush.horizontalGradient(
-                            colors = listOf(
-                                Color.White,
-                                Color(0xFFDDDDDD),
-                                Color.White
-                            ),
-                            startX = 0f,
-                            endX   = widthGradient
-                        ),
-                        size = Size(widthGradient, heightGradient)
-                    )
-                }
-            }
-        }
-    }
-}
 
 @Composable
 fun DiscountPanel(modifier: Modifier, percent: Int){
@@ -262,147 +210,6 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
 
     @Composable
     fun ProductImages(){
-        fun getLinkImage(index: Int): ImageLink?{
-            return linkImages.let{
-                if (index < it.size)
-                    it[index]
-                else
-                    null
-            }
-        }
-//**************************************************************************************************
-        val countItems = remember {cardproduct.linkimages?.size ?: 1} // у продукта должно быть хотя бы одно изображение
-        val listImages = remember{
-            Array<Pair<IMAGE_STATE, ImageBitmap>>(countItems) {
-                IMAGE_STATE.NONE to EMPTY_IMAGE
-            }}
-        //val context = LocalContext.current
-
-       // val visible = remember{MutableTransitionState(false)}
-        val animateSize = remember{mutableStateOf(Size.Zero)}
-        //val imageLink = getLinkImage(0)//, product.linkimages)
-
-
-        val downloadedImage = remember {
-            mutableStateOf(false)
-        }
-
-       /* val downloadedImage = remember {
-            mutableStateOf(false)
-           /* mutableStateOf(
-                (listImages[0].first == IMAGE_STATE.COMPLETED && !listImages[0].second.isEmpty()) || listImages[0].first == IMAGE_STATE.FAILURE
-            )*/
-        }*/
-
-        /*val isDownload = remember {
-            derivedStateOf {
-                (listImages[0].first == IMAGE_STATE.COMPLETED && !listImages[0].second.isEmpty())
-                        || listImages[0].first == IMAGE_STATE.FAILURE
-            }
-        }*/
-
-
-
-
-        /*val downloadedImage = remember{ mutableStateOf(
-            (listImages[0].first == IMAGE_STATE.COMPLETED && !listImages[0].second.isEmpty()) || listImages[0].first == IMAGE_STATE.FAILURE
-        ) }*/
-
-
-        // Вызывается при старте композиции один раз, выполняется блок,
-        // в случае рекомпозиции: при измененнии key или уничтожения композиции блок не выполняется,
-        // а выполняется OnDispose()
-        DisposableEffect(Unit) {
-            onDispose {
-                for (i in listImages.indices)
-                    listImages[i] = IMAGE_STATE.NONE to EMPTY_IMAGE
-            }
-        }
-
-
-        /*val isDownloadImage = remember {
-            derivedStateOf {
-              //  val loaded =
-                listImages[0].first == IMAGE_STATE.COMPLETED && !listImages[0].second.isEmpty()// || listImages[0].first == IMAGE_STATE.FAILURE
-              //  log("is download image = $loaded")
-              //  loaded
-            }
-        }*/
-
-
-     //   if (!downloadedImage.value) {
-        //if (!isDownloadImage.value) {
-
-        @Composable
-        fun getCardImage(index: Int): MutableState<ImageBitmap> {
-            val imageNet = remember { mutableStateOf(EMPTY_IMAGE) }
-            LaunchedEffect(Unit) {
-                //   if (listImages[index].first == IMAGE_STATE.NONE) {
-                val itemImageLink = getLinkImage(index)//, items)
-                listImages[index] = IMAGE_STATE.PROCESS to EMPTY_IMAGE
-                ImageLinkDownloader.downloadCardImage(
-                    "$SERVER_URL/images/${itemImageLink?.link}",
-                    object : Callback {
-                        override fun onComplete(image: ExtBitmap) {
-                            imageNet.value = image.bitmap!!.asImageBitmap()
-                            //log("image download")
-                            listImages[index] =
-                                IMAGE_STATE.COMPLETED to imageNet.value//image.bitmap!!.asImageBitmap()
-                            downloadedImage.value = true
-                        }
-                        override fun onFailure() {
-                            listImages[index] =
-                                IMAGE_STATE.FAILURE to EMPTY_IMAGE
-                            downloadedImage.value = true
-                        }
-                    }
-                )
-                //  }
-            }
-            return imageNet
-        }
-
-
-            //getLinkImage(0)
-
-            // Запуск в области compose, если compose завершится. Блок внутри будет завершен без
-            // утечки памяти и процессов.
-      /*      LaunchedEffect(Unit) {
-                // Если не нужно уменьшать изображение,
-                // используйте ImageLinkDownload.downloadImage вместо
-                // ImageLinkDownload.downloadCardImage
-                //    if (!isDownload.value) {
-                //log ("not download")
-                ImageLinkDownloader.downloadCardImage(
-                    imageLink?.let { "$SERVER_URL/images/${it.link}" },
-                    object : Callback {
-                        override fun onComplete(image: ExtBitmap) {
-                            listImages[0] =
-                                IMAGE_STATE.COMPLETED to image.bitmap!!.asImageBitmap()
-                            visible.targetState = true
-                            //downloadedImage.value = true
-                            //  log("card product $listImages[0]")
-                            //  log("${imageLink?.link} load image true")
-
-                        }
-
-                        override fun onFailure() {
-                            // здесь можно установить картинку по умолчанию,
-                            // в случае если картинка не загрузилась
-                            //listImages[0] = ваше изображение
-                            listImages[0] = IMAGE_STATE.FAILURE to EMPTY_IMAGE
-                            //visible.targetState = true
-                            //log("${imageLink?.link} load image false")
-                            //downloadedImage.value = false//true
-                            //  log("load image false")
-                        }
-                    })
-
-            }
-
-            //     } /*else
-            //     visible.targetState = true*/
-*/
 
         Card(modifier = Modifier
             .requiredSize(CARD_SIZE.dp),
@@ -412,97 +219,11 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
             shape = RoundedCornerShape(16.dp)
         ) {
             Box(modifier = Modifier
-                .padding(8.dp)
-                .onGloballyPositioned { coordinates ->
-                    animateSize.value = coordinates.size.toSize()
-                },
+                .padding(8.dp),
                 contentAlignment = Alignment.Center
             ) {
 
-
-              /*  val showDownloadProcess = remember {
-                    derivedStateOf {
-                  //      log("md5 = ${getLinkImage(0)?.md5}")
-                      //  val result =
-                            !(listImages[0].first == IMAGE_STATE.COMPLETED && !listImages[0].second.isEmpty())
-                                    //!isDownloadImage.value
-                                    //!downloadedImage.value
-                                  //  && !viewModel.existImageCache(getLinkImage(0)?.md5)
-                    //    log ("show progress $result")
-                    //    result
-
-                    }
-                }*/
-
-                //log("show download progress ${showDownloadProcess.value}")
-               // if (showDownloadProcess.value) {
-                if (!downloadedImage.value){
-                    //log ("show progress")
-                    AnimateLinkDownload(animateSize.value)
-                }
-
-                /*androidx.compose.animation.AnimatedVisibility(
-                    visibleState = visible,
-                    enter = fadeIn(
-                        animationSpec = tween(
-                            durationMillis = if (!showDownloadProcess.value) 0 else 100,
-                            easing = LinearEasing
-                        )
-                    )
-                ) {*/
-                    val lazyRowState = rememberLazyListState()
-
-
-                    /*  LaunchedEffect(Unit){
-                        cardproduct.linkimages?.let { //items ->
-                            for (i in 1 until countItems) {
-                                if (listImages[i].first == IMAGE_STATE.NONE) {
-                                    val itemImageLink = getLinkImage(i)//, items)
-                                    listImages[i] = IMAGE_STATE.PROCESS to EMPTY_IMAGE
-                                    ImageLinkDownloader.downloadCardImage(
-                                        "$SERVER_URL/images/${itemImageLink?.link}",
-                                        object : Callback {
-                                            override fun onComplete(image: ExtBitmap) {
-                                                //log ("product ${product.id}, loaded image $i")
-                                                listImages[i] =
-                                                    IMAGE_STATE.COMPLETED to image.bitmap!!.asImageBitmap()
-                                            }
-
-                                            override fun onFailure() {
-                                                listImages[i] =
-                                                    IMAGE_STATE.FAILURE to EMPTY_IMAGE
-                                            }
-                                        }
-                                    )
-                                }
-                            }
-                        }
-                    }*/
-                    val flingBehavior = rememberSnapFlingBehavior(lazyListState = lazyRowState)
-                    LazyRow(
-                        state = lazyRowState, modifier = Modifier.fillMaxSize(),
-                        horizontalArrangement = Arrangement.Center,
-                        flingBehavior = flingBehavior
-                    ) {
-                        listImages.forEachIndexed { index, item ->
-                            item {
-                                Image(
-                                    modifier = Modifier
-                                        .fillParentMaxSize()
-                                        .padding(all = 8.dp),
-                                    bitmap = run {
-                                        if (item.first != IMAGE_STATE.COMPLETED)
-                                            getCardImage(index).value
-                                        else
-                                            item.second
-                                    },//item.second,//bitmap.value,
-                                    contentDescription = null
-                                )
-                            }
-                        }
-                    }
-                    //       }
-                    //if (isCardModeView())
+                    ShowProductImages(modifier = Modifier.fillMaxSize(), product = cardproduct)
                     DiscountPanel(
                         modifier = Modifier.align(if (isCardModeView()) Alignment.BottomStart else Alignment.TopStart),
                         percent = cardproduct.discount
@@ -636,27 +357,21 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
 
 
 
-  /*  Box(
-        modifier = Modifier
-            .width(CARD_SIZE.dp)
-            /* .onGloballyPositioned { coordinates ->
-            heightCard = coordinates.size.height
-          //  log ("height = ${heightCard.Dp}")
-                //animateSize.value = coordinates.size.toSize()
-        }*/
-            .padding(vertical = 10.dp))
-        {*/
+
         val interaction = remember { MutableInteractionSource() }
         if (isCardModeView()) {
             Column(
                 modifier = Modifier
                     .width(CARD_SIZE.dp)
                     .padding(vertical = 10.dp)
-                    .clickable(interactionSource = interaction,
-                               indication = null) {
+                    .clickable(
+                        interactionSource = interaction,
+                        indication = null
+                    ) {
                         onClick(cardproduct)
                     }
             ) {
+
                 ProductImages()
                 Spacer(modifier = Modifier
                     .height(8.dp)
