@@ -44,7 +44,7 @@ fun ShowImagesIndicator(modifier: Modifier, index: State<Int>, count: Int){
     val curIndex= remember { // хранит предыдущее значение индекса
         IndexImage()
     }*/
-
+    val selectedColor = remember {TextFieldFont.copy(alpha = 0.7f)}
     val symIndicator = "●"
     Row(modifier = modifier,
         verticalAlignment = Alignment.CenterVertically){
@@ -53,7 +53,7 @@ fun ShowImagesIndicator(modifier: Modifier, index: State<Int>, count: Int){
                 curIndex.value = i*/
             Box(modifier = Modifier.padding(horizontal = 1.dp)){
                 Text(text = symIndicator,
-                    color = if (index.value == i) TextFieldFont.copy(alpha = 0.7f) else TextFieldBg,
+                    color = if (index.value == i) selectedColor else TextFieldBg,
                     fontSize = 13.sp
                 )
             }
