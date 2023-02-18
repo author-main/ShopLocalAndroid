@@ -53,7 +53,8 @@ fun ShowImagesIndicator(modifier: Modifier, index: State<Int>, count: Int){
                 curIndex.value = i*/
             Box(modifier = Modifier.padding(horizontal = 1.dp)){
                 Text(text = symIndicator,
-                    color = if (index.value == i) TextFieldFont.copy(alpha = 0.7f) else TextFieldBg
+                    color = if (index.value == i) TextFieldFont.copy(alpha = 0.7f) else TextFieldBg,
+                    fontSize = 13.sp
                 )
             }
         }
