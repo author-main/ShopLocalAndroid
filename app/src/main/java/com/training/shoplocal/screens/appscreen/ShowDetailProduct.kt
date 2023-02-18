@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +19,7 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.training.shoplocal.classes.Product
@@ -29,6 +31,9 @@ import com.training.shoplocal.ui.theme.PrimaryDark
 fun ShowDetailProduct(value: Product){
     val product = remember {
         value
+    }
+    val indexImage = remember {
+        mutableStateOf(0)
     }
     //val requester: FocusRequester = FocusRequester()
     val interaction = remember { MutableInteractionSource() }
@@ -44,24 +49,39 @@ fun ShowDetailProduct(value: Product){
         /*LaunchedEffect(Unit) {
             requester.requestFocus()
         }*/
-        val size = this.maxWidth - 32.dp/*with(LocalDensity) {
+        val size = this.maxWidth/*with(LocalDensity) {
            32.dp.roundToPx().toFloat()
         }*/
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(all = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            ShowProductImages(
+            Column(
                 modifier = Modifier
-                    .clipToBounds()
-                    .width(size)
-                    .height(size)
-                    .padding(all = 8.dp)
-                , product = product
+                    .fillMaxSize()
+                    .padding(all = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                log("index = $it")
+            Box(
+                Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .size(size)
+                    .background(Color.White),
+                contentAlignment = Alignment.Center
+            ) {
+                ShowProductImages(
+                    modifier = Modifier
+                        //.clipToBounds()
+                        .width(size - 32.dp)
+                        .height(size - 32.dp)
+                        .padding(all = 8.dp), product = product
+                ) {
+                    //log("index = $it")
+                    indexImage.value = it
+                }
             }
+            product.linkimages?.let{links ->
+                val count = links.size
+                if (count > 1 )
+                    ShowImagesIndicator(modifier = Modifier, index = indexImage, count = count)
+            }
+
         }
     }
 }

@@ -11,7 +11,9 @@ import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
@@ -22,6 +24,7 @@ import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import com.training.shoplocal.classes.EMPTY_IMAGE
 import com.training.shoplocal.classes.Product
@@ -30,8 +33,33 @@ import com.training.shoplocal.classes.downloader.Callback
 import com.training.shoplocal.classes.downloader.ExtBitmap
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 import com.training.shoplocal.log
+import com.training.shoplocal.ui.theme.TextFieldBg
+import com.training.shoplocal.ui.theme.TextFieldFont
 import kotlin.math.pow
 
+
+@Composable
+fun ShowImagesIndicator(modifier: Modifier, index: State<Int>, count: Int){
+    /*data class IndexImage(var value: Int = -1) // если захочется анимировать
+    val curIndex= remember { // хранит предыдущее значение индекса
+        IndexImage()
+    }*/
+
+    val symIndicator = "●"
+    Row(modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically){
+        for (i in 0 until count) {
+           /* if (index.value == i)
+                curIndex.value = i*/
+            Box(modifier = Modifier.padding(horizontal = 1.dp)){
+                Text(text = symIndicator,
+                    color = if (index.value == i) TextFieldFont.copy(alpha = 0.7f) else TextFieldBg
+                )
+            }
+        }
+    }
+
+}
 
 private enum class Status {
     NONE,
@@ -188,7 +216,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, onChangeImage: (inde
 
          if (!downloadedMainImage)
              Box(modifier = Modifier
-                 .clipToBounds()
+                 //.clipToBounds()
                  .fillMaxSize()
                  .background(Color.White)) {
                 ProgressDownloadImage(size)
@@ -197,7 +225,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, onChangeImage: (inde
         val indexImage = remember {
             derivedStateOf {
                 if (lazyRowState.layoutInfo.visibleItemsInfo.isNotEmpty())
-                    lazyRowState.layoutInfo.visibleItemsInfo.first().index
+                    lazyRowState.firstVisibleItemIndex
                 else
                     -1
             }
