@@ -321,13 +321,13 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
 
     @Composable
     fun ActionText(){
-        val promostr: String =
-            if (cardproduct.star >= 4)
+        val promostr: String = cardproduct.getTypeSale()
+            /*if (cardproduct.star >= 4)
                 getStringResource(R.string.text_bestseller)
             else if (cardproduct.discount > 0)
                 getStringResource(R.string.text_action)
             else
-                ""
+                ""*/
         if (promostr.isNotEmpty())
             Text(promostr,
                 fontSize = fontsize,

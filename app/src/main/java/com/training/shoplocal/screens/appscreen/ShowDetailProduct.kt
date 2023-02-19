@@ -22,10 +22,11 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import com.training.shoplocal.R
 import com.training.shoplocal.classes.Product
+import com.training.shoplocal.getStringResource
 import com.training.shoplocal.log
-import com.training.shoplocal.ui.theme.BgScreenDark
-import com.training.shoplocal.ui.theme.PrimaryDark
+import com.training.shoplocal.ui.theme.*
 
 @Composable
 fun ShowDetailProduct(value: Product){
@@ -71,10 +72,30 @@ fun ShowDetailProduct(value: Product){
                     indexImage.value = it
                 }
             }
+
             product.linkimages?.let{links ->
                 val count = links.size
                 if (count > 1 )
                     ShowImagesIndicator(modifier = Modifier, index = indexImage, count = count)
+                else
+                    DividerVertical(size = 16.dp)
+            }
+
+            Row(modifier = Modifier.fillMaxWidth()) {
+                TextPanel(
+                    text = "-${product.discount}%",
+                    textColor = Color.White,
+                    backgroundColor = BgDiscount
+                )
+                val textSale = product.getTypeSale()
+                if (textSale.isNotBlank()) {
+                    DividerHorizontal(size = 4.dp)
+                    TextPanel(
+                        text = textSale,
+                        textColor       = TextOrange,
+                        backgroundColor = PrimaryDark
+                    )
+                }
             }
 
         }

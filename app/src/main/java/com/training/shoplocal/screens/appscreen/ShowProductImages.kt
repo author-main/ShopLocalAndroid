@@ -24,12 +24,8 @@ import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.unit.toSize
-import com.training.shoplocal.classes.EMPTY_IMAGE
-import com.training.shoplocal.classes.Product
-import com.training.shoplocal.classes.SERVER_URL
+import androidx.compose.ui.unit.*
+import com.training.shoplocal.classes.*
 import com.training.shoplocal.classes.downloader.Callback
 import com.training.shoplocal.classes.downloader.ExtBitmap
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
@@ -38,6 +34,33 @@ import com.training.shoplocal.ui.theme.TextFieldBg
 import com.training.shoplocal.ui.theme.TextFieldFont
 import kotlin.math.absoluteValue
 import kotlin.math.pow
+
+
+
+@Composable
+fun DividerHorizontal(size: Dp){
+    Spacer(modifier = Modifier.width(size))
+}
+
+@Composable
+fun DividerVertical(size: Dp){
+    Spacer(modifier = Modifier.height(size))
+}
+
+
+@Composable
+fun TextPanel(text: String, textColor: Color, backgroundColor: Color, fontSize: TextUnit = 13.sp ) {
+    Box(modifier = Modifier
+        .clip(RoundedCornerShape(6.dp))
+        .background(backgroundColor),
+        contentAlignment = Alignment.Center
+    ){
+        Text(modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp), text = text,
+            color = textColor,
+            fontSize = fontSize
+        )
+    }
+}
 
 
 @Composable

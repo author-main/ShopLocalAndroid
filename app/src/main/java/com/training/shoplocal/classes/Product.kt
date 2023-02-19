@@ -2,8 +2,10 @@ package com.training.shoplocal.classes
 
 import android.graphics.Bitmap
 import com.google.gson.annotations.SerializedName
+import com.training.shoplocal.R
 import com.training.shoplocal.classes.downloader.Callback
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
+import com.training.shoplocal.getStringResource
 import com.training.shoplocal.log
 
 data class Product(
@@ -61,4 +63,12 @@ data class Product(
  * FOREIGN KEY (`category`) REFERENCES `shop_local`.`category` (`id`)
  * FOREIGN KEY (`brand`) REFERENCES `shop_local`.`brands` (`id`)
  */
+    fun getTypeSale() =
+        if (star >= 4)
+            getStringResource(R.string.text_bestseller)
+        else if (discount > 0)
+            getStringResource(R.string.text_action)
+        else
+            ""
+
  }
