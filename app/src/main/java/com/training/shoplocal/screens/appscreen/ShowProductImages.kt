@@ -208,8 +208,9 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
             }
     ) {
 
-        linkImages.forEachIndexed{index, _ ->
-            linkImages[index].image = downloadImage(index).value
+        linkImages.forEachIndexed{index, item ->
+            if (item.status == Status.NONE)
+                item.image = downloadImage(index).value
         }
 
         LazyRow(
