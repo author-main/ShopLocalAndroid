@@ -36,6 +36,7 @@ import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.TextFieldBg
 import com.training.shoplocal.ui.theme.TextFieldFont
+import kotlin.math.absoluteValue
 import kotlin.math.pow
 
 
@@ -89,7 +90,7 @@ private enum class Status {
 }
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ShowProductImages(modifier: Modifier, product: Product, onChangeImage: (index: Int) -> Unit = {}){
+fun ShowProductImages(modifier: Modifier, product: Product, onChangeImage: ((index: Int) -> Unit)? = null){
     @Composable
     fun ProgressDownloadImage(size: Size){
         if (size.width > 0) {
@@ -180,16 +181,12 @@ fun ShowProductImages(modifier: Modifier, product: Product, onChangeImage: (inde
                         linkImage.status = Status.COMPLETE
                         downloadedImage.value = it.asImageBitmap()
                         linkImage.image = it.asImageBitmap()
-                        /*if (isMainImage)
-                            downloadedMainImage = true*/
                         checkMainImage()
                     }
                 }
                 override fun onFailure() {
                     linkImage.status = Status.FAIL
                     downloadedImage.value = EMPTY_IMAGE
-                    /*if (isMainImage)
-                        downloadedMainImage = true*/
                     checkMainImage()
                 }
             }
@@ -210,9 +207,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, onChangeImage: (inde
                 size = coordinates.size.toSize()
             }
     ) {
-      //  log ("download = $downloadedMainImage")
         LazyRow(
-          //  modifier = Modifier.padding(all = 8.dp),
             state = lazyRowState,
             horizontalArrangement = Arrangement.Center,
             flingBehavior = flingBehavior
@@ -223,7 +218,6 @@ fun ShowProductImages(modifier: Modifier, product: Product, onChangeImage: (inde
                         .fillParentMaxSize()
                         .padding(all = 8.dp),
                     bitmap = run {
-//                        if (linkImages[index].status == Status.NONE)
                         if (item.status == Status.NONE)
                             downloadImage(index).value
                         else
@@ -241,20 +235,23 @@ fun ShowProductImages(modifier: Modifier, product: Product, onChangeImage: (inde
                  .background(Color.White)) {
                 ProgressDownloadImage(size)
              }
-
-        val indexImage = remember {
-            derivedStateOf {
-                if (lazyRowState.layoutInfo.visibleItemsInfo.isNotEmpty())
-                    lazyRowState.firstVisibleItemIndex
-                else
-                    -1
+        onChangeImage?.let {changeImage ->
+            val indexImage = remember {
+                derivedStateOf {
+                    var index = lazyRowState.firstVisibleItemIndex
+                    val half = lazyRowState.layoutInfo.viewportSize / 2
+                    val offset = (lazyRowState.layoutInfo.visibleItemsInfo.firstOrNull()?.offset
+                        ?: 0).absoluteValue
+                    if (lazyRowState.layoutInfo.visibleItemsInfo.isNotEmpty())
+                        if (offset > half.width) {
+                            index += 1
+                        }
+                    index
+                }
+            }
+            LaunchedEffect(indexImage.value) {
+                changeImage(indexImage.value)
             }
         }
-        LaunchedEffect(indexImage.value) {
-            onChangeImage(indexImage.value)
-        }
     }
-
-
-   //log("Product ${product.name}")
 }
