@@ -1,5 +1,6 @@
 package com.training.shoplocal.screens.appscreen
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -40,23 +41,41 @@ import kotlin.math.pow
 
 @Composable
 fun ShowImagesIndicator(modifier: Modifier, index: State<Int>, count: Int){
-    /*data class IndexImage(var value: Int = -1) // если захочется анимировать
+    val STATUS_NONE = -1
+    val STATUS_SELECTED = 1
+    val STATUS_DESELECTED = 0
+    data class IndexImage(var value: Int = -1) // если захочется анимировать
     val curIndex= remember { // хранит предыдущее значение индекса
         IndexImage()
-    }*/
-    val selectedColor = remember {TextFieldFont.copy(alpha = 0.7f)}
-    val symIndicator = "●"
+    }
+    @Composable
+    fun AnimateSymbol(status: Int = STATUS_NONE) {
+        val selectedColor = remember {TextFieldFont.copy(alpha = 0.7f)}
+        val symIndicator = remember {"●"}
+        val animateColor by animateColorAsState(
+            if (status == STATUS_SELECTED) selectedColor else TextFieldBg,
+            animationSpec = tween(
+                durationMillis = 350,
+                easing = LinearEasing
+            )
+        )
+        Box(modifier = Modifier.padding(horizontal = 1.dp)){
+            Text(text = symIndicator,
+                color = animateColor,
+                fontSize = 13.sp
+            )
+       }
+    }
     Row(modifier = modifier,
         verticalAlignment = Alignment.CenterVertically){
         for (i in 0 until count) {
-           /* if (index.value == i)
-                curIndex.value = i*/
-            Box(modifier = Modifier.padding(horizontal = 1.dp)){
-                Text(text = symIndicator,
-                    color = if (index.value == i) selectedColor else TextFieldBg,
-                    fontSize = 13.sp
-                )
-            }
+            var status = STATUS_NONE
+            if (curIndex.value == i) {
+                curIndex.value = i
+                status = STATUS_DESELECTED
+            } else if (index.value == i)
+                status = STATUS_SELECTED
+            AnimateSymbol(status)
         }
     }
 
