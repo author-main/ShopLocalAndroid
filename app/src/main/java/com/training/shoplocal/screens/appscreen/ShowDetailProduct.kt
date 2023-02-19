@@ -46,9 +46,6 @@ fun ShowDetailProduct(value: Product){
         ) {}
         .background(BgScreenDark)
     ){
-        /*LaunchedEffect(Unit) {
-            requester.requestFocus()
-        }*/
         val size = this.maxWidth/*with(LocalDensity) {
            32.dp.roundToPx().toFloat()
         }*/
@@ -67,12 +64,10 @@ fun ShowDetailProduct(value: Product){
             ) {
                 ShowProductImages(
                     modifier = Modifier
-                        //.clipToBounds()
                         .width(size - 32.dp)
                         .height(size - 32.dp)
-                        .padding(all = 8.dp), product = product
+                        .padding(all = 8.dp), reduce = false, product = product
                 ) {
-                    //log("index = $it")
                     indexImage.value = it
                 }
             }

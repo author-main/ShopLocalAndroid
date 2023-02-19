@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import com.training.shoplocal.*
 import com.training.shoplocal.classes.EMPTY_IMAGE
+import com.training.shoplocal.classes.EMPTY_STRING
 import kotlinx.coroutines.delay
 import java.io.IOException
 import java.net.HttpURLConnection
@@ -39,10 +40,10 @@ class ImageLinkDownloader private constructor() {
 
     @Synchronized
     private fun downloadImage(link: String, reduce: Boolean, callback: Callback) {
-        //val md5link = md5(link)
         val md5link = md5(fileNameFromPath(link))
-
-        val bitmapMemory = MemoryCache.get(md5link)
+        val md5MemoryLink = md5link + if (reduce) EMPTY_STRING else "_"
+        //val reduceSym = if (reduce) EMPTY_STRING else "_"
+        val bitmapMemory = MemoryCache.get(md5MemoryLink)
         if (bitmapMemory != null) {
            // log ("$link from memory cache")
             val extBitmap = ExtBitmap(bitmapMemory, Source.MEMORY_CACHE)
@@ -61,15 +62,11 @@ class ImageLinkDownloader private constructor() {
         cacheStorage?.put(link)
         val timestamp = cacheStorage?.getTimestamp(link) ?: 0L
         val task = DownloadImageTask(link, reduce) { extBitmap, fileTimestamp ->
-            //extBitmap.let
             if (extBitmap.source != Source.NONE)
             {
-                //val md5link = md5(link)
                 extBitmap.bitmap?.let {uploaded ->
-                    MemoryCache.put(md5link, uploaded)
+                    MemoryCache.put(md5MemoryLink, uploaded)
                 }
-
-                //log ("to memory cache $md5link")
                 val filesize = getFileSize("$cachedir$md5link")
                 cacheStorage?.let { storage ->
                     if (timestamp != fileTimestamp) {
@@ -142,16 +139,16 @@ class ImageLinkDownloader private constructor() {
             if (link.isNullOrEmpty())
                 callback.onFailure()
             else
-                getInstance().downloadImage(link, reduce = false, callback)
+                getInstance().downloadImage(link, reduce, callback)
         }
 
-        fun downloadCardImage(link: String?, callback: Callback) {
+      /*  fun downloadCardImage(link: String?, callback: Callback) {
             downloadImage(link, reduce = true, callback)
         /*if (link.isNullOrEmpty())
                 callback.onFailure()
             else
                 getInstance().downloadImage(link, reduce = true, callback)*/
-        }
+        }*/
 
         fun cancel(){
             getInstance().cancelAll()

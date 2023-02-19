@@ -90,7 +90,7 @@ private enum class Status {
 }
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ShowProductImages(modifier: Modifier, product: Product, onChangeImage: ((index: Int) -> Unit)? = null){
+fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onChangeImage: ((index: Int) -> Unit)? = null){
     @Composable
     fun ProgressDownloadImage(size: Size){
         if (size.width > 0) {
@@ -175,7 +175,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, onChangeImage: ((ind
         val linkImage = remember{linkImages[index]}
         LaunchedEffect(Unit) {
             linkImage.status = Status.LOADING
-            ImageLinkDownloader.downloadImage("$SERVER_URL/images/${linkImage.link}", callback = object: Callback{
+            ImageLinkDownloader.downloadImage("$SERVER_URL/images/${linkImage.link}", reduce, callback = object: Callback{
                 override fun onComplete(image: ExtBitmap) {
                     image.bitmap?.let{
                         linkImage.status = Status.COMPLETE
@@ -207,22 +207,27 @@ fun ShowProductImages(modifier: Modifier, product: Product, onChangeImage: ((ind
                 size = coordinates.size.toSize()
             }
     ) {
+
+        linkImages.forEachIndexed{index, _ ->
+            linkImages[index].image = downloadImage(index).value
+        }
+
         LazyRow(
             state = lazyRowState,
             horizontalArrangement = Arrangement.Center,
             flingBehavior = flingBehavior
         ) {
-            itemsIndexed(linkImages) { index, item ->
+            itemsIndexed(linkImages) { _, item ->
                 Image(
                     modifier = Modifier
                         .fillParentMaxSize()
                         .padding(all = 8.dp),
-                    bitmap = run {
+                    bitmap = item.image/*run {
                         if (item.status == Status.NONE)
                             downloadImage(index).value
                         else
                             item.image
-                    },
+                    }*/,
                     contentDescription = null
                 )
             }
