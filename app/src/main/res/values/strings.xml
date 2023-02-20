@@ -56,6 +56,8 @@
     <string name="text_reset">Сбросить</string>
     <string name="text_perform">Применить</string>
     <string name="text_viewmode">Вид</string>
+    <string name="text_review">Отзывы</string>
+    <string name="text_question">Вопросы</string>
 
 
 </resources>

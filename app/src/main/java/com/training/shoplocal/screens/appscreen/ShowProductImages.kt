@@ -2,11 +2,9 @@ package com.training.shoplocal.screens.appscreen
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.CircleShape
@@ -30,11 +28,36 @@ import com.training.shoplocal.classes.downloader.Callback
 import com.training.shoplocal.classes.downloader.ExtBitmap
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 import com.training.shoplocal.log
+import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.ui.theme.TextFieldBg
 import com.training.shoplocal.ui.theme.TextFieldFont
 import kotlin.math.absoluteValue
 import kotlin.math.pow
 
+
+
+@Composable
+fun CompositeButton(modifier: Modifier, top: @Composable () -> Unit, bottom: @Composable () -> Unit, onClick: (() -> Unit)? = null){
+    Column(modifier = modifier
+        .clickable(
+            interactionSource = MutableInteractionSource(),
+            indication = if (onClick == null) null else LocalIndication.current
+        ) {
+            onClick?.invoke()
+        }
+
+        .clip(RoundedCornerShape(6.dp))
+        .background(PrimaryDark),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
+        Spacer(modifier = Modifier.weight(1f))
+        //DividerVertical(size = 8.dp)
+        top()
+        bottom()
+        Spacer(modifier = Modifier.weight(1f))
+        //DividerVertical(size = 8.dp)
+    }
+}
 
 
 @Composable

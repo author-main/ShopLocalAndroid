@@ -1,5 +1,6 @@
 package com.training.shoplocal.screens.appscreen
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.Interaction
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -20,12 +22,18 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.training.shoplocal.R
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.getStringResource
 import com.training.shoplocal.log
+import com.training.shoplocal.screens.mainscreen.StarPanel
 import com.training.shoplocal.ui.theme.*
 
 @Composable
@@ -95,6 +103,53 @@ fun ShowDetailProduct(value: Product){
                         textColor       = TextOrange,
                         backgroundColor = PrimaryDark
                     )
+                }
+            }
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .height(intrinsicSize = IntrinsicSize.Min)
+                .padding(vertical = 12.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ){
+                CompositeButton(
+                    modifier = Modifier.weight(1f),
+                    top = {
+                        StarPanel(count = product.star)
+                    },
+                    bottom = {
+                        Text(modifier = Modifier.padding(top = 4.dp), text = "15 оценок", color = SelectedItemBottomNavi, fontSize = 11.sp)
+                    })
+                CompositeButton(
+                    modifier = Modifier.weight(1f),
+                    top = {
+                        Row(modifier = Modifier.padding(top = 8.dp), verticalAlignment = Alignment.CenterVertically){
+                            Image(
+                                imageVector = ImageVector.vectorResource(R.drawable.ic_review),
+                                colorFilter = ColorFilter.tint(TextFieldFont),
+                                contentDescription = null
+                            )
+                            Text(modifier = Modifier.padding(start = 4.dp), text = "15", color = TextFieldFont, fontSize = 13.sp)
+                        }
+                    },
+                    bottom = {
+                        Text(modifier = Modifier.padding(bottom = 8.dp), text = stringResource(id = R.string.text_review), color = SelectedItemBottomNavi, fontSize = 11.sp)
+                    }) {
+                }
+                CompositeButton(
+                    modifier = Modifier.weight(1f),
+                    top = {
+                        Row(modifier = Modifier.padding(top = 8.dp), verticalAlignment = Alignment.CenterVertically){
+                            Image(
+                                imageVector = ImageVector.vectorResource(R.drawable.ic_question),
+                                colorFilter = ColorFilter.tint(TextFieldFont),
+                                contentDescription = null
+                            )
+                            Text(modifier = Modifier.padding(start = 4.dp), text = "4", color = TextFieldFont, fontSize = 13.sp)
+                        }
+                    },
+                    bottom = {
+                        Text(modifier = Modifier.padding(bottom = 8.dp), text = stringResource(id = R.string.text_question), color = SelectedItemBottomNavi, fontSize = 11.sp)
+                    }) {
                 }
             }
 

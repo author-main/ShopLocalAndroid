@@ -80,7 +80,7 @@ fun StarPanel(count: Float){
     val partNumber = df.format(count).split(DECIMAL_SEPARATOR)
     val intPart = partNumber[0].toInt()
     val floatPart = if (partNumber.size == 2) partNumber[1].toInt() else 0
-    val starPart = intPart + 1
+    //val starPart = intPart + 1
 
     val bm = BitmapFactory.decodeResource(appContext().resources, R.drawable.ic_star)
     Row(modifier = Modifier.padding(top = 2.dp),
@@ -98,7 +98,7 @@ fun StarPanel(count: Float){
                 contentDescription = null
             )
             // < * Отрисовка части звезды
-            if (i == starPart - 1 && floatPart > 0) {
+            if (i == intPart && floatPart > 0) {
                 val part       = bm.width / 10f
                 val widthStar  = floatPart * part
                 val bmPart: Bitmap = Bitmap.createBitmap(bm, 0, 0, widthStar.toInt(), bm.height)
