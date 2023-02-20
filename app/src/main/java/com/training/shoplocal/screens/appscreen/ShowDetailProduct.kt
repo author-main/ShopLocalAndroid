@@ -40,6 +40,10 @@ import com.training.shoplocal.viewmodel.RepositoryViewModel
 
 @Composable
 fun ShowDetailProduct(value: Product){
+    data class Integer(var value: Int = 0) // если захочется анимировать
+    val countReviews = remember {
+        Integer()
+    }
     val product = remember {
         value
     }
@@ -51,8 +55,22 @@ fun ShowDetailProduct(value: Product){
     //val requester: FocusRequester = FocusRequester()
     DisposableEffect(Unit) {
         viewModel.getReviewProduct(product.id, limit = 2)
+      /*  if (reviews.value.isNotEmpty()) {
+            val username = reviews.value[0].username
+            val pos = username.indexOf(' ')
+            log ("*${username.substring(0, pos)}*")
+            //countReviews.value = username.substring(0, pos)
+        }*/
         onDispose {
             viewModel.clearReviews()
+        }
+    }
+    LaunchedEffect(reviews.value.size) {
+        if (reviews.value.isNotEmpty()) {
+            val username = reviews.value[0].username
+            val pos = username.indexOf(' ')
+            reviews.value[0].username = username.substring(pos+1)
+            countReviews.value = username.substring(0, pos).toInt()
         }
     }
     val interaction = remember { MutableInteractionSource() }
@@ -122,7 +140,7 @@ fun ShowDetailProduct(value: Product){
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ){
                 val questions = 4
-                val rate = reviews.value.size
+                val rate = countReviews.value
                 val textRate = if (rate > 0) "$rate ${getRate(rate)}" else getStringResource(R.string.text_norate)
                 CompositeButton(
                     modifier = Modifier.weight(1f),
