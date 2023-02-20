@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.training.shoplocal.R
 import com.training.shoplocal.classes.Product
+import com.training.shoplocal.getRate
 import com.training.shoplocal.getStringResource
 import com.training.shoplocal.log
 import com.training.shoplocal.screens.mainscreen.StarPanel
@@ -111,13 +112,16 @@ fun ShowDetailProduct(value: Product){
                 .padding(vertical = 12.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ){
+                val questions = 4
+                val rate = 2
+                val textRate = getRate(rate)
                 CompositeButton(
                     modifier = Modifier.weight(1f),
                     top = {
                         StarPanel(count = product.star)
                     },
                     bottom = {
-                        Text(modifier = Modifier.padding(top = 4.dp), text = "15 оценок", color = SelectedItemBottomNavi, fontSize = 11.sp)
+                        Text(modifier = Modifier.padding(top = 4.dp), text = "$rate $textRate", color = SelectedItemBottomNavi, fontSize = 13.sp)
                     })
                 CompositeButton(
                     modifier = Modifier.weight(1f),
@@ -128,11 +132,11 @@ fun ShowDetailProduct(value: Product){
                                 colorFilter = ColorFilter.tint(TextFieldFont),
                                 contentDescription = null
                             )
-                            Text(modifier = Modifier.padding(start = 4.dp), text = "15", color = TextFieldFont, fontSize = 13.sp)
+                            Text(modifier = Modifier.padding(start = 4.dp), text = "$rate", color = TextFieldFont, fontSize = 13.sp)
                         }
                     },
                     bottom = {
-                        Text(modifier = Modifier.padding(bottom = 8.dp), text = stringResource(id = R.string.text_review), color = SelectedItemBottomNavi, fontSize = 11.sp)
+                        Text(modifier = Modifier.padding(bottom = 8.dp), text = stringResource(id = R.string.text_review), color = SelectedItemBottomNavi, fontSize = 13.sp)
                     }) {
                 }
                 CompositeButton(
@@ -144,7 +148,7 @@ fun ShowDetailProduct(value: Product){
                                 colorFilter = ColorFilter.tint(TextFieldFont),
                                 contentDescription = null
                             )
-                            Text(modifier = Modifier.padding(start = 4.dp), text = "4", color = TextFieldFont, fontSize = 13.sp)
+                            Text(modifier = Modifier.padding(start = 4.dp), text = "$questions", color = TextFieldFont, fontSize = 13.sp)
                         }
                     },
                     bottom = {

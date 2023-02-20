@@ -89,4 +89,15 @@ fun encodeBase64(value: String): String //{
     log("decode $decode")*/
    // return result
 //}
+fun getRate(rate: Int): String{
+    val aRate = AppShopLocal.appContext().resources.getStringArray(R.array.rate)
+     return when (rate.toString().last().toString().toInt()) {
+        1     -> aRate[0]
+        2,3,4 -> aRate[1]
+        else  -> aRate[2]
+    }
+/*    1  оценка
+    2, 3, 4         оценки
+    0, 5, 6, 7, 8, 9    оценок*/
+}
 
