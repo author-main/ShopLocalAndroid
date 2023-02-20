@@ -40,7 +40,7 @@ import com.training.shoplocal.viewmodel.RepositoryViewModel
 
 @Composable
 fun ShowDetailProduct(value: Product){
-    data class Integer(var value: Int = 0) // если захочется анимировать
+    data class Integer(var value: Int = 0)
     val countReviews = remember {
         Integer()
     }
