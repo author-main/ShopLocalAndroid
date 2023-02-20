@@ -52,20 +52,14 @@ fun ShowDetailProduct(value: Product){
     val indexImage = remember {
         mutableStateOf(0)
     }
-    //val requester: FocusRequester = FocusRequester()
     DisposableEffect(Unit) {
         viewModel.getReviewProduct(product.id, limit = 2)
-      /*  if (reviews.value.isNotEmpty()) {
-            val username = reviews.value[0].username
-            val pos = username.indexOf(' ')
-            log ("*${username.substring(0, pos)}*")
-            //countReviews.value = username.substring(0, pos)
-        }*/
         onDispose {
             viewModel.clearReviews()
         }
     }
     LaunchedEffect(reviews.value.size) {
+       // log(reviews.value.size.toString())
         if (reviews.value.isNotEmpty()) {
             val username = reviews.value[0].username
             val pos = username.indexOf(' ')
@@ -76,7 +70,6 @@ fun ShowDetailProduct(value: Product){
     val interaction = remember { MutableInteractionSource() }
     BoxWithConstraints(modifier = Modifier
         .fillMaxSize()
-        //       .focusRequester(requester)
         .clickable(
             interactionSource = interaction,
             indication = null
