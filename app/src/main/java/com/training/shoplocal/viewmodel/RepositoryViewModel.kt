@@ -155,7 +155,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     fun showSnackbar(message: String = "", type: MESSAGE = MESSAGE.INFO, visible: Boolean = true){
         _snackbarData.value = Triple(message, visible, type)
     }
-    fun hideSnackbar(){
+    private fun hideSnackbar(){
         _snackbarData.value = Triple("", false, MESSAGE.INFO)
     }
 
