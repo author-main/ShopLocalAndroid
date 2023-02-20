@@ -196,6 +196,15 @@ class Repository: DAOinterface {
         databaseCRUD.getFoundProducts(query, order, portion, uuid, userid, action)
     }
 
+    fun getReviewProduct(id: Int,
+                                 limit: Int,
+                                 portion: Int,
+                                 action: (reviews: List<Review>) -> Unit){
+        databaseCRUD.getReviewProduct(id, limit, portion, action)
+    }
+
+
+
     /**
      * @param query строка поиска
      * @param portion порция (часть) подгружаемых данных, значение -1 - инициализация выполнения поискового запроса

@@ -1,10 +1,7 @@
 package com.training.shoplocal.repository.retrofit
 
 import com.google.gson.annotations.SerializedName
-import com.training.shoplocal.classes.Brand
-import com.training.shoplocal.classes.Category
-import com.training.shoplocal.classes.Product
-import com.training.shoplocal.classes.User
+import com.training.shoplocal.classes.*
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
@@ -29,6 +26,12 @@ interface DatabaseApiInterface {
                          @Query("portion") portion: Int,
                          @Query("uuid") uuid: String,
                          @Query("userid") userid: Int): Call<List<Product>>
+
+
+    @GET("/api/get_reviews_product")
+    fun getReviewProduct(@Query("id")    id: Int,
+                         @Query("limit") limit: Int,
+                         @Query("portion") portion: Int): Call<List<Review>>
 
 
     /*@GET("/api/get_promo_products")

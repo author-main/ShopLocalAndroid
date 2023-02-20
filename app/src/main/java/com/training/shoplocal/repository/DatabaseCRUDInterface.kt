@@ -3,6 +3,7 @@ package com.training.shoplocal.repository
 import com.training.shoplocal.classes.Brand
 import com.training.shoplocal.classes.Category
 import com.training.shoplocal.classes.Product
+import com.training.shoplocal.classes.Review
 
 interface DatabaseCRUDInterface {
     fun getCategories()
@@ -18,7 +19,11 @@ interface DatabaseCRUDInterface {
                          userid: Int,
                          action: (products: List<Product>) -> Unit = {})
     fun getBrands( action: (brands: List<Brand>) -> Unit = {})
+    fun getReviewProduct(id: Int,
+                         limit: Int,
+                         portion: Int,
+                         action: (reviews: List<Review>) -> Unit = {})
     fun getCategories( action: (categories: List<Category>) -> Unit = {})
-    suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte): Boolean
+    suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte)
   //  suspend fun getProducts( id: Int, part: Int) : List<Product>
 }

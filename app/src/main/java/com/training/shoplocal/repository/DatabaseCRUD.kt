@@ -3,6 +3,7 @@ package com.training.shoplocal.repository
 import com.training.shoplocal.classes.Brand
 import com.training.shoplocal.classes.Category
 import com.training.shoplocal.classes.Product
+import com.training.shoplocal.classes.Review
 import com.training.shoplocal.log
 import com.training.shoplocal.repository.retrofit.DatabaseApi
 import retrofit2.Call
@@ -86,7 +87,7 @@ class DatabaseCRUD: DatabaseCRUDInterface {
 
             override fun onFailure(call: Call<List<Product>>, t: Throwable) {
                // log("found failure")
-                action.invoke(mutableListOf<Product>())
+                action.invoke(listOf<Product>())
             }
         })
     }
@@ -102,7 +103,7 @@ class DatabaseCRUD: DatabaseCRUDInterface {
             }
 
             override fun onFailure(call: Call<Product>, t: Throwable) {
-                log("error")
+
             }
 
         })
@@ -112,11 +113,30 @@ class DatabaseCRUD: DatabaseCRUDInterface {
 
     }
 
-    override suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte): Boolean {
-        return DatabaseApi.updateFavorite(id_user, id_product, value)
+    override suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte) {
+        DatabaseApi.updateFavorite(id_user, id_product, value)
     }
 
-   /* override suspend fun getProducts(id: Int, part: Int): List<Product> {
+    override fun getReviewProduct(
+        id: Int,
+        limit: Int,
+        portion: Int,
+        action: (reviews: List<Review>) -> Unit
+    ) {
+        DatabaseApi.getReviewProduct(id, limit, portion, object: retrofit2.Callback<List<Review>>{
+            override fun onResponse(call: Call<List<Review>>, response: Response<List<Review>>) {
+                response.body()?.let {
+                    action(it)
+                }
+            }
+
+            override fun onFailure(call: Call<List<Review>>, t: Throwable) {
+                action(listOf<Review>())
+            }
+        })
+    }
+
+    /* override suspend fun getProducts(id: Int, part: Int): List<Product> {
         return DatabaseApi.getProducts(id, part)
     }*/
 }

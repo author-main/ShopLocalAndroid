@@ -83,6 +83,18 @@ object DatabaseApi {
         } catch(_: Exception){}
     }
 
+    fun getReviewProduct(id: Int,
+                         limit: Int,
+                         portion: Int,
+                         callback: retrofit2.Callback<List<Review>>
+                        )
+    {
+        try {
+            val call: retrofit2.Call<List<Review>> = service!!.getReviewProduct(id, limit, portion)
+            call.enqueue(callback)
+        } catch(_: Exception){}
+    }
+
 
 
  /*   suspend fun getProducts(id: Int, part: Int) : List<Product> {
@@ -98,16 +110,11 @@ object DatabaseApi {
         return list
     }*/
 
-    suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte): Boolean{
-        var result = false
+    suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte){
         try {
-            val response = service!!.updateFavorite(id_user, id_product, value)
-            response.body()?.let{body ->
-                result = body == 1
-            }
+            service!!.updateFavorite(id_user, id_product, value)
         } catch(_: Exception){
         }
-        return result
     }
 
     fun getBrands(callback: retrofit2.Callback<List<Brand>>){
@@ -155,6 +162,8 @@ object DatabaseApi {
         val userCall: retrofit2.Call<User> = service!!.createUser(user)
         userCall.enqueue(callback)
     }*/
+
+
 
 
 }

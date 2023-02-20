@@ -30,6 +30,16 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private fun accessFingerPrint(value: Boolean) {
         _accessFinger.value = value
     }*/
+
+    private val _reviews = MutableStateFlow(listOf<Review>())
+    val reviews = _reviews.asStateFlow()
+    private fun setReviews(value: List<Review>) {
+        _reviews.value = value
+    }
+    fun clearReviews(){
+        _reviews.value = listOf()
+    }
+
     private var onCloseApp: (() -> Unit)? = null
     fun setOnCloseApp(value:() -> Unit ) {
         onCloseApp = value
@@ -555,6 +565,19 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             findProductsRequest(searchQuery)
         } else {
             getProducts(1)
+        }
+    }
+
+    fun getReviewProduct(id: Int,
+                         limit: Int,
+                         portion: Int = 0)
+    {
+        repository.getReviewProduct(
+            id,
+            limit,
+            portion
+        ) {reviews ->
+            setReviews(reviews)
         }
     }
 

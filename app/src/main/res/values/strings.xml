@@ -58,6 +58,7 @@
     <string name="text_viewmode">Вид</string>
     <string name="text_review">Отзывы</string>
     <string name="text_question">Вопросы</string>
+    <string name="text_norate">Нет оценок</string>
     <string-array name="rate">
         <item>оценка</item>
         <item>оценки</item>

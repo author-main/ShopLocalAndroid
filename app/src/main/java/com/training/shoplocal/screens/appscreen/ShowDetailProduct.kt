@@ -10,10 +10,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,23 +26,35 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.R
 import com.training.shoplocal.classes.Product
+import com.training.shoplocal.classes.Review
 import com.training.shoplocal.getRate
 import com.training.shoplocal.getStringResource
 import com.training.shoplocal.log
 import com.training.shoplocal.screens.mainscreen.StarPanel
 import com.training.shoplocal.ui.theme.*
+import com.training.shoplocal.viewmodel.RepositoryViewModel
 
 @Composable
 fun ShowDetailProduct(value: Product){
     val product = remember {
         value
     }
+    val viewModel: RepositoryViewModel = viewModel()
+    val reviews = viewModel.reviews.collectAsState()
     val indexImage = remember {
         mutableStateOf(0)
     }
     //val requester: FocusRequester = FocusRequester()
+    DisposableEffect(Unit) {
+        viewModel.getReviewProduct(product.id, limit = 2)
+        onDispose {
+            viewModel.clearReviews()
+        }
+    }
     val interaction = remember { MutableInteractionSource() }
     BoxWithConstraints(modifier = Modifier
         .fillMaxSize()
@@ -113,15 +122,15 @@ fun ShowDetailProduct(value: Product){
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ){
                 val questions = 4
-                val rate = 2
-                val textRate = getRate(rate)
+                val rate = reviews.value.size
+                val textRate = if (rate > 0) "$rate ${getRate(rate)}" else getStringResource(R.string.text_norate)
                 CompositeButton(
                     modifier = Modifier.weight(1f),
                     top = {
                         StarPanel(count = product.star)
                     },
                     bottom = {
-                        Text(modifier = Modifier.padding(top = 4.dp), text = "$rate $textRate", color = SelectedItemBottomNavi, fontSize = 13.sp)
+                        Text(modifier = Modifier.padding(top = 4.dp), text = textRate, color = SelectedItemBottomNavi, fontSize = 13.sp)
                     })
                 CompositeButton(
                     modifier = Modifier.weight(1f),
@@ -152,7 +161,7 @@ fun ShowDetailProduct(value: Product){
                         }
                     },
                     bottom = {
-                        Text(modifier = Modifier.padding(bottom = 8.dp), text = stringResource(id = R.string.text_question), color = SelectedItemBottomNavi, fontSize = 11.sp)
+                        Text(modifier = Modifier.padding(bottom = 8.dp), text = stringResource(id = R.string.text_question), color = SelectedItemBottomNavi, fontSize = 13.sp)
                     }) {
                 }
             }
