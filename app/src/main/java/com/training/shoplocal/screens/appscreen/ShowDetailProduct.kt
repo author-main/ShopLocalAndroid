@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
@@ -190,12 +191,12 @@ fun ShowDetailProduct(value: Product){
                      Column(){
                          CompositeButton(
                              color = BgTextPrice,
-                             modifier = Modifier,//.weight(1f),
+                             modifier = Modifier.padding(8.dp),//.weight(1f),
                              top = {
-                                 Text(modifier = Modifier.padding(start = 4.dp), text = "10 990Р", color = TextFieldFont, fontSize = 13.sp)
+                                 Text(modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 8.dp), text = "10 990Р", color = ColorText, fontSize = 19.sp, fontWeight = FontWeight.Medium)
                              },
                              bottom = {
-                                 Text(modifier = Modifier.padding(bottom = 8.dp), text = stringResource(id = R.string.text_question), color = SelectedItemBottomNavi, fontSize = 13.sp)
+                                 Text(modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp),text = stringResource(id = R.string.text_final_price), color = ColorText, fontSize = 13.sp)
                              })
 
                      }

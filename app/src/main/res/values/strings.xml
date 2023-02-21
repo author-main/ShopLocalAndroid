@@ -64,6 +64,10 @@
         <item>оценки</item>
         <item>оценок</item>
     </string-array>
+    <string name="text_final_price">Ваша цена</string>
+    <string name="text_regular_price">Обычная цена</string>
+    <string name="text_black_discount">Черная пятница</string>
+
 
 
 </resources>
