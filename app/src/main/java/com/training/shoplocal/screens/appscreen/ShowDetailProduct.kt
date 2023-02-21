@@ -187,7 +187,7 @@ fun ShowDetailProduct(value: Product){
                 val buttonWidth = (this.maxWidth - padding * 2) /2 /*with(LocalDensity.current) {
                     (boxScope.maxWidth).roundToPx().toFloat() / 2
                 }*/
-                 Column(modifier = Modifier
+                 Row(modifier = Modifier
                      .padding(all = padding)
                      .clip(RoundedCornerShape(4.dp))
                      .fillMaxSize()
@@ -205,7 +205,7 @@ fun ShowDetailProduct(value: Product){
                                          ),
                                          text = "10 990Р",
                                          color = ColorText,
-                                         fontSize = 19.sp,
+                                         fontSize = 21.sp,
                                          fontWeight = FontWeight.Medium
                                      )
                                  },
@@ -218,7 +218,7 @@ fun ShowDetailProduct(value: Product){
                                          ),
                                          text = stringResource(id = R.string.text_final_price),
                                          color = ColorText,
-                                         fontSize = 13.sp
+                                         fontSize = 14.sp
                                      )
                                  })
                              DividerVertical(size = 8.dp)
