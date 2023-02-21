@@ -38,7 +38,7 @@ import kotlin.math.pow
 
 
 @Composable
-fun CompositeButton(modifier: Modifier, color: Color = PrimaryDark, top: @Composable () -> Unit, bottom: @Composable () -> Unit, onClick: (() -> Unit)? = null){
+fun CompositeButton(modifier: Modifier = Modifier, color: Color = PrimaryDark, top: @Composable () -> Unit, bottom: @Composable () -> Unit, onClick: (() -> Unit)? = null){
     Box(modifier = modifier.clip(RoundedCornerShape(6.dp)).background(color)
         .clickable(
             interactionSource = MutableInteractionSource(),

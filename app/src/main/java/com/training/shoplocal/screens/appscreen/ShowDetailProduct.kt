@@ -185,19 +185,74 @@ fun ShowDetailProduct(value: Product){
             ) {
                  Row(modifier = Modifier
                      .padding(all = 10.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .fillMaxSize()
-                    .background(TextFieldBg.copy(alpha = 0.3f))) {
-                     Column(){
-                         CompositeButton(
-                             color = BgTextPrice,
-                             modifier = Modifier.padding(8.dp),//.weight(1f),
-                             top = {
-                                 Text(modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 8.dp), text = "10 990Р", color = ColorText, fontSize = 19.sp, fontWeight = FontWeight.Medium)
-                             },
-                             bottom = {
-                                 Text(modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp),text = stringResource(id = R.string.text_final_price), color = ColorText, fontSize = 13.sp)
-                             })
+                     .clip(RoundedCornerShape(4.dp))
+                     .fillMaxSize()
+                     .background(TextFieldBg.copy(alpha = 0.3f))) {
+                     BoxWithConstraints() {
+                         val boxScope = this
+                         val buttonWidth = with(LocalDensity.current) {
+                             (boxScope.maxWidth).roundToPx().toFloat()
+                         }
+                         Column(modifier = Modifier.padding(8.dp)) {
+                             CompositeButton(
+                                 modifier = Modifier.fillMaxWidth(buttonWidth),
+                                 color = BgTextPrice,
+                                 top = {
+                                     Text(
+                                         modifier = Modifier.padding(
+                                             start = 8.dp,
+                                             end = 8.dp,
+                                             top = 8.dp
+                                         ),
+                                         text = "10 990Р",
+                                         color = ColorText,
+                                         fontSize = 19.sp,
+                                         fontWeight = FontWeight.Medium
+                                     )
+                                 },
+                                 bottom = {
+                                     Text(
+                                         modifier = Modifier.padding(
+                                             start = 8.dp,
+                                             end = 8.dp,
+                                             bottom = 8.dp
+                                         ),
+                                         text = stringResource(id = R.string.text_final_price),
+                                         color = ColorText,
+                                         fontSize = 13.sp
+                                     )
+                                 })
+                             DividerVertical(size = 8.dp)
+                             CompositeButton(
+                                 modifier = Modifier.fillMaxWidth(buttonWidth),
+                                 color = TextOrange,
+                                 top = {
+                                     Text(
+                                         modifier = Modifier.padding(
+                                             start = 8.dp,
+                                             end = 8.dp,
+                                             top = 8.dp
+                                         ), text = stringResource(
+                                             id = R.string.text_black_discount
+                                         ), color = PrimaryDark, fontSize = 13.sp
+                                     )
+                                 },
+                                 bottom = {
+                                     Text(
+                                         modifier = Modifier.padding(
+                                             start = 8.dp,
+                                             end = 8.dp,
+                                             bottom = 8.dp
+                                         ),
+                                         text = "-10%",
+                                         color = SelectedItem,
+                                         fontSize = 19.sp,
+                                         fontWeight = FontWeight.Medium
+                                     )
+                                 })
+
+
+                         }
 
                      }
                 }
