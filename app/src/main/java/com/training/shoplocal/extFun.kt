@@ -1,5 +1,6 @@
 package com.training.shoplocal
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.net.ConnectivityManager
@@ -8,6 +9,7 @@ import android.util.Base64
 import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
+import androidx.annotation.ArrayRes
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.ImageBitmap
 import com.training.shoplocal.AppShopLocal.Companion.appContext
@@ -18,6 +20,10 @@ import java.text.DecimalFormat
 import kotlin.math.roundToInt
 
 //const val DEFAULT_STRRESOURCE_VALUE  = ""
+
+fun getStringArrayResource(@ArrayRes id: Int): Array<String> =
+    AppShopLocal.appContext().resources.getStringArray(id)
+
 fun getStringResource(@StringRes id: Int): String =
     try {
         AppShopLocal.appContext().getString(id)
@@ -58,6 +64,9 @@ fun mToast(value: String){
     Toast.makeText(appContext(), value, Toast.LENGTH_LONG).show()
 }
 
+
+
+
 fun getFormattedPrice(value: Float): String{
     val result = value.roundToInt()
     val dec = DecimalFormat("#,###.00")
@@ -85,7 +94,7 @@ fun encodeBase64(value: String): String //{
    // return result
 //}
 fun getRate(rate: Int): String{
-    val aRate = AppShopLocal.appContext().resources.getStringArray(R.array.rate)
+    val aRate = getStringArrayResource(R.array.rate)
      return when (rate.toString().last().toString().toInt()) {
         1     -> aRate[0]
         2,3,4 -> aRate[1]
@@ -96,8 +105,12 @@ fun getRate(rate: Int): String{
     0, 5, 6, 7, 8, 9    оценок*/
 }
 
-fun getSalePrice(price: Float, percent: Int): String{
-    val result = price - (price * percent/100f)
-    return getFormattedPrice(result)
-}
+fun getDiscountPrice(price: Float, percent: Int) =
+    price - (price * percent/100f)
+
+fun getSalePrice(price: Float, percent: Int) =
+    getFormattedPrice(getDiscountPrice(price, percent))
+
+
+
 

@@ -64,9 +64,27 @@
         <item>оценки</item>
         <item>оценок</item>
     </string-array>
+    <string-array name="month">
+        <item>января</item>
+        <item>февраля</item>
+        <item>марта</item>
+        <item>апреля</item>
+        <item>мая</item>
+        <item>июня</item>
+        <item>июля</item>
+        <item>августа</item>
+        <item>сентября</item>
+        <item>октября</item>
+        <item>ноября</item>
+        <item>декабря</item>
+    </string-array>
     <string name="text_final_price">Ваша цена</string>
     <string name="text_regular_price">Обычная цена</string>
     <string name="text_black_discount">Черная пятница</string>
+    <string name="text_noname">Noname</string>
+    <string name="text_description">Описание</string>
+    <string name="text_addcart">В корзину</string>
+    <string name="text_datedelivery">Доставим</string>
 
 
 
