@@ -22,17 +22,17 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.training.shoplocal.*
 import com.training.shoplocal.R
 import com.training.shoplocal.classes.Product
 import com.training.shoplocal.classes.Review
-import com.training.shoplocal.getRate
-import com.training.shoplocal.getStringResource
-import com.training.shoplocal.log
 import com.training.shoplocal.screens.mainscreen.StarPanel
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
@@ -183,16 +183,18 @@ fun ShowDetailProduct(value: Product){
                 .fillMaxWidth()
                 .background(PrimaryDark)
             ) {
-                val padding = 10.dp
-                val buttonWidth = (this.maxWidth - padding * 2) /2 /*with(LocalDensity.current) {
+                val paddingRow = 10.dp
+                val paddingColumn = 8.dp
+                val buttonWidth = (this.maxWidth - paddingColumn * 4 - paddingRow * 2) /2 /*with(LocalDensity.current) {
                     (boxScope.maxWidth).roundToPx().toFloat() / 2
                 }*/
                  Row(modifier = Modifier
-                     .padding(all = padding)
+                     .padding(all = paddingRow)
                      .clip(RoundedCornerShape(4.dp))
                      .fillMaxSize()
-                     .background(TextFieldBg.copy(alpha = 0.3f))) {
-                         Column(modifier = Modifier.padding(8.dp)) {
+                     .background(TextFieldBg.copy(alpha = 0.3f)),
+                 verticalAlignment = Alignment.CenterVertically) {
+                         Column(modifier = Modifier.padding(paddingColumn)) {
                              CompositeButton(
                                  modifier = Modifier.width(buttonWidth),
                                  color = BgTextPrice,
@@ -205,7 +207,7 @@ fun ShowDetailProduct(value: Product){
                                          ),
                                          text = "10 990Р",
                                          color = ColorText,
-                                         fontSize = 21.sp,
+                                         fontSize = 23.sp,
                                          fontWeight = FontWeight.Medium
                                      )
                                  },
@@ -249,6 +251,41 @@ fun ShowDetailProduct(value: Product){
                                          fontWeight = FontWeight.Medium
                                      )
                                  })
+                        }
+                     Column(modifier = Modifier.padding(paddingColumn)) {
+                         CompositeButton(
+                             modifier = Modifier.fillMaxWidth(),//width(buttonWidth),
+                             color = Color.Transparent,
+                             top = {
+                                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                     Text(
+                                         text = getSalePrice(product.price, product.discount),
+                                         color = TextFieldFont,
+                                         fontSize = 21.sp,
+                                         fontWeight = FontWeight.Medium
+                                     )
+                                     Text(
+                                         text = getFormattedPrice(product.price),
+                                         color = TextFieldFont.copy(alpha = 0.6f),
+                                         fontSize = 17.sp,
+                                         style = TextStyle(textDecoration  = TextDecoration.LineThrough),
+                                         fontWeight = FontWeight.Medium
+                                     )
+                                 }
+                             },
+                             bottom = {
+                                 Text(
+                                     modifier = Modifier.padding(
+                                         start = 8.dp,
+                                         end = 8.dp,
+                                         bottom = 8.dp
+                                     ),
+                                     text = stringResource(id = R.string.text_regular_price),
+                                     color = TextFieldFont,
+                                     fontSize = 14.sp
+                                 )
+                             })
+
                      }
                 }
             }
