@@ -183,7 +183,7 @@ fun ShowDetailProduct(value: Product){
                 .background(PrimaryDark)
             ) {
                  Row(modifier = Modifier
-                     .padding(all = 12.dp)
+                     .padding(all = 10.dp)
                     .clip(RoundedCornerShape(4.dp))
                     .fillMaxSize()
                     .background(TextFieldBg.copy(alpha = 0.3f))) {
