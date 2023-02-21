@@ -135,7 +135,7 @@ fun ShowDetailProduct(value: Product){
                 product.linkimages?.let { links ->
                     val count = links.size
                     if (count > 1)
-                        ShowImagesIndicator(modifier = Modifier, index = indexImage, count = count)
+                        ShowImagesIndicator(modifier = Modifier.padding(top = 2.dp), index = indexImage, count = count)
                     else
                         DividerVertical(size = 16.dp)
                 }
