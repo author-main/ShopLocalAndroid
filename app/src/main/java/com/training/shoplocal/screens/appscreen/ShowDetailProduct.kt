@@ -1,5 +1,6 @@
 package com.training.shoplocal.screens.appscreen
 
+import android.icu.util.LocaleData
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.Interaction
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -30,6 +31,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.createFontFamilyResolver
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,6 +43,7 @@ import com.training.shoplocal.classes.*
 import com.training.shoplocal.screens.mainscreen.StarPanel
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
+import java.time.LocalDateTime
 
 @Composable
 fun ShowDetailProduct(value: Product){
@@ -48,6 +51,7 @@ fun ShowDetailProduct(value: Product){
     val countReviews = remember {
         Integer()
     }
+    val font = remember { FontFamily(Font(R.font.robotocondensed_light)) }
     val product = remember {
         value
     }
@@ -167,7 +171,7 @@ fun ShowDetailProduct(value: Product){
                     ) {
                         val textBrend = product.brand?.let { viewModel.getBrand(it) }
                             ?: stringResource(id = R.string.text_noname)
-                        CompositeButton(color = TextFieldBg.copy(alpha = 0.3f), top = {
+                        CompositeButton(color = TextFieldBg.copy(alpha = 0.5f), top = {
                             Box(
                                 modifier = Modifier
                                     .padding(vertical = 4.dp, horizontal = 8.dp)
@@ -183,7 +187,8 @@ fun ShowDetailProduct(value: Product){
                         Text(
                             modifier = Modifier.padding(top = 4.dp),
                             text = product.name,
-                            fontSize = 14.sp
+                            fontFamily = font,
+                            fontSize = 17.sp
                         )
                     }
                 }
@@ -387,14 +392,14 @@ fun ShowDetailProduct(value: Product){
                 }
                 Box(
                     modifier = Modifier
-                        .padding(top = 12.dp)
+                        .padding(top = 10.dp)
                         .clip(RoundedCornerShape(6.dp))
                         .fillMaxWidth()
                         .background(PrimaryDark)
                 ) {
                     Column(
                         modifier = Modifier
-                            .padding(all = 8.dp)
+                            .padding(all = 12.dp)
                     ) {
                         CompositeButton(color = TextFieldFont, top = {
                             Box(
@@ -411,8 +416,9 @@ fun ShowDetailProduct(value: Product){
                         }, bottom = {})
                         Text(
                             modifier = Modifier.padding(top = 4.dp),
-                            text = product.description,
-                            fontSize = 13.sp
+                            fontFamily = font,
+                            text = product.description/*,
+                            fontSize = 13.sp*/
                         )
                     }
                 }
@@ -424,20 +430,28 @@ fun ShowDetailProduct(value: Product){
         },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .padding(top = 4.dp, start = 16.dp, end = 16.dp),
             colors = ButtonDefaults.buttonColors(backgroundColor = SelectedItemBottomNavi)
         ){
-            val font = remember { FontFamily(Font(R.font.roboto_light)) }
-            val month = remember{ getStringArrayResource(id = R.array.month)}
-            Column() {
+            val aMonth = remember{ getStringArrayResource(id = R.array.month)}
+            val dateDelivery = remember {
+                val date = LocalDateTime.now().plusDays(3)
+                val day = date.dayOfMonth
+                val month = aMonth[date.monthValue - 1]
+                "$day $month"
+            }
+
+
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     text = stringResource(id = R.string.text_addcart),
                     color = ColorText,
-                    fontFamily = font,
+                    //fontFamily = font,
+                    fontSize = 15.sp,
                     letterSpacing = 0.sp
                 )
                 Text(
-                    text = stringResource(id = R.string.text_datedelivery),
+                    text = stringResource(id = R.string.text_datedelivery) + " " + dateDelivery,
                     color = ColorText,
                     fontFamily = font,
                     letterSpacing = 0.sp
