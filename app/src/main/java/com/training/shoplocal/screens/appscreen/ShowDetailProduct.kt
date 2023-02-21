@@ -1,8 +1,6 @@
 package com.training.shoplocal.screens.appscreen
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.Interaction
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -68,6 +66,7 @@ fun ShowDetailProduct(value: Product){
         }
     }
     val interaction = remember { MutableInteractionSource() }
+    val scrollState = rememberScrollState()
     BoxWithConstraints(modifier = Modifier
         .fillMaxSize()
         .clickable(
@@ -81,6 +80,7 @@ fun ShowDetailProduct(value: Product){
         }*/
             Column(
                 modifier = Modifier
+                    .verticalScroll(scrollState)
                     .fillMaxSize()
                     .padding(all = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally

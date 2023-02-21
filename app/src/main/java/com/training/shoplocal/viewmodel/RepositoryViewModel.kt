@@ -59,9 +59,11 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private var searchQuery: String = EMPTY_STRING
     private val _progressCRUD = MutableStateFlow<Boolean>(false)
     val progressCRUD = _progressCRUD.asStateFlow()
-    private fun showProgressCRUD(value: Boolean = true) {
-//        if (value != _progressCRUD.value)
-        _progressCRUD.value = value
+    private fun showProgressCRUD() {
+        _progressCRUD.value = true
+    }
+    private fun hideProgressCRUD() {
+        _progressCRUD.value = false
     }
 
     private val _activeContainer = MutableStateFlow(Container.LOGIN)
@@ -259,7 +261,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                         _products.value = mutableListOf()
                 }
                 lockDB = false
-                showProgressCRUD(false)
+                hideProgressCRUD()
             //}
 
         }
@@ -499,7 +501,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                         _products.value = mutableListOf()
                 }
                 lockDB = false
-                showProgressCRUD(false)
+                hideProgressCRUD()
             }
 
         /*INSERT INTO new_table_name
@@ -572,12 +574,14 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                          limit: Int,
                          portion: Int = 0)
     {
+        showProgressCRUD()
         repository.getReviewProduct(
             id,
             limit,
             portion
         ) {reviews ->
             setReviews(reviews)
+            hideProgressCRUD()
         }
     }
 
