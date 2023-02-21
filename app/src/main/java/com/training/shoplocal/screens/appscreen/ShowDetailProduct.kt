@@ -178,24 +178,23 @@ fun ShowDetailProduct(value: Product){
                 }
             }
 
-            Box(modifier = Modifier
+            BoxWithConstraints(modifier = Modifier
                 .clip(RoundedCornerShape(6.dp))
                 .fillMaxWidth()
                 .background(PrimaryDark)
             ) {
-                 Row(modifier = Modifier
-                     .padding(all = 10.dp)
+                val padding = 10.dp
+                val buttonWidth = (this.maxWidth - padding * 2) /2 /*with(LocalDensity.current) {
+                    (boxScope.maxWidth).roundToPx().toFloat() / 2
+                }*/
+                 Column(modifier = Modifier
+                     .padding(all = padding)
                      .clip(RoundedCornerShape(4.dp))
                      .fillMaxSize()
                      .background(TextFieldBg.copy(alpha = 0.3f))) {
-                     BoxWithConstraints() {
-                         val boxScope = this
-                         val buttonWidth = with(LocalDensity.current) {
-                             (boxScope.maxWidth).roundToPx().toFloat()
-                         }
                          Column(modifier = Modifier.padding(8.dp)) {
                              CompositeButton(
-                                 modifier = Modifier.fillMaxWidth(buttonWidth),
+                                 modifier = Modifier.width(buttonWidth),
                                  color = BgTextPrice,
                                  top = {
                                      Text(
@@ -224,7 +223,7 @@ fun ShowDetailProduct(value: Product){
                                  })
                              DividerVertical(size = 8.dp)
                              CompositeButton(
-                                 modifier = Modifier.fillMaxWidth(buttonWidth),
+                                 modifier = Modifier.width(buttonWidth),
                                  color = TextOrange,
                                  top = {
                                      Text(
@@ -250,10 +249,6 @@ fun ShowDetailProduct(value: Product){
                                          fontWeight = FontWeight.Medium
                                      )
                                  })
-
-
-                         }
-
                      }
                 }
             }
