@@ -66,11 +66,6 @@ fun getFormattedPrice(value: Float): String{
 }
 
 
-fun getSalePrice(price: Float, discount: Int): String{
-    val result = price - (price * discount/100f)
-    return getFormattedPrice(result)
-}
-
 val Int.Dp: Int
     get() = (this / Resources.getSystem().displayMetrics.density).toInt()
 
@@ -99,5 +94,10 @@ fun getRate(rate: Int): String{
 /*    1  оценка
     2, 3, 4         оценки
     0, 5, 6, 7, 8, 9    оценок*/
+}
+
+fun getSalePrice(price: Float, percent: Int): String{
+    val result = price - (price * percent/100f)
+    return getFormattedPrice(result)
 }
 

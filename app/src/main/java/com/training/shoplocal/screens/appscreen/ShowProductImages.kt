@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -37,25 +38,23 @@ import kotlin.math.pow
 
 
 @Composable
-fun CompositeButton(modifier: Modifier, top: @Composable () -> Unit, bottom: @Composable () -> Unit, onClick: (() -> Unit)? = null){
-    Column(modifier = modifier
+fun CompositeButton(modifier: Modifier, color: Color = PrimaryDark, top: @Composable () -> Unit, bottom: @Composable () -> Unit, onClick: (() -> Unit)? = null){
+    Box(modifier = modifier.clip(RoundedCornerShape(6.dp)).background(color)
         .clickable(
             interactionSource = MutableInteractionSource(),
             indication = if (onClick == null) null else LocalIndication.current
         ) {
             onClick?.invoke()
-        }
-
-        .clip(RoundedCornerShape(6.dp))
-        .background(PrimaryDark),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        Spacer(modifier = Modifier.weight(1f))
-        //DividerVertical(size = 8.dp)
-        top()
-        bottom()
-        Spacer(modifier = Modifier.weight(1f))
-        //DividerVertical(size = 8.dp)
+        },
+        contentAlignment = Alignment.Center) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+                Spacer(modifier = Modifier.weight(1f))
+                top()
+                bottom()
+                Spacer(modifier = Modifier.weight(1f))
+            }
     }
 }
 

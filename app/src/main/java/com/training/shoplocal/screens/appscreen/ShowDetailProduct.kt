@@ -177,6 +177,31 @@ fun ShowDetailProduct(value: Product){
                 }
             }
 
+            Box(modifier = Modifier
+                .clip(RoundedCornerShape(6.dp))
+                .fillMaxWidth()
+                .background(PrimaryDark)
+            ) {
+                 Row(modifier = Modifier
+                     .padding(all = 12.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .fillMaxSize()
+                    .background(TextFieldBg.copy(alpha = 0.3f))) {
+                     Column(){
+                         CompositeButton(
+                             color = BgTextPrice,
+                             modifier = Modifier,//.weight(1f),
+                             top = {
+                                 Text(modifier = Modifier.padding(start = 4.dp), text = "10 990Р", color = TextFieldFont, fontSize = 13.sp)
+                             },
+                             bottom = {
+                                 Text(modifier = Modifier.padding(bottom = 8.dp), text = stringResource(id = R.string.text_question), color = SelectedItemBottomNavi, fontSize = 13.sp)
+                             })
+
+                     }
+                }
+            }
+
         }
     }
 }
