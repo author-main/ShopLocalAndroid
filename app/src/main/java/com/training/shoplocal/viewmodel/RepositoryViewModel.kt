@@ -570,15 +570,11 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    fun getReviewProduct(id: Int,
-                         limit: Int,
-                         portion: Int = 0)
+    fun getReviewProduct(id: Int)
     {
         showProgressCRUD()
         repository.getReviewProduct(
-            id,
-            limit,
-            portion
+            id
         ) {reviews ->
             setReviews(reviews)
             hideProgressCRUD()

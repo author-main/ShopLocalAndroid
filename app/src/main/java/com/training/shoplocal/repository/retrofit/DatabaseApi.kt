@@ -84,13 +84,11 @@ object DatabaseApi {
     }
 
     fun getReviewProduct(id: Int,
-                         limit: Int,
-                         portion: Int,
                          callback: retrofit2.Callback<List<Review>>
                         )
     {
         try {
-            val call: retrofit2.Call<List<Review>> = service!!.getReviewProduct(id, limit, portion)
+            val call: retrofit2.Call<List<Review>> = service!!.getReviewProduct(id)
             call.enqueue(callback)
         } catch(_: Exception){}
     }

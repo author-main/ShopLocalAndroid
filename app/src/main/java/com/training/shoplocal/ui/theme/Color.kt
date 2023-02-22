@@ -37,5 +37,6 @@ val ImageFavoriteOff    = Color(0xFFAAAAAA)
 val ImageFavoriteOn     = BgDiscount
 val SelectedItemBottomNavi  = Color(0xFF679BE9)
 val ColorText           = Color.White
+val ColorDarkBlue       = Color(0xFF1B4B95)
 //val PlaceHolder         = Color(0xFF5E5E5E)
 // >

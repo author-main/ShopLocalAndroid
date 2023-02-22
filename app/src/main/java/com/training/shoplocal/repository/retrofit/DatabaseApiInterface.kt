@@ -29,9 +29,7 @@ interface DatabaseApiInterface {
 
 
     @GET("/api/get_reviews_product")
-    fun getReviewProduct(@Query("id")    id: Int,
-                         @Query("limit") limit: Int,
-                         @Query("portion") portion: Int): Call<List<Review>>
+    fun getReviewProduct(@Query("id") id: Int): Call<List<Review>>
 
 
     /*@GET("/api/get_promo_products")

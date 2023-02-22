@@ -20,8 +20,6 @@ interface DatabaseCRUDInterface {
                          action: (products: List<Product>) -> Unit = {})
     fun getBrands( action: (brands: List<Brand>) -> Unit = {})
     fun getReviewProduct(id: Int,
-                         limit: Int,
-                         portion: Int,
                          action: (reviews: List<Review>) -> Unit = {})
     fun getCategories( action: (categories: List<Category>) -> Unit = {})
     suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte)

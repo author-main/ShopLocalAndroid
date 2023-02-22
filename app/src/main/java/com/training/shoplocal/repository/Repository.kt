@@ -197,10 +197,8 @@ class Repository: DAOinterface {
     }
 
     fun getReviewProduct(id: Int,
-                                 limit: Int,
-                                 portion: Int,
-                                 action: (reviews: List<Review>) -> Unit){
-        databaseCRUD.getReviewProduct(id, limit, portion, action)
+                         action: (reviews: List<Review>) -> Unit){
+        databaseCRUD.getReviewProduct(id, action)
     }
 
 

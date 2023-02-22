@@ -119,11 +119,9 @@ class DatabaseCRUD: DatabaseCRUDInterface {
 
     override fun getReviewProduct(
         id: Int,
-        limit: Int,
-        portion: Int,
         action: (reviews: List<Review>) -> Unit
     ) {
-        DatabaseApi.getReviewProduct(id, limit, portion, object: retrofit2.Callback<List<Review>>{
+        DatabaseApi.getReviewProduct(id, object: retrofit2.Callback<List<Review>>{
             override fun onResponse(call: Call<List<Review>>, response: Response<List<Review>>) {
                 response.body()?.let {
                     action(it)

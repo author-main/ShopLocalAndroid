@@ -1,41 +1,30 @@
 package com.training.shoplocal.screens.appscreen
 
-import android.icu.util.LocaleData
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
-import androidx.compose.foundation.interaction.Interaction
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusModifier
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.modifier.modifierLocalConsumer
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.font.createFontFamilyResolver
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.*
 import com.training.shoplocal.R
@@ -43,15 +32,49 @@ import com.training.shoplocal.classes.*
 import com.training.shoplocal.screens.mainscreen.StarPanel
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
+import kotlinx.coroutines.delay
 import java.time.LocalDateTime
 
 @Composable
 fun ShowDetailProduct(value: Product){
+    @Composable
+    fun AnimatePrice(price: String){
+        val infiniteTransition = rememberInfiniteTransition()
+        val rotate by infiniteTransition.animateFloat(
+            initialValue = 0f,
+            targetValue = 360f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(
+                    durationMillis = 1000,
+                    delayMillis = 5000,
+                    easing = FastOutLinearInEasing
+                ),
+                repeatMode = RepeatMode.Reverse
+            )
+        )
+        Text(
+            modifier = Modifier.padding(
+                start = 8.dp,
+                end = 8.dp,
+                top = 8.dp
+            )
+                .graphicsLayer {
+                    rotationY = rotate
+                },
+            text = price,
+            color = ColorText,
+            fontSize = 23.sp,
+            fontWeight = FontWeight.Medium
+        )
+
+
+    }
     data class Integer(var value: Int = 0)
     val countReviews = remember {
         Integer()
     }
-    val font = remember { FontFamily(Font(R.font.robotocondensed_light)) }
+    val fontCondensed = remember { FontFamily(Font(R.font.robotocondensed_light)) }
+    val font = remember { FontFamily(Font(R.font.roboto_light)) }
     val product = remember {
         value
     }
@@ -74,7 +97,7 @@ fun ShowDetailProduct(value: Product){
 
 
     DisposableEffect(Unit) {
-        viewModel.getReviewProduct(product.id, limit = 2)
+        viewModel.getReviewProduct(product.id)
         onDispose {
             viewModel.clearReviews()
         }
@@ -82,10 +105,10 @@ fun ShowDetailProduct(value: Product){
     LaunchedEffect(reviews.value.size) {
        // log(reviews.value.size.toString())
         if (reviews.value.isNotEmpty()) {
-            val username = reviews.value[0].username
+            /*val username = reviews.value[0].username
             val pos = username.indexOf(' ')
-            reviews.value[0].username = username.substring(pos+1)
-            countReviews.value = username.substring(0, pos).toInt()
+            reviews.value[0].username = username.substring(pos+1)*/
+            countReviews.value = reviews.value.size//username.substring(0, pos).toInt()
         }
     }
     val interaction = remember { MutableInteractionSource() }
@@ -187,7 +210,7 @@ fun ShowDetailProduct(value: Product){
                         Text(
                             modifier = Modifier.padding(top = 4.dp),
                             text = product.name,
-                            fontFamily = font,
+                            fontFamily = fontCondensed,
                             fontSize = 17.sp
                         )
                     }
@@ -289,20 +312,25 @@ fun ShowDetailProduct(value: Product){
                     val buttonWidth = (this.maxWidth - paddingColumn * 4 - paddingRow * 2) / 2 /*with(LocalDensity.current) {
                     (boxScope.maxWidth).roundToPx().toFloat() / 2
                 }*/
+                Column(modifier = Modifier
+                    .padding(all = paddingRow)
+                    .clip(RoundedCornerShape(4.dp))
+                    .fillMaxSize()
+                    .background(TextFieldBg.copy(alpha = 0.3f))) {
                     Row(
-                        modifier = Modifier
-                            .padding(all = paddingRow)
-                            .clip(RoundedCornerShape(4.dp))
-                            .fillMaxSize()
-                            .background(TextFieldBg.copy(alpha = 0.3f)),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Column(modifier = Modifier.padding(paddingColumn)) {
+                        Column(modifier = Modifier
+                            .padding(horizontal = paddingColumn)
+                            .padding(top = paddingColumn, bottom = 2.dp)
+                        ) {
                             CompositeButton(
                                 modifier = Modifier.width(buttonWidth),
                                 color = BgTextPrice,
                                 top = {
-                                    Text(
+
+                                    AnimatePrice(yourPrice)
+                                    /*Text(
                                         modifier = Modifier.padding(
                                             start = 8.dp,
                                             end = 8.dp,
@@ -312,7 +340,8 @@ fun ShowDetailProduct(value: Product){
                                         color = ColorText,
                                         fontSize = 23.sp,
                                         fontWeight = FontWeight.Medium
-                                    )
+                                    )*/
+
                                 },
                                 bottom = {
                                     Text(
@@ -389,6 +418,22 @@ fun ShowDetailProduct(value: Product){
 
                         }
                     }
+                    Button(onClick = {
+                    },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 8.dp, end = 8.dp, bottom = 4.dp),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = ColorDarkBlue)
+                    ){
+                        Text(
+                                text = stringResource(id = R.string.text_buy_oneclick),
+                                color = ColorText,
+                                fontFamily = font,
+                                //fontSize = 15.sp,*/
+                                letterSpacing = 0.sp
+                            )
+                    }
+                }
                 }
                 Box(
                     modifier = Modifier
@@ -416,7 +461,7 @@ fun ShowDetailProduct(value: Product){
                         }, bottom = {})
                         Text(
                             modifier = Modifier.padding(top = 4.dp),
-                            fontFamily = font,
+                            fontFamily = fontCondensed,
                             text = product.description/*,
                             fontSize = 13.sp*/
                         )
@@ -453,7 +498,7 @@ fun ShowDetailProduct(value: Product){
                 Text(
                     text = stringResource(id = R.string.text_datedelivery) + " " + dateDelivery,
                     color = ColorText,
-                    fontFamily = font,
+                    fontFamily = fontCondensed,
                     letterSpacing = 0.sp
                 )
             }
