@@ -65,7 +65,7 @@ fun ShowDetailProduct(value: Product){
                             Text(
                                 text = textReview,
                                 color = SelectedItemBottomNavi,
-                                fontSize = 12.sp
+                                fontSize = 13.sp
                             )
                             DividerHorizontal(size = 8.dp)
                             StarPanel(count = product.star)
@@ -73,13 +73,13 @@ fun ShowDetailProduct(value: Product){
                             Text(
                                 text = product.star.toString(),
                                 color = TextFieldFont,
-                                fontSize = 12.sp,
+                                fontSize = 13.sp,
                                 fontWeight = FontWeight.Bold
                             )
                             Text(
                                 text = "/5",
                                 color = TextFieldFont,
-                                fontSize = 12.sp
+                                fontSize = 13.sp
                             )
                         }
                     }
@@ -87,9 +87,9 @@ fun ShowDetailProduct(value: Product){
                 }, bottom = {})
                 Text(
                     modifier = Modifier.padding(top = 4.dp),
-                    fontFamily = fontCondensed,
-                    text = product.description/*,
-                            fontSize = 13.sp*/
+                    fontFamily = font,
+                    text = reviews.value[0].comment,
+                    fontSize = 14.sp
                 )
             }
         }
@@ -253,15 +253,15 @@ fun ShowDetailProduct(value: Product){
                                 Text(
                                     text = textBrend,
                                     color = SelectedItemBottomNavi,
-                                    fontSize = 12.sp
+                                    fontSize = 13.sp
                                 )
                             }
 
-                        }, bottom = {})
+                        }, bottom = {}){}
                         Text(
                             modifier = Modifier.padding(top = 4.dp),
                             text = product.name,
-                            fontFamily = fontCondensed,
+                            fontFamily = font,
                             fontSize = 17.sp
                         )
                     }
@@ -505,14 +505,14 @@ fun ShowDetailProduct(value: Product){
                                 Text(
                                     text = stringResource(id = R.string.text_description),
                                     color = PrimaryDark,
-                                    fontSize = 12.sp
+                                    fontSize = 13.sp
                                 )
                             }
 
                         }, bottom = {})
                         Text(
                             modifier = Modifier.padding(top = 4.dp),
-                            fontFamily = fontCondensed,
+                            fontFamily = font,
                             text = product.description/*,
                             fontSize = 13.sp*/
                         )
