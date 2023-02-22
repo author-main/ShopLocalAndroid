@@ -37,6 +37,63 @@ import java.time.LocalDateTime
 
 @Composable
 fun ShowDetailProduct(value: Product){
+    val product = remember {value}
+    val viewModel: RepositoryViewModel = viewModel()
+    val reviews = viewModel.reviews.collectAsState()
+    val fontCondensed = remember { FontFamily(Font(R.font.robotocondensed_light)) }
+    val font = remember { FontFamily(Font(R.font.roboto_light)) }
+    @Composable
+    fun ShowReviews(count: Int){
+        val textReview = "$count ${getAfterWord(count, WORD_REVIEW)}"
+        Box(
+            modifier = Modifier
+                .padding(top = 10.dp)
+                .clip(RoundedCornerShape(6.dp))
+                .fillMaxWidth()
+                .background(PrimaryDark)
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(all = 12.dp)
+            ) {
+                CompositeButton(color = TextFieldBg.copy(alpha = 0.3f), top = {
+                    Box(
+                        modifier = Modifier
+                            .padding(vertical = 4.dp, horizontal = 8.dp)
+                    ) {
+                        Row() {
+                            Text(
+                                text = textReview,
+                                color = SelectedItemBottomNavi,
+                                fontSize = 12.sp
+                            )
+                            DividerHorizontal(size = 8.dp)
+                            StarPanel(count = product.star)
+                            DividerHorizontal(size = 4.dp)
+                            Text(
+                                text = product.star.toString(),
+                                color = TextFieldFont,
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = "/5",
+                                color = TextFieldFont,
+                                fontSize = 12.sp
+                            )
+                        }
+                    }
+
+                }, bottom = {})
+                Text(
+                    modifier = Modifier.padding(top = 4.dp),
+                    fontFamily = fontCondensed,
+                    text = product.description/*,
+                            fontSize = 13.sp*/
+                )
+            }
+        }
+    }
     @Composable
     fun AnimatePrice(price: String){
         val infiniteTransition = rememberInfiniteTransition()
@@ -53,11 +110,12 @@ fun ShowDetailProduct(value: Product){
             )
         )
         Text(
-            modifier = Modifier.padding(
-                start = 8.dp,
-                end = 8.dp,
-                top = 8.dp
-            )
+            modifier = Modifier
+                .padding(
+                    start = 8.dp,
+                    end = 8.dp,
+                    top = 8.dp
+                )
                 .graphicsLayer {
                     rotationY = rotate
                 },
@@ -73,13 +131,6 @@ fun ShowDetailProduct(value: Product){
     val countReviews = remember {
         Integer()
     }
-    val fontCondensed = remember { FontFamily(Font(R.font.robotocondensed_light)) }
-    val font = remember { FontFamily(Font(R.font.roboto_light)) }
-    val product = remember {
-        value
-    }
-    val viewModel: RepositoryViewModel = viewModel()
-    val reviews = viewModel.reviews.collectAsState()
     val indexImage = remember {
         mutableStateOf(0)
     }
@@ -227,7 +278,7 @@ fun ShowDetailProduct(value: Product){
                     val questions = 4
                     val rate = countReviews.value
                     val textRate =
-                        if (rate > 0) "$rate ${getRate(rate)}" else getStringResource(R.string.text_norate)
+                        if (rate > 0) "$rate ${getAfterWord(rate, WORD_RATE)}" else getStringResource(R.string.text_norate)
                     CompositeButton(
                         modifier = Modifier.weight(1f),
                         top = {
@@ -467,7 +518,8 @@ fun ShowDetailProduct(value: Product){
                         )
                     }
                 }
-
+                if (countReviews.value > 0)
+                    ShowReviews(countReviews.value)
             }
         }
 

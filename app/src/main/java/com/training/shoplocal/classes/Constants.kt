@@ -16,6 +16,9 @@ import java.text.DecimalFormatSymbols
 const val PERCENT_BLACKFRIDAY = 10
 const val LIMIT_BLACKFRIDAY   = 7000f
 
+const val WORD_REVIEW         = 0
+const val WORD_RATE           = 1
+
 enum class Container {
     LOGIN,
     MAIN,

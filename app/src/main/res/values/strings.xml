@@ -64,6 +64,11 @@
         <item>оценки</item>
         <item>оценок</item>
     </string-array>
+    <string-array name="review">
+        <item>отзыв</item>
+        <item>отзыва</item>
+        <item>отзывов</item>
+    </string-array>
     <string-array name="month">
         <item>января</item>
         <item>февраля</item>

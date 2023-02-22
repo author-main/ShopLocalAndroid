@@ -14,6 +14,8 @@ import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.ImageBitmap
 import com.training.shoplocal.AppShopLocal.Companion.appContext
 import com.training.shoplocal.classes.EMPTY_STRING
+import com.training.shoplocal.classes.WORD_RATE
+import com.training.shoplocal.classes.WORD_REVIEW
 import java.math.RoundingMode
 import java.nio.charset.Charset
 import java.text.DecimalFormat
@@ -93,17 +95,72 @@ fun encodeBase64(value: String): String //{
     log("decode $decode")*/
    // return result
 //}
+
+fun getAfterWord(count: Int, what: Int): String {
+    val idResource = when (what) {
+        WORD_RATE   -> R.array.rate
+        WORD_REVIEW -> R.array.review
+        else        -> -1
+    }
+    if (idResource == -1)
+        return EMPTY_STRING
+    val aWord = getStringArrayResource(idResource)
+    var sCount = count.toString()
+    val length = sCount.length
+    if (length >=2 )
+        sCount = sCount.substring(length - 2)
+    val iCount = sCount.toInt()
+    if (iCount in 11..14)
+        return aWord[2]
+    return when (iCount.toString().last().toString().toInt()) {
+        1     -> aWord[0]
+        2,3,4 -> aWord[1]
+        else  -> aWord[2]
+    }
+}
+
+
+
+/*fun getReview(count: Int) : String {
+/*  1                    отзыв
+    2, 3, 4             отзыва
+    0, 5, 6, 7, 8, 9    отзывов */
+    val aReview = getStringArrayResource(R.array.review)
+    var sReview = count.toString()
+    if (sReview.length >=2 )
+        sReview = sReview.substring(sReview.length - 2)
+
+    val iReview = sReview.toInt()
+    if (iReview in 11..14)
+        return aReview[2]
+
+    return when (iReview.toString().last().toString().toInt()) {
+        1     -> aReview[0]
+        2,3,4 -> aReview[1]
+        else  -> aReview[2]
+    }
+}
+
 fun getRate(rate: Int): String{
     val aRate = getStringArrayResource(R.array.rate)
-     return when (rate.toString().last().toString().toInt()) {
+    var sRate = rate.toString()
+    if (sRate.length >=2 )
+       sRate = sRate.substring(sRate.length - 2)
+
+    val iRate = sRate.toInt()
+    if (iRate in 11..14)
+        return aRate[2]
+
+     return when (iRate.toString().last().toString().toInt()) {
         1     -> aRate[0]
         2,3,4 -> aRate[1]
         else  -> aRate[2]
     }
-/*    1  оценка
-    2, 3, 4         оценки
-    0, 5, 6, 7, 8, 9    оценок*/
+/*          1                   оценка
+            2, 3, 4             оценки
+            0, 5, 6, 7, 8, 9    оценок*/
 }
+*/
 
 fun getDiscountPrice(price: Float, percent: Int) =
     price - (price * percent/100f)
