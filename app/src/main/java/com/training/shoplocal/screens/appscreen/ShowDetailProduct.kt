@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
@@ -85,12 +86,18 @@ fun ShowDetailProduct(value: Product){
                     }
 
                 }, bottom = {})
-                Text(
-                    modifier = Modifier.padding(top = 4.dp),
-                    fontFamily = font,
-                    text = reviews.value[0].comment,
-                    fontSize = 14.sp
-                )
+                DividerVertical(size = 8.dp)
+                Column(modifier = Modifier
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(TextFieldBg.copy(alpha = 0.3f))
+                    .padding(all = 8.dp)
+                    ) {
+                    Text(
+                        fontFamily = font,
+                        text = reviews.value[0].comment,
+                        fontSize = 14.sp
+                    )
+                }
             }
         }
     }
@@ -537,6 +544,8 @@ fun ShowDetailProduct(value: Product){
                 val month = aMonth[date.monthValue - 1]
                 "$day $month"
             }
+
+
 
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
