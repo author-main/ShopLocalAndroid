@@ -76,10 +76,10 @@ fun DiscountPanel(modifier: Modifier, percent: Int){
 @Composable
 fun StarPanel(count: Float, starSize: Dp = 12.dp, starHorzInterval: Dp = 0.dp){
     val MAX_STAR_COUNT = 5
-    val df = DecimalFormat("#.#")
-    df.roundingMode = RoundingMode.HALF_EVEN
+   /* val df = DecimalFormat("#.#")
+    df.roundingMode = RoundingMode.HALF_EVEN*/
     //val rounded = df.format(count)
-    val partNumber = df.format(count).split(DECIMAL_SEPARATOR)
+    val partNumber = getFormattedStar(count).split(DECIMAL_SEPARATOR)
     val intPart = partNumber[0].toInt()
     val floatPart = if (partNumber.size == 2) partNumber[1].toInt() else 0
     //val starPart = intPart + 1

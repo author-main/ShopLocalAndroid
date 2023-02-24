@@ -13,6 +13,7 @@ import androidx.annotation.ArrayRes
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.ImageBitmap
 import com.training.shoplocal.AppShopLocal.Companion.appContext
+import com.training.shoplocal.classes.DECIMAL_SEPARATOR
 import com.training.shoplocal.classes.EMPTY_STRING
 import com.training.shoplocal.classes.WORD_RATE
 import com.training.shoplocal.classes.WORD_REVIEW
@@ -167,6 +168,12 @@ fun getDiscountPrice(price: Float, percent: Int) =
 
 fun getSalePrice(price: Float, percent: Int) =
     getFormattedPrice(getDiscountPrice(price, percent))
+
+fun getFormattedStar(value: Float): String{
+    val df = DecimalFormat("#.#")
+    df.roundingMode = RoundingMode.HALF_EVEN
+    return df.format(value)
+}
 
 
 

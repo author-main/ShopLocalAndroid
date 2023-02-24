@@ -104,7 +104,7 @@ fun ShowDetailProduct(value: Product){
                             StarPanel(count = product.star)//, starSize = 24.dp, starHorzInterval = 8.dp)
                             DividerHorizontal(size = 4.dp)
                             Text(
-                                text = product.star.toString(),
+                                text = getFormattedStar(product.star).replace(',', '.'),
                                 color = TextFieldFont,
                                 fontSize = 13.sp,
                                 fontWeight = FontWeight.Bold
@@ -118,8 +118,10 @@ fun ShowDetailProduct(value: Product){
                     }
 
                 }, bottom = {})
-                DividerVertical(size = 8.dp)
-                ItemReview(reviews.value[0])
+                for (i in 0 until reviews.value.size) {
+                    DividerVertical(size = 8.dp)
+                    ItemReview(reviews.value[i])
+                }
             }
         }
     }
