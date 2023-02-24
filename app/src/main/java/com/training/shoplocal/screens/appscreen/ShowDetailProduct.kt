@@ -105,7 +105,7 @@ fun ShowDetailProduct(value: Product){
                             DividerHorizontal(size = 4.dp)
                             Text(
                                 text = getFormattedStar(product.star).replace(',', '.'),
-                                color = TextFieldFont,
+                                color = ColorText,
                                 fontSize = 13.sp,
                                 fontWeight = FontWeight.Bold
                             )
