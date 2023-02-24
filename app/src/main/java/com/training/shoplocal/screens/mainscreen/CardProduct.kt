@@ -48,6 +48,7 @@ import com.training.shoplocal.classes.downloader.Callback
 import com.training.shoplocal.classes.downloader.ExtBitmap
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 import com.training.shoplocal.classes.fodisplay.VIEW_MODE
+import com.training.shoplocal.screens.appscreen.DividerHorizontal
 import com.training.shoplocal.screens.appscreen.ShowProductImages
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
@@ -73,7 +74,8 @@ fun DiscountPanel(modifier: Modifier, percent: Int){
 }
 
 @Composable
-fun StarPanel(count: Float){
+fun StarPanel(count: Float, starSize: Dp = 12.dp, starHorzInterval: Dp = 0.dp){
+    val MAX_STAR_COUNT = 5
     val df = DecimalFormat("#.#")
     df.roundingMode = RoundingMode.HALF_EVEN
     //val rounded = df.format(count)
@@ -86,13 +88,14 @@ fun StarPanel(count: Float){
     Row(modifier = Modifier.padding(top = 2.dp),
     //    horizontalArrangement = Arrangement.spacedBy(1.dp)
     ) {
-        for (i in 0..4) {
+        for (i in 0 until MAX_STAR_COUNT) {
             val color = if (i <= intPart - 1)
                 ImageStarOn
             else
                 ImageStarOff
+
             Box{
-            Image( modifier = Modifier.requiredSize(12.dp),
+            Image( modifier = Modifier.requiredSize(starSize),
                 bitmap = bm.asImageBitmap(),
                 colorFilter = ColorFilter.tint(color),
                 contentDescription = null
@@ -102,16 +105,17 @@ fun StarPanel(count: Float){
                 val part       = bm.width / 10f
                 val widthStar  = floatPart * part
                 val bmPart: Bitmap = Bitmap.createBitmap(bm, 0, 0, widthStar.toInt(), bm.height)
-                Image(modifier = Modifier.height(12.dp),
+                Image(modifier = Modifier.height(starSize),
                     bitmap = bmPart.asImageBitmap(),
                     colorFilter = ColorFilter.tint(ImageStarOn),
+                    //contentScale = ContentScale.FillBounds,
                     contentDescription = null
                 )
             }
             // * >
             }
-
-
+            if (starHorzInterval > 0.dp && i < MAX_STAR_COUNT - 1)
+                DividerHorizontal(size = starHorzInterval)
         }
     }
 }

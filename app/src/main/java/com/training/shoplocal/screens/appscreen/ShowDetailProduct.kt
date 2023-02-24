@@ -69,7 +69,7 @@ fun ShowDetailProduct(value: Product){
                                 fontSize = 13.sp
                             )
                             DividerHorizontal(size = 8.dp)
-                            StarPanel(count = product.star)
+                            StarPanel(count = product.star)//, starSize = 24.dp, starHorzInterval = 8.dp)
                             DividerHorizontal(size = 4.dp)
                             Text(
                                 text = product.star.toString(),
@@ -92,6 +92,16 @@ fun ShowDetailProduct(value: Product){
                     .background(TextFieldBg.copy(alpha = 0.3f))
                     .padding(all = 8.dp)
                     ) {
+                    val curReview = reviews.value[0]
+                    Row(modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        Column(modifier = Modifier.weight(1f)){
+                            Text(text = curReview.username, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+                            Text(text = curReview.date, fontSize = 12.sp, color = TextFieldFont.copy(alpha = 0.6f))
+                        }
+                        StarPanel(count = curReview.countstar.toFloat(), starSize = 16.dp, starHorzInterval = 8.dp)
+                    }
                     Text(
                         fontFamily = font,
                         text = reviews.value[0].comment,
