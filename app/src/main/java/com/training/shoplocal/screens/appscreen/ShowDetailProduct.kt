@@ -1,5 +1,6 @@
 package com.training.shoplocal.screens.appscreen
 
+import android.content.ClipData.Item
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -45,7 +46,38 @@ fun ShowDetailProduct(value: Product){
     val font = remember { FontFamily(Font(R.font.roboto_light)) }
     @Composable
     fun ShowReviews(count: Int){
-        val textReview = "$count ${getAfterWord(count, WORD_REVIEW)}"
+        @Composable
+        fun ItemReview(value: Review){
+            val review = remember {
+                value
+            }
+            Column(modifier = Modifier
+                .clip(RoundedCornerShape(4.dp))
+                .background(TextFieldBg.copy(alpha = 0.3f))
+                .padding(all = 8.dp)
+            ) {
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    Column(modifier = Modifier.weight(1f)){
+                        Text(text = review.username, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+                        Text(text = review.date, fontSize = 12.sp, color = TextFieldFont.copy(alpha = 0.6f))
+                    }
+                    StarPanel(count = review.countstar.toFloat(), starSize = 16.dp, starHorzInterval = 8.dp)
+                }
+                Text(
+                    fontFamily = font,
+                    text = review.comment,
+                    fontSize = 14.sp
+                )
+            }
+        }
+
+        val textReview = remember {
+            "$count ${getAfterWord(count, WORD_REVIEW)}"
+        }
         Box(
             modifier = Modifier
                 .padding(top = 10.dp)
@@ -87,27 +119,7 @@ fun ShowDetailProduct(value: Product){
 
                 }, bottom = {})
                 DividerVertical(size = 8.dp)
-                Column(modifier = Modifier
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(TextFieldBg.copy(alpha = 0.3f))
-                    .padding(all = 8.dp)
-                    ) {
-                    val curReview = reviews.value[0]
-                    Row(modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ){
-                        Column(modifier = Modifier.weight(1f)){
-                            Text(text = curReview.username, fontSize = 13.sp, fontWeight = FontWeight.Medium)
-                            Text(text = curReview.date, fontSize = 12.sp, color = TextFieldFont.copy(alpha = 0.6f))
-                        }
-                        StarPanel(count = curReview.countstar.toFloat(), starSize = 16.dp, starHorzInterval = 8.dp)
-                    }
-                    Text(
-                        fontFamily = font,
-                        text = reviews.value[0].comment,
-                        fontSize = 14.sp
-                    )
-                }
+                ItemReview(reviews.value[0])
             }
         }
     }
