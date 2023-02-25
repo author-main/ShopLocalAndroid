@@ -8,8 +8,7 @@ import com.training.shoplocal.log
 class MemoryCache {
     //private val maxMemory = Runtime.getRuntime().maxMemory() / 1024
     //private val maxCacheSize = (maxMemory / 10).toInt()
-    private val maxMemory = SIZE_MEMORYCACHE * 1024 * 1024 // 8Mb Memory cache
-    private val maxCacheSize = maxMemory
+    private val maxCacheSize = SIZE_MEMORYCACHE * 1024 * 1024 // 8Mb Memory cache
     private val cache = object: LruCache<String, Bitmap>(maxCacheSize){
         override fun sizeOf(key: String, value: Bitmap): Int {
             //log("max cache size = $maxCacheSize")

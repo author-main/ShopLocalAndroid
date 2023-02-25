@@ -1,6 +1,9 @@
 package com.training.shoplocal.screens.appscreen
 
 import android.content.ClipData.Item
+import android.graphics.Paint
+import android.graphics.Rect
+import android.util.TypedValue
 import android.widget.Space
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
@@ -21,15 +24,22 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -52,25 +62,64 @@ fun ShowDetailProduct(value: Product){
     val font = remember { FontFamily(Font(R.font.roboto_light)) }
     @Composable
     fun ShowReviews(modifier: Modifier){
+        val context = LocalContext.current
+        fun getTextHeight(fontSize: Float): Int{
+            var textHeight = 0
+            /*val sizePx =
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
+                    fontSize.toFloat(), context.resources.displayMetrics)*/
+            val paint = Paint()
+            paint.apply {
+                textSize = fontSize//sizePx
+                val bound = Rect()
+                val str = "Ap"
+                getTextBounds(str, 0, str.length, bound)
+                textHeight = bound.height()
+            }
+            return textHeight
+        }
         @Composable
-        fun ItemReview(value: Review){
+        fun ItemReview(value: Review, columnWidth: Dp){
+            //val textHeight = (getTextHeight(fontSize = 14) * 8).Dp
+
+            val textHeight = LocalDensity.current.run {
+                (getTextHeight(fontSize = 14.sp.toPx()) * 8).toDp()
+            }
+
+            //log(textHeight)
+            /*Canvas(modifier = Modifier.height(150.dp).width(300.dp).background(Color.White), onDraw = {
+                drawContext.canvas.nativeCanvas.apply {
+                    drawText(
+                        "Hey, Himanshu",
+                        size.width / 2,
+                        size.height / 2,
+                        Paint().apply {
+                            textSize = 100f
+                            val bound = Rect()
+                            val str = "Ap"
+                            getTextBounds(str, 0, str.length, bound)
+                            log(bound.height())
+                           //color = Color.Blue
+//                            textAlign = Paint.Align.CENTER
+                        }
+                    )
+                }
+
+            } )*/
             val review = remember {
                 value
             }
             Column(modifier = Modifier
                 //.fillMaxWidth()
-            /*    .clip(RoundedCornerShape(4.dp))
+                /*    .clip(RoundedCornerShape(4.dp))
                 .background(TextFieldBg.copy(alpha = 0.3f))*/
-                .background(Color.Blue)
                 .padding(all = 8.dp)
             ) {
                 Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.Red)
+                    .requiredWidth(columnWidth)
                     .padding(bottom = 4.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
-
                 ){
                     Column(){
                         Text(text = review.username, fontSize = 13.sp, fontWeight = FontWeight.Medium)
@@ -79,11 +128,32 @@ fun ShowDetailProduct(value: Product){
                     //Spacer(modifier = Modifier.weight(1f))
                     StarPanel(count = review.countstar.toFloat(), starSize = 16.dp, starHorzInterval = 8.dp)
                 }
-                /*Text(
-                    fontFamily = font,
-                    text = review.comment,
-                    fontSize = 14.sp
-                )*/
+                    //val scrollState = rememberScrollState()
+                Box(modifier = Modifier
+                    .requiredHeight(textHeight)
+                    .requiredWidth(columnWidth)){
+                    //.verticalScroll(scrollState)) {
+                    Text(
+                        fontFamily = font,
+                        maxLines = 8,
+                        softWrap = true,
+                        text = "$TAB_CHAR${review.comment}",
+                        overflow = TextOverflow.Ellipsis,
+                        fontSize = 14.sp/*,
+                                onTextLayout = { result: TextLayoutResult ->
+                            val cursorRect = result.getCursorRect(0)
+
+                            val info = "firstBaseline: ${result.firstBaseline}, " +
+                                    "lastBaseline: ${result.lastBaseline}\n" +
+                                    "cursorRect: $cursorRect\n" +
+                                    "getLineBottom: ${result.getLineBottom(0)}, " +
+                                    "getBoundingBox: ${result.getBoundingBox(0)}"
+                            val heightInPx =
+                                result.size.height.toFloat()
+                                    log(info)
+                        }*/
+                    )
+                }
             }
         }
 
@@ -133,13 +203,20 @@ fun ShowDetailProduct(value: Product){
                 DividerVertical(size = 8.dp)
                 val lazyRowState = rememberLazyListState()
                 val flingBehavior = rememberSnapFlingBehavior(lazyListState = lazyRowState)
-                LazyRow(state = lazyRowState, flingBehavior = flingBehavior,
-                    modifier = modifier
-                        .clip(RoundedCornerShape(4.dp))
-                        .background(TextFieldBg.copy(alpha = 0.3f))
+                BoxWithConstraints(modifier = modifier
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(TextFieldBg.copy(alpha = 0.3f))
                 ) {
-                    items(reviews.value) {item ->
-                        ItemReview(item)
+                    val width = this.maxWidth - 16.dp
+                    LazyRow(
+                        state = lazyRowState, flingBehavior = flingBehavior,
+                        modifier = Modifier.fillMaxSize()/*modifier
+                            .clip(RoundedCornerShape(4.dp))
+                            .background(TextFieldBg.copy(alpha = 0.3f))*/
+                    ) {
+                        items(reviews.value) { item ->
+                            ItemReview(item, width)
+                        }
                     }
                 }
                 /*for (i in 0 until reviews.value.size) {
