@@ -1,10 +1,15 @@
 package com.training.shoplocal.screens.appscreen
 
 import android.content.ClipData.Item
+import android.widget.Space
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -37,6 +42,7 @@ import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.delay
 import java.time.LocalDateTime
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ShowDetailProduct(value: Product){
     val product = remember {value}
@@ -45,26 +51,31 @@ fun ShowDetailProduct(value: Product){
     val fontCondensed = remember { FontFamily(Font(R.font.robotocondensed_light)) }
     val font = remember { FontFamily(Font(R.font.roboto_light)) }
     @Composable
-    fun ShowReviews(count: Int){
+    fun ShowReviews(modifier: Modifier){
         @Composable
         fun ItemReview(value: Review){
             val review = remember {
                 value
             }
             Column(modifier = Modifier
-                .clip(RoundedCornerShape(4.dp))
-                .background(TextFieldBg.copy(alpha = 0.3f))
+            /*    .clip(RoundedCornerShape(4.dp))
+                .background(TextFieldBg.copy(alpha = 0.3f))*/
+                .background(Color.Blue)
                 .padding(all = 8.dp)
             ) {
                 Row(modifier = Modifier
                     .fillMaxWidth()
+                    .background(Color.Red)
                     .padding(bottom = 4.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+
                 ){
-                    Column(modifier = Modifier.weight(1f)){
+                    Column(){
                         Text(text = review.username, fontSize = 13.sp, fontWeight = FontWeight.Medium)
                         Text(text = review.date, fontSize = 12.sp, color = TextFieldFont.copy(alpha = 0.6f))
                     }
+                    //Spacer(modifier = Modifier.weight(1f))
                     StarPanel(count = review.countstar.toFloat(), starSize = 16.dp, starHorzInterval = 8.dp)
                 }
                 Text(
@@ -76,7 +87,7 @@ fun ShowDetailProduct(value: Product){
         }
 
         val textReview = remember {
-            "$count ${getAfterWord(count, WORD_REVIEW)}"
+            "${reviews.value.size} ${getAfterWord(reviews.value.size, WORD_REVIEW)}"
         }
         Box(
             modifier = Modifier
@@ -118,10 +129,23 @@ fun ShowDetailProduct(value: Product){
                     }
 
                 }, bottom = {})
-                for (i in 0 until reviews.value.size) {
+                DividerVertical(size = 8.dp)
+                val lazyRowState = rememberLazyListState()
+                val flingBehavior = rememberSnapFlingBehavior(lazyListState = lazyRowState)
+                LazyRow(state = lazyRowState, flingBehavior = flingBehavior,
+                    modifier = modifier
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(TextFieldBg.copy(alpha = 0.3f))
+                ) {
+                    items(reviews.value) {item ->
+                        ItemReview(item)
+                    }
+                }
+                /*for (i in 0 until reviews.value.size) {
                     DividerVertical(size = 8.dp)
                     ItemReview(reviews.value[i])
-                }
+                }*/
+
             }
         }
     }
@@ -550,7 +574,7 @@ fun ShowDetailProduct(value: Product){
                     }
                 }
                 if (countReviews.value > 0)
-                    ShowReviews(countReviews.value)
+                    ShowReviews(Modifier.fillMaxWidth())
             }
         }
 
