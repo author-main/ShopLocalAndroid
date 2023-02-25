@@ -223,7 +223,9 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
         ) }
 
         val linkImage = remember{linkImages[index]}
+
         LaunchedEffect(index) {
+            //log ("linkImage = $index")
             linkImage.status = Status.LOADING
             ImageLinkDownloader.downloadImage("$SERVER_URL/images/${linkImage.link}", reduce, callback = object: Callback{
                 override fun onComplete(image: ExtBitmap) {
