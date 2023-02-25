@@ -58,6 +58,7 @@ fun ShowDetailProduct(value: Product){
                 value
             }
             Column(modifier = Modifier
+                //.fillMaxWidth()
             /*    .clip(RoundedCornerShape(4.dp))
                 .background(TextFieldBg.copy(alpha = 0.3f))*/
                 .background(Color.Blue)
@@ -78,11 +79,11 @@ fun ShowDetailProduct(value: Product){
                     //Spacer(modifier = Modifier.weight(1f))
                     StarPanel(count = review.countstar.toFloat(), starSize = 16.dp, starHorzInterval = 8.dp)
                 }
-                Text(
+                /*Text(
                     fontFamily = font,
                     text = review.comment,
                     fontSize = 14.sp
-                )
+                )*/
             }
         }
 
