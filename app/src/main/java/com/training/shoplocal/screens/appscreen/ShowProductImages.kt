@@ -205,12 +205,17 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
     }
 
     @Composable
-    fun downloadImage(index: Int): MutableState<ImageBitmap> {
-        val isMainImage = remember{
+    fun downloadImage(indexLink: Int): MutableState<ImageBitmap> {
+        /*val isMainImage = remember{
             index == 0
+        }*/
+        val index = remember {
+            indexLink
         }
         fun checkMainImage(){
-            if (isMainImage)
+            /*if (isMainImage)
+                downloadedMainImage = true*/
+            if (index == 0)
                 downloadedMainImage = true
         }
         val downloadedImage = remember { mutableStateOf(
@@ -218,7 +223,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
         ) }
 
         val linkImage = remember{linkImages[index]}
-        LaunchedEffect(Unit) {
+        LaunchedEffect(index) {
             linkImage.status = Status.LOADING
             ImageLinkDownloader.downloadImage("$SERVER_URL/images/${linkImage.link}", reduce, callback = object: Callback{
                 override fun onComplete(image: ExtBitmap) {
@@ -252,6 +257,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
                 size = coordinates.size.toSize()
             }
     ) {
+
 
         linkImages.forEachIndexed{index, item ->
             if (item.status == Status.NONE)
