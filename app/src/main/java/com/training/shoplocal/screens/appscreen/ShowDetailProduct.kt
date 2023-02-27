@@ -8,6 +8,7 @@ import android.widget.Space
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
+import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -79,7 +80,7 @@ fun ShowDetailProduct(value: Product){
             return textHeight
         }
         @Composable
-        fun ItemReview(value: Review, columnWidth: Dp){
+        fun ItemReview(value: Review, columnWidth: Dp, onClick: (review: Review) -> Unit){
             //val textHeight = (getTextHeight(fontSize = 14) * 8).Dp
 
             val textHeight = LocalDensity.current.run {
@@ -109,7 +110,14 @@ fun ShowDetailProduct(value: Product){
             val review = remember {
                 value
             }
+
             Column(modifier = Modifier
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                ){
+                    onClick(review)
+                }
                 //.fillMaxWidth()
                 /*    .clip(RoundedCornerShape(4.dp))
                 .background(TextFieldBg.copy(alpha = 0.3f))*/
@@ -215,7 +223,9 @@ fun ShowDetailProduct(value: Product){
                             .background(TextFieldBg.copy(alpha = 0.3f))*/
                     ) {
                         items(reviews.value) { item ->
-                            ItemReview(item, width)
+                            ItemReview(item, width) {
+
+                            }
                         }
                     }
                 }
