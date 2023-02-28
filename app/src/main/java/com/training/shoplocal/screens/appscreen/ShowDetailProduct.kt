@@ -122,7 +122,6 @@ fun ShowDetailProduct(value: Product){
                 ) {
                     if (review.hasOverflow) {
                         onClick(review)
-                        //  log(review.comment)
                         openDialogReview.value = true
                     }
                 }
@@ -147,7 +146,7 @@ fun ShowDetailProduct(value: Product){
                     //val scrollState = rememberScrollState()
                 Box(modifier = Modifier
                     .requiredHeight(
-                        LocalDensity.current.run {
+                        density.run {
                             textHeight.toDp()
                         }
                     )
