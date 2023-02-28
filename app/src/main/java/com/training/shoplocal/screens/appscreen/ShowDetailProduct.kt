@@ -116,7 +116,8 @@ fun ShowDetailProduct(value: Product){
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null
                 ){
-                    onClick(review)
+                    if (review.hasOverflow)
+                        onClick(review)
                 }
                 //.fillMaxWidth()
                 /*    .clip(RoundedCornerShape(4.dp))
@@ -141,14 +142,27 @@ fun ShowDetailProduct(value: Product){
                     .requiredHeight(textHeight)
                     .requiredWidth(columnWidth)){
                     //.verticalScroll(scrollState)) {
+                    val textReview = "$TAB_CHAR${review.comment}"
                     Text(
                         fontFamily = font,
                         maxLines = 8,
                         softWrap = true,
-                        text = "$TAB_CHAR${review.comment}",
+                        text = textReview,
                         overflow = TextOverflow.Ellipsis,
-                        fontSize = 14.sp/*,
-                                onTextLayout = { result: TextLayoutResult ->
+                        fontSize = 14.sp,
+                        onTextLayout = { textLayoutResult ->
+                            if (textLayoutResult.hasVisualOverflow) {
+                                review.hasOverflow = true
+                                //log(textReview)
+/*                                val lineEndIndex = textLayoutResult.getLineEnd(
+                                    lineIndex = 1,
+                                    visibleEnd = true
+                                )
+                                log("end index = $lineEndIndex")*/
+                            }
+                        }
+
+                                /*onTextLayout = { result: TextLayoutResult ->
                             val cursorRect = result.getCursorRect(0)
 
                             val info = "firstBaseline: ${result.firstBaseline}, " +
