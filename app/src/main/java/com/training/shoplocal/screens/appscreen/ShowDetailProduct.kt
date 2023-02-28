@@ -59,65 +59,72 @@ fun ShowDetailProduct(value: Product){
     val product = remember {value}
     val viewModel: RepositoryViewModel = viewModel()
     val reviews = viewModel.reviews.collectAsState()
+    val dialogReview = remember {
+        Review(comment = "", username = "", countstar = 1, date = "", hasOverflow = false)
+    }
     val fontCondensed = remember { FontFamily(Font(R.font.robotocondensed_light)) }
     val font = remember { FontFamily(Font(R.font.roboto_light)) }
+    val openDialogReview = remember {
+        mutableStateOf(false)
+    }
+
+    val currentDensity = LocalDensity.current
+    val density = remember { currentDensity }
+    val currentContext = LocalContext.current
+    val context = remember {currentContext}
+
+    fun getTextHeight(fontSize: Int, lines: Int): Float{//Pair<Float, Int>{ // междустроковый интервал, высота строки
+        var lineSpace = 0f
+        var textHeight = 0
+        val fontSizePx =
+            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
+                fontSize.toFloat(), context.resources.displayMetrics)
+        val paint = Paint()
+        paint.apply {
+            lineSpace = fontSpacing
+            textSize = fontSizePx//sizePx
+            val bound = Rect()
+            val str = "A"
+            getTextBounds(str, 0, 1, bound)
+            textHeight = bound.height()
+        }
+        return (lines - 1) * lineSpace + lines * textHeight
+    }
+
+
+
+    @Composable
+    fun ShowDialogReview(openDialogReview: MutableState<Boolean>, widthContent: Dp){
+        val dialogTextHeight = remember { density.run { getTextHeight(14, 12).toDp()}}
+        val dialogContentWidth = remember {widthContent}
+        if (openDialogReview.value) {
+            log(dialogReview.comment)
+            openDialogReview.value = false
+        }
+    }
+
     @Composable
     fun ShowReviews(modifier: Modifier){
-        val context = LocalContext.current
-        fun getTextHeight(fontSize: Float): Int{
-            var textHeight = 0
-            /*val sizePx =
-                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
-                    fontSize.toFloat(), context.resources.displayMetrics)*/
-            val paint = Paint()
-            paint.apply {
-                textSize = fontSize//sizePx
-                val bound = Rect()
-                val str = "Ap"
-                getTextBounds(str, 0, str.length, bound)
-                textHeight = bound.height()
-            }
-            return textHeight
+        val textHeight = remember {
+            getTextHeight(fontSize = 14, lines = 8)
         }
         @Composable
         fun ItemReview(value: Review, columnWidth: Dp, onClick: (review: Review) -> Unit){
-            //val textHeight = (getTextHeight(fontSize = 14) * 8).Dp
-
-            val textHeight = LocalDensity.current.run {
-                (getTextHeight(fontSize = 14.sp.toPx()) * 8).toDp()
-            }
-
-            //log(textHeight)
-            /*Canvas(modifier = Modifier.height(150.dp).width(300.dp).background(Color.White), onDraw = {
-                drawContext.canvas.nativeCanvas.apply {
-                    drawText(
-                        "Hey, Himanshu",
-                        size.width / 2,
-                        size.height / 2,
-                        Paint().apply {
-                            textSize = 100f
-                            val bound = Rect()
-                            val str = "Ap"
-                            getTextBounds(str, 0, str.length, bound)
-                            log(bound.height())
-                           //color = Color.Blue
-//                            textAlign = Paint.Align.CENTER
-                        }
-                    )
-                }
-
-            } )*/
             val review = remember {
                 value
             }
 
+            ShowDialogReview(openDialogReview = openDialogReview, widthContent = columnWidth)
             Column(modifier = Modifier
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null
-                ){
-                    if (review.hasOverflow)
+                ) {
+                    if (review.hasOverflow) {
                         onClick(review)
+                        //  log(review.comment)
+                        openDialogReview.value = true
+                    }
                 }
                 //.fillMaxWidth()
                 /*    .clip(RoundedCornerShape(4.dp))
@@ -139,7 +146,11 @@ fun ShowDetailProduct(value: Product){
                 }
                     //val scrollState = rememberScrollState()
                 Box(modifier = Modifier
-                    .requiredHeight(textHeight)
+                    .requiredHeight(
+                        LocalDensity.current.run {
+                            textHeight.toDp()
+                        }
+                    )
                     .requiredWidth(columnWidth)){
                     //.verticalScroll(scrollState)) {
                     val textReview = "$TAB_CHAR${review.comment}"
@@ -237,8 +248,12 @@ fun ShowDetailProduct(value: Product){
                             .background(TextFieldBg.copy(alpha = 0.3f))*/
                     ) {
                         items(reviews.value) { item ->
-                            ItemReview(item, width) {
-
+                            ItemReview(item, width){
+                                    dialogReview.comment     = it.comment
+                                    dialogReview.username    = it.username
+                                    dialogReview.countstar   = it.countstar
+                                    dialogReview.date        = it.date
+                                    dialogReview.hasOverflow = it.hasOverflow
                             }
                         }
                     }
