@@ -90,10 +90,10 @@ fun ShowImagesIndicator(modifier: Modifier, index: State<Int>, count: Int){
     val STATUS_NONE = -1
     val STATUS_SELECTED = 1
     val STATUS_DESELECTED = 0
-    data class IndexImage(var value: Int = -1) // если захочется анимировать
+   /* data class IndexImage(var value: Int = -1) // если захочется анимировать
     val curIndex= remember { // хранит предыдущее значение индекса
         IndexImage()
-    }
+    }*/
     @Composable
     fun AnimateSymbol(status: Int = STATUS_NONE) {
         val selectedColor = remember {TextFieldFont.copy(alpha = 0.7f)}
@@ -116,10 +116,10 @@ fun ShowImagesIndicator(modifier: Modifier, index: State<Int>, count: Int){
         verticalAlignment = Alignment.CenterVertically){
         for (i in 0 until count) {
             var status = STATUS_NONE
-            if (curIndex.value == i) {
+          /*  if (curIndex.value == i) {
                 curIndex.value = i
                 status = STATUS_DESELECTED
-            } else if (index.value == i)
+            } else*/ if (index.value == i)
                 status = STATUS_SELECTED
             AnimateSymbol(status)
         }
