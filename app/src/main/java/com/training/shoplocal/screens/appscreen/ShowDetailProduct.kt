@@ -164,6 +164,9 @@ fun ShowDetailProduct(value: Product){
                         fontSize = 14.sp,
                         onTextLayout = { textLayoutResult ->
 
+                           /* log(textLayoutResult.multiParagraph.getLineHeight(0))
+                            log(textLayoutResult.multiParagraph.lastBaseline)*/
+                            //textLayoutResult.multiParagraph.
                             //log(textLayoutResult.multiParagraph.)
                             /*val line = textLayoutResult.getLineEnd(lineIndex = 0, visibleEnd = false)
                             log("line = $line")*/
