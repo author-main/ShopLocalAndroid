@@ -46,7 +46,7 @@ fun DialogReview(openDialog: MutableState<Boolean>, review: Review){//}, widthCo
         Surface(
            // border = BorderStroke(1.dp, TextFieldBg),
             color = PrimaryDark,
-            shape = RoundedCornerShape(6.dp)
+            shape = RoundedCornerShape(12.dp)
         ){
             Column(modifier = Modifier
                 .padding(16.dp)) {
@@ -64,6 +64,7 @@ fun DialogReview(openDialog: MutableState<Boolean>, review: Review){//}, widthCo
                     modifier = Modifier
 //                .height(textHeight)
 //                        .padding(all = 16.dp)
+                        .heightIn(1.dp, 296.dp)
                         .verticalScroll(rememberScrollState())
                 ) {
                     Text(
