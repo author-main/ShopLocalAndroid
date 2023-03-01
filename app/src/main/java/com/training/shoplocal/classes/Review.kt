@@ -7,7 +7,7 @@ data class Review (
     @SerializedName("username")     var username    : String,
     @SerializedName("countstar")    var countstar   : Int,
     @SerializedName("date")         var date        : String,
-                                    var lines       : Int = 0
+                                    var hasOverflow : Boolean = false
 /*    $time = strtotime($datetimeFromMysql);
     $myFormatForView = date("m/d/y g:i A", $time);*/
 )

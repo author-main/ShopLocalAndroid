@@ -87,11 +87,11 @@ fun ShowDetailProduct(value: Product){
             lineSpace = fontSpacing
             textSize = fontSizePx//sizePx
             val bound = Rect()
-            val str = "A"
-            getTextBounds(str, 0, 1, bound)
+            val str = "Aq"
+            getTextBounds(str, 0, 2, bound)
             textHeight = bound.height()
         }
-        return (lines - 1) * lineSpace + lines * textHeight
+        return (lines - 2) * lineSpace + lines * textHeight
     }
 
 
@@ -99,10 +99,10 @@ fun ShowDetailProduct(value: Product){
     @Composable
     fun ShowDialogReview(widthContent: Dp){
         if (openDialogReview.value) {
-            val lines = if (dialogReview.lines > 15) 15 else dialogReview.lines
-            log ("lines = $lines")
-            val textHeight = density.run { getTextHeight(14, lines).toDp()}
-            DialogReview(openDialogReview, dialogReview, widthContent, textHeight)
+            //val lines = if (dialogReview.lines > 15) 15 else dialogReview.lines
+            //log ("lines = $lines")
+            //val textHeight = density.run { getTextHeight(14, lines).toDp()}
+            DialogReview(openDialogReview, dialogReview)//, widthContent, textHeight)
         }
     }
 
@@ -122,7 +122,7 @@ fun ShowDetailProduct(value: Product){
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null
                 ) {
-                    if (review.lines > 0) {
+                    if (review.hasOverflow) {
                         onClick(review)
                         openDialogReview.value = true
                     }
@@ -157,35 +157,13 @@ fun ShowDetailProduct(value: Product){
                     val textReview = "$TAB_CHAR${review.comment}"
                     Text(
                         fontFamily = font,
-                        maxLines = 8,
+                       // maxLines = 8,
                         softWrap = true,
                         text = textReview,
                         overflow = TextOverflow.Ellipsis,
                         fontSize = 14.sp,
                         onTextLayout = { textLayoutResult ->
-
-                           /* log(textLayoutResult.multiParagraph.getLineHeight(0))
-                            log(textLayoutResult.multiParagraph.lastBaseline)*/
-                            //textLayoutResult.multiParagraph.
-                            //log(textLayoutResult.multiParagraph.)
-                            /*val line = textLayoutResult.getLineEnd(lineIndex = 0, visibleEnd = false)
-                            log("line = $line")*/
-                          /*  val paragraph = androidx.compose.ui.text.Paragraph(
-                                text = "Foo",
-                                style = MaterialTheme.typography.body1,
-                                constraints = Constraints(maxWidth = maxWidthInPx),
-                                density = density,
-                                fontFamilyResolver = LocalFontFamilyResolver.current,
-                            )*/
-                            if (textLayoutResult.hasVisualOverflow) {
-                                review.lines = textLayoutResult.multiParagraph.lineCount//textLayoutResult.lineCount
-                                //log(textReview)
-/*                                val lineEndIndex = textLayoutResult.getLineEnd(
-                                    lineIndex = 1,
-                                    visibleEnd = true
-                                )
-                                log("end index = $lineEndIndex")*/
-                            } else review.lines = 0
+                           review.hasOverflow = textLayoutResult.hasVisualOverflow
                         }
 
                                 /*onTextLayout = { result: TextLayoutResult ->
@@ -268,7 +246,7 @@ fun ShowDetailProduct(value: Product){
                                     dialogReview.username    = it.username
                                     dialogReview.countstar   = it.countstar
                                     dialogReview.date        = it.date
-                                    dialogReview.lines       = it.lines
+                                  // dialogReview.hasOverflow = it.hasOverflow
                             }
                         }
                     }

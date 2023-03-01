@@ -10,16 +10,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.training.shoplocal.R
 import com.training.shoplocal.classes.Review
+import com.training.shoplocal.classes.TAB_CHAR
 import com.training.shoplocal.ui.theme.PrimaryDark
 
 @Composable
-fun DialogReview(openDialog: MutableState<Boolean>, review: Review, widthContent: Dp, textHeight: Dp){
+fun DialogReview(openDialog: MutableState<Boolean>, review: Review){//}, widthContent: Dp, textHeight: Dp){
     Dialog(onDismissRequest = { openDialog.value = false},
         properties = DialogProperties(
             dismissOnBackPress = true, dismissOnClickOutside = true
@@ -27,10 +31,11 @@ fun DialogReview(openDialog: MutableState<Boolean>, review: Review, widthContent
     ) {
         Surface(color = Color.Red){
             Box(modifier = Modifier
-                .height(textHeight)
+//                .height(textHeight)
                 .verticalScroll(rememberScrollState())
             ) {
-                Text(text = review.comment, fontSize = 14.sp)
+                Text(text = "$TAB_CHAR${review.comment}", fontSize = 14.sp,
+                fontFamily = FontFamily(Font(R.font.roboto_light)) )
             }
         }
     }
