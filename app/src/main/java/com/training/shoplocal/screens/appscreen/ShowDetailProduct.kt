@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -30,6 +31,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFontFamilyResolver
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextLayoutResult
@@ -47,6 +49,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.*
 import com.training.shoplocal.R
 import com.training.shoplocal.classes.*
+import com.training.shoplocal.dialogs.DialogReview
 import com.training.shoplocal.screens.mainscreen.StarPanel
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
@@ -60,7 +63,7 @@ fun ShowDetailProduct(value: Product){
     val viewModel: RepositoryViewModel = viewModel()
     val reviews = viewModel.reviews.collectAsState()
     val dialogReview = remember {
-        Review(comment = "", username = "", countstar = 1, date = "", hasOverflow = false)
+        Review(comment = "", username = "", countstar = 1, date = "")
     }
     val fontCondensed = remember { FontFamily(Font(R.font.robotocondensed_light)) }
     val font = remember { FontFamily(Font(R.font.roboto_light)) }
@@ -94,12 +97,12 @@ fun ShowDetailProduct(value: Product){
 
 
     @Composable
-    fun ShowDialogReview(openDialogReview: MutableState<Boolean>, widthContent: Dp){
-        val dialogTextHeight = remember { density.run { getTextHeight(14, 12).toDp()}}
-        val dialogContentWidth = remember {widthContent}
+    fun ShowDialogReview(widthContent: Dp){
         if (openDialogReview.value) {
-            log(dialogReview.comment)
-            openDialogReview.value = false
+            val lines = if (dialogReview.lines > 15) 15 else dialogReview.lines
+            log ("lines = $lines")
+            val textHeight = density.run { getTextHeight(14, lines).toDp()}
+            DialogReview(openDialogReview, dialogReview, widthContent, textHeight)
         }
     }
 
@@ -113,14 +116,13 @@ fun ShowDetailProduct(value: Product){
             val review = remember {
                 value
             }
-
-            ShowDialogReview(openDialogReview = openDialogReview, widthContent = columnWidth)
+            ShowDialogReview(widthContent = columnWidth)
             Column(modifier = Modifier
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null
                 ) {
-                    if (review.hasOverflow) {
+                    if (review.lines > 0) {
                         onClick(review)
                         openDialogReview.value = true
                     }
@@ -161,15 +163,26 @@ fun ShowDetailProduct(value: Product){
                         overflow = TextOverflow.Ellipsis,
                         fontSize = 14.sp,
                         onTextLayout = { textLayoutResult ->
+
+                            //log(textLayoutResult.multiParagraph.)
+                            /*val line = textLayoutResult.getLineEnd(lineIndex = 0, visibleEnd = false)
+                            log("line = $line")*/
+                          /*  val paragraph = androidx.compose.ui.text.Paragraph(
+                                text = "Foo",
+                                style = MaterialTheme.typography.body1,
+                                constraints = Constraints(maxWidth = maxWidthInPx),
+                                density = density,
+                                fontFamilyResolver = LocalFontFamilyResolver.current,
+                            )*/
                             if (textLayoutResult.hasVisualOverflow) {
-                                review.hasOverflow = true
+                                review.lines = textLayoutResult.multiParagraph.lineCount//textLayoutResult.lineCount
                                 //log(textReview)
 /*                                val lineEndIndex = textLayoutResult.getLineEnd(
                                     lineIndex = 1,
                                     visibleEnd = true
                                 )
                                 log("end index = $lineEndIndex")*/
-                            }
+                            } else review.lines = 0
                         }
 
                                 /*onTextLayout = { result: TextLayoutResult ->
@@ -252,7 +265,7 @@ fun ShowDetailProduct(value: Product){
                                     dialogReview.username    = it.username
                                     dialogReview.countstar   = it.countstar
                                     dialogReview.date        = it.date
-                                    dialogReview.hasOverflow = it.hasOverflow
+                                    dialogReview.lines       = it.lines
                             }
                         }
                     }

@@ -6,8 +6,9 @@ import androidx.compose.runtime.setValue
 
 sealed class DialogItem {
     object None : DialogItem()
-    object RegUserDialog : DialogItem()
+    object RegUserDialog     : DialogItem()
     object RestoreUserDialog : DialogItem()
+    //object ReviewDialog      : DialogItem()
    // object SearchProductDialog : DialogItem()
 }
 

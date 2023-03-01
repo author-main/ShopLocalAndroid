@@ -79,7 +79,7 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
             DialogItem.RestoreUserDialog -> {
                 DialogRestore()
             }
-          }
+        }
     }
 
 
