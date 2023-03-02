@@ -815,6 +815,7 @@ fun MainScreen(state: ModalBottomSheetState){
                         items(products, { product -> product.id }) { product ->
                             //log("item${product.id}")
                             // items(products.size, key = {}) { index ->
+
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -825,12 +826,12 @@ fun MainScreen(state: ModalBottomSheetState){
                                 CardProduct(/*modifier = Modifier.onGloballyPositioned { coordinates ->
                                     calcHeight = coordinates.size.height
                                 },*/
-                                product, showMoreButton = !isActiveContainer(Container.SEARCH)/*searchScreenDisplayed()*/, state = state, modeview = OrderDisplay.getViewMode()){selectedProduct ->
-                                    setActiveContainer(Container.DETAIL)
+                                product, showMoreButton = isActiveContainer(Container.MAIN)/*searchScreenDisplayed()*/, state = state, modeview = OrderDisplay.getViewMode()){selectedProduct ->
                                     viewModel.hideBottomNavigation()
                                     showFloatingButton = false
                                     detailProduct.value = selectedProduct
                                     ///log(selectedProduct.name)
+                                    setActiveContainer(Container.DETAIL)
                                 }
                             }
                         }
