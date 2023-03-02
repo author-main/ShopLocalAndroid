@@ -41,6 +41,19 @@ import kotlin.math.absoluteValue
 import kotlin.math.pow
 
 
+/*@Composable
+fun ExtImage(modifier: Modifier, bitmap: State<ImageBitmap>){
+   /* val source = remember {
+        bitmap
+    }*/
+    log("recomposition image...")
+    Image(
+        modifier = modifier,
+        bitmap = bitmap.value,
+        contentDescription = null
+    )
+}*/
+
 
 @Composable
 fun CompositeButton(modifier: Modifier = Modifier, color: Color = PrimaryDark, top: @Composable () -> Unit, bottom: @Composable () -> Unit, onClick: (() -> Unit)? = null){
@@ -220,6 +233,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
             }
         }*/
 
+
         val downloadedImage = remember {
             mutableStateOf(ImageBitmap(1, 1, hasAlpha = true, config = ImageBitmapConfig.Argb8888))
         }
@@ -244,7 +258,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
                             downloadedImage.value = it.asImageBitmap()
 
                             // linkImage.image = downloadedImage
-                            //log("complete ${linkImage.link}")
+                      //      log("complete ${linkImage.link}")
                             checkMainImage()
                         }
                     }
@@ -298,8 +312,13 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
 
 
             itemsIndexed(linkImages) { _, item ->
-                if (item.status == Status.COMPLETE)
 
+
+              /*  ExtImage(modifier = Modifier
+                    .fillParentMaxSize()
+                    .padding(all = 8.dp),
+                    bitmap = downloadImage(index))*/
+                if (item.status == Status.COMPLETE)
                 Image(
                     modifier = Modifier
                         .fillParentMaxSize()
