@@ -521,14 +521,21 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             containerStack.push(value)
             _activeContainer.value = value
         }
-        //log(containerStack)
+     //   log(containerStack)
+    }
+
+    fun getPrevContainer(): Container? {
+        val prev = try {
+            containerStack[containerStack.lastIndex - 1]
+        } catch (_: Exception){null}
+        return prev
     }
 
     fun prevComposeViewStack(): Container {
         containerStack.pop()
         val value = containerStack.peek()
         _activeContainer.value = value
-        //log(containerStack)
+      //  log(containerStack)
         return value//containerStacks.peek()
     }
 
@@ -538,9 +545,9 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         return value//composeViewStack.pop()
     }*/
 
-    fun getContainerStack(): Container {
+  /*  fun getContainerStack(): Container {
         return _activeContainer.value//containerStack.peek()
-    }
+    }*/
 
  /*   fun existImageCache(filename: String?, convert: Boolean = false):Boolean {
         if (filename == null)

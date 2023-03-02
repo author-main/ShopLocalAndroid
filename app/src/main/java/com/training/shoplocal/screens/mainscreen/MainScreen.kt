@@ -55,10 +55,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.*
 import com.training.shoplocal.R
-import com.training.shoplocal.classes.Container
-import com.training.shoplocal.classes.MESSAGE
-import com.training.shoplocal.classes.Product
-import com.training.shoplocal.classes.SIZE_PORTION
+import com.training.shoplocal.classes.*
 import com.training.shoplocal.classes.fodisplay.OrderDisplay
 import com.training.shoplocal.classes.fodisplay.VIEW_MODE
 import com.training.shoplocal.classes.searcher.SearchState
@@ -179,9 +176,19 @@ fun MainScreen(state: ModalBottomSheetState){
 
 
     fun backSearchMode(){
+        val prev = viewModel.getPrevContainer()
+        val isPrevSearchResult = prev?.let {
+            it == Container.SEARCH
+        } ?: false
+
         if (searchState.value == SearchState.SEARCH_QUERY) {
-            searchState.value = SearchState.SEARCH_RESULT
-            textSearch.value = prevSearchText.toString()
+            if (isPrevSearchResult) {
+                searchState.value = SearchState.SEARCH_RESULT
+                textSearch.value = prevSearchText.toString()
+            } else {
+                searchState.value = SearchState.SEARCH_NONE
+                textSearch.value = EMPTY_STRING
+            }
         } else {
             viewModel.clearResultSearch() // удаляем результаты последнего запроса в БД на сервере
             val firstIndex =
@@ -197,7 +204,7 @@ fun MainScreen(state: ModalBottomSheetState){
         showBottomNavigation()
     }
 
-    fun actionBack(container: Container) {
+    fun actionBack(container: Container){
         when (container) {
             Container.DETAIL -> {
                 showBottomNavigation()
@@ -209,7 +216,9 @@ fun MainScreen(state: ModalBottomSheetState){
             Container.SEARCH_EDIT -> {
                 backSearchMode()
             }
-            else -> {}
+            else -> {
+                viewModel.closeApp()
+            }
         }
     }
 
@@ -501,6 +510,9 @@ fun MainScreen(state: ModalBottomSheetState){
     //val activity = (LocalContext.current as? Activity)
 
     BackHandler(enabled = true){
+        actionBack(activeContainer)
+     /*
+
         //if (filterScreenDisplayed())
         if (isActiveContainer(Container.FILTER))
             actionBack(Container.FILTER)// backFilterMode()
@@ -509,7 +521,7 @@ fun MainScreen(state: ModalBottomSheetState){
         else {
             //activity?.finish() // закрыть приложение
             viewModel.closeApp()
-        }
+        }*/
     }
 
 

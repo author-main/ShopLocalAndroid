@@ -44,7 +44,7 @@ fun DialogReview(openDialog: MutableState<Boolean>, review: Review){//}, widthCo
         )
     ) {
         Surface(
-            border = BorderStroke(5.dp, TextFieldBg),
+            border = BorderStroke(2.dp, TextFieldBg),
             color = PrimaryDark,
             shape = RoundedCornerShape(12.dp)
         ){

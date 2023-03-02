@@ -83,6 +83,7 @@ fun ShowSearchHistory(textSearch: MutableState<String>, searchState: State<Searc
         showList.addAll(viewModel.getSearchHistoryList(true))
         initHistoryList = true
         onDispose(){
+            //log("on dispose....")
             if (searchState.value == SearchState.SEARCH_RESULT)
                 viewModel.putSearchHistoryQuery(textSearch.value.trim())
             viewModel.saveSearchHistory()
@@ -102,6 +103,7 @@ fun ShowSearchHistory(textSearch: MutableState<String>, searchState: State<Searc
         .background(PrimaryDark)
     ){
         //log("recompose")
+        if (searchState.value == SearchState.SEARCH_QUERY)
         Column(Modifier.padding(vertical = 8.dp, horizontal = 16.dp)){
          //   log("recomposition history ${textSearch.value}")
             if (textSearch.value.isBlank())
@@ -159,6 +161,7 @@ fun ShowSearchHistory(textSearch: MutableState<String>, searchState: State<Searc
                             //if (!filtered)
                             //if (!isFiltered.value)
                           //  if (searchState.value == SearchState.SEARCH_QUERY)
+                            if (textSearch.value.isBlank())
                             Icon(
                                 modifier = Modifier
                                     //.align(Alignment.CenterVertically)
@@ -169,6 +172,7 @@ fun ShowSearchHistory(textSearch: MutableState<String>, searchState: State<Searc
                                         indication = null
                                     ) {
                                         //history.removeAt(index)
+                                        //log("query = $line")
                                         viewModel.removeSearchHistoryQuery(index)
                                         showList.removeAt(index)
                                     },
