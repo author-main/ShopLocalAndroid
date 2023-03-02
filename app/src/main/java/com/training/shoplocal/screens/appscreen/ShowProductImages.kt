@@ -32,6 +32,9 @@ import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.ui.theme.TextFieldBg
 import com.training.shoplocal.ui.theme.TextFieldFont
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 import kotlin.math.pow
 
@@ -39,7 +42,9 @@ import kotlin.math.pow
 
 @Composable
 fun CompositeButton(modifier: Modifier = Modifier, color: Color = PrimaryDark, top: @Composable () -> Unit, bottom: @Composable () -> Unit, onClick: (() -> Unit)? = null){
-    Box(modifier = modifier.clip(RoundedCornerShape(6.dp)).background(color)
+    Box(modifier = modifier
+        .clip(RoundedCornerShape(6.dp))
+        .background(color)
         .clickable(
             interactionSource = MutableInteractionSource(),
             indication = if (onClick == null) null else LocalIndication.current
@@ -203,22 +208,23 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
         /*val isMainImage = remember{
             index == 0
         }*/
-        val index = remember {
+     /*   val index = remember {
             indexLink
-        }
-        fun checkMainImage(){
-            /*if (isMainImage)
-                downloadedMainImage = true*/
-            if (index == 0)
+        }*/
+      /*  fun checkMainImage(){
+            if (index == 0 ) {
+             //   log("download main image ${linkImages[index].link}")
                 downloadedMainImage = true
-        }
+            }
+        }*/
+
         val downloadedImage = remember { mutableStateOf(
             ImageBitmap(1,1, hasAlpha = true, config = ImageBitmapConfig.Argb8888)
         ) }
 
-        val linkImage = remember{linkImages[index]}
+        val linkImage = remember{linkImages[indexLink]}
 
-        LaunchedEffect(index) {
+        LaunchedEffect(Unit) {
             //log ("linkImage = $index")
             linkImage.status = Status.LOADING
             ImageLinkDownloader.downloadImage("$SERVER_URL/images/${linkImage.link}", reduce, callback = object: Callback{
@@ -226,14 +232,16 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
                     image.bitmap?.let{
                         linkImage.status = Status.COMPLETE
                         downloadedImage.value = it.asImageBitmap()
-                       //linkImage.image = it.asImageBitmap()
-                        checkMainImage()
+                       // linkImage.image = downloadedImage
+                        //log("complete ${linkImage.link}, ${linkImages[index].status.name}")
+                      //  checkMainImage()
                     }
                 }
                 override fun onFailure() {
                     linkImage.status = Status.FAIL
                     downloadedImage.value = EMPTY_IMAGE
-                    checkMainImage()
+                  //  checkMainImage()
+                   // log("fail ${linkImage.link}")
                 }
             }
             )
@@ -246,6 +254,14 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
     var size by remember {
         mutableStateOf(Size.Zero)
     }
+
+            linkImages.forEachIndexed { index, item ->
+                if (item.status == Status.NONE)
+                    item.image = downloadImage(index) else
+                    if (index == 0)
+                        downloadedMainImage = true
+            }
+
     Box(
         modifier = modifier
             .background(Color.White)
@@ -253,35 +269,26 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
                 size = coordinates.size.toSize()
             }
     ) {
-
-
-        linkImages.forEachIndexed{index, item ->
-            if (item.status == Status.NONE)
-                item.image = downloadImage(index)
-        }
-
         LazyRow(
             state = lazyRowState,
             horizontalArrangement = Arrangement.Center,
             flingBehavior = flingBehavior
         ) {
+
+
             itemsIndexed(linkImages) { _, item ->
+                if (item.status == Status.COMPLETE)
                 Image(
                     modifier = Modifier
                         .fillParentMaxSize()
                         .padding(all = 8.dp),
-                    bitmap = item.image.value/*run {
-                        if (item.status == Status.NONE)
-                            downloadImage(index).value
-                        else
-                            item.image
-                    }*/,
+                    bitmap = item.image.value,
                     contentDescription = null
                 )
             }
         }
 
-         if (!downloadedMainImage)
+        if (!downloadedMainImage)
              Box(modifier = Modifier
                  //.clipToBounds()
                  .fillMaxSize()
