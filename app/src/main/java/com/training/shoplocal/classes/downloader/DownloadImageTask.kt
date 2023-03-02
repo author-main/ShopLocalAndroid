@@ -48,6 +48,7 @@ class DownloadImageTask(private val link: String, private val reduce: Boolean, v
                     while (inputStream.read(buffer).also { count = it } > 0) {
                         outputStream.write(buffer, 0, count)
                     }
+
                     inputStream.close()
                     outputStream.flush()
                     outputStream.close()

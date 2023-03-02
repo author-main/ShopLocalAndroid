@@ -311,7 +311,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
         ) {
 
 
-            itemsIndexed(linkImages) { _, item ->
+            items(linkImages) { item ->
 
 
               /*  ExtImage(modifier = Modifier
