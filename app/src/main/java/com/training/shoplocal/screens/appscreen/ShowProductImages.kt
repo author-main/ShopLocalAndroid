@@ -28,7 +28,9 @@ import com.training.shoplocal.classes.*
 import com.training.shoplocal.classes.downloader.Callback
 import com.training.shoplocal.classes.downloader.ExtBitmap
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
+import com.training.shoplocal.isEmpty
 import com.training.shoplocal.log
+import com.training.shoplocal.screens.mainscreen.MainScreen
 import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.ui.theme.TextFieldBg
 import com.training.shoplocal.ui.theme.TextFieldFont
@@ -182,7 +184,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
             }
         }
     }
-    data class ImageStatus (var link: String, var image: MutableState<ImageBitmap> = mutableStateOf(EMPTY_IMAGE), var status: Status = Status.NONE)
+    data class ImageStatus (var link: String, var image: State<ImageBitmap> = mutableStateOf(EMPTY_IMAGE), var status: Status = Status.NONE)
    /* val currentProduct = remember {
         product
     }*/
@@ -204,48 +206,54 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
     }*/
 
     @Composable
-    fun downloadImage(indexLink: Int): MutableState<ImageBitmap> {
+    fun downloadImage(indexLink: Int): State<ImageBitmap> {
         /*val isMainImage = remember{
             index == 0
         }*/
-     /*   val index = remember {
+        /*   val index = remember {
             indexLink
         }*/
-      /*  fun checkMainImage(){
+        /*  fun checkMainImage(){
             if (index == 0 ) {
              //   log("download main image ${linkImages[index].link}")
                 downloadedMainImage = true
             }
         }*/
 
-        val downloadedImage = remember { mutableStateOf(
-            ImageBitmap(1,1, hasAlpha = true, config = ImageBitmapConfig.Argb8888)
-        ) }
+        val downloadedImage = remember {
+            mutableStateOf(ImageBitmap(1, 1, hasAlpha = true, config = ImageBitmapConfig.Argb8888))
+        }
 
-        val linkImage = remember{linkImages[indexLink]}
+        val linkImage = remember{
+            linkImages[indexLink]
+        }
 
         LaunchedEffect(Unit) {
-            //log ("linkImage = $index")
             linkImage.status = Status.LOADING
-            ImageLinkDownloader.downloadImage("$SERVER_URL/images/${linkImage.link}", reduce, callback = object: Callback{
-                override fun onComplete(image: ExtBitmap) {
-                    image.bitmap?.let{
-                        linkImage.status = Status.COMPLETE
-                        downloadedImage.value = it.asImageBitmap()
-                       // linkImage.image = downloadedImage
-                        //log("complete ${linkImage.link}, ${linkImages[index].status.name}")
-                      //  checkMainImage()
+            ImageLinkDownloader.downloadImage(
+                "$SERVER_URL/images/${linkImage.link}",
+                reduce,
+                callback = object : Callback {
+                    override fun onComplete(image: ExtBitmap) {
+                        image.bitmap?.let {
+                            linkImage.status = Status.COMPLETE
+                            downloadedImage.value = it.asImageBitmap()
+                            // linkImage.image = downloadedImage
+                            //log("complete ${linkImage.link}")
+                            //  checkMainImage()
+                        }
+                    }
+
+                    override fun onFailure() {
+                        linkImage.status = Status.FAIL
+                        downloadedImage.value = EMPTY_IMAGE
+                        //  checkMainImage()
+                        // log("fail ${linkImage.link}")
                     }
                 }
-                override fun onFailure() {
-                    linkImage.status = Status.FAIL
-                    downloadedImage.value = EMPTY_IMAGE
-                  //  checkMainImage()
-                   // log("fail ${linkImage.link}")
-                }
-            }
             )
         }
+
         return downloadedImage
     }
 
@@ -267,7 +275,8 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
 
     linkImages.forEachIndexed { index, item ->
         if (item.status == Status.NONE)
-            item.image = downloadImage(index) else
+            item.image = downloadImage(index)
+        else
             if (index == 0)
                 downloadedMainImage = true
     }
@@ -288,6 +297,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
 
             itemsIndexed(linkImages) { _, item ->
                 if (item.status == Status.COMPLETE)
+                //if (!item.image.value.isEmpty())
                 Image(
                     modifier = Modifier
                         .fillParentMaxSize()
