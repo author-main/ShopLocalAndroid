@@ -197,11 +197,11 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
         mutableStateOf(false)
     }
 
-    DisposableEffect(Unit){
+   /* DisposableEffect(Unit){
         onDispose {
             linkImages.clear()
         }
-    }
+    }*/
 
     @Composable
     fun downloadImage(indexLink: Int): MutableState<ImageBitmap> {
@@ -255,12 +255,22 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
         mutableStateOf(Size.Zero)
     }
 
-            linkImages.forEachIndexed { index, item ->
-                if (item.status == Status.NONE)
-                    item.image = downloadImage(index) else
-                    if (index == 0)
-                        downloadedMainImage = true
-            }
+
+
+    DisposableEffect(Unit){
+        onDispose {
+            linkImages.clear()
+        }
+    }
+
+
+
+    linkImages.forEachIndexed { index, item ->
+        if (item.status == Status.NONE)
+            item.image = downloadImage(index) else
+            if (index == 0)
+                downloadedMainImage = true
+    }
 
     Box(
         modifier = modifier
