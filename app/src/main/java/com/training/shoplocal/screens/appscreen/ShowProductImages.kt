@@ -312,13 +312,8 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
 
 
             items(linkImages) { item ->
-
-
-              /*  ExtImage(modifier = Modifier
-                    .fillParentMaxSize()
-                    .padding(all = 8.dp),
-                    bitmap = downloadImage(index))*/
-                if (item.status == Status.COMPLETE)
+                //if (item.status == Status.COMPLETE)
+                if (!item.image.value.isEmpty())
                 Image(
                     modifier = Modifier
                         .fillParentMaxSize()
