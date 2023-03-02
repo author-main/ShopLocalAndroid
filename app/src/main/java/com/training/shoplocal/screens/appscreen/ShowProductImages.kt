@@ -228,7 +228,11 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
             linkImages[indexLink]
         }
 
-        LaunchedEffect(Unit) {
+        LaunchedEffect(indexLink) {
+            fun checkMainImage(){
+                if (indexLink == 0)
+                    downloadedMainImage = true
+            }
             linkImage.status = Status.LOADING
             ImageLinkDownloader.downloadImage(
                 "$SERVER_URL/images/${linkImage.link}",
@@ -238,16 +242,17 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
                         image.bitmap?.let {
                             linkImage.status = Status.COMPLETE
                             downloadedImage.value = it.asImageBitmap()
+
                             // linkImage.image = downloadedImage
                             //log("complete ${linkImage.link}")
-                            //  checkMainImage()
+                            checkMainImage()
                         }
                     }
 
                     override fun onFailure() {
                         linkImage.status = Status.FAIL
                         downloadedImage.value = EMPTY_IMAGE
-                        //  checkMainImage()
+                        checkMainImage()
                         // log("fail ${linkImage.link}")
                     }
                 }
@@ -276,9 +281,6 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
     linkImages.forEachIndexed { index, item ->
         if (item.status == Status.NONE)
             item.image = downloadImage(index)
-        else
-            if (index == 0)
-                downloadedMainImage = true
     }
 
     Box(
@@ -297,7 +299,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
 
             itemsIndexed(linkImages) { _, item ->
                 if (item.status == Status.COMPLETE)
-                //if (!item.image.value.isEmpty())
+
                 Image(
                     modifier = Modifier
                         .fillParentMaxSize()
