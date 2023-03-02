@@ -319,6 +319,14 @@ fun MainScreen(state: ModalBottomSheetState){
 
 
     fun findProducts(query: String, recognizer: Boolean = false){
+
+        val prev = viewModel.getPrevContainer()
+        val isPrevDetail = prev?.let {
+            it == Container.DETAIL
+        } ?: false
+
+
+
 /*        if (products.isNotEmpty())
             LaunchedEffect(Unit) {
                 scope.launch {
@@ -342,6 +350,8 @@ fun MainScreen(state: ModalBottomSheetState){
             viewModel.findProductsRequest(query)//textSearch.value.trim())
             searchState.value = SearchState.SEARCH_RESULT
             panelOffsetHeightPx.value = 0f
+            if (isPrevDetail)
+                viewModel.prevComposeViewStack()
             setActiveContainer(Container.SEARCH)
             //searchScreenDisplayed = true
        // }
