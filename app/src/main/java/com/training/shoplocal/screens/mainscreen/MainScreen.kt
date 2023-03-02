@@ -173,16 +173,32 @@ fun MainScreen(state: ModalBottomSheetState){
         StringBuilder("")
     }
 
+    /*val prevContainerSearch = remember {
+        derivedStateOf {
+            val prev = viewModel.getPrevContainer()
+            log(prev?.name)
+            prev?.let {
+                it == Container.SEARCH
+            } ?: false
+        }
+    }*/
 
-
-    fun backSearchMode(){
+    fun prevContainerSearch(): Boolean {
         val prev = viewModel.getPrevContainer()
         val isPrevSearchResult = prev?.let {
             it == Container.SEARCH
         } ?: false
+        return isPrevSearchResult
+    }
+
+    fun backSearchMode(){
+     /*   val prev = viewModel.getPrevContainer()
+        val isPrevSearchResult = prev?.let {
+            it == Container.SEARCH
+        } ?: false*/
 
         if (searchState.value == SearchState.SEARCH_QUERY) {
-            if (isPrevSearchResult) {
+            if (prevContainerSearch()) {
                 searchState.value = SearchState.SEARCH_RESULT
                 textSearch.value = prevSearchText.toString()
             } else {
@@ -811,7 +827,12 @@ fun MainScreen(state: ModalBottomSheetState){
                         contentPadding = PaddingValues(top = 40.dp),
                         //horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                     //   log(products)
+
+                        val isShowButtonMore =
+                            derivedStateOf {
+                                !isActiveContainer(Container.SEARCH) && !prevContainerSearch()
+                            }
+
                         items(products, { product -> product.id }) { product ->
                             //log("item${product.id}")
                             // items(products.size, key = {}) { index ->
@@ -826,7 +847,8 @@ fun MainScreen(state: ModalBottomSheetState){
                                 CardProduct(/*modifier = Modifier.onGloballyPositioned { coordinates ->
                                     calcHeight = coordinates.size.height
                                 },*/
-                                product, showMoreButton = isActiveContainer(Container.MAIN)/*searchScreenDisplayed()*/, state = state, modeview = OrderDisplay.getViewMode()){selectedProduct ->
+                                //product, showMoreButton = !isActiveContainer(Container.SEARCH) && !prevContainerSearch.value/*searchScreenDisplayed()*/, state = state, modeview = OrderDisplay.getViewMode()){selectedProduct ->
+                                product, showMoreButton = isShowButtonMore.value, state = state, modeview = OrderDisplay.getViewMode()){selectedProduct ->
                                     viewModel.hideBottomNavigation()
                                     showFloatingButton = false
                                     detailProduct.value = selectedProduct
@@ -972,11 +994,8 @@ fun MainScreen(state: ModalBottomSheetState){
                 enter = fadeIn(),
                 exit = fadeOut()
             ) {
-                //if (isFocusedSearchTextField.value) {
-                ShowDetailProduct(detailProduct.value)//lastSearchQuery)
+                ShowDetailProduct(detailProduct.value)
             }
-
-
 
 
 

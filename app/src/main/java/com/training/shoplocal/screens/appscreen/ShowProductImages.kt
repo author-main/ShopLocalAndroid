@@ -177,7 +177,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
             }
         }
     }
-    data class ImageStatus (var link: String, var image: ImageBitmap = EMPTY_IMAGE, var status: Status = Status.NONE)
+    data class ImageStatus (var link: String, var image: MutableState<ImageBitmap> = mutableStateOf(EMPTY_IMAGE), var status: Status = Status.NONE)
    /* val currentProduct = remember {
         product
     }*/
@@ -226,7 +226,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
                     image.bitmap?.let{
                         linkImage.status = Status.COMPLETE
                         downloadedImage.value = it.asImageBitmap()
-                        linkImage.image = it.asImageBitmap()
+                       //linkImage.image = it.asImageBitmap()
                         checkMainImage()
                     }
                 }
@@ -257,7 +257,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
 
         linkImages.forEachIndexed{index, item ->
             if (item.status == Status.NONE)
-                item.image = downloadImage(index).value
+                item.image = downloadImage(index)
         }
 
         LazyRow(
@@ -270,7 +270,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
                     modifier = Modifier
                         .fillParentMaxSize()
                         .padding(all = 8.dp),
-                    bitmap = item.image/*run {
+                    bitmap = item.image.value/*run {
                         if (item.status == Status.NONE)
                             downloadImage(index).value
                         else
