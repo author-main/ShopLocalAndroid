@@ -1,6 +1,7 @@
 package com.training.shoplocal.screens.appscreen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -36,6 +37,8 @@ import com.training.shoplocal.Dp
 import com.training.shoplocal.Px
 import com.training.shoplocal.R
 import com.training.shoplocal.log
+import com.training.shoplocal.ui.theme.SelectedItem
+import com.training.shoplocal.ui.theme.SelectedItemBottomNavi
 import com.training.shoplocal.ui.theme.TextFieldBg
 import com.training.shoplocal.ui.theme.TextFieldFont
 
@@ -105,10 +108,11 @@ fun TextFieldSearch(modifier: Modifier, textSearch: MutableState<String>, enable
             }
             // .weight(1f)
             .height(32.dp)
+            .border(1.dp, color = if (!enabled) TextFieldFont.copy(alpha = 0.3f) else Color.Transparent, CircleShape)
             .background(color = if (enabled) TextFieldBg else Color.Transparent, shape = RoundedCornerShape(32.dp)),
         cursorBrush = SolidColor(TextFieldFont),
         value = textSearch.value,
-        textStyle = TextStyle(color = TextFieldFont),
+        textStyle = TextStyle(color = if (enabled) TextFieldFont else SelectedItemBottomNavi),
         onValueChange = {
             textSearch.value = it
         },
