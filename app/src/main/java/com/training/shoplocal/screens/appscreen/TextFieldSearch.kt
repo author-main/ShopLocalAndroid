@@ -105,7 +105,7 @@ fun TextFieldSearch(modifier: Modifier, textSearch: MutableState<String>, enable
             }
             // .weight(1f)
             .height(32.dp)
-            .background(color = TextFieldBg, shape = RoundedCornerShape(32.dp)),
+            .background(color = if (enabled) TextFieldBg else Color.Transparent, shape = RoundedCornerShape(32.dp)),
         cursorBrush = SolidColor(TextFieldFont),
         value = textSearch.value,
         textStyle = TextStyle(color = TextFieldFont),
@@ -143,29 +143,31 @@ fun TextFieldSearch(modifier: Modifier, textSearch: MutableState<String>, enable
                 )
             },
             trailingIcon = {
-                val showClearIcon =
-                    textSearch.value.isNotEmpty() && isFocused//searchState.value == SearchState.SEARCH_QUERY
-                val iconSize = if (showClearIcon) 16.dp else 24.dp
-                Icon(
-                    imageVector = if (showClearIcon)
-                        ImageVector.vectorResource(R.drawable.ic_cancel_bs)
-                    else
-                        ImageVector.vectorResource(R.drawable.ic_microphone),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .size(iconSize)
-                        .clickable {
-                            if (enabled) {
-                                if (showClearIcon) {
-                                    textSearch.value = ""
-                                } else {
-                                    // Вызвать голосовой ввод
-                                    onSpeechRecognizer()
-                                }
+                if (enabled) {
+                    val showClearIcon =
+                        textSearch.value.isNotEmpty() && isFocused//searchState.value == SearchState.SEARCH_QUERY
+                    val iconSize = if (showClearIcon) 16.dp else 24.dp
+                    Icon(
+                        imageVector = if (showClearIcon)
+                            ImageVector.vectorResource(R.drawable.ic_cancel_bs)
+                        else
+                            ImageVector.vectorResource(R.drawable.ic_microphone),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .size(iconSize)
+                            .clickable {
+
+                                    if (showClearIcon) {
+                                        textSearch.value = ""
+                                    } else {
+                                        // Вызвать голосовой ввод
+                                        onSpeechRecognizer()
+                                    }
+
                             }
-                        }
-                )
+                    )
+                }
             },
 
             visualTransformation = VisualTransformation.None,
