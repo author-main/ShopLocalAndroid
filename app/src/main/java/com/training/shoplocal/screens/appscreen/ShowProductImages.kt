@@ -293,7 +293,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
 
 
     linkImages.forEachIndexed { index, item ->
-        if (item.status == Status.NONE)
+        if (item.status == Status.NONE || item.status == Status.FAIL)
             item.image = downloadImage(index)
     }
 

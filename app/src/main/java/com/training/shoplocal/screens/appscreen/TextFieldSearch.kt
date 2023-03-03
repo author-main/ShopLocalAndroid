@@ -74,7 +74,8 @@ fun PopupSearchHistory() {
 */
 @OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
 @Composable
-fun TextFieldSearch(modifier: Modifier, textSearch: MutableState<String>, onSpeechRecognizer: () -> Unit = {},  onFocused: () -> Unit = {}, onSearch: (query: String) -> Unit){
+fun TextFieldSearch(modifier: Modifier, textSearch: MutableState<String>, enabled: Boolean, onSpeechRecognizer: () -> Unit = {},  onFocused: () -> Unit = {}, onSearch: (query: String) -> Unit){
+    //log("enabled $enabled")
    /* val textSearch = remember {
         mutableStateOf(query)
     }*/
@@ -91,6 +92,7 @@ fun TextFieldSearch(modifier: Modifier, textSearch: MutableState<String>, onSpee
 
 
     BasicTextField(
+        enabled = enabled,
         modifier = modifier
             .onFocusChanged {
                 if (it.isFocused) {
@@ -154,11 +156,13 @@ fun TextFieldSearch(modifier: Modifier, textSearch: MutableState<String>, onSpee
                         .clip(CircleShape)
                         .size(iconSize)
                         .clickable {
-                            if (showClearIcon) {
-                                textSearch.value = ""
-                            } else {
-                                // Вызвать голосовой ввод
-                                onSpeechRecognizer()
+                            if (enabled) {
+                                if (showClearIcon) {
+                                    textSearch.value = ""
+                                } else {
+                                    // Вызвать голосовой ввод
+                                    onSpeechRecognizer()
+                                }
                             }
                         }
                 )

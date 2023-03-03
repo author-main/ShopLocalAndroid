@@ -672,7 +672,13 @@ fun MainScreen(state: ModalBottomSheetState){
                     Container.MAIN,
                     Container.SEARCH,
                     Container.SEARCH_EDIT -> {
-                        TextFieldSearch(modifier = Modifier.weight(1f),
+                        var enableSearch = true
+                        if (isActiveContainer(Container.DETAIL)) {
+                            if (prevContainerSearch()) {
+                                enableSearch = false
+                            }
+                        }
+                        TextFieldSearch(modifier = Modifier.weight(1f), enabled = enableSearch,
                             textSearch = textSearch,
                             onSpeechRecognizer = {
                                 val error_speechrecognizer =
