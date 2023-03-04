@@ -124,6 +124,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
 
     val mode_View       = rememberUpdatedState(newValue = modeview)
     val show_MoreButton = rememberUpdatedState(newValue = showMoreButton)
+
     val cardproduct = remember {
         product
     }
@@ -141,7 +142,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
         list.toList()
     }
     val viewModel: RepositoryViewModel = viewModel()
-    val brand: String = product.brand?.let { viewModel.getBrand(it) } ?: ""
+    val brand: String = remember {product.brand?.let { viewModel.getBrand(it) } ?: ""}
     val scope = rememberCoroutineScope()
 
     @Composable
@@ -281,15 +282,19 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
     @Composable
     fun PriceText(){
         fun isDiscount() = cardproduct.discount > 0
+        val text = remember {
+            if (isDiscount()) getFormattedPrice(cardproduct.price) else getStringResource(
+                id = R.string.text_nodiscounts)
+        }
+        val style = remember{
+            TextStyle(textDecoration = if (isDiscount()) TextDecoration.LineThrough else TextDecoration.None)
+        }
             Text(
                 modifier = Modifier.padding(top = 4.dp),
                 fontSize = fontsize,
-                text = if (isDiscount()) getFormattedPrice(cardproduct.price) else stringResource(
-                    id = R.string.text_nodiscounts
-                ),
-
+                text = text,
               //  fontWeight = FontWeight.SemiBold,
-                style = TextStyle(textDecoration = if (isDiscount()) TextDecoration.LineThrough else TextDecoration.None),
+                style = style,
                 color = TextPriceDiscount
             )
     }
