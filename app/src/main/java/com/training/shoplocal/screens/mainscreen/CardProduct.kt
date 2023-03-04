@@ -76,15 +76,12 @@ fun DiscountPanel(modifier: Modifier, percent: Int){
 @Composable
 fun StarPanel(count: Float, starSize: Dp = 12.dp, starHorzInterval: Dp = 0.dp){
     val MAX_STAR_COUNT = 5
-   /* val df = DecimalFormat("#.#")
-    df.roundingMode = RoundingMode.HALF_EVEN*/
-    //val rounded = df.format(count)
-    val partNumber = getFormattedStar(count).split(DECIMAL_SEPARATOR)
-    val intPart = partNumber[0].toInt()
-    val floatPart = if (partNumber.size == 2) partNumber[1].toInt() else 0
-    //val starPart = intPart + 1
+    val partNumber  = remember { getFormattedStar(count).split(DECIMAL_SEPARATOR) }
+    val intPart     = remember { partNumber[0].toInt()}
+    val floatPart   = remember { if (partNumber.size == 2) partNumber[1].toInt() else 0}
+    val bm          = remember { BitmapFactory.decodeResource(appContext().resources, R.drawable.ic_star)}
+    val widthStar   = remember { floatPart * (bm.width / 10f)}
 
-    val bm = BitmapFactory.decodeResource(appContext().resources, R.drawable.ic_star)
     Row(modifier = Modifier.padding(top = 2.dp),
     //    horizontalArrangement = Arrangement.spacedBy(1.dp)
     ) {
@@ -102,13 +99,12 @@ fun StarPanel(count: Float, starSize: Dp = 12.dp, starHorzInterval: Dp = 0.dp){
             )
             // < * Отрисовка части звезды
             if (i == intPart && floatPart > 0) {
-                val part       = bm.width / 10f
-                val widthStar  = floatPart * part
+               /* val part       = bm.width / 10f
+                val widthStar  = floatPart * part*/
                 val bmPart: Bitmap = Bitmap.createBitmap(bm, 0, 0, widthStar.toInt(), bm.height)
                 Image(modifier = Modifier.height(starSize),
                     bitmap = bmPart.asImageBitmap(),
                     colorFilter = ColorFilter.tint(ImageStarOn),
-                    //contentScale = ContentScale.FillBounds,
                     contentDescription = null
                 )
             }
@@ -128,6 +124,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
 
     val mode_View       = rememberUpdatedState(newValue = modeview)
     val show_MoreButton = rememberUpdatedState(newValue = showMoreButton)
+
     val cardproduct = remember {
         product
     }
@@ -145,7 +142,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
         list.toList()
     }
     val viewModel: RepositoryViewModel = viewModel()
-    val brand: String = product.brand?.let { viewModel.getBrand(it) } ?: ""
+    val brand: String = remember {product.brand?.let { viewModel.getBrand(it) } ?: ""}
     val scope = rememberCoroutineScope()
 
     @Composable
@@ -285,15 +282,19 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
     @Composable
     fun PriceText(){
         fun isDiscount() = cardproduct.discount > 0
+        val text = remember {
+            if (isDiscount()) getFormattedPrice(cardproduct.price) else getStringResource(
+                id = R.string.text_nodiscounts)
+        }
+        val style = remember{
+            TextStyle(textDecoration = if (isDiscount()) TextDecoration.LineThrough else TextDecoration.None)
+        }
             Text(
                 modifier = Modifier.padding(top = 4.dp),
                 fontSize = fontsize,
-                text = if (isDiscount()) getFormattedPrice(cardproduct.price) else stringResource(
-                    id = R.string.text_nodiscounts
-                ),
-
+                text = text,
               //  fontWeight = FontWeight.SemiBold,
-                style = TextStyle(textDecoration = if (isDiscount()) TextDecoration.LineThrough else TextDecoration.None),
+                style = style,
                 color = TextPriceDiscount
             )
     }

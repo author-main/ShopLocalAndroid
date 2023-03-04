@@ -66,6 +66,7 @@ import com.training.shoplocal.screens.appscreen.*
 import com.training.shoplocal.screens.remember.rememberLazyViewState
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.roundToInt
@@ -672,7 +673,13 @@ fun MainScreen(state: ModalBottomSheetState){
                     Container.MAIN,
                     Container.SEARCH,
                     Container.SEARCH_EDIT -> {
-                        TextFieldSearch(modifier = Modifier.weight(1f),
+                        var enableSearch = true
+                        if (isActiveContainer(Container.DETAIL)) {
+                            if (prevContainerSearch()) {
+                                enableSearch = false
+                            }
+                        }
+                        TextFieldSearch(modifier = Modifier.weight(1f), enabled = enableSearch,
                             textSearch = textSearch,
                             onSpeechRecognizer = {
                                 val error_speechrecognizer =
@@ -815,6 +822,8 @@ fun MainScreen(state: ModalBottomSheetState){
                    // val verticalScrollState = rememberScrollState()
                     //log("first Index = ${stateGrid.firstVisibleItemIndex}")
                     //var calcHeight = 0
+
+                    val isShowButtonMore = !isActiveContainer(Container.SEARCH) && !prevContainerSearch()
                     LazyVerticalGrid(
                         modifier = Modifier
                             .padding(horizontal = 10.dp),
@@ -828,10 +837,10 @@ fun MainScreen(state: ModalBottomSheetState){
                         //horizontalArrangement = Arrangement.SpaceBetween
                     ) {
 
-                        val isShowButtonMore =
-                            derivedStateOf {
+                        //val isShowButtonMore = !isActiveContainer(Container.SEARCH) && !prevContainerSearch()
+                            /*derivedStateOf {
                                 !isActiveContainer(Container.SEARCH) && !prevContainerSearch()
-                            }
+                            }*/
 
                         items(products, { product -> product.id }) { product ->
                             //log("item${product.id}")
@@ -848,7 +857,7 @@ fun MainScreen(state: ModalBottomSheetState){
                                     calcHeight = coordinates.size.height
                                 },*/
                                 //product, showMoreButton = !isActiveContainer(Container.SEARCH) && !prevContainerSearch.value/*searchScreenDisplayed()*/, state = state, modeview = OrderDisplay.getViewMode()){selectedProduct ->
-                                product, showMoreButton = isShowButtonMore.value, state = state, modeview = OrderDisplay.getViewMode()){selectedProduct ->
+                                product, showMoreButton = isShowButtonMore, state = state, modeview = OrderDisplay.getViewMode()){selectedProduct ->
                                     viewModel.hideBottomNavigation()
                                     showFloatingButton = false
                                     detailProduct.value = selectedProduct
@@ -858,24 +867,12 @@ fun MainScreen(state: ModalBottomSheetState){
                             }
                         }
 
-                      /*  if (restoredStateGrid != null) {
-                            stateGrid = LazyGridState(
-                                restoredStateGrid!!.firstVisibleItemIndex,
-                                restoredStateGrid!!.firstVisibleItemScrollOffset
-                            )
-                            restoredStateGrid = null
-                        }*/
+
                     }
-                    /*LaunchedEffect(Unit) {
-                        val boxHeight = with(localDensity) { boxScope.maxHeight.roundToPx().toFloat() }
-                        if (calcHeight != 0) {
-                            viewModel.setPortionDataDB(2 + (boxHeight / calcHeight).roundToInt() * 2)
-                           // log("box = $boxHeight, card = $calcHeight, portition = $portition")
-                        }
-                    }*/
+
 
                     if (!isFocusedSearchTextField) {
-                    val changeVisibleStateFAB = remember {
+                        val changeVisibleStateFAB = remember {
                         derivedStateOf {
                             val firstVisible = stateGrid.layoutInfo.visibleItemsInfo.isNotEmpty() && stateGrid.layoutInfo.visibleItemsInfo.first().index == 0
                             val prevFirstIndex  = prevStateScroll.first
@@ -883,8 +880,6 @@ fun MainScreen(state: ModalBottomSheetState){
                             val firstIndex  = stateGrid.firstVisibleItemIndex
                             val firstOffset = stateGrid.firstVisibleItemScrollOffset
                             val upperLimit = firstVisible && firstOffset == 0 && firstIndex == 0
-                            /*if (upperLimit)
-                                log("upper limit")*/
                             var scrollUp = false
                             if (!upperLimit) {
                                 val deltaIndex = firstIndex - prevFirstIndex
@@ -892,68 +887,41 @@ fun MainScreen(state: ModalBottomSheetState){
                                                         0
                                                    else
                                                         firstOffset - prevFirstOffset
-                                if (deltaOffset < 0 || deltaIndex < 0) {
-                                    /*log ("firstIndex = $firstIndex, prev = $prevFirstIndex")
-                                    log ("firstOffset = $firstOffset, prev = $prevFirstOffset")*/
+                                if (deltaOffset < 0 || deltaIndex < 0)
                                     scrollUp = true
-                                }
                             }
                             prevStateScroll = firstIndex to firstOffset
-                            //log ("scrollup = $scrollUp")
-                          //  showFloatingButton = scrollUp
                             scrollUp
                         }
-
+                        }
+                        showFloatingButton = changeVisibleStateFAB.value
                     }
 
-                       /*LaunchedEffect(changeVisibleStateFAB.value) {
-                           log("fab ${changeVisibleStateFAB.value}")*/
-                           showFloatingButton = changeVisibleStateFAB.value
-                      // }
-
-                /*LaunchedEffect(changeVisibleStateFAB.value) {
-                    log("fab ${changeVisibleStateFAB.value}")
-                    showFloatingButton = changeVisibleStateFAB.value
-                }*/
-
-                    }
                 val nextPart = remember {
                     derivedStateOf {
-                        //val portition = if (stateGrid.layoutInfo.visibleItemsInfo.isNotEmpty() && stateGrid.firstVisibleItemIndex == 0 && stateGrid.firstVisibleItemScrollOffset == 0) stateGrid.layoutInfo.visibleItemsInfo.size else 0
-                        //val portition = boxScope.maxHeight//stateGrid.layoutInfo.visibleItemsInfo.size
-                        //log ("portition = $portition")
-                        //log("offset ${stateGrid.firstVisibleItemScrollOffset}")
-                        //log ("lastIndex = ${stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.index}, gridCount = ${stateGrid.layoutInfo.totalItemsCount - 1}")
-                        /*val viewOffset = stateGrid.layoutInfo.viewportEndOffset // высота Grid
-                        val offset = stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.offset?.y ?: 0 // расстояние от верха item до верха grid
-                        val height = stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.size?.height ?: 0
-                        log("view offset = $viewOffset")
-                        log("last offset = $offset")
-                        log("height = $height")*/
-                        //log ("offset = ${viewOffset  - offset}, height $height")
-                       /* log ("gridOffset = ${stateGrid.layoutInfo.viewportEndOffset -
-                                offset}, heightLast = ${stateGrid.layoutInfo.visibleItemsInfo.last().size.height}")*/
                         val total: Int = products.size /SIZE_PORTION
                         val remains    = products.size % SIZE_PORTION
                         val upload = if (remains > 0)
                                         false else
                                      total > 0
-
                        viewModel.nextPortionAvailable() && upload &&
                         stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.index == stateGrid.layoutInfo.totalItemsCount - 1
-                                && stateGrid.isScrollInProgress
+                                //&& stateGrid.isScrollInProgress
                                 //&& stateGrid.layoutInfo.visibleItemsInfo.last().offset.y > 0
                                 && stateGrid.layoutInfo.viewportEndOffset - stateGrid.layoutInfo.visibleItemsInfo.last().offset.y >= stateGrid.layoutInfo.visibleItemsInfo.last().size.height / 2
 
                     }
                 }
 
-                LaunchedEffect(nextPart.value) {
 
+
+
+
+
+
+                LaunchedEffect(nextPart.value) {
                     if (nextPart.value) {
-                        //log("next portion")
-                        //log("portition = $portition")
-                       // log("next portion = ${nextPart.value}")
+                        //log ("nextpart changed...")
                         viewModel.getNextPortionData(isSearchMode, textSearch.value.trim())
                     }
                 }
@@ -1008,6 +976,7 @@ fun MainScreen(state: ModalBottomSheetState){
                         ShowSearchHistory(textSearch, searchState)//lastSearchQuery)
                     }
 
+            if (isActiveContainer(Container.FILTER))
             AnimatedVisibility(
                 visible = isActiveContainer(Container.FILTER),
                 enter = fadeIn(),
