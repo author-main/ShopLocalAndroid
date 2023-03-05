@@ -1,4 +1,4 @@
-package com.training.shoplocal.screens.appscreen
+package com.training.shoplocal.screens.mainscreen.composable
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*

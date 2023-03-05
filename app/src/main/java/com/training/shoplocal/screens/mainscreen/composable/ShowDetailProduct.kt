@@ -51,6 +51,7 @@ import com.training.shoplocal.R
 import com.training.shoplocal.classes.*
 import com.training.shoplocal.dialogs.DialogReview
 import com.training.shoplocal.screens.mainscreen.StarPanel
+import com.training.shoplocal.screens.mainscreen.composable.*
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.delay

@@ -48,8 +48,8 @@ import com.training.shoplocal.classes.downloader.Callback
 import com.training.shoplocal.classes.downloader.ExtBitmap
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 import com.training.shoplocal.classes.fodisplay.VIEW_MODE
-import com.training.shoplocal.screens.appscreen.DividerHorizontal
-import com.training.shoplocal.screens.appscreen.ShowProductImages
+import com.training.shoplocal.screens.mainscreen.composable.DividerHorizontal
+import com.training.shoplocal.screens.mainscreen.composable.ShowProductImages
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.launch

@@ -29,8 +29,8 @@ import com.training.shoplocal.DialogRouter
 import com.training.shoplocal.R
 import com.training.shoplocal.classes.Review
 import com.training.shoplocal.classes.TAB_CHAR
-import com.training.shoplocal.screens.appscreen.DividerVertical
 import com.training.shoplocal.screens.mainscreen.StarPanel
+import com.training.shoplocal.screens.mainscreen.composable.DividerVertical
 import com.training.shoplocal.ui.theme.*
 
 @Composable

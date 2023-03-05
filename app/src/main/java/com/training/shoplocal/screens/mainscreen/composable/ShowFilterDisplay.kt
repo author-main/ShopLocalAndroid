@@ -39,6 +39,7 @@ import com.training.shoplocal.R
 import com.training.shoplocal.classes.*
 import com.training.shoplocal.classes.fodisplay.*
 import com.training.shoplocal.getStringResource
+import com.training.shoplocal.screens.mainscreen.composable.CustomCheckBox
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import java.util.*
