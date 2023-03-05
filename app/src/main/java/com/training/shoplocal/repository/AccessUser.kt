@@ -38,7 +38,7 @@ class AccessUser(): AccessUserInterface {
         finger: Boolean
     ) {
         fun clearLoginPassword(){
-            if (!finger)
+        //    if (!finger)
                 CoroutineScope(Dispatchers.Main).launch {
                     delay(400)
                     loginState.clearPassword()
@@ -70,6 +70,7 @@ class AccessUser(): AccessUserInterface {
                         -3 - Registration error
                     */
                     val id = response.body()?.id ?: 0
+                  //  log("id = $id")
                     if (id > 0) {
                         //user.id = id
                         saveUserPassword(password)
@@ -79,8 +80,10 @@ class AccessUser(): AccessUserInterface {
                         if (finger)
                             loginState.changePassword(password)
                         loginState.clearPassword()
-                    } else
+                    } else {
+                      //  log ("error login")
                         clearLoginPassword()
+                    }
                 }
 
                 override fun onFailure(call: Call<User>, t: Throwable) {
