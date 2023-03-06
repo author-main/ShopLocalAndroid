@@ -197,14 +197,14 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
             }
         }
     }
-    data class ImageStatus (var link: String, var image: State<ImageBitmap> = mutableStateOf(EMPTY_IMAGE), var status: Status = Status.NONE)
+    data class ImageStatus (val id: Int, var link: String, var image: State<ImageBitmap> = mutableStateOf(EMPTY_IMAGE), var status: Status = Status.NONE)
    /* val currentProduct = remember {
         product
     }*/
     val linkImages = remember {
         val entries = mutableListOf<ImageStatus>()
-        product.linkimages?.forEach {
-            entries.add(ImageStatus(it))
+        product.linkimages?.forEachIndexed{index, it ->
+            entries.add(ImageStatus(id = index, link = it))
         }
         entries
     }
@@ -311,7 +311,8 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
         ) {
 
 
-            items(linkImages) { item ->
+            items(linkImages, {linkimage -> linkimage.id}) { item ->
+            //items(linkImages) { item ->
                 //if (item.status == Status.COMPLETE)
                 if (!item.image.value.isEmpty())
                 Image(

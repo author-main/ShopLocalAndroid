@@ -901,10 +901,11 @@ fun MainScreen(state: ModalBottomSheetState){
                     derivedStateOf {
                         val total: Int = products.size /SIZE_PORTION
                         val remains    = products.size % SIZE_PORTION
+                       // log("product size = ${products.size}, total = $total, remains = $remains")
                         val upload = if (remains > 0)
                                         false else
                                      total > 0
-                       viewModel.nextPortionAvailable() && upload &&
+                        upload && viewModel.nextPortionAvailable() &&
                         stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.index == stateGrid.layoutInfo.totalItemsCount - 1
                                 //&& stateGrid.isScrollInProgress
                                 //&& stateGrid.layoutInfo.visibleItemsInfo.last().offset.y > 0

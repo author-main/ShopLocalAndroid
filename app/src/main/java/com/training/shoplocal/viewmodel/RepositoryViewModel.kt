@@ -76,7 +76,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private val UUID_QUERY = System.nanoTime().toString()
     private var maxPortion: Int = -1
     //private val UUID_QUERY: String = UUID.randomUUID().toString()
-    private var lockDB = false
+    //private var lockDB = false
     //private val reflexRepository = Repository::class.java.methods
     //log(reflexRepository.toString())
     private val _hiddenBottomNavigation = MutableStateFlow<Boolean>(false)
@@ -260,7 +260,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                     if (part == 1)
                         _products.value = mutableListOf()
                 }
-                lockDB = false
+                //lockDB = false
                 hideProgressCRUD()
             //}
 
@@ -474,11 +474,11 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             loadedPortion = 0
             //UUID_QUERY = UUID.randomUUID()
             portion = 1
-            lockDB = false
+            //lockDB = false
                 //_products.value.clear()// = mutableListOf()
             //log("clear products")
         }
-        lockDB = true
+      //  lockDB = true
         //log ("find portion = $portion")
         //repository.findProductsRequest(query, portion, UUID_QUERY.toString(), USER_ID) { listFound ->
             repository.findProductsRequest(query, portion, UUID_QUERY, USER_ID) { listFound ->
@@ -500,7 +500,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                     if (portion == 1)
                         _products.value = mutableListOf()
                 }
-                lockDB = false
+              // lockDB = false
                 hideProgressCRUD()
             }
 
