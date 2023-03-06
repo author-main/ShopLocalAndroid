@@ -363,14 +363,14 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
 
 
 
-        val interaction = remember { MutableInteractionSource() }
+        //val interaction = remember { MutableInteractionSource() }
         if (isCardModeView()) {
             Column(
                 modifier = Modifier
                     .width(CARD_SIZE.dp)
                     .padding(vertical = 10.dp)
                     .clickable(
-                        interactionSource = interaction,
+                        interactionSource = MutableInteractionSource(),
                         indication = null
                     ) {
                         onClick(cardproduct)
@@ -400,7 +400,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
         } else { // VIEW_MODE.ROW
             //if (mode_View.value == VIEW_MODE.ROW) {
             Column(Modifier
-                .clickable(interactionSource = interaction,
+                .clickable(interactionSource = MutableInteractionSource(),
                     indication = null) {
                     onClick(cardproduct)
                 }

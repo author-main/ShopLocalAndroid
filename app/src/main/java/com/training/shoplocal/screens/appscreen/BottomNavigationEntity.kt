@@ -51,7 +51,7 @@ sealed class BottomNavigationItem(val route: String, val data: BottomNavigationI
 
 @Composable
 fun IconWithText(value: BottomNavigationItemData, selected: Boolean = false,
-                 interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+                 //interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
                  action: ()->Unit = {}){
     val DEFAULT_SELECTED_SCALE = 1.1f
     val scope = rememberCoroutineScope()
@@ -64,7 +64,7 @@ fun IconWithText(value: BottomNavigationItemData, selected: Boolean = false,
             .padding(horizontal = 24.dp)
             .graphicsLayer(scaleX = scaleColumn, scaleY = scaleColumn)
             .clickable(
-                interactionSource = interactionSource,
+                interactionSource = MutableInteractionSource(),
                 indication = null
             ) {
                 if (!selected) {

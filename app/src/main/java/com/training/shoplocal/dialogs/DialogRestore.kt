@@ -56,7 +56,7 @@ fun DialogRestore() {
     }*/
 
     val trailingIcon = @Composable {
-        val interactionSource = remember { MutableInteractionSource() }
+        //val interactionSource = remember { MutableInteractionSource() }
         val idDrawable = if (showchar.value)
             R.drawable.ic_showsym_on
         else
@@ -64,7 +64,7 @@ fun DialogRestore() {
         Image(
             modifier = Modifier
                 .clickable(
-                    interactionSource = interactionSource,
+                    interactionSource = MutableInteractionSource(),
                     indication = null
                 ) {
                     showchar.value = !showchar.value

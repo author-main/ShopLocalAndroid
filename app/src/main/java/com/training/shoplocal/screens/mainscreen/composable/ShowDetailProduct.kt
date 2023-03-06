@@ -1,11 +1,14 @@
-package com.training.shoplocal.screens.appscreen
+package com.training.shoplocal.screens.mainscreen.composable
 
 import android.content.ClipData.Item
 import android.graphics.Paint
 import android.graphics.Rect
 import android.util.TypedValue
 import android.widget.Space
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.*
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.interaction.InteractionSource
@@ -61,6 +64,16 @@ import java.time.LocalDateTime
 @Composable
 fun ShowDetailProduct(value: Product){
     val product = remember {value}
+    val viewBigImages = remember {
+        mutableStateOf(false)
+    }
+    val indexImage = remember {
+        mutableStateOf(0)
+    }
+
+    if (viewBigImages.value)
+        ShowBigProductImages(open = viewBigImages, product = product, index = indexImage.value)
+
     val viewModel: RepositoryViewModel = viewModel()
     val reviews = viewModel.reviews.collectAsState()
     val dialogReview = remember {
@@ -120,7 +133,7 @@ fun ShowDetailProduct(value: Product){
             ShowDialogReview(widthContent = columnWidth)
             Column(modifier = Modifier
                 .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
+                    interactionSource = MutableInteractionSource(),
                     indication = null
                 ) {
                     if (review.hasOverflow) {
@@ -297,9 +310,7 @@ fun ShowDetailProduct(value: Product){
     val countReviews = remember {
         Integer()
     }
-    val indexImage = remember {
-        mutableStateOf(0)
-    }
+
     val discountPrice = remember {
         if (product.discount > 0)
             getSalePrice(product.price, product.discount)
@@ -328,14 +339,16 @@ fun ShowDetailProduct(value: Product){
             countReviews.value = reviews.value.size//username.substring(0, pos).toInt()
         }
     }
-    val interaction = remember { MutableInteractionSource() }
+        // val interaction = remember { MutableInteractionSource() }
     val scrollState = rememberScrollState()
     Column(modifier = Modifier
         .fillMaxSize()
         .clickable(
-            interactionSource = interaction,
+            interactionSource = MutableInteractionSource(),
             indication = null
-        ) {}
+        ) {
+
+        }
         .background(BgScreenDark)) {
         BoxWithConstraints(modifier = Modifier
             .weight(1f)
@@ -357,6 +370,12 @@ fun ShowDetailProduct(value: Product){
             ) {
                 Box(
                     Modifier
+                        .clickable(
+                            interactionSource = MutableInteractionSource(),
+                            indication = null
+                        ) {
+                            viewBigImages.value = true
+                        }
                         .clip(RoundedCornerShape(8.dp))
                         .size(size)
                         .background(Color.White),

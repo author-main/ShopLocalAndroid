@@ -34,9 +34,8 @@ import com.training.shoplocal.screens.mainscreen.MainScreen
 import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.ui.theme.TextFieldBg
 import com.training.shoplocal.ui.theme.TextFieldFont
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import okhttp3.Dispatcher
 import kotlin.math.absoluteValue
 import kotlin.math.pow
 
@@ -149,9 +148,9 @@ private enum class Status {
 }
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onChangeImage: ((index: Int) -> Unit)? = null){
+fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, startIndex: Int = 0, onChangeImage: ((index: Int) -> Unit)? = null) {
     @Composable
-    fun ProgressDownloadImage(size: Size){
+    fun ProgressDownloadImage(size: Size) {
         if (size.width > 0) {
             val dpSize = LocalDensity.current.run {
                 size.toDpSize()
@@ -159,10 +158,12 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
             val padding = LocalDensity.current.run {
                 16.dp.toPx()
             }
-            val heightGradient = kotlin.math.sqrt(size.width.pow(2) +
-            size.height.pow(2)) + padding
-            val widthGradient  = 120f
-            val delta = ( heightGradient - size.height) / 2
+            val heightGradient = kotlin.math.sqrt(
+                size.width.pow(2) +
+                        size.height.pow(2)
+            ) + padding
+            val widthGradient = 120f
+            val delta = (heightGradient - size.height) / 2
             val infiniteTransition = rememberInfiniteTransition()
             val animatedPos by infiniteTransition.animateFloat(
                 initialValue = -widthGradient - delta,
@@ -188,7 +189,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
                                     Color.White
                                 ),
                                 startX = 0f,
-                                endX   = widthGradient
+                                endX = widthGradient
                             ),
                             size = Size(widthGradient, heightGradient)
                         )
@@ -197,13 +198,19 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
             }
         }
     }
-    data class ImageStatus (val id: Int, var link: String, var image: State<ImageBitmap> = mutableStateOf(EMPTY_IMAGE), var status: Status = Status.NONE)
-   /* val currentProduct = remember {
+
+    data class ImageStatus(
+        val id: Int,
+        var link: String,
+        var image: State<ImageBitmap> = mutableStateOf(EMPTY_IMAGE),
+        var status: Status = Status.NONE
+    )
+    /* val currentProduct = remember {
         product
     }*/
     val linkImages = remember {
         val entries = mutableListOf<ImageStatus>()
-        product.linkimages?.forEachIndexed{index, it ->
+        product.linkimages?.forEachIndexed { index, it ->
             entries.add(ImageStatus(id = index, link = it))
         }
         entries
@@ -212,7 +219,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
         mutableStateOf(false)
     }
 
-   /* DisposableEffect(Unit){
+    /* DisposableEffect(Unit){
         onDispose {
             linkImages.clear()
         }
@@ -238,12 +245,12 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
             mutableStateOf(ImageBitmap(1, 1, hasAlpha = true, config = ImageBitmapConfig.Argb8888))
         }
 
-        val linkImage = remember{
+        val linkImage = remember {
             linkImages[indexLink]
         }
 
         LaunchedEffect(indexLink) {
-            fun checkMainImage(){
+            fun checkMainImage() {
                 if (indexLink == 0)
                     downloadedMainImage = true
             }
@@ -258,7 +265,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
                             downloadedImage.value = it.asImageBitmap()
 
                             // linkImage.image = downloadedImage
-                      //      log("complete ${linkImage.link}")
+                            //      log("complete ${linkImage.link}")
                             checkMainImage()
                         }
                     }
@@ -282,6 +289,12 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, onC
         mutableStateOf(Size.Zero)
     }
 
+
+    LaunchedEffect(Unit) {
+        MainScope().launch {
+            lazyRowState.scrollToItem(startIndex)
+        }
+    }
 
 
     DisposableEffect(Unit){

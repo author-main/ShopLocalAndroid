@@ -2,6 +2,8 @@ package com.training.shoplocal.dialogs
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
@@ -30,13 +32,15 @@ fun ShowProgress() {
             focusable = true
         )
     ) {
-      /*  Card(
+       // Box(modifier = Modifier.fillMaxSize().background(Color.Red)) {
+            /*  Card(
             elevation = 0.dp,
             shape = RoundedCornerShape(12.dp),
             backgroundColor = PrimaryDark,
             contentColor = TextLightGray
         ) {*/
             CircularProgressIndicator(color = SelectedItemBottomNavi)
+       // }
 
     }
 }

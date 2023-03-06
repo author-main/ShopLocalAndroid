@@ -1,4 +1,4 @@
-package com.training.shoplocal.screens.appscreen
+package com.training.shoplocal.screens.mainscreen.composable
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.LinearEasing
@@ -61,7 +61,7 @@ import java.util.*
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ShowFilterDisplay(filter: ProviderDataDisplay, reset: () -> Unit, perform: (filter: FilterData)->Unit){
-    val interaction = remember { MutableInteractionSource() }
+    //val interaction = remember { MutableInteractionSource() }
     val viewModel: RepositoryViewModel = viewModel()
     val items = remember {
         viewModel.getSectionFilter()
@@ -387,7 +387,7 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay, reset: () -> Unit, perform: (
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable(
-                        interactionSource = interaction,//Source,
+                        interactionSource = MutableInteractionSource(),
                         indication = null
                     ) {
                         openSection = if (openSection != sectionId)
@@ -426,7 +426,7 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay, reset: () -> Unit, perform: (
     Box(modifier = Modifier
         //.fillMaxSize()
         .clickable(
-            interactionSource = interaction,
+            interactionSource = MutableInteractionSource(),
             indication = null,
             onClick = {}
         )

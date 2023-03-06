@@ -63,6 +63,7 @@ import com.training.shoplocal.dialogs.ShowMessage
 import com.training.shoplocal.dialogs.ShowProgress
 import com.training.shoplocal.screens.ScreenRouter
 import com.training.shoplocal.screens.appscreen.*
+import com.training.shoplocal.screens.mainscreen.composable.*
 import com.training.shoplocal.screens.remember.rememberLazyViewState
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
@@ -643,7 +644,9 @@ fun MainScreen(state: ModalBottomSheetState){
                 )
         }
         TopAppBar(backgroundColor = MaterialTheme.colors.primary,
-                    elevation = 0.dp
+                    elevation = 0.dp,
+
+
         ) {
             Row(
                 Modifier

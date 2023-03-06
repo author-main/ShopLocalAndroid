@@ -75,7 +75,7 @@ fun DialogRegistration(){
     @Composable
     fun TextGroup(label: String, text: MutableState<String>, keyboardType: KeyboardType = KeyboardType.Text, onTextChange: (value: String)-> Unit = { }, order: Int){
         val trailingIcon = @Composable {
-                val interactionSource = remember { MutableInteractionSource() }
+                //val interactionSource = remember { MutableInteractionSource() }
                 val idDrawable = if (showChar.value)
                     R.drawable.ic_showsym_on
                 else
@@ -91,7 +91,7 @@ fun DialogRegistration(){
 
                     modifier = Modifier
                         .clickable(
-                            interactionSource = interactionSource,
+                            interactionSource = MutableInteractionSource(),
                             indication = null
                         ) {
                             showChar.value = !showChar.value

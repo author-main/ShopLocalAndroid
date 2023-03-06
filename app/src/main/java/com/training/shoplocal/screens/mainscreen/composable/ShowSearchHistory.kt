@@ -1,4 +1,4 @@
-package com.training.shoplocal.screens.appscreen
+package com.training.shoplocal.screens.mainscreen.composable
 
 import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.FastOutLinearInEasing
@@ -92,10 +92,10 @@ fun ShowSearchHistory(textSearch: MutableState<String>, searchState: State<Searc
         }
     }
     //val textFont = FontFamily(Font(R.font.robotocondensed_light))
-    val interaction = remember { MutableInteractionSource() }
+    //val interaction = remember { MutableInteractionSource() }
     Box(modifier = Modifier
         .clickable(
-            interactionSource = interaction,
+            interactionSource = MutableInteractionSource(),
             indication = null,
             onClick = {}
         )
@@ -168,7 +168,7 @@ fun ShowSearchHistory(textSearch: MutableState<String>, searchState: State<Searc
                                     .background(TextFieldBg, CircleShape)
                                     .size(16.dp)
                                     .clickable(
-                                        interactionSource = remember { MutableInteractionSource() },
+                                        interactionSource = MutableInteractionSource() ,
                                         indication = null
                                     ) {
                                         //history.removeAt(index)

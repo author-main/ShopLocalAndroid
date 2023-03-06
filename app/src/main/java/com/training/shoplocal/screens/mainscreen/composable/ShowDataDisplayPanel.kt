@@ -1,4 +1,4 @@
-package com.training.shoplocal.screens.appscreen
+package com.training.shoplocal.screens.mainscreen.composable
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background

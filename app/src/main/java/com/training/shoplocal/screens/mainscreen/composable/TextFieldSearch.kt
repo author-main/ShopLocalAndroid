@@ -1,4 +1,4 @@
-package com.training.shoplocal.screens.appscreen
+package com.training.shoplocal.screens.mainscreen.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -89,7 +89,7 @@ fun TextFieldSearch(modifier: Modifier, textSearch: MutableState<String>, enable
         onFocused()
         //PopupSearchHistory()
     }*/
-    val interactionSource = remember { MutableInteractionSource() }
+    //val interactionSource = remember { MutableInteractionSource() }
 //    val keyboardController = LocalSoftwareKeyboardController.current
 
 
@@ -178,9 +178,9 @@ fun TextFieldSearch(modifier: Modifier, textSearch: MutableState<String>, enable
             innerTextField = innerTextField,
             singleLine = true,
             enabled = true,
-            interactionSource = remember {
+            interactionSource = MutableInteractionSource()/*remember {
                 interactionSource//MutableInteractionSource()
-            },
+            }*/,
             contentPadding = PaddingValues(0.dp)
         )
     }
