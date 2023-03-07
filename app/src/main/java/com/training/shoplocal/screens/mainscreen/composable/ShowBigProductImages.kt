@@ -48,6 +48,7 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
 /*    var changedImage by remember {
         mutableStateOf(false)
     }*/
+    val indexBigImage = remember{mutableStateOf(index)}
     val countImages = remember {product.linkimages?.size ?: 1}
     val images = remember {
        // val list =
@@ -134,7 +135,7 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
                                     log("image[$index] $image")
                                 }
                             ) {
-
+                                indexBigImage.value = it
                             }
                             Box(
                                 modifier = Modifier
@@ -167,7 +168,7 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
                                             .height(100.dp)
                                             .width(75.dp)
                                             .clip(RoundedCornerShape(6.dp))
-                                            //  .border(BorderStroke(2.dp, SelectedItemBottomNavi))
+                                            .border(BorderStroke(2.dp, if (index==indexBigImage.value) SelectedItemBottomNavi else Color.Transparent))
                                             .background(Color.White),
                                         contentScale = ContentScale.Inside,
                                         bitmap = item.value,
