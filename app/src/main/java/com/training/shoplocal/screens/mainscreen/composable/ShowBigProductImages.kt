@@ -50,8 +50,9 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
 /*    var changedImage by remember {
         mutableStateOf(false)
     }*/
+    val selectedIndex = remember{mutableStateOf(index)}
     val startIndex    = remember{mutableStateOf(index)}
-    val indexBigImage = remember{mutableStateOf(index)}
+    //val indexBigImage = remember{mutableStateOf(index)}
     //log("index big = ${indexBigImage.value}")
     val countImages = remember {product.linkimages?.size ?: 1}
     val images = remember {
@@ -126,6 +127,7 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
                                 .background(Color.White)
                         ) {
                             //val img = ImageBitmap.imageResource(R.drawable.ic_close)
+                        //    log("start index = ${startIndex.value}")
                             ShowProductImages(
                                 modifier = Modifier
                                     .fillMaxSize()
@@ -136,10 +138,12 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
                                 onLoadImage = {  index, image ->
                                     images[index].value = image
                                     //changedImage = !changedImage
-                                    log("image[$index] $image")
+                              //      log("image[$index] $image")
                                 }
                             ) {
-                                indexBigImage.value = it
+                                //indexBigImage.value = it
+                               // startIndex.value = it
+                                selectedIndex.value = it
                             }
                             Box(
                                 modifier = Modifier
@@ -172,11 +176,11 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
                                             .padding(all = 4.dp)
                                             .clickable {
                                                 // log("selected index = $index")
-                                                indexBigImage.value = index
-                                                //startIndex.value    = -1
+                                                //indexBigImage.value = index
+                                                selectedIndex.value = index
                                                 startIndex.value    = index
                                             },
-                                        border = BorderStroke(2.dp, if (index == indexBigImage.value) SelectedItemBottomNavi else Color.Transparent),
+                                        border = BorderStroke(2.dp, if (index == selectedIndex.value) SelectedItemBottomNavi else Color.Transparent),
                                         color = Color.White,
                                         shape = RoundedCornerShape(6.dp)
                                     ) {

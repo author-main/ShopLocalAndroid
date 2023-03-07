@@ -7,16 +7,12 @@ import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.rotate
@@ -29,13 +25,10 @@ import com.training.shoplocal.classes.downloader.Callback
 import com.training.shoplocal.classes.downloader.ExtBitmap
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 import com.training.shoplocal.isEmpty
-import com.training.shoplocal.log
-import com.training.shoplocal.screens.mainscreen.MainScreen
 import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.ui.theme.TextFieldBg
 import com.training.shoplocal.ui.theme.TextFieldFont
 import kotlinx.coroutines.*
-import okhttp3.Dispatcher
 import kotlin.math.absoluteValue
 import kotlin.math.pow
 
@@ -148,7 +141,7 @@ private enum class Status {
 }
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, startIndex: State<Int> = mutableStateOf(0), onLoadImage:((index: Int, image: ImageBitmap) -> Unit)? = null, onChangeImage: ((index: Int) -> Unit)? = null) {
+fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, startIndex: MutableState<Int> = mutableStateOf(0), onLoadImage:((index: Int, image: ImageBitmap) -> Unit)? = null, onChangeImage: ((index: Int) -> Unit)? = null) {
     @Composable
     fun ProgressDownloadImage(size: Size) {
         if (size.width > 0) {
@@ -291,16 +284,28 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
         mutableStateOf(Size.Zero)
     }
 
-    data class Integer(var value: Int = 0)
-    val selectedImage = remember{
-        Integer(startIndex.value)
-    }
+    //data class Integer(var value: Int = 0)
 
+
+  /*  val updateSelectedItem = remember {
+        derivedStateOf {
+            selectedImage.value != startIndex.value
+        }
+    }*/
+   // log ("selected ${startIndex.value}")
+
+    /*val selectedIndex = remember {
+        startIndex
+    }*/
+
+    //LaunchedEffect(startIndex.value) {
+    data class Boolean(var value: kotlin.Boolean)
+    val init = remember{ Boolean(true) }
 
     LaunchedEffect(startIndex.value) {
         MainScope().launch {
-            //if (startIndex.value > 0)
-                lazyRowState.scrollToItem(startIndex.value)
+            lazyRowState.scrollToItem(startIndex.value)
+            init.value = false
         }
     }
 
@@ -361,15 +366,16 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
                     val offset = (lazyRowState.layoutInfo.visibleItemsInfo.firstOrNull()?.offset
                         ?: 0).absoluteValue
                     if (lazyRowState.layoutInfo.visibleItemsInfo.isNotEmpty())
-                        if (offset > half.width) {
+                        if (offset > half.width)
                             index += 1
-                        }
-                    selectedImage.value = index
+                    //selectedIndex.value = index
                     index
                 }
             }
             LaunchedEffect(indexImage.value) {
-                changeImage(indexImage.value)
+              if (!init.value)
+                startIndex.value = indexImage.value
+              changeImage(indexImage.value)
             }
         }
     }
