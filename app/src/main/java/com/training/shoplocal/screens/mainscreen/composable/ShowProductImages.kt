@@ -148,7 +148,7 @@ private enum class Status {
 }
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, startIndex: Int = 0, onChangeImage: ((index: Int) -> Unit)? = null) {
+fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, startIndex: Int = 0, onLoadImage:((index: Int, image: ImageBitmap) -> Unit)? = null, onChangeImage: ((index: Int) -> Unit)? = null) {
     @Composable
     fun ProgressDownloadImage(size: Size) {
         if (size.width > 0) {
@@ -230,9 +230,9 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
         /*val isMainImage = remember{
             index == 0
         }*/
-        /*   val index = remember {
+        val index = remember {
             indexLink
-        }*/
+        }
         /*  fun checkMainImage(){
             if (index == 0 ) {
              //   log("download main image ${linkImages[index].link}")
@@ -246,12 +246,12 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
         }
 
         val linkImage = remember {
-            linkImages[indexLink]
+            linkImages[index]
         }
 
-        LaunchedEffect(indexLink) {
+        LaunchedEffect(index) {
             fun checkMainImage() {
-                if (indexLink == 0)
+                if (index == 0)
                     downloadedMainImage = true
             }
             linkImage.status = Status.LOADING
@@ -262,7 +262,9 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
                     override fun onComplete(image: ExtBitmap) {
                         image.bitmap?.let {
                             linkImage.status = Status.COMPLETE
-                            downloadedImage.value = it.asImageBitmap()
+                            val imageBitmap = it.asImageBitmap()
+                            downloadedImage.value = imageBitmap//it.asImageBitmap()
+                            onLoadImage?.invoke(index, imageBitmap)
 
                             // linkImage.image = downloadedImage
                             //      log("complete ${linkImage.link}")
