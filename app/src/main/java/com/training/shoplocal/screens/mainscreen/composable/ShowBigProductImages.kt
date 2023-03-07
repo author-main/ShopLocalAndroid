@@ -173,6 +173,7 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
                                             .clickable {
                                                 // log("selected index = $index")
                                                 indexBigImage.value = index
+                                                //startIndex.value    = -1
                                                 startIndex.value    = index
                                             },
                                         border = BorderStroke(2.dp, if (index == indexBigImage.value) SelectedItemBottomNavi else Color.Transparent),
