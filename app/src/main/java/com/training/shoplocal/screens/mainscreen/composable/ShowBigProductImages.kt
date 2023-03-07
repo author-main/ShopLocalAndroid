@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -33,6 +34,7 @@ import com.training.shoplocal.R
 import com.training.shoplocal.classes.Container
 import com.training.shoplocal.classes.EMPTY_IMAGE
 import com.training.shoplocal.classes.Product
+import com.training.shoplocal.isEmpty
 import com.training.shoplocal.log
 import com.training.shoplocal.screens.mainscreen.ImageLink
 import com.training.shoplocal.ui.theme.PrimaryDark
@@ -42,13 +44,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: Int) {
 /*    var changedImage by remember {
         mutableStateOf(false)
     }*/
+    //val startIndex    = remember{mutableStateOf(index)}
     val indexBigImage = remember{mutableStateOf(index)}
+    //log("index big = ${indexBigImage.value}")
     val countImages = remember {product.linkimages?.size ?: 1}
     val images = remember {
        // val list =
@@ -128,7 +132,7 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
                                     .padding(8.dp),
                                 product = product,
                                 reduce = false,
-                                startIndex = index,
+                                startIndex = indexBigImage,
                                 onLoadImage = {  index, image ->
                                     images[index].value = image
                                     //changedImage = !changedImage
@@ -162,18 +166,25 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
                             LazyRow(modifier = Modifier.align(Alignment.Center)) {
                                 itemsIndexed(images) { index, item ->
                                     //log("$item")
-                                    log("image height = ${item.value.height}, width = ${item.value.width}")
+                                  //  log("image height = ${item.value.height}, width = ${item.value.width}")
                                     Surface(
                                         modifier = Modifier
-                                            .padding(all = 4.dp),
+                                            .padding(all = 4.dp)
+                                            .clickable {
+                                                // log("selected index = $index")
+                                                indexBigImage.value = index
+                                                //startIndex.value    = index
+                                            },
                                         border = BorderStroke(2.dp, if (index == indexBigImage.value) SelectedItemBottomNavi else Color.Transparent),
-                                        color = PrimaryDark,
-                                        shape = RoundedCornerShape(12.dp)
+                                        color = Color.White,
+                                        shape = RoundedCornerShape(6.dp)
                                     ) {
 
+                                        if (!item.value.isEmpty())
                                         Image(
                                             modifier = Modifier
                                                 .size(imageViewSize)
+                                                .padding(all = 4.dp)
                                                 /*.height(100.dp)
                                                 .width(75.dp)*/
                                               /*  .clip(RoundedCornerShape(6.dp))
@@ -184,7 +195,7 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
                                                     )
                                                 )*/
                                                 .background(Color.White),
-                                            contentScale = ContentScale.Inside,
+                                            //contentScale = ContentScale.Inside,
                                             bitmap = item.value,
                                             //imageVector = ImageVector.vectorResource(id = R.drawable.ic_close),
                                             contentDescription = "index = $index"

@@ -148,7 +148,7 @@ private enum class Status {
 }
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, startIndex: Int = 0, onLoadImage:((index: Int, image: ImageBitmap) -> Unit)? = null, onChangeImage: ((index: Int) -> Unit)? = null) {
+fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, startIndex: State<Int> = mutableStateOf(0), onLoadImage:((index: Int, image: ImageBitmap) -> Unit)? = null, onChangeImage: ((index: Int) -> Unit)? = null) {
     @Composable
     fun ProgressDownloadImage(size: Size) {
         if (size.width > 0) {
@@ -292,9 +292,10 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
     }
 
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(startIndex.value) {
         MainScope().launch {
-            lazyRowState.scrollToItem(startIndex)
+           // log("start index ${startIndex.value}")
+            lazyRowState.scrollToItem(startIndex.value)
         }
     }
 
