@@ -115,7 +115,7 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
                         animationSpec = tween(500)
                     )*/
                 ) {
-                    Column(modifier = Modifier.fillMaxSize()) {
+                    Column(modifier = Modifier.fillMaxSize().background(PrimaryDark)) {
                         Box(
                             modifier = Modifier
                                 .weight(1f)
@@ -155,9 +155,10 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
                                 )
                             }
                         }
-                        log("recomposition...")
+                      //  log("recomposition...")
                         if (countImages > 1)
-                        Box(modifier = Modifier.fillMaxWidth().background(PrimaryDark)) {
+                        Box(modifier = Modifier.padding(top = 4.dp).fillMaxWidth()) {
+                            val imageViewSize = 50.dp
                             LazyRow(modifier = Modifier.align(Alignment.Center)) {
                                 itemsIndexed(images) { index, item ->
                                     //log("$item")
@@ -172,8 +173,9 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
 
                                         Image(
                                             modifier = Modifier
-                                                .height(100.dp)
-                                                .width(75.dp)
+                                                .size(imageViewSize)
+                                                /*.height(100.dp)
+                                                .width(75.dp)*/
                                               /*  .clip(RoundedCornerShape(6.dp))
                                                 .border(
                                                     BorderStroke(
