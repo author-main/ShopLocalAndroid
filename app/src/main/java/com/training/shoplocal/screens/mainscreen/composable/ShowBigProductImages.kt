@@ -162,19 +162,32 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
                                 itemsIndexed(images) { index, item ->
                                     //log("$item")
                                     log("image height = ${item.value.height}, width = ${item.value.width}")
-                                    Image(
+                                    Surface(
                                         modifier = Modifier
-                                            .padding(all = 4.dp)
-                                            .height(100.dp)
-                                            .width(75.dp)
-                                            .clip(RoundedCornerShape(6.dp))
-                                            .border(BorderStroke(2.dp, if (index==indexBigImage.value) SelectedItemBottomNavi else Color.Transparent))
-                                            .background(Color.White),
-                                        contentScale = ContentScale.Inside,
-                                        bitmap = item.value,
-                                        //imageVector = ImageVector.vectorResource(id = R.drawable.ic_close),
-                                        contentDescription = "index = $index"
-                                    )
+                                            .padding(all = 4.dp),
+                                        border = BorderStroke(2.dp, if (index == indexBigImage.value) SelectedItemBottomNavi else Color.Transparent),
+                                        color = PrimaryDark,
+                                        shape = RoundedCornerShape(12.dp)
+                                    ) {
+
+                                        Image(
+                                            modifier = Modifier
+                                                .height(100.dp)
+                                                .width(75.dp)
+                                              /*  .clip(RoundedCornerShape(6.dp))
+                                                .border(
+                                                    BorderStroke(
+                                                        2.dp,
+                                                        if (index == indexBigImage.value) SelectedItemBottomNavi else Color.Transparent
+                                                    )
+                                                )*/
+                                                .background(Color.White),
+                                            contentScale = ContentScale.Inside,
+                                            bitmap = item.value,
+                                            //imageVector = ImageVector.vectorResource(id = R.drawable.ic_close),
+                                            contentDescription = "index = $index"
+                                        )
+                                    }
                                 }
                             }
                         }
