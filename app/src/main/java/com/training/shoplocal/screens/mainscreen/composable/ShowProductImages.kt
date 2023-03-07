@@ -291,6 +291,15 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
         mutableStateOf(Size.Zero)
     }
 
+   /* data class Integer(var value: Int = 0)
+    val selectedImage = remember{
+        Integer(startIndex.value)
+    }
+
+    if (selectedImage.value >= startIndex.value)
+        selectedImage.value = startIndex.value*/
+
+
     LaunchedEffect(startIndex.value) {
         MainScope().launch {
             lazyRowState.scrollToItem(startIndex.value)
@@ -357,6 +366,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
                         if (offset > half.width) {
                             index += 1
                         }
+                    //selectedImage.value = index
                     index
                 }
             }
