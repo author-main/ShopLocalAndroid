@@ -17,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageBitmap
@@ -25,6 +26,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
@@ -166,7 +168,7 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
                       //  log("recomposition...")
                         if (countImages > 1)
                         Box(modifier = Modifier.padding(top = 4.dp).fillMaxWidth()) {
-                            val imageViewSize = 50.dp
+                            val imageViewSize = DpSize(45.dp, 50.dp)
                             LazyRow(modifier = Modifier.align(Alignment.Center)) {
                                 itemsIndexed(images) { index, item ->
                                     //log("$item")
