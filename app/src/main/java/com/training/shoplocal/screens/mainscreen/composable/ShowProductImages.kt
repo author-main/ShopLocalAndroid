@@ -294,7 +294,6 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
 
     LaunchedEffect(startIndex.value) {
         MainScope().launch {
-           // log("start index ${startIndex.value}")
             lazyRowState.scrollToItem(startIndex.value)
         }
     }

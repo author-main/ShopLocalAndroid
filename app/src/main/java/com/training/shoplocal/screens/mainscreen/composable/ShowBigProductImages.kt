@@ -50,7 +50,7 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
 /*    var changedImage by remember {
         mutableStateOf(false)
     }*/
-    //val startIndex    = remember{mutableStateOf(index)}
+    val startIndex    = remember{mutableStateOf(index)}
     val indexBigImage = remember{mutableStateOf(index)}
     //log("index big = ${indexBigImage.value}")
     val countImages = remember {product.linkimages?.size ?: 1}
@@ -132,7 +132,7 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
                                     .padding(8.dp),
                                 product = product,
                                 reduce = false,
-                                startIndex = indexBigImage,
+                                startIndex = startIndex,
                                 onLoadImage = {  index, image ->
                                     images[index].value = image
                                     //changedImage = !changedImage
@@ -173,7 +173,7 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
                                             .clickable {
                                                 // log("selected index = $index")
                                                 indexBigImage.value = index
-                                                //startIndex.value    = index
+                                                startIndex.value    = index
                                             },
                                         border = BorderStroke(2.dp, if (index == indexBigImage.value) SelectedItemBottomNavi else Color.Transparent),
                                         color = Color.White,
