@@ -41,8 +41,8 @@ import kotlin.math.pow
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState<Boolean>? = null, isZoom: Boolean = false){
-    val maxScale: Float = 1f
-    val minScale: Float = 3f
+    val maxScale: Float = 3f
+    val minScale: Float = 1f
     var scale by remember { mutableStateOf(1f) }
     var offsetX by remember { mutableStateOf(1f) }
     var offsetY by remember { mutableStateOf(1f) }
@@ -72,9 +72,8 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                         offsetY = 1f
                         enableScroll(true)
                     } else {
-                        log("zoom...")
-                        enableScroll(false)
                         scale = maxScale
+                        enableScroll(false)
                     }
                 }
             },
@@ -137,8 +136,10 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
         Image(source, modifier = Modifier.fillMaxSize()
             .graphicsLayer {
                 if (isZoom) {
-                    scaleX = maxOf(maxScale, minOf(minScale, scale))
-                    scaleY = maxOf(maxScale, minOf(minScale, scale))
+                    val lScale = maxOf(maxScale, minOf(minScale, scale))
+                    log("scale = $lScale")
+                    scaleX = lScale
+                    scaleY = lScale
                     translationX = offsetX
                     translationY = offsetY
                 }
