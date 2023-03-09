@@ -69,7 +69,7 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
      //   scale = animateScale.value
     }*/
 
-    val scaleFloat by animateFloatAsState(
+    val animScale by animateFloatAsState(
         targetValue = scale,//if (scale < halfScale) 1f else maxScale,
         animationSpec = tween(durationMillis =300, easing = LinearEasing),
         finishedListener = {
@@ -78,8 +78,33 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
         }
     )
 
+
+
+
     var offsetX by remember { mutableStateOf(0f) }
     var offsetY by remember { mutableStateOf(0f) }
+
+
+    val animOffsetX by animateFloatAsState(
+        targetValue = offsetX,//if (scale < halfScale) 1f else maxScale,
+        animationSpec = tween(durationMillis =300, easing = LinearEasing),
+        finishedListener = {
+            animate = false
+            //     scale = it
+        }
+    )
+
+    val animOffsetY by animateFloatAsState(
+        targetValue = offsetY,//if (scale < halfScale) 1f else maxScale,
+        animationSpec = tween(durationMillis =300, easing = LinearEasing),
+        finishedListener = {
+            animate = false
+            //     scale = it
+        }
+    )
+
+
+
     val coroutineScope = rememberCoroutineScope()
 
     fun enableScroll(enabled: Boolean) {
@@ -171,10 +196,10 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                 .fillMaxSize()
                 .graphicsLayer {
                     if (isZoom) {
-                        scaleX = if (animate) scaleFloat else scale
-                        scaleY = if (animate) scaleFloat else scale
-                        translationX = offsetX
-                        translationY = offsetY
+                        scaleX = if (animate) animScale else scale
+                        scaleY = if (animate) animScale else scale
+                        translationX = if (animate) animOffsetX else offsetX
+                        translationY = if (animate) animOffsetY else offsetY
                     }
                 }, contentDescription = null)
 
