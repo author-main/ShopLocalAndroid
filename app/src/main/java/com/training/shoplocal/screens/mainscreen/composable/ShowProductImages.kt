@@ -39,9 +39,87 @@ import kotlin.math.pow
 
 
 @Composable
-fun ZoomImage(modifier: Modifier, source: ImageBitmap, zoom: Boolean = false){
-    Box(modifier = modifier.padding(8.dp)){
-        Image(source, modifier = Modifier.fillMaxSize(), contentDescription = null)
+fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState<Boolean>? = null, isZoom: Boolean = false){
+    val maxScale: Float = 1f
+    val minScale: Float = 3f
+    var scale by remember { mutableStateOf(1f) }
+    var offsetX by remember { mutableStateOf(1f) }
+    var offsetY by remember { mutableStateOf(1f) }
+    val coroutineScope = rememberCoroutineScope()
+    Box(modifier = modifier
+        .padding(8.dp)
+        .pointerInput(Unit) {
+            if (isZoom) {
+                awaitEachGesture {
+                    awaitFirstDown()
+                    do {
+                        val event = awaitPointerEvent()
+                        scale *= event.calculateZoom()
+                        if (scale > 1f) {
+                            scrollState?.run {
+                                coroutineScope.launch {
+                                    value = false
+                                }
+                            }
+                            val offset = event.calculatePan()
+                            offsetX += offset.x
+                            offsetY += offset.y
+                            //log("scale = $scale")
+                            scrollState?.run {
+                                coroutineScope.launch {
+                                    value = true
+                                }
+                            }
+                        } else {
+                            scale =1f
+                            offsetX = 1f
+                            offsetY = 1f
+                        }
+
+                    } while (event.changes.any { it.pressed })
+                    /*  awaitPointerEventScope {
+                        awaitFirstDown()
+                        do {
+                            val event = awaitPointerEvent()
+                            scale.value *= event.calculateZoom()
+                            if (scale.value > 1) {
+                                scrollState?.run {
+                                    coroutineScope.launch {
+                                        setScrolling(false)
+                                    }
+                                }
+                                val offset = event.calculatePan()
+                                offsetX.value += offset.x
+                                offsetY.value += offset.y
+                                rotationState.value += event.calculateRotation()
+                                scrollState?.run {
+                                    coroutineScope.launch {
+                                        setScrolling(true)
+                                    }
+                                }
+                            } else {
+                                scale.value = 1f
+                                offsetX.value = 1f
+                                offsetY.value = 1f
+                            }
+                        } while (event.changes.any { it.pressed })
+                    }*/
+                }
+            }
+        }
+
+
+    ){
+        Image(source, modifier = Modifier.fillMaxSize()
+            .graphicsLayer {
+                if (isZoom) {
+                    scaleX = maxOf(maxScale, minOf(minScale, scale))
+                    scaleY = maxOf(maxScale, minOf(minScale, scale))
+                    translationX = offsetX
+                    translationY = offsetY
+                }
+            }
+            , contentDescription = null)
     }
 }
 
@@ -299,6 +377,9 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
     }
 
     val lazyRowState = rememberLazyListState()
+    val scrollState = remember {
+        mutableStateOf(true)
+    }
     val flingBehavior = rememberSnapFlingBehavior(lazyListState = lazyRowState)
     var size by remember {
         mutableStateOf(Size.Zero)
@@ -353,7 +434,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
     ) {
         LazyRow(
             state = lazyRowState,
-            //userScrollEnabled = false,
+            userScrollEnabled = scrollState.value,
             horizontalArrangement = Arrangement.Center,
             flingBehavior = flingBehavior
         ) {
@@ -361,7 +442,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
 
             items(linkImages, {linkimage -> linkimage.id}) { item ->
                 if (!item.image.value.isEmpty()) {
-                    ZoomImage(modifier = Modifier.fillParentMaxSize(), item.image.value)
+                    ZoomImage(modifier = Modifier.fillParentMaxSize(), item.image.value, scrollState = scrollState, isZoom = true)
                 }
             //items(linkImages) { item ->
                 //if (item.status == Status.COMPLETE)
