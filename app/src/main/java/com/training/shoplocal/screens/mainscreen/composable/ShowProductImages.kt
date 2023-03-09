@@ -3,6 +3,7 @@ package com.training.shoplocal.screens.mainscreen.composable
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -17,6 +18,8 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.*
@@ -201,6 +204,9 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
     /* val currentProduct = remember {
         product
     }*/
+    var scale by remember {
+        mutableStateOf(1f)
+    }
     val linkImages = remember {
         val entries = mutableListOf<ImageStatus>()
         product.linkimages?.forEachIndexed { index, it ->
@@ -341,14 +347,37 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
             items(linkImages, {linkimage -> linkimage.id}) { item ->
             //items(linkImages) { item ->
                 //if (item.status == Status.COMPLETE)
-                if (!item.image.value.isEmpty())
-                Image(
-                    modifier = Modifier
+                //val scrollState = rememberScrollState()
+                if (!item.image.value.isEmpty()) {
+                  /*  Box(modifier = Modifier
+                        .verticalScroll(scrollState)
+                      //  .horizontalScroll(scrollState)
                         .fillParentMaxSize()
-                        .padding(all = 8.dp),
-                    bitmap = item.image.value,
-                    contentDescription = null
-                )
+                        .padding(all = 8.dp)
+                    ) {*/
+                        Image(
+                            modifier = Modifier
+                              //  .verticalScroll(scrollState)
+                                .fillParentMaxSize(),
+                          /*      .pointerInput(Unit) {
+                            detectTransformGestures(true, onGesture =  { centroid, pan, zoom, rotate ->
+                                scale = when {
+                                    scale < 0.5f -> 0.5f
+                                    scale > 3f -> 3f
+                                    else -> scale * zoom
+                                }
+                            })
+                        }
+                                .graphicsLayer(
+                                    scaleX = scale,
+                                    scaleY = scale
+                                ),*/
+                            bitmap = item.image.value,
+                            //contentScale = ContentScale.None,
+                            contentDescription = null
+                        )
+                    }
+              //  }
             }
         }
 
