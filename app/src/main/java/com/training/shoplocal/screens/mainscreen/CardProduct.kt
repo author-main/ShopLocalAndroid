@@ -224,7 +224,9 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                 contentAlignment = Alignment.Center
             ) {
 
-                    ShowProductImages(modifier = Modifier.fillMaxSize(), reduce = true, product = cardproduct)
+                    ShowProductImages(modifier = Modifier.fillMaxSize(), reduce = true, product = cardproduct){
+                       onClick(cardproduct)
+                    }
                     DiscountPanel(
                         modifier = Modifier.align(if (isCardModeView()) Alignment.BottomStart else Alignment.TopStart),
                         percent = cardproduct.discount

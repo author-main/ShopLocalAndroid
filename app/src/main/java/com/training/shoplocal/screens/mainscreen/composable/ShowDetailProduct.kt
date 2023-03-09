@@ -385,9 +385,11 @@ fun ShowDetailProduct(value: Product){
                         modifier = Modifier
                             .width(size - 32.dp)
                             .height(size - 32.dp)
-                            .padding(all = 8.dp), reduce = false, product = product
-                    ) {
+                            .padding(all = 8.dp), reduce = false, product = product,
+                        onChangeImage =  {
                         indexImage.value = it
+                    }) {
+                        viewBigImages.value = true
                     }
                 }
 

@@ -122,7 +122,9 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
                         animationSpec = tween(500)
                     )*/
                 ) {
-                    Column(modifier = Modifier.fillMaxSize().background(PrimaryDark)) {
+                    Column(modifier = Modifier
+                        .fillMaxSize()
+                        .background(PrimaryDark)) {
                         Box(
                             modifier = Modifier
                                 .weight(1f)
@@ -137,15 +139,18 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
                                 product = product,
                                 reduce = false,
                                 startIndex = startIndex,
+                                isZoom = true,
                                 onLoadImage = {  index, image ->
                                     images[index].value = image
                                     //changedImage = !changedImage
                               //      log("image[$index] $image")
-                                }
-                            ) {
+                                },
+                            onChangeImage = {
                                 //indexBigImage.value = it
                                // startIndex.value = it
                                 selectedIndex.value = it
+                            }) {
+
                             }
                             Box(
                                 modifier = Modifier
@@ -167,7 +172,9 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
                         }
                       //  log("recomposition...")
                         if (countImages > 1)
-                        Box(modifier = Modifier.padding(top = 4.dp).fillMaxWidth()) {
+                        Box(modifier = Modifier
+                            .padding(top = 4.dp)
+                            .fillMaxWidth()) {
                             val imageViewSize = DpSize(45.dp, 50.dp)
                             LazyRow(modifier = Modifier.align(Alignment.Center)) {
                                 itemsIndexed(images) { index, item ->
@@ -180,7 +187,7 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
                                                 // log("selected index = $index")
                                                 //indexBigImage.value = index
                                                 selectedIndex.value = index
-                                                startIndex.value    = index
+                                                startIndex.value = index
                                             },
                                         border = BorderStroke(2.dp, if (index == selectedIndex.value) SelectedItemBottomNavi else Color.Transparent),
                                         color = Color.White,
@@ -194,7 +201,7 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
                                                 .padding(all = 4.dp)
                                                 /*.height(100.dp)
                                                 .width(75.dp)*/
-                                              /*  .clip(RoundedCornerShape(6.dp))
+                                                /*  .clip(RoundedCornerShape(6.dp))
                                                 .border(
                                                     BorderStroke(
                                                         2.dp,
