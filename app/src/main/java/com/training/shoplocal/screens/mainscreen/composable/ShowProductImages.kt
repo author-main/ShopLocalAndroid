@@ -68,39 +68,23 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
         animate = false
      //   scale = animateScale.value
     }*/
-
+    var offsetX by remember { mutableStateOf(0f) }
+    var offsetY by remember { mutableStateOf(0f) }
     val animScale by animateFloatAsState(
         targetValue = scale,//if (scale < halfScale) 1f else maxScale,
         animationSpec = tween(durationMillis =300, easing = LinearEasing),
         finishedListener = {
             animate = false
-       //     scale = it
         }
     )
-
-
-
-
-    var offsetX by remember { mutableStateOf(0f) }
-    var offsetY by remember { mutableStateOf(0f) }
-
-
     val animOffsetX by animateFloatAsState(
-        targetValue = offsetX,//if (scale < halfScale) 1f else maxScale,
-        animationSpec = tween(durationMillis =300, easing = LinearEasing),
-        finishedListener = {
-            animate = false
-            //     scale = it
-        }
+        targetValue = offsetX,
+        animationSpec = tween(durationMillis =300, easing = LinearEasing)
     )
 
     val animOffsetY by animateFloatAsState(
-        targetValue = offsetY,//if (scale < halfScale) 1f else maxScale,
-        animationSpec = tween(durationMillis =300, easing = LinearEasing),
-        finishedListener = {
-            animate = false
-            //     scale = it
-        }
+        targetValue = offsetY,
+        animationSpec = tween(durationMillis =300, easing = LinearEasing)
     )
 
 
