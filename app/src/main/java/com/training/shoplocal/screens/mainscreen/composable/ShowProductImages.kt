@@ -38,6 +38,7 @@ import kotlin.math.pow
 
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState<Boolean>? = null, isZoom: Boolean = false){
     val maxScale: Float = 1f
@@ -46,8 +47,38 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
     var offsetX by remember { mutableStateOf(1f) }
     var offsetY by remember { mutableStateOf(1f) }
     val coroutineScope = rememberCoroutineScope()
+
+    fun enableScroll(enabled: Boolean) {
+        scrollState?.run {
+            coroutineScope.launch {
+                value = enabled
+            }
+        }
+    }
+
     Box(modifier = modifier
+        .clip(RectangleShape)
         .padding(8.dp)
+        .combinedClickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null,
+            onClick = {  },
+            onDoubleClick = {
+                if (isZoom) {
+
+                    if (scale >= minScale + maxScale / 2f) {
+                        scale = minScale
+                        offsetX = 1f
+                        offsetY = 1f
+                        enableScroll(true)
+                    } else {
+                        log("zoom...")
+                        enableScroll(false)
+                        scale = maxScale
+                    }
+                }
+            },
+        )
         .pointerInput(Unit) {
             if (isZoom) {
                 awaitEachGesture {
@@ -56,24 +87,17 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                         val event = awaitPointerEvent()
                         scale *= event.calculateZoom()
                         if (scale > 1f) {
-                            scrollState?.run {
-                                coroutineScope.launch {
-                                    value = false
-                                }
-                            }
+                            enableScroll(false)
                             val offset = event.calculatePan()
                             offsetX += offset.x
                             offsetY += offset.y
                             //log("scale = $scale")
-                            scrollState?.run {
-                                coroutineScope.launch {
-                                    value = true
-                                }
-                            }
+
                         } else {
                             scale =1f
                             offsetX = 1f
                             offsetY = 1f
+                            enableScroll(true)
                         }
 
                     } while (event.changes.any { it.pressed })
