@@ -3,7 +3,7 @@ package com.training.shoplocal.screens.mainscreen.composable
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.detectTransformGestures
+import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -28,6 +28,7 @@ import com.training.shoplocal.classes.downloader.Callback
 import com.training.shoplocal.classes.downloader.ExtBitmap
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 import com.training.shoplocal.isEmpty
+import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.ui.theme.TextFieldBg
 import com.training.shoplocal.ui.theme.TextFieldFont
@@ -35,6 +36,14 @@ import kotlinx.coroutines.*
 import kotlin.math.absoluteValue
 import kotlin.math.pow
 
+
+
+@Composable
+fun ZoomImage(modifier: Modifier, source: ImageBitmap, zoom: Boolean = false){
+    Box(modifier = modifier.padding(8.dp)){
+        Image(source, modifier = Modifier.fillMaxSize(), contentDescription = null)
+    }
+}
 
 /*@Composable
 fun ExtImage(modifier: Modifier, bitmap: State<ImageBitmap>){
@@ -207,6 +216,11 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
     var scale by remember {
         mutableStateOf(1f)
     }
+    val offsetX = remember { mutableStateOf(1f) }
+    val offsetY = remember { mutableStateOf(1f) }
+    val coroutineScope = rememberCoroutineScope()
+
+
     val linkImages = remember {
         val entries = mutableListOf<ImageStatus>()
         product.linkimages?.forEachIndexed { index, it ->
@@ -339,16 +353,20 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
     ) {
         LazyRow(
             state = lazyRowState,
+            //userScrollEnabled = false,
             horizontalArrangement = Arrangement.Center,
             flingBehavior = flingBehavior
         ) {
 
 
             items(linkImages, {linkimage -> linkimage.id}) { item ->
+                if (!item.image.value.isEmpty()) {
+                    ZoomImage(modifier = Modifier.fillParentMaxSize(), item.image.value)
+                }
             //items(linkImages) { item ->
                 //if (item.status == Status.COMPLETE)
                 //val scrollState = rememberScrollState()
-                if (!item.image.value.isEmpty()) {
+                /*if (!item.image.value.isEmpty()) {
                   /*  Box(modifier = Modifier
                         .verticalScroll(scrollState)
                       //  .horizontalScroll(scrollState)
@@ -357,6 +375,28 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
                     ) {*/
                         Image(
                             modifier = Modifier
+                                .pointerInput(Unit) {
+                                    awaitEachGesture {
+                                        awaitFirstDown()
+                                        do {
+                                            val event = awaitPointerEvent()
+                                            scale *= event.calculateZoom()
+                                            if (scale > 1) {
+                                                log("scale = $scale")
+                                                lazyRowState.run {
+                                                    coroutineScope.launch {
+                                                        //setScrolling(false)
+                                                    }
+                                                }
+                                            }
+
+                                       /*     val offset = event.calculatePan()
+                                            log(offset.x)*/
+                                        } while (event.changes.any { it.pressed })
+                                    }
+                                }
+
+
                               //  .verticalScroll(scrollState)
                                 .fillParentMaxSize(),
                           /*      .pointerInput(Unit) {
@@ -377,7 +417,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
                             contentDescription = null
                         )
                     }
-              //  }
+              //  }*/
             }
         }
 
