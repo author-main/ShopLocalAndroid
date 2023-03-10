@@ -10,29 +10,29 @@ import com.training.shoplocal.log
 
 data class Product(
     @SerializedName("id")
-    val id: Int,
+    var id: Int,
     @SerializedName("name")
     var name:           String,
     @SerializedName("category")
-    val category:       Int? = null,
+    var category:       Int? = null,
     @SerializedName("description")
-    val description:    String,
+    var description:    String,
     @SerializedName("instock")
-    val instock:        Int = 1,
+    var instock:        Int = 1,
     @SerializedName("discount")
-    val discount:       Int,
+    var discount:       Int,
     @SerializedName("price")
-    val price:          Float,
+    var price:          Float,
     @SerializedName("star")
-    val star:           Float = 1.0f,
+    var star:           Float = 1.0f,
     @SerializedName("favorite")
     var favorite:       Byte = 0,
     @SerializedName("brand")
-    val brand:          Int? = null,
+    var brand:          Int? = null,
     @SerializedName("sold")
-    val sold:          Int? = null,
+    var sold:          Int? = null,
     @SerializedName("linkimages")
-    val linkimages:     List<String>? = null,
+    var linkimages:     List<String>? = null,
    // var imageindex: Int = 0
     ) {
         constructor(): this(
@@ -70,5 +70,19 @@ data class Product(
             getStringResource(R.string.text_action)
         else
             ""
+    fun copydata(value: Product){
+        id              = value.id
+        name            = value.name
+        category        = value.category
+        description     = value.description
+        instock         = value.instock
+        discount        = value.discount
+        price           = value.price
+        star            = value.star
+        favorite        = value.favorite
+        brand           = value.brand
+        sold            = value.sold
+        linkimages      = value.linkimages
+    }
 
  }

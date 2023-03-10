@@ -45,7 +45,7 @@ fun AppScreen(){
                       BottomNavigationBar(navController)*/
 
 
-                  androidx.compose.animation.AnimatedVisibility(
+               /*   androidx.compose.animation.AnimatedVisibility(
                       visible = !hiddenNavigation.value,
                       enter = expandVertically(
                           animationSpec = tween(
@@ -61,7 +61,9 @@ fun AppScreen(){
                       )
                   ) {
                       BottomNavigationBar(navController)
-                  }
+                  }*/
+                  if (!hiddenNavigation.value)
+                    BottomNavigationBar(navController)
 
 
 

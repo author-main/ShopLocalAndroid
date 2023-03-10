@@ -135,7 +135,7 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
                             ShowProductImages(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .padding(8.dp),
+                                    .padding(12.dp),
                                 product = product,
                                 reduce = false,
                                 startIndex = startIndex,

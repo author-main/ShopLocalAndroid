@@ -315,6 +315,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
             )
             Canvas(
                 modifier = Modifier.size(dpSize)
+                    .clip(RectangleShape)
             ) {
                 rotate(degrees = 45f) {
                     translate(animatedPos, -delta) {

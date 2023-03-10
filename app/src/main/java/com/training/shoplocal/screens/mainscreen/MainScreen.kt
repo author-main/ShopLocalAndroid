@@ -79,7 +79,9 @@ import kotlin.math.roundToInt
 fun MainScreen(state: ModalBottomSheetState){
     val viewModel: RepositoryViewModel = viewModel()
     val detailProduct = remember {
-        mutableStateOf(Product())
+        //mutableStateOf(
+            Product()
+        //)
     } //Product? = null
     val progress by viewModel.progressCRUD.collectAsState()
     if (progress)
@@ -718,10 +720,10 @@ fun MainScreen(state: ModalBottomSheetState){
                                     .clip(CircleShape)
                                     .size(23.dp)
                                     .align(Alignment.CenterVertically),
-                                checked = detailProduct.value.favorite > 0
+                                checked = detailProduct.favorite > 0
                             ) {
-                                detailProduct.value.favorite = if (it) 1 else 0
-                                viewModel.setProductFavorite(detailProduct.value)
+                                detailProduct.favorite = if (it) 1 else 0
+                                viewModel.setProductFavorite(detailProduct)
                             }
                             Spacer(modifier = Modifier.width(4.dp))
                         Image(
@@ -820,7 +822,7 @@ fun MainScreen(state: ModalBottomSheetState){
                     .background(MaterialTheme.colors.primary),
                     hide = isSearchMode)*/
 
-
+                //log("recomposition...")
                 if (products.isNotEmpty()) {
                    // val verticalScrollState = rememberScrollState()
                     //log("first Index = ${stateGrid.firstVisibleItemIndex}")
@@ -861,11 +863,11 @@ fun MainScreen(state: ModalBottomSheetState){
                                 },*/
                                 //product, showMoreButton = !isActiveContainer(Container.SEARCH) && !prevContainerSearch.value/*searchScreenDisplayed()*/, state = state, modeview = OrderDisplay.getViewMode()){selectedProduct ->
                                 product, showMoreButton = isShowButtonMore, state = state, modeview = OrderDisplay.getViewMode()){selectedProduct ->
+                                    detailProduct.copydata(selectedProduct)
                                     viewModel.hideBottomNavigation()
                                     showFloatingButton = false
-                                    detailProduct.value = selectedProduct
-                                    ///log(selectedProduct.name)
                                     setActiveContainer(Container.DETAIL)
+
                                 }
                             }
                         }
@@ -963,11 +965,20 @@ fun MainScreen(state: ModalBottomSheetState){
 
             AnimatedVisibility(
                 visible = isActiveContainer(Container.DETAIL),
-                enter = fadeIn(),
-                exit = fadeOut()
+                enter = fadeIn(
+                    animationSpec = tween(800)
+                ),
+                exit = fadeOut(
+                    animationSpec = tween(500)
+                )
             ) {
-                ShowDetailProduct(detailProduct.value)
+                ShowDetailProduct(detailProduct)
             }
+
+
+            /*if (isActiveContainer(Container.DETAIL))
+                ShowDetailProduct(detailProduct)*/
+
 
 
 
