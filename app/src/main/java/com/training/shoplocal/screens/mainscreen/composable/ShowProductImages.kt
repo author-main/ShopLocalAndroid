@@ -50,9 +50,9 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
     var scale by remember { mutableStateOf(1f) }
 
 
-    var animate by remember {
+   /* var animate by remember {
         mutableStateOf(false)
-    }
+    }*/
 
 
    /* val animateScale  = remember{ Animatable(0f) }
@@ -72,10 +72,10 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
     var offsetY by remember { mutableStateOf(0f) }
     val animScale by animateFloatAsState(
         targetValue = scale,//if (scale < halfScale) 1f else maxScale,
-        animationSpec = tween(durationMillis =300, easing = LinearEasing),
+        animationSpec = tween(durationMillis =300, easing = LinearEasing)/*,
         finishedListener = {
             animate = false
-        }
+        }*/
     )
     val animOffsetX by animateFloatAsState(
         targetValue = offsetX,
@@ -138,7 +138,7 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                             scale = maxScale
                             enableScroll(false)
                         }
-                        animate = true
+                        //animate = true
                     }
                 },
                 onTap = {
@@ -180,10 +180,14 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                 .fillMaxSize()
                 .graphicsLayer {
                     if (isZoom) {
-                        scaleX = if (animate) animScale else scale
+                       /* scaleX = if (animate) animScale else scale
                         scaleY = if (animate) animScale else scale
                         translationX = if (animate) animOffsetX else offsetX
-                        translationY = if (animate) animOffsetY else offsetY
+                        translationY = if (animate) animOffsetY else offsetY*/
+                        scaleX = animScale
+                        scaleY = animScale
+                        translationX = animOffsetX
+                        translationY = animOffsetY
                     }
                 }, contentDescription = null)
 
