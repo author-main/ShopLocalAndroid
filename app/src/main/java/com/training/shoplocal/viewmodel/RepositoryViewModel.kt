@@ -136,6 +136,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             putComposeViewStack(Container.MAIN)
             getBrands()
             getCategories()
+            getMessages(USER_ID, getCountUnread = true)
 //            exchangeDataMap[ExchangeData.GET_PRODUCTS] = false
             loadedPortion = 0
             getProducts(1)

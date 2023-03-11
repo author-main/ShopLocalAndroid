@@ -84,6 +84,7 @@ fun MainScreen(state: ModalBottomSheetState){
         //)
     } //Product? = null
     val progress by viewModel.progressCRUD.collectAsState()
+    val countUnreadMessages by viewModel.countUnreadMessages.collectAsState()
     if (progress)
         ShowProgress()
 /*    var progress by remember {
@@ -712,7 +713,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 }
 
                 when (activeContainer) {
-                    Container.MAIN -> ShowMessageCount(24)
+                    Container.MAIN -> ShowMessageCount(countUnreadMessages)
                     Container.DETAIL -> {
                             Spacer(modifier = Modifier.width(4.dp))
                             ButtonFavorite(
