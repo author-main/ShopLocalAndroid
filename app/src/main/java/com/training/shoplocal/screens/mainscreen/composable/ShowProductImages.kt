@@ -157,7 +157,6 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                         if (scaleValue != 1f) {
                             val lScale = minOf(maxOf(minScale, scale * scaleValue), maxScale)
                             scale = lScale
-
                         }
                         if (scale != 1f) {
                             val offset = event.calculatePan()
