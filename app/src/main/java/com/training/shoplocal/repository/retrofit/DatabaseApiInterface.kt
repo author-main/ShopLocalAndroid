@@ -1,6 +1,5 @@
 package com.training.shoplocal.repository.retrofit
 
-import com.google.gson.annotations.SerializedName
 import com.training.shoplocal.classes.*
 import retrofit2.Call
 import retrofit2.Response
@@ -41,6 +40,9 @@ interface DatabaseApiInterface {
 
     @GET("/api/get_categories")
     fun getCategories(): Call<List<Category>>
+
+    @GET("/api/get_messages")
+    fun getMessages(@Query("id") id:Int, @Query("count") getCountUnread: Boolean): Call<List<UserMessage>>
 
     /**
      *  Используем response без обработки результата запроса.

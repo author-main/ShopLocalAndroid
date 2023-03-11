@@ -238,7 +238,7 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay, reset: () -> Unit, perform: (
     }
 
     @Composable
-    fun showDiscount(value: Int){
+    fun showDiscount(){
 
         Row(modifier = Modifier
             .fillMaxWidth()
@@ -453,7 +453,7 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay, reset: () -> Unit, perform: (
 
             ) {
 
-                    showDiscount(value = 20)
+                    showDiscount()
 
             }
             Spacer(modifier = Modifier.height(8.dp))

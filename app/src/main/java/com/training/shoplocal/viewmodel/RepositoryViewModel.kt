@@ -31,6 +31,11 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         _accessFinger.value = value
     }*/
 
+    private val _countUnreadMessages = MutableStateFlow<Int>(0)
+    val countUnreadMessages = _countUnreadMessages.asStateFlow()
+    fun setCountUnreadMessages(value: Int){
+        _countUnreadMessages.value = value
+    }
     private val _reviews = MutableStateFlow(listOf<Review>())
     val reviews = _reviews.asStateFlow()
     private fun setReviews(value: List<Review>) {
@@ -585,6 +590,16 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         ) {reviews ->
             setReviews(reviews)
             hideProgressCRUD()
+        }
+    }
+
+    private fun getMessages(id: Int,
+                            getCountUnread: Boolean = false) {
+        repository.getMessages(id, getCountUnread) {messages ->
+            if (messages.isNotEmpty()) {
+                if (getCountUnread)
+                    setCountUnreadMessages(messages[0].id)
+            }
         }
     }
 

@@ -349,12 +349,12 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
     val currentProduct = remember {
         product
     }
-    var scale by remember {
+    /*var scale by remember {
         mutableStateOf(1f)
     }
-    val offsetX = remember { mutableStateOf(1f) }
-    val offsetY = remember { mutableStateOf(1f) }
-    val coroutineScope = rememberCoroutineScope()
+    val offsetX = remember { mutableStateOf(0f) }
+    val offsetY = remember { mutableStateOf(0f) }
+    val coroutineScope = rememberCoroutineScope()*/
 
 
     val linkImages = remember {

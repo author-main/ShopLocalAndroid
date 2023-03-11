@@ -2,12 +2,8 @@ package com.training.shoplocal.repository.retrofit
 
 import com.google.gson.GsonBuilder
 import com.training.shoplocal.classes.*
-import com.training.shoplocal.log
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Query
 
 
 object DatabaseApi {
@@ -132,6 +128,17 @@ object DatabaseApi {
             // log(e.message ?: "error")
         }
     }
+
+    fun getMessages(id: Int, getCountUnread: Boolean, callback: retrofit2.Callback<List<UserMessage>>){
+        try {
+            val call: retrofit2.Call<List<UserMessage>> = service!!.getMessages(id, getCountUnread)
+            call.enqueue(callback)
+        } catch(e: Exception){
+            // log(e.message ?: "error")
+        }
+    }
+
+
 
 
 

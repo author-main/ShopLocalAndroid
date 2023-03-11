@@ -91,8 +91,8 @@ fun ShowDetailProduct(value: Product){
     val context = remember {currentContext}
 
     fun getTextHeight(fontSize: Int, lines: Int): Float{//Pair<Float, Int>{ // междустроковый интервал, высота строки
-        var lineSpace = 0f
-        var textHeight = 0
+        var lineSpace : Float
+        var textHeight: Int
         val fontSizePx =
             TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
                 fontSize.toFloat(), context.resources.displayMetrics)
@@ -111,7 +111,7 @@ fun ShowDetailProduct(value: Product){
 
 
     @Composable
-    fun ShowDialogReview(widthContent: Dp){
+    fun ShowDialogReview(){//widthContent: Dp){
         if (openDialogReview.value) {
             //val lines = if (dialogReview.lines > 15) 15 else dialogReview.lines
             //log ("lines = $lines")
@@ -130,7 +130,7 @@ fun ShowDetailProduct(value: Product){
             val review = remember {
                 value
             }
-            ShowDialogReview(widthContent = columnWidth)
+            ShowDialogReview()//(widthContent = columnWidth)
             Column(modifier = Modifier
                 .clickable(
                     interactionSource = MutableInteractionSource(),

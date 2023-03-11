@@ -133,14 +133,14 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
     val fontsize = if (isCardModeView()) 14.sp else 13.sp
     val fontSizeDescription = 15.sp//if (isCardModeView()) 16.sp else 15.sp
     val CARD_SIZE = if (isCardModeView()) 150 else 110
-    val linkImages: List<ImageLink> = remember {
+   /* val linkImages: List<ImageLink> = remember {
         val list = mutableListOf<ImageLink>()
         cardproduct.linkimages?.forEach {
             list.add(ImageLink(it, md5(it)))
         }
        // log("links = ${list.toString()}")
         list.toList()
-    }
+    }*/
     val viewModel: RepositoryViewModel = viewModel()
     val brand: String = remember {product.brand?.let { viewModel.getBrand(it) } ?: ""}
     val scope = rememberCoroutineScope()

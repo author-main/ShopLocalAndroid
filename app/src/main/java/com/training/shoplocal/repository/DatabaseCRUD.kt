@@ -1,10 +1,6 @@
 package com.training.shoplocal.repository
 
-import com.training.shoplocal.classes.Brand
-import com.training.shoplocal.classes.Category
-import com.training.shoplocal.classes.Product
-import com.training.shoplocal.classes.Review
-import com.training.shoplocal.log
+import com.training.shoplocal.classes.*
 import com.training.shoplocal.repository.retrofit.DatabaseApi
 import retrofit2.Call
 import retrofit2.Response
@@ -132,9 +128,27 @@ class DatabaseCRUD: DatabaseCRUDInterface {
                 action(listOf<Review>())
             }
         })
-    }
-
-    /* override suspend fun getProducts(id: Int, part: Int): List<Product> {
+    }    /* override suspend fun getProducts(id: Int, part: Int): List<Product> {
         return DatabaseApi.getProducts(id, part)
     }*/
+
+    override fun getMessages(
+        id: Int,
+        getCountUnread: Boolean,
+        action: (userMessages: List<UserMessage>) -> Unit
+    ) {
+        DatabaseApi.getMessages(id, getCountUnread, object: retrofit2.Callback<List<UserMessage>> {
+
+            override fun onResponse(call: Call<List<UserMessage>>, response: Response<List<UserMessage>>) {
+                response.body()?.let {
+                    action(it)
+                }
+            }
+
+            override fun onFailure(call: Call<List<UserMessage>>, t: Throwable) {
+                    action(listOf<UserMessage>())
+            }
+
+        })
+    }
 }
