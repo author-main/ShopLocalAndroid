@@ -400,7 +400,8 @@ fun MainScreen(state: ModalBottomSheetState){
         val animate  = remember{ Animatable(0f) }
         val animate1 = remember{ Animatable(0f) }
         val animate2 = remember{ Animatable(0f) }
-        val align = remember{ mutableStateOf( Alignment.Center)}
+        //val align = remember{ mutableStateOf( Alignment.Center)}
+        //val align = remember{ mutableStateOf( Alignment.Center)}
         val count = remember{ value }
 
             Box(modifier = Modifier
@@ -437,7 +438,7 @@ fun MainScreen(state: ModalBottomSheetState){
                                 durationMillis = 20)
                         )
                         // ** end Анимация Icon
-                        align.value = Alignment.TopEnd
+                      //  align.value = Alignment.TopEnd
                         animate.animateTo(
                             targetValue = 18f,
                             animationSpec = tween(
@@ -455,7 +456,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 if (count > 0) {
                     Surface(
                         modifier = Modifier
-                            .align(align.value)
+                            .align(Alignment.TopEnd)
                             //.fillMaxWidth()
                             .size(animate.value.dp),
                             shape = CircleShape,
