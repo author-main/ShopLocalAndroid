@@ -401,7 +401,7 @@ fun MainScreen(state: ModalBottomSheetState){
         val animate1 = remember{ Animatable(0f) }
         val animate2 = remember{ Animatable(0f) }
         val align = remember{ mutableStateOf( Alignment.Center)}
-        val count = remember{ mutableStateOf(value)}
+        val count = remember{ value }
 
             Box(modifier = Modifier
                 .clickable(
@@ -452,7 +452,7 @@ fun MainScreen(state: ModalBottomSheetState){
                             )
                     }
                 }
-                if (count.value > 0) {
+                if (count > 0) {
                     Surface(
                         modifier = Modifier
                             .align(align.value)
@@ -468,9 +468,9 @@ fun MainScreen(state: ModalBottomSheetState){
                     tint = TextFieldFont,
                     modifier = Modifier
                         .align(Alignment.Center)
-                        .offset(x = if (count.value > 0) animate2.value.dp else 0.dp)
+                        .offset(x = if (count > 0) animate2.value.dp else 0.dp)
                 )
-                if (count.value > 0) {
+                if (count > 0) {
                     Box(
                         modifier = Modifier
                             .size(18.dp)//animate1.value.dp)
@@ -483,7 +483,7 @@ fun MainScreen(state: ModalBottomSheetState){
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = count.value.toString(),
+                            text = count.toString(),
                             color = TextDiscount.copy(alpha = animate1.value / 18),
                             fontSize = 10.sp,
                         )
