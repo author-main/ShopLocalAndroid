@@ -83,6 +83,11 @@ fun MainScreen(state: ModalBottomSheetState){
             Product()
         //)
     } //Product? = null
+    val openDialogMessages = remember {
+        mutableStateOf(false)
+    }
+    if (openDialogMessages.value)
+        ShowUserMessages(openDialogMessages)
     val progress by viewModel.progressCRUD.collectAsState()
     val countUnreadMessages by viewModel.countUnreadMessages.collectAsState()
     if (progress)
@@ -380,7 +385,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
 
     @Composable
-    fun ShowMessageCount(value: Int = 0){
+    fun ShowMessageCount(value: Int = 0, onClick: () -> Unit){
         val animated = remember{ mutableStateOf(value > 0) }
 
 
@@ -408,7 +413,9 @@ fun MainScreen(state: ModalBottomSheetState){
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null
-                ) {}
+                ) {
+                    onClick()
+                }
                 .padding(start = 4.dp)
                 .size(32.dp),
                 contentAlignment = Alignment.TopEnd
@@ -714,7 +721,10 @@ fun MainScreen(state: ModalBottomSheetState){
                 }
 
                 when (activeContainer) {
-                    Container.MAIN -> ShowMessageCount(countUnreadMessages)
+                    Container.MAIN -> ShowMessageCount(countUnreadMessages){
+                        log("click messages")
+                        openDialogMessages.value = true
+                    }
                     Container.DETAIL -> {
                             Spacer(modifier = Modifier.width(4.dp))
                             ButtonFavorite(
