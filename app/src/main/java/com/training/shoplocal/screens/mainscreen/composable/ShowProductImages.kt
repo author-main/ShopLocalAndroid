@@ -136,7 +136,7 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                         } else {
                             scale = maxScale
                             enableScroll(false)
-                        }
+                         }
                         //animate = true
                     }
                 },
