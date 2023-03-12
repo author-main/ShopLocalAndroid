@@ -19,7 +19,7 @@ interface DatabaseCRUDInterface {
     fun getReviewProduct(id: Int,
                          action: (reviews: List<Review>) -> Unit = {})
     fun getCategories( action: (categories: List<Category>) -> Unit = {})
-    fun getMessages(id: Int, getCountUnread: Boolean, action: (userMessages: List<UserMessage>) -> Unit = {})
+    fun getMessages(id: Int, action: (userMessages: List<UserMessage>) -> Unit = {})
 
 
     suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte)

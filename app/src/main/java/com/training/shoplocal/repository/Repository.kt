@@ -229,10 +229,9 @@ class Repository: DAOinterface {
         getFoundProducts(query64, order64, portion, UUID_query, userId, action)
     }
 
-    fun getMessages(    id: Int,
-                                getCountUnread: Boolean = false,
-                                action: (userMessages: List<UserMessage>) -> Unit){
-        databaseCRUD.getMessages(id, getCountUnread, action)
+    fun getMessages(id: Int,
+                    action: (userMessages: List<UserMessage>) -> Unit){
+        databaseCRUD.getMessages(id, action)
     }
 
 }

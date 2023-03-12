@@ -134,10 +134,9 @@ class DatabaseCRUD: DatabaseCRUDInterface {
 
     override fun getMessages(
         id: Int,
-        getCountUnread: Boolean,
         action: (userMessages: List<UserMessage>) -> Unit
     ) {
-        DatabaseApi.getMessages(id, getCountUnread, object: retrofit2.Callback<List<UserMessage>> {
+        DatabaseApi.getMessages(id, object: retrofit2.Callback<List<UserMessage>> {
 
             override fun onResponse(call: Call<List<UserMessage>>, response: Response<List<UserMessage>>) {
                 response.body()?.let {

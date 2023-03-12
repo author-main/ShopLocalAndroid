@@ -136,7 +136,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             putComposeViewStack(Container.MAIN)
             getBrands()
             getCategories()
-            getMessages(USER_ID, getCountUnread = true)
+            getMessages(-USER_ID)
 //            exchangeDataMap[ExchangeData.GET_PRODUCTS] = false
             loadedPortion = 0
             getProducts(1)
@@ -219,7 +219,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     /**
      * Получить max число порций, количество записей возвращается в первой строке результа
      * выборки продуктов в формате &lt;count&gt; name
-     * @paran value первый элемент списка продуктов
+     * @param value первый элемент списка продуктов
      * @return Pair<max, name>, где max - число порций, name - наименование продукта
      */
     private fun getMaxPortion(value: String): Pair<Int, String>{
@@ -594,11 +594,15 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    private fun getMessages(id: Int,
-                            getCountUnread: Boolean = false) {
-        repository.getMessages(id, getCountUnread) {messages ->
+    /**
+     * Получить сообщения пользователя или количество непрочитанных сообщений
+     * @param id идентификатор пользователя, если отрицательное значение - возвращает количество
+     * непрочитанных сообщений (в первой записи списка, в поле id)
+     */
+    private fun getMessages(id: Int) {
+        repository.getMessages(id) {messages ->
             if (messages.isNotEmpty()) {
-                if (getCountUnread)
+                if (id < 0)
                     setCountUnreadMessages(messages[0].id)
             }
         }

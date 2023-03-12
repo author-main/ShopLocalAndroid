@@ -42,7 +42,7 @@ interface DatabaseApiInterface {
     fun getCategories(): Call<List<Category>>
 
     @GET("/api/get_messages")
-    fun getMessages(@Query("id") id:Int, @Query("count") getCountUnread: Boolean): Call<List<UserMessage>>
+    fun getMessages(@Query("id") id:Int): Call<List<UserMessage>>
 
     /**
      *  Используем response без обработки результата запроса.

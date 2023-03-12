@@ -129,9 +129,9 @@ object DatabaseApi {
         }
     }
 
-    fun getMessages(id: Int, getCountUnread: Boolean, callback: retrofit2.Callback<List<UserMessage>>){
+    fun getMessages(id: Int, callback: retrofit2.Callback<List<UserMessage>>){
         try {
-            val call: retrofit2.Call<List<UserMessage>> = service!!.getMessages(id, getCountUnread)
+            val call: retrofit2.Call<List<UserMessage>> = service!!.getMessages(id)
             call.enqueue(callback)
         } catch(e: Exception){
             // log(e.message ?: "error")
