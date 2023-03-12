@@ -1,6 +1,7 @@
 package com.training.shoplocal.repository
 
 import com.training.shoplocal.classes.*
+import retrofit2.Response
 
 interface DatabaseCRUDInterface {
     fun getCategories()
@@ -22,6 +23,6 @@ interface DatabaseCRUDInterface {
     fun getMessages(id: Int, action: (userMessages: List<UserMessage>) -> Unit = {})
 
 
-    suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte)
+    suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte): Response<Int>
   //  suspend fun getProducts( id: Int, part: Int) : List<Product>
 }

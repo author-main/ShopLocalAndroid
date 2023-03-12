@@ -43,7 +43,7 @@ class DatabaseCRUD: DatabaseCRUDInterface {
 
                     response.body()?.let {
                        // if (it.isNotEmpty()) {
-                            action.invoke(it)
+                            action(it)
                        // }
                     }
             }
@@ -51,7 +51,7 @@ class DatabaseCRUD: DatabaseCRUDInterface {
             override fun onFailure(call: Call<List<Product>>, t: Throwable) {
                 //log(t.message ?: "ошибка")
                 //log("ошибка")
-                action.invoke(mutableListOf<Product>())
+                action.invoke(listOf<Product>())
             }
         })
     }
@@ -109,8 +109,8 @@ class DatabaseCRUD: DatabaseCRUDInterface {
 
     }
 
-    override suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte) {
-        DatabaseApi.updateFavorite(id_user, id_product, value)
+    override suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte): Response<Int> {
+        return DatabaseApi.updateFavorite(id_user, id_product, value)
     }
 
     override fun getReviewProduct(

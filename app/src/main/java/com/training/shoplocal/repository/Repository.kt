@@ -12,6 +12,7 @@ import com.training.shoplocal.classes.searcher.SearchQueryStorage
 import com.training.shoplocal.encodeBase64
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.screens.ScreenRouter
+import retrofit2.Response
 import kotlin.collections.HashMap
 
 class Repository: DAOinterface {
@@ -82,8 +83,8 @@ class Repository: DAOinterface {
         databaseCRUD.getCategories(action)
     }
 
-    suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte){
-        databaseCRUD.updateFavorite(id_user, id_product, value)
+    suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte): Response<Int>{
+        return databaseCRUD.updateFavorite(id_user, id_product, value)
     }
 
     /*suspend fun getProducts(id: Int, part: Int): List<Product> =

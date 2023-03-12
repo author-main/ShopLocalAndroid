@@ -2,6 +2,7 @@ package com.training.shoplocal.repository.retrofit
 
 import com.google.gson.GsonBuilder
 import com.training.shoplocal.classes.*
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -104,11 +105,12 @@ object DatabaseApi {
         return list
     }*/
 
-    suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte){
-        try {
+    suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte): Response<Int> {
+        /*try {
             service!!.updateFavorite(id_user, id_product, value)
         } catch(_: Exception){
-        }
+        }*/
+        return service!!.updateFavorite(id_user, id_product, value)
     }
 
     fun getBrands(callback: retrofit2.Callback<List<Brand>>){
