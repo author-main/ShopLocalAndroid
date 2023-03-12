@@ -338,13 +338,21 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         //log("favorite ${product.favorite}")
 
         viewModelScope.launch {
+            /*
+            Если нужно обработать результат
+            val result: Int =
             try{
-                val response = repository.updateFavorite(USER_ID, product.id, product.favorite)
-                log("response = ${response.body()}")
+               val response = repository.updateFavorite(USER_ID, product.id, product.favorite)
+               response.body()?.toInt() ?: 0
+               // log("response = ${response.body()}")
             }
             catch (_: Exception) {
-              //  log(exception.message.toString())
+               0
             }
+            if (result > 0) {
+
+            }*/
+            repository.updateFavorite(USER_ID, product.id, product.favorite)
         }
         var currentProduct: Product? = null
         products.value.find { it.id== product.id }?.let {
