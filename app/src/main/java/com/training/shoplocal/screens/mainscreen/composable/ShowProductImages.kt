@@ -89,14 +89,14 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
 
 
 
-    val coroutineScope = rememberCoroutineScope()
+  //  val coroutineScope = rememberCoroutineScope()
 
     fun enableScroll(enabled: Boolean) {
-        scrollState?.run {
-            coroutineScope.launch {
-                value = enabled
-            }
-        }
+      //  scrollState?.run {
+      //      coroutineScope.launch {
+        scrollState?.value = enabled
+      //      }
+      //  }
     }
 
     Box(modifier = modifier
@@ -179,10 +179,6 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                 .fillMaxSize()
                 .graphicsLayer {
                     if (isZoom) {
-                       /* scaleX = if (animate) animScale else scale
-                        scaleY = if (animate) animScale else scale
-                        translationX = if (animate) animOffsetX else offsetX
-                        translationY = if (animate) animOffsetY else offsetY*/
                         scaleX = animScale
                         scaleY = animScale
                         translationX = animOffsetX
