@@ -89,14 +89,13 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
 
 
 
-  //  val coroutineScope = rememberCoroutineScope()
-
+    val coroutineScope = rememberCoroutineScope()
     fun enableScroll(enabled: Boolean) {
-      //  scrollState?.run {
-      //      coroutineScope.launch {
-        scrollState?.value = enabled
-      //      }
-      //  }
+      scrollState?.run {
+        coroutineScope.launch {
+            value = enabled
+        }
+      }
     }
 
     Box(modifier = modifier
