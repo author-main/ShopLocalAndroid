@@ -7,6 +7,16 @@ import com.training.shoplocal.viewmodel.RepositoryViewModel
 
 @Composable
 fun ShowUserMessages(open: MutableState<Boolean>){
+    /**
+     * 0 - ОБЫЧНОЕ СООБЩЕНИЕ
+     * 1 - СООБЩЕНИЕ О ДОСТАВКЕ
+     * 2 - СООБЩЕНИЕ О СКИДКАХ
+     * 3 - СООБЩЕНИЕ ПОЗДРАВЛЕНИЕ
+     */
+    val USER_MESSAGE_NORMAL           = 0
+    val USER_MESSAGE_DELIVERY         = 1
+    val USER_MESSAGE_DISCOUNT         = 2
+    val USER_MESSAGE_GIFT             = 3
     val viewModel: RepositoryViewModel = viewModel()
     val messages = viewModel.userMessages.collectAsState()
     DisposableEffect(Unit) {

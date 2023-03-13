@@ -13,17 +13,6 @@ import java.text.DecimalFormatSymbols
     const val SERVER_URL = "http://192.168.0.10"
 //---------------------------------------------------------------------------------------------
 
-/**
- * 0 - ОБЫЧНОЕ СООБЩЕНИЕ
- * 1 - СООБЩЕНИЕ О ДОСТАВКЕ
- * 2 - СООБЩЕНИЕ О СКИДКАХ
- * 3 - СООБЩЕНИЕ ПОЗДРАВЛЕНИЕ
- */
-const val USER_MESSAGE                  = 0
-const val USER_MESSAGE_DELIVERY         = 1
-const val USER_MESSAGE_DISCOUNT         = 2
-const val USER_MESSAGE_CONGRATULATION   = 3
-
 const val PERCENT_BLACKFRIDAY = 10
 const val LIMIT_BLACKFRIDAY   = 7000f
 const val TAB_CHAR   = "    "
