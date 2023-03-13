@@ -19,7 +19,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun AnimatedScreen(open: MutableState<Boolean>, content: @Composable () -> Unit){
+fun AnimatedScreen(open: MutableState<Boolean>, close: MutableState<Boolean> = mutableStateOf(false), content: @Composable () -> Unit){
     val openPopup = remember{ mutableStateOf(false) }
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
@@ -28,7 +28,6 @@ fun AnimatedScreen(open: MutableState<Boolean>, content: @Composable () -> Unit)
         }
     }
 
-
     fun onDissmiss(){
         coroutineScope.launch {
             openPopup.value = false
@@ -36,6 +35,9 @@ fun AnimatedScreen(open: MutableState<Boolean>, content: @Composable () -> Unit)
             open.value = false
         }
     }
+
+    if (close.value)
+        onDissmiss()
 
     Popup(
         alignment = Alignment.Center,
@@ -69,4 +71,5 @@ fun AnimatedScreen(open: MutableState<Boolean>, content: @Composable () -> Unit)
             }
         }
     }
+
 }

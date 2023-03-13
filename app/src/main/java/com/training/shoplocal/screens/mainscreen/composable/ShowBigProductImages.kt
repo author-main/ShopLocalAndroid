@@ -49,20 +49,16 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: Int) {
-/*    var changedImage by remember {
+    val close = remember {
         mutableStateOf(false)
-    }*/
+    }
     val selectedIndex = remember{mutableStateOf(index)}
     val startIndex    = remember{mutableStateOf(index)}
-    //val indexBigImage = remember{mutableStateOf(index)}
-    //log("index big = ${indexBigImage.value}")
     val countImages = remember {product.linkimages?.size ?: 1}
     val images = remember {
-       // val list =
         MutableList<MutableState<ImageBitmap>>(countImages){ mutableStateOf(EMPTY_IMAGE) }
-        //mutableStateListOf<ImageBitmap>().apply{addAll(list)}
     }
-    val openPopup = remember{ mutableStateOf(false) }
+/*    val openPopup = remember{ mutableStateOf(false) }
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
         launch {
@@ -78,10 +74,10 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
             delay(300)
             open.value = false
         }
-    }
+    }*/
 
 
-        Popup(
+    /*    Popup(
             alignment = Alignment.Center,
             onDismissRequest = {
         /*        coroutineScope.launch {
@@ -121,7 +117,8 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
                     /*scaleOut(
                         animationSpec = tween(500)
                     )*/
-                ) {
+                ) {*/
+                AnimatedScreen(open, close) {
                     Column(modifier = Modifier
                         .fillMaxSize()
                         .background(PrimaryDark)) {
@@ -160,7 +157,7 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
                                     .clip(CircleShape)
                                     .background(Color.White)
                                     .clickable {
-                                        onDissmiss()
+                                        close.value = true
                                     },
                             ) {
                                 Image(
@@ -221,5 +218,5 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
                     }
 
             }
-    }
+
 }

@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 
 @Composable
-fun ShowUserMessages(isOpen: MutableState<Boolean>){
-
+fun ShowUserMessages(open: MutableState<Boolean>){
+    AnimatedScreen(open = open) {
+        
+    }
 }

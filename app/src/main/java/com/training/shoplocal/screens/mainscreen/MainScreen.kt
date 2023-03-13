@@ -722,7 +722,6 @@ fun MainScreen(state: ModalBottomSheetState){
 
                 when (activeContainer) {
                     Container.MAIN -> ShowMessageCount(countUnreadMessages){
-                        log("click messages")
                         openDialogMessages.value = true
                     }
                     Container.DETAIL -> {
