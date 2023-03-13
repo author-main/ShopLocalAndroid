@@ -2,10 +2,7 @@ package com.training.shoplocal.viewmodel
 
 import android.content.Context
 import android.content.Context.VIBRATOR_SERVICE
-import android.os.Build
-import android.os.VibrationEffect
-import android.os.Vibrator
-import android.os.VibratorManager
+import android.os.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.training.shoplocal.*
@@ -33,9 +30,16 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     private val _countUnreadMessages = MutableStateFlow<Int>(0)
     val countUnreadMessages = _countUnreadMessages.asStateFlow()
-    fun setCountUnreadMessages(value: Int){
+    private fun setCountUnreadMessages(value: Int){
         _countUnreadMessages.value = value
     }
+
+    private val _userMessages = MutableStateFlow<MutableList<UserMessage>>(mutableListOf())
+    val userMessages = _userMessages.asStateFlow()
+    private fun setUserMessages(value: List<UserMessage>){
+        _userMessages.value = mutableListOf<UserMessage>().apply { addAll(value) }
+    }
+
     private val _reviews = MutableStateFlow(listOf<Review>())
     val reviews = _reviews.asStateFlow()
     private fun setReviews(value: List<Review>) {
@@ -613,13 +617,19 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
      * @param id идентификатор пользователя, если отрицательное значение - возвращает количество
      * непрочитанных сообщений (в первой записи списка, в поле id)
      */
-    private fun getMessages(id: Int) {
+    fun getMessages(id: Int = USER_ID) {
         repository.getMessages(id) {messages ->
             if (messages.isNotEmpty()) {
                 if (id < 0)
                     setCountUnreadMessages(messages[0].id)
+                else {
+                    setUserMessages(messages)
+                }
             }
         }
+    }
+    fun clearMessages(){
+        _userMessages.value.clear()
     }
 
  }
