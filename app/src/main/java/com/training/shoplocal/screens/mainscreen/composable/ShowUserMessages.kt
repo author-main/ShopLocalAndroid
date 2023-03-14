@@ -1,5 +1,8 @@
 package com.training.shoplocal.screens.mainscreen.composable
 
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.log
@@ -22,10 +25,15 @@ fun ShowUserMessages(open: MutableState<Boolean>){
     DisposableEffect(Unit) {
         viewModel.getMessages()
         onDispose {
+            //log(messages.toString())
             viewModel.clearMessages()
         }
     }
     AnimatedScreen(open = open) {
-
+        LazyColumn() {
+            items(messages.value, {message -> message.id}) { item ->
+                Text(text = item.message)
+            }
+        }
     }
 }

@@ -37,7 +37,9 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private val _userMessages = MutableStateFlow<MutableList<UserMessage>>(mutableListOf())
     val userMessages = _userMessages.asStateFlow()
     private fun setUserMessages(value: List<UserMessage>){
-        _userMessages.value = mutableListOf<UserMessage>().apply { addAll(value) }
+        _userMessages.value = mutableListOf<UserMessage>(*value.toTypedArray()) // * spread operator, входной параметр элементы массива/списка
+            //MutableList<UserMessage>(value.size){index -> value[index]}
+            //mutableListOf<UserMessage>().apply { addAll(value) }
     }
 
     private val _reviews = MutableStateFlow(listOf<Review>())
