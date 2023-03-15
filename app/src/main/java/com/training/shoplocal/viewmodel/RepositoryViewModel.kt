@@ -142,7 +142,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             putComposeViewStack(Container.MAIN)
             getBrands()
             getCategories()
-            getMessages(-USER_ID)
+            getMessages(getCountUnread = true)
 //            exchangeDataMap[ExchangeData.GET_PRODUCTS] = false
             loadedPortion = 0
             getProducts(1)
@@ -619,10 +619,11 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
      * @param id идентификатор пользователя, если отрицательное значение - возвращает количество
      * непрочитанных сообщений (в первой записи списка, в поле id)
      */
-    fun getMessages(id: Int = USER_ID) {
-        repository.getMessages(id) {messages ->
+    fun getMessages(getCountUnread: Boolean = false) {
+        val passId = if (getCountUnread) -USER_ID else USER_ID
+        repository.getMessages(passId) {messages ->
             if (messages.isNotEmpty()) {
-                if (id < 0)
+                if (passId < 0)
                     setCountUnreadMessages(messages[0].id)
                 else {
                     setUserMessages(messages)

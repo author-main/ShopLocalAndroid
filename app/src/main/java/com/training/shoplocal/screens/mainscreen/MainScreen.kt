@@ -89,7 +89,7 @@ fun MainScreen(state: ModalBottomSheetState){
     if (openDialogMessages.value)
         ShowUserMessages(openDialogMessages)
     val progress by viewModel.progressCRUD.collectAsState()
-    val countUnreadMessages by viewModel.countUnreadMessages.collectAsState()
+    //val countUnreadMessages by viewModel.countUnreadMessages.collectAsState()
     if (progress)
         ShowProgress()
 /*    var progress by remember {
@@ -385,9 +385,10 @@ fun MainScreen(state: ModalBottomSheetState){
 
 
     @Composable
-    fun ShowMessageCount(value: Int = 0, onClick: () -> Unit){
-        val animated = remember{ mutableStateOf(value > 0) }
-
+    fun ShowMessageCount(onClick: () -> Unit){
+        val count = viewModel.countUnreadMessages.collectAsState()
+     //   log("pass value $value")
+        val animated = remember{ mutableStateOf(count.value > 0) }
 
       /*  val timer = remember {
             Timer().apply {
@@ -407,7 +408,7 @@ fun MainScreen(state: ModalBottomSheetState){
         val animate2 = remember{ Animatable(0f) }
         //val align = remember{ mutableStateOf( Alignment.Center)}
         //val align = remember{ mutableStateOf( Alignment.Center)}
-        val count = remember{ value }
+        //val count = remember{ value }
 
             Box(modifier = Modifier
                 .clickable(
@@ -421,6 +422,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 contentAlignment = Alignment.TopEnd
             ) {
                 LaunchedEffect(animated.value) {
+                    log("animate messages")
                     scope.launch {
                         animate.animateTo(
                             targetValue = MAX_SIZE,
@@ -460,7 +462,8 @@ fun MainScreen(state: ModalBottomSheetState){
                             )
                     }
                 }
-                if (count > 0) {
+                if (count.value > 0) {
+                    //log("count = $count")
                     Surface(
                         modifier = Modifier
                             .align(Alignment.TopEnd)
@@ -476,9 +479,9 @@ fun MainScreen(state: ModalBottomSheetState){
                     tint = TextFieldFont,
                     modifier = Modifier
                         .align(Alignment.Center)
-                        .offset(x = if (count > 0) animate2.value.dp else 0.dp)
+                        .offset(x = if (count.value > 0) animate2.value.dp else 0.dp)
                 )
-                if (count > 0) {
+                if (count.value > 0) {
                     Box(
                         modifier = Modifier
                             .size(18.dp)//animate1.value.dp)
@@ -491,7 +494,7 @@ fun MainScreen(state: ModalBottomSheetState){
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = count.toString(),
+                            text = count.value.toString(),
                             color = TextDiscount.copy(alpha = animate1.value / 18),
                             fontSize = 10.sp,
                         )
@@ -705,7 +708,8 @@ fun MainScreen(state: ModalBottomSheetState){
                 }
 
                 when (activeContainer) {
-                    Container.MAIN -> ShowMessageCount(countUnreadMessages){
+                    Container.MAIN -> //ShowMessageCount(countUnreadMessages){
+                        ShowMessageCount(){
                         openDialogMessages.value = true
                     }
                     Container.DETAIL -> {
