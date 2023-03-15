@@ -639,24 +639,8 @@ fun MainScreen(state: ModalBottomSheetState){
            }
         },
         topBar = {
-        @Composable
-        fun BackButton(modifier: Modifier, onClick: () -> Unit){
-                Icon(modifier = modifier
-                    .padding(end = 8.dp)
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null
-                    ) {
-                        onClick()
-                    },
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = null,
-                    tint = TextFieldFont
-                )
-        }
         TopAppBar(backgroundColor = MaterialTheme.colors.primary,
                     elevation = 0.dp,
-
 
         ) {
             Row(
