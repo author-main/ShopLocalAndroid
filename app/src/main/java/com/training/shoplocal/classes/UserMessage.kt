@@ -6,5 +6,6 @@ data class UserMessage(
     @SerializedName("id")       val id          :Int,
     @SerializedName("message")  val message     :String,
     @SerializedName("type")     val type        :Int,
-    @SerializedName("read")     val read        :Int
+    @SerializedName("read")     val read        :Int,
+    @SerializedName("date")     val date        : String
 )

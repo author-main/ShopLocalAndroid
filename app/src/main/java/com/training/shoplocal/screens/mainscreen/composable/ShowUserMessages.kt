@@ -4,9 +4,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.res.stringArrayResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.training.shoplocal.getStringArrayResource
 import com.training.shoplocal.log
 import com.training.shoplocal.viewmodel.RepositoryViewModel
+import com.training.shoplocal.R
 
 @Composable
 fun ShowUserMessages(open: MutableState<Boolean>){
@@ -22,6 +25,7 @@ fun ShowUserMessages(open: MutableState<Boolean>){
     val USER_MESSAGE_GIFT             = 3
     val viewModel: RepositoryViewModel = viewModel()
     val messages = viewModel.userMessages.collectAsState()
+    var title = remember{getStringArrayResource(R.array.typemessage)}
     DisposableEffect(Unit) {
         viewModel.getMessages()
         onDispose {

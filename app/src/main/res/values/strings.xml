@@ -92,7 +92,10 @@
     <string name="text_datedelivery">Доставим</string>
     <string name="text_buy_oneclick">Купить в один клик</string>
     <string name="text_ok">OK</string>
-
-
-
+    <string-array name="typemessage">
+        <item>Информируем</item>
+        <item>Доставка</item>
+        <item>Скидки и акции</item>
+        <item>Поздравляем</item>
+    </string-array>
 </resources>
