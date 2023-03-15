@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.AlignmentLine
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.vectorResource
@@ -77,13 +78,15 @@ fun ShowUserMessages(open: MutableState<Boolean>){
                         Image(
                             modifier = Modifier
                                 .padding(end = 8.dp)
-                                .align(Alignment.CenterVertically),
+                                .align(Alignment.CenterVertically)
+                                .size(48.dp),
                             imageVector = ImageVector.vectorResource(imageId),
+                            contentScale = ContentScale.FillBounds,
                             contentDescription = null
                         )
                         Column(modifier = Modifier.weight(1f)) {
                             Row(modifier= Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                                Text(text = title[item.type], fontWeight = FontWeight.Medium)
+                                Text(text = title[item.type], fontWeight = FontWeight.Medium, fontSize = 15.sp)
                                 Text(modifier = Modifier.weight(1f), textAlign = TextAlign.End, text = item.date, fontSize = 12.sp, color = TextFieldFont.copy(alpha = 0.5f))
                             }
                             Text(text = item.message, fontFamily = font, fontSize = 14.sp)
@@ -109,7 +112,7 @@ fun ShowUserMessages(open: MutableState<Boolean>){
 
                         Spacer(modifier = Modifier.fillMaxWidth()
                             .height(1.dp)
-                            .background(Color(0x50FFFFFF)))
+                            .background(Color(0x30FFFFFF)))
                 }
             }
         }
