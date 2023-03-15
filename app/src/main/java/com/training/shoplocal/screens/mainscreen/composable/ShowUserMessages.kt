@@ -149,7 +149,7 @@ fun ShowUserMessages(open: MutableState<Boolean>){
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(1.dp)
-                                    .background(Color(0x30FFFFFF))
+                                    .background(Color(0x20FFFFFF))
                             )
                     }
                 }
