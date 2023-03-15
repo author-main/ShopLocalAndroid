@@ -2,6 +2,7 @@ package com.training.shoplocal.screens.mainscreen.composable
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -33,10 +34,11 @@ import com.training.shoplocal.getStringArrayResource
 import com.training.shoplocal.log
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import com.training.shoplocal.R
+import com.training.shoplocal.classes.UserMessage
 import com.training.shoplocal.ui.theme.*
 
 @Composable
-fun ShowUserMessages(open: MutableState<Boolean>){
+fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: UserMessage) -> Unit = {}){
     /**
      * 0 - ОБЫЧНОЕ СООБЩЕНИЕ
      * 1 - СООБЩЕНИЕ О ДОСТАВКЕ
@@ -85,7 +87,11 @@ fun ShowUserMessages(open: MutableState<Boolean>){
                             USER_MESSAGE_GIFT -> R.drawable.ic_gift
                             else -> R.drawable.ic_usermessage
                         }
-                    Column() {
+                    Column(
+                        Modifier.clickable {
+                            onSelectMessage(item)
+                        }
+                    ) {
                         Row(modifier = Modifier.padding(vertical = 8.dp)) {
                             Image(
                                 modifier = Modifier
