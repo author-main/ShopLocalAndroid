@@ -8,10 +8,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.training.shoplocal.getStringArrayResource
 import com.training.shoplocal.log
 import com.training.shoplocal.viewmodel.RepositoryViewModel
@@ -40,7 +41,6 @@ import com.training.shoplocal.classes.TAB_CHAR
 import com.training.shoplocal.classes.USERMESSAGE_READ
 import com.training.shoplocal.classes.UserMessage
 import com.training.shoplocal.ui.theme.*
-
 
 @Composable
 private fun ShowWarningInformation(){
@@ -76,6 +76,7 @@ private fun ShowWarningInformation(){
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: UserMessage) -> Unit = {}){
     /**
@@ -89,6 +90,8 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
     val USER_MESSAGE_DISCOUNT         = 2
     val USER_MESSAGE_GIFT             = 3
     val viewModel: RepositoryViewModel = viewModel()
+    val refreshing = viewModel.refreshUserMessages.collectAsState(false)
+    val pullRefreshState = rememberPullRefreshState(refreshing.value, { viewModel.updateUserMessages() })
     val messages = remember {
         viewModel.userMessages
     }//.collectAsState()
@@ -115,92 +118,113 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                 }
                 ShowWarningInformation()
 
-            LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
 
-                itemsIndexed(messages, { _, message -> message.id }) { index, item ->
 
-                    /* }
+                                
+               /* SwipeRefresh(
+                    state = rememberSwipeRefreshState(isRefreshing),
+                    onRefresh = { viewModel.updateForecast() },
+                    indicator = {state, dp ->
+                        SwipeRefreshIndicator(
+                            state = state,
+                            refreshTriggerDistance = dp,
+                            contentColor = Color(150,0,0)
+                        )
+                    }
+                ) {*/
+
+                Box(Modifier.pullRefresh(pullRefreshState)) {
+
+                    LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
+
+                        itemsIndexed(messages, { _, message -> message.id }) { index, item ->
+
+                            /* }
 
             items(messages.value, {message -> message.id}) { item ->*/
-                    var colorTitle = ColorText
-                    val imageId =
-                        when (item.type) {
-                            USER_MESSAGE_DELIVERY -> {
-                                if (item.read == 0)
-                                    colorTitle = SelectedItemBottomNavi
-                                R.drawable.ic_delivery
-                            }
-                            USER_MESSAGE_DISCOUNT -> R.drawable.ic_discount
-                            USER_MESSAGE_GIFT -> R.drawable.ic_gift
-                            else -> R.drawable.ic_usermessage
-                        }
-                    Column(
-                        Modifier.clickable {
-                            onSelectMessage(item)
-                            if (item.read == 0)
-                                viewModel.updateUserMessage(item.id, USERMESSAGE_READ)
-                        }
-                    ) {
-                        Row(modifier = Modifier.padding(vertical = 8.dp)) {
-                            Image(
-                                modifier = Modifier
-                                    .padding(end = 8.dp)
-                                    .align(Alignment.CenterVertically)
-                                    .size(48.dp),
-                                imageVector = ImageVector.vectorResource(imageId),
-                                contentScale = ContentScale.FillBounds,
-                                contentDescription = null
-                            )
-                            Column(modifier = Modifier.weight(1f)) {
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-
-                                    Row(
-                                        modifier = Modifier.weight(1f),
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Text(
-                                            //    modifier = Modifier.weight(1f),
-                                            text = title[item.type],
-                                            fontWeight = FontWeight.Medium,
-                                            fontSize = 15.sp,
-                                            color = colorTitle
-                                            //color = if (item.read == 0) SelectedItemBottomNavi else TextFieldFont
-                                        )
-                                        if (item.read != 0) {
-                                            DividerHorizontal(size = 4.dp)
-                                            Icon(
-                                                modifier = Modifier.size(16.dp),
-                                                imageVector = ImageVector.vectorResource(id = R.drawable.ic_check_circle),
-                                                contentDescription = null,
-                                                tint = SelectedItemBottomNavi
-                                            )
-                                        }
+                            var colorTitle = ColorText
+                            val imageId =
+                                when (item.type) {
+                                    USER_MESSAGE_DELIVERY -> {
+                                        if (item.read == 0)
+                                            colorTitle = SelectedItemBottomNavi
+                                        R.drawable.ic_delivery
                                     }
-                                    /* Box(modifier = Modifier
+                                    USER_MESSAGE_DISCOUNT -> R.drawable.ic_discount
+                                    USER_MESSAGE_GIFT -> R.drawable.ic_gift
+                                    else -> R.drawable.ic_usermessage
+                                }
+                            Column(
+                                Modifier.clickable {
+                                    onSelectMessage(item)
+                                    if (item.read == 0)
+                                        viewModel.updateUserMessage(item.id, USERMESSAGE_READ)
+                                }
+                            ) {
+                                Row(modifier = Modifier.padding(vertical = 8.dp)) {
+                                    Image(
+                                        modifier = Modifier
+                                            .padding(end = 8.dp)
+                                            .align(Alignment.CenterVertically)
+                                            .size(48.dp),
+                                        imageVector = ImageVector.vectorResource(imageId),
+                                        contentScale = ContentScale.FillBounds,
+                                        contentDescription = null
+                                    )
+                                    Column(modifier = Modifier.weight(1f)) {
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+
+                                            Row(
+                                                modifier = Modifier.weight(1f),
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Text(
+                                                    //    modifier = Modifier.weight(1f),
+                                                    text = title[item.type],
+                                                    fontWeight = FontWeight.Medium,
+                                                    fontSize = 15.sp,
+                                                    color = colorTitle
+                                                    //color = if (item.read == 0) SelectedItemBottomNavi else TextFieldFont
+                                                )
+                                                if (item.read != 0) {
+                                                    DividerHorizontal(size = 4.dp)
+                                                    Icon(
+                                                        modifier = Modifier.size(16.dp),
+                                                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_check_circle),
+                                                        contentDescription = null,
+                                                        tint = SelectedItemBottomNavi
+                                                    )
+                                                }
+                                            }
+                                            /* Box(modifier = Modifier
                                     .clip(CircleShape)
                                     .background(if (item.read != 0) Color.Transparent else SelectedItemBottomNavi),
                                 ) {*/
-                                    Text(
-                                        // modifier = Modifier.padding(vertical = 2.dp, horizontal = 4.dp),
-                                        /* modifier = Modifier
+                                            Text(
+                                                // modifier = Modifier.padding(vertical = 2.dp, horizontal = 4.dp),
+                                                /* modifier = Modifier
                                             .clip(CircleShape)
                                             .background(if (item.read != 0) Color.Transparent else SelectedItemBottomNavi),*/
-                                        /*.weight(1f),
+                                                /*.weight(1f),
                                     textAlign = TextAlign.End,*/
-                                        text = item.date, fontSize = 12.sp,
-                                        color = //if (item.read == 0) ColorText else
-                                        TextFieldFont.copy(alpha = 0.5f)
-                                    )
-                                    // }
+                                                text = item.date, fontSize = 12.sp,
+                                                color = //if (item.read == 0) ColorText else
+                                                TextFieldFont.copy(alpha = 0.5f)
+                                            )
+                                            // }
+                                        }
+                                        Text(
+                                            text = item.message,
+                                            fontFamily = font,
+                                            fontSize = 14.sp
+                                        )
+                                    }
                                 }
-                                Text(text = item.message, fontFamily = font, fontSize = 14.sp)
-                            }
-                        }
-                        if (index < messages.size - 1)
-                        /*   Spacer(
+                                if (index < messages.size - 1)
+                                /*   Spacer(
                             Modifier
                                 .height(1.dp)
                                 .fillMaxWidth()
@@ -216,15 +240,18 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                         )*/
 
 
-                            Spacer(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(1.dp)
-                                    .background(Color(0x20FFFFFF))
-                            )
+                                    Spacer(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(1.dp)
+                                            .background(Color(0x20FFFFFF))
+                                    )
+                            }
+                        }
                     }
+                    PullRefreshIndicator(refreshing.value, pullRefreshState, Modifier.align(Alignment.TopCenter), contentColor = SelectedItemBottomNavi)
                 }
-            }
+              //  }
         }
     }
 }

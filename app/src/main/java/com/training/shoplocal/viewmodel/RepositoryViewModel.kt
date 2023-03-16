@@ -31,6 +31,13 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         _accessFinger.value = value
     }*/
 
+    private val _refreshUserMessages = MutableStateFlow<Boolean>(false)
+    val refreshUserMessages = _refreshUserMessages.asStateFlow()
+    fun updateUserMessages(){
+        _refreshUserMessages.value = true
+        getMessages()
+    }
+
     private val _countUnreadMessages = MutableStateFlow<Int>(0)
     val countUnreadMessages = _countUnreadMessages.asStateFlow()
     private fun setCountUnreadMessages(value: Int){
@@ -642,6 +649,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                     setUserMessages(messages)
                 }
             }
+         //   log("messages updates...")
+            _refreshUserMessages.value = false
         }
     }
     fun clearMessages(){
