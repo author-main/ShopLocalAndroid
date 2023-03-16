@@ -647,6 +647,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                     setCountUnreadMessages(messages[0].id)
                 else {
                     setUserMessages(messages)
+                    setCountUnreadMessages(messages.count { it.read == 0 })
                 }
             }
          //   log("messages updates...")
