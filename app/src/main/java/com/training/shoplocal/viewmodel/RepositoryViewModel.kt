@@ -665,7 +665,6 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                 try{
                     val response = repository.updateUserMessage(USER_ID, what, id_message)
                     response.body()?.toInt() ?: 0
-                    // log("response = ${response.body()}")
                 }
                 catch (_: Exception) {
                     0
