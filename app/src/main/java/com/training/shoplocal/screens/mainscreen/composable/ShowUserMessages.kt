@@ -132,7 +132,11 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                         )
                     }
                 ) {*/
-
+                if (messages.isNotEmpty())
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text(text = stringResource(id = R.string.text_nousermessages), textAlign = TextAlign.Center, fontSize = 14.sp, color = ColorText.copy(alpha = 0.2f))
+                    }
+                else
                 Box(Modifier.pullRefresh(pullRefreshState)) {
 
                     LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
