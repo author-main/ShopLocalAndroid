@@ -422,7 +422,6 @@ fun MainScreen(state: ModalBottomSheetState){
                 contentAlignment = Alignment.TopEnd
             ) {
                 LaunchedEffect(animated.value) {
-                    log("animate messages")
                     scope.launch {
                         animate.animateTo(
                             targetValue = MAX_SIZE,

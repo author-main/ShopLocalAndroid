@@ -99,4 +99,6 @@
         <item>Поздравляем</item>
     </string-array>
     <string name="text_usermessages">Сообщения</string>
+    <string name="text_warninginformation">Никому не передавайте свой номер телефона и коды из СМС, даже сотрудникам LocalShop.</string>
+    <string name="text_warninginformation1">Так мы сможем гарантировать безопасность вашего аккаунта.</string>
 </resources>

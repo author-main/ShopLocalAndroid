@@ -8,6 +8,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -34,8 +36,45 @@ import com.training.shoplocal.getStringArrayResource
 import com.training.shoplocal.log
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import com.training.shoplocal.R
+import com.training.shoplocal.classes.TAB_CHAR
+import com.training.shoplocal.classes.USERMESSAGE_READ
 import com.training.shoplocal.classes.UserMessage
 import com.training.shoplocal.ui.theme.*
+
+
+@Composable
+private fun ShowWarningInformation(){
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 4.dp),
+        backgroundColor = TextFieldBg.copy(alpha=0.7f)
+    ) {
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(12.dp)) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = stringResource(id = R.string.text_warninginformation),
+                    fontSize = 14.sp, fontWeight = FontWeight.Medium,
+                    color = ColorText.copy(alpha = 0.8f),
+                    textAlign = TextAlign.Center
+                )
+                Text(
+                    text = stringResource(id = R.string.text_warninginformation1),
+                    fontSize = 13.sp, color = ColorText.copy(alpha = 0.5f),
+                    textAlign = TextAlign.Center
+                )
+            }
+            Image(modifier = Modifier
+                .width(32.dp)
+                .padding(start = 8.dp)
+                .align(Alignment.CenterVertically),
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_yellow_warning),
+            contentDescription = null)
+        }
+    }
+}
 
 @Composable
 fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: UserMessage) -> Unit = {}){
@@ -50,7 +89,9 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
     val USER_MESSAGE_DISCOUNT         = 2
     val USER_MESSAGE_GIFT             = 3
     val viewModel: RepositoryViewModel = viewModel()
-    val messages = viewModel.userMessages.collectAsState()
+    val messages = remember {
+        viewModel.userMessages
+    }//.collectAsState()
     val title = remember{getStringArrayResource(R.array.typemessage)}
     val font = remember { FontFamily(Font(R.font.roboto_light)) }
     val close = remember{ mutableStateOf(false) }
@@ -72,17 +113,23 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                         fontSize = 17.sp
                     )
                 }
+                ShowWarningInformation()
 
             LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
 
-                itemsIndexed(messages.value, { _, message -> message.id }) { index, item ->
+                itemsIndexed(messages, { _, message -> message.id }) { index, item ->
 
                     /* }
 
             items(messages.value, {message -> message.id}) { item ->*/
+                    var colorTitle = ColorText
                     val imageId =
                         when (item.type) {
-                            USER_MESSAGE_DELIVERY -> R.drawable.ic_delivery
+                            USER_MESSAGE_DELIVERY -> {
+                                if (item.read == 0)
+                                    colorTitle = SelectedItemBottomNavi
+                                R.drawable.ic_delivery
+                            }
                             USER_MESSAGE_DISCOUNT -> R.drawable.ic_discount
                             USER_MESSAGE_GIFT -> R.drawable.ic_gift
                             else -> R.drawable.ic_usermessage
@@ -90,6 +137,8 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                     Column(
                         Modifier.clickable {
                             onSelectMessage(item)
+                            if (item.read == 0)
+                                viewModel.updateUserMessage(item.id, USERMESSAGE_READ)
                         }
                     ) {
                         Row(modifier = Modifier.padding(vertical = 8.dp)) {
@@ -107,13 +156,29 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                                     modifier = Modifier.fillMaxWidth(),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Text(
+
+                                    Row(
                                         modifier = Modifier.weight(1f),
-                                        text = title[item.type],
-                                        fontWeight = FontWeight.Medium,
-                                        fontSize = 15.sp,
-                                        //color = if (item.read == 0) SelectedItemBottomNavi else TextFieldFont
-                                    )
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Text(
+                                            //    modifier = Modifier.weight(1f),
+                                            text = title[item.type],
+                                            fontWeight = FontWeight.Medium,
+                                            fontSize = 15.sp,
+                                            color = colorTitle
+                                            //color = if (item.read == 0) SelectedItemBottomNavi else TextFieldFont
+                                        )
+                                        if (item.read != 0) {
+                                            DividerHorizontal(size = 4.dp)
+                                            Icon(
+                                                modifier = Modifier.size(16.dp),
+                                                imageVector = ImageVector.vectorResource(id = R.drawable.ic_check_circle),
+                                                contentDescription = null,
+                                                tint = SelectedItemBottomNavi
+                                            )
+                                        }
+                                    }
                                     /* Box(modifier = Modifier
                                     .clip(CircleShape)
                                     .background(if (item.read != 0) Color.Transparent else SelectedItemBottomNavi),
@@ -134,7 +199,7 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                                 Text(text = item.message, fontFamily = font, fontSize = 14.sp)
                             }
                         }
-                        if (index < messages.value.size - 1)
+                        if (index < messages.size - 1)
                         /*   Spacer(
                             Modifier
                                 .height(1.dp)

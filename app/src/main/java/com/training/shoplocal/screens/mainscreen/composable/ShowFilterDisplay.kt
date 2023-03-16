@@ -458,8 +458,6 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay, reset: () -> Unit, perform: (
             }
             Spacer(modifier = Modifier.height(8.dp))
             Card(
-               /* modifier = Modifier
-                    .fillMaxWidth(),*/
                 backgroundColor = PrimaryDark
             ) {
                 showRangePrice()//valueFrom = 500f, valueTo = 2000f)

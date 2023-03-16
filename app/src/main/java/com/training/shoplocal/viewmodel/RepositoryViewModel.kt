@@ -3,6 +3,8 @@ package com.training.shoplocal.viewmodel
 import android.content.Context
 import android.content.Context.VIBRATOR_SERVICE
 import android.os.*
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.training.shoplocal.*
@@ -16,6 +18,7 @@ import com.training.shoplocal.repository.Repository
 import com.training.shoplocal.screens.ScreenRouter
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.util.*
 import kotlin.collections.HashMap
@@ -34,13 +37,23 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         _countUnreadMessages.value = value
     }
 
-    private val _userMessages = MutableStateFlow<MutableList<UserMessage>>(mutableListOf())
+   /* private val _userMessages = MutableStateFlow<MutableList<UserMessage>>(mutableListOf())
     val userMessages = _userMessages.asStateFlow()
     private fun setUserMessages(value: List<UserMessage>){
         _userMessages.value = mutableListOf<UserMessage>(*value.toTypedArray()) // * spread operator, входной параметр элементы массива/списка
-            //MutableList<UserMessage>(value.size){index -> value[index]}
-            //mutableListOf<UserMessage>().apply { addAll(value) }
+    }*/
+
+
+    private var _userMessages = mutableStateListOf<UserMessage>()
+    val userMessages: List<UserMessage> = _userMessages
+    private fun setUserMessages(value: List<UserMessage>){
+        _userMessages.apply {
+            clear()
+            addAll(value)
+        }
     }
+
+
 
     private val _reviews = MutableStateFlow(listOf<Review>())
     val reviews = _reviews.asStateFlow()
@@ -632,7 +645,52 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         }
     }
     fun clearMessages(){
-        _userMessages.value.clear()
+        _userMessages.clear()
+    }
+    fun updateUserMessage(id_message: Int, what: Int) {
+        //0 - отметить как прочитанное
+        //1 - удалить
+        viewModelScope.launch {
+            val result: Int =
+                try{
+                    val response = repository.updateUserMessage(USER_ID, what, id_message)
+                    response.body()?.toInt() ?: 0
+                    // log("response = ${response.body()}")
+                }
+                catch (_: Exception) {
+                    0
+                }
+            //log("response = $result")
+            if (result > 0) {
+                var recomposition = false
+                val listMessages = _userMessages.toMutableList()
+                if (what == USERMESSAGE_READ) {
+                    listMessages.find {
+
+                        it.id == id_message
+                    }?.let {message ->
+                        message.read = 1
+                        recomposition = true
+                        _countUnreadMessages.value -= 1
+                    }
+                }
+                if (what == USERMESSAGE_DELETE) {
+                    val message = listMessages.find {
+                        it.id == id_message
+                    }
+                    message?.let{
+                        listMessages.remove(it)
+                        if (it.read == 0)
+                            _countUnreadMessages.value -= 1
+                        recomposition = true
+                    }
+                }
+                if (recomposition)
+                    setUserMessages(listMessages)
+
+            }
+        }
+
     }
 
  }

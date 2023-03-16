@@ -113,6 +113,10 @@ object DatabaseApi {
         return service!!.updateFavorite(id_user, id_product, value)
     }
 
+    suspend fun updateUserMessage(id_user: Int, what: Int, id_message: Int): Response<Int> {
+        return service!!.updateUserMessage(id_user, what, id_message)
+    }
+
     fun getBrands(callback: retrofit2.Callback<List<Brand>>){
         try {
             val call: retrofit2.Call<List<Brand>> = service!!.getBrands()

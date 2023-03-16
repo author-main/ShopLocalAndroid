@@ -10,8 +10,11 @@ import com.training.shoplocal.ui.theme.SelectedItem
 import com.training.shoplocal.ui.theme.TextFieldBg
 import java.text.DecimalFormatSymbols
 //---------------------------------------------------------------------------------------------
-    const val SERVER_URL = "http://192.168.0.10"
+    const val SERVER_URL = "http://192.168.1.10"
 //---------------------------------------------------------------------------------------------
+
+const val USERMESSAGE_READ   = 0
+const val USERMESSAGE_DELETE = 1
 
 const val PERCENT_BLACKFRIDAY = 10
 const val LIMIT_BLACKFRIDAY   = 7000f

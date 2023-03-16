@@ -113,6 +113,10 @@ class DatabaseCRUD: DatabaseCRUDInterface {
         return DatabaseApi.updateFavorite(id_user, id_product, value)
     }
 
+    override suspend fun updateUserMessage(id_user: Int, what: Int, id_message: Int): Response<Int> {
+        return DatabaseApi.updateUserMessage(id_user, what, id_message)
+    }
+
     override fun getReviewProduct(
         id: Int,
         action: (reviews: List<Review>) -> Unit

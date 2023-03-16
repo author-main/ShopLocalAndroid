@@ -87,6 +87,10 @@ class Repository: DAOinterface {
         return databaseCRUD.updateFavorite(id_user, id_product, value)
     }
 
+    suspend fun updateUserMessage(id_user: Int, what: Int, id_message: Int): Response<Int>{
+        return databaseCRUD.updateUserMessage(id_user, what, id_message)
+    }
+
     /*suspend fun getProducts(id: Int, part: Int): List<Product> =
         databaseCRUD.getProducts(id, part)*/
 

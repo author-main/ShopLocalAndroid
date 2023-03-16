@@ -51,4 +51,9 @@ interface DatabaseApiInterface {
     @FormUrlEncoded
     @POST("/api/update_favorite")
     suspend fun updateFavorite(@Field("id_user") id_user: Int, @Field("id_product") id_product: Int, @Field("favorite") value: Byte): Response<Int>
+
+    @FormUrlEncoded
+    @POST("/api/update_message")
+    suspend fun updateUserMessage(@Field("id_user") id_user: Int, @Field("what") what: Int, @Field("id_message") id_message: Int): Response<Int>
+
 }
