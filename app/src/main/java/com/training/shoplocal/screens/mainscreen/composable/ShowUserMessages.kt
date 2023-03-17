@@ -132,7 +132,7 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                         )
                     }
                 ) {*/
-                if (messages.isNotEmpty())
+                if (messages.isEmpty())
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         Text(text = stringResource(id = R.string.text_nousermessages), textAlign = TextAlign.Center, fontSize = 14.sp, color = ColorText.copy(alpha = 0.2f))
                     }
