@@ -1,10 +1,5 @@
 package com.training.shoplocal.screens.mainscreen.composable
 
-import android.content.Context
-import android.os.Build
-import android.os.VibrationEffect
-import android.os.Vibrator
-import android.os.VibratorManager
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -13,13 +8,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -28,15 +21,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.Font
@@ -48,17 +37,67 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.training.shoplocal.*
 import com.training.shoplocal.R
 import com.training.shoplocal.viewmodel.RepositoryViewModel
-import com.training.shoplocal.classes.TAB_CHAR
 import com.training.shoplocal.classes.USERMESSAGE_DELETE
 import com.training.shoplocal.classes.USERMESSAGE_READ
 import com.training.shoplocal.classes.UserMessage
 import com.training.shoplocal.ui.theme.*
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
+
+
+
+
+
+@Composable
+private fun CancelAction(modifier: Modifier, isShow: MutableState<Boolean>, index: Int, content: @Composable () -> Unit, onCancel: () -> Unit){
+
+    val snackbarHostState = remember { mutableStateOf(SnackbarHostState()) }
+
+        LaunchedEffect(index) {
+            log("snackbar....")
+            val result = snackbarHostState.value.showSnackbar(
+                "Checkit...",
+                duration = SnackbarDuration.Short
+            )
+            when (result) {
+                SnackbarResult.Dismissed -> {
+                    isShow.value = false
+                    //        (viewModel as RepositoryViewModel).showSnackbar(visible = false)
+                }
+                SnackbarResult.ActionPerformed -> {
+
+                }
+            }
+        }
+
+    //    Box(Modifier.fillMaxSize()){
+            SnackbarHost(
+                modifier = modifier,//Modifier.align(Alignment.BottomCenter),
+                hostState = snackbarHostState.value,
+                snackbar = { snackbarData: SnackbarData ->
+                    Card(
+                        shape = RoundedCornerShape(16.dp),
+                        //border = BorderStroke(1.dp, TextFieldFont),
+                        backgroundColor = TextFieldBg,
+                        modifier = Modifier
+                            .padding(16.dp)
+
+                            //.wrapContentSize()
+                        //    .background(TextOrange)
+                        //.align(Alignment.BottomCenter)
+
+                    ) {content()}
+
+
+                })
+     //   }
+
+
+
+}
 
 @Composable
 private fun ShowWarningInformation(){
@@ -97,6 +136,9 @@ private fun ShowWarningInformation(){
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: UserMessage) -> Unit = {}){
+    val isShowSnackbar = remember {
+        mutableStateOf(false)
+    }
     val coroutine = rememberCoroutineScope()
     val width_button =
         with(LocalDensity.current) {
@@ -114,6 +156,9 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
     val USER_MESSAGE_DELIVERY         = 1
     val USER_MESSAGE_DISCOUNT         = 2
     val USER_MESSAGE_GIFT             = 3
+    data class Integer(var value: Int)
+    val userMessage = remember{UserMessage()}
+    val messageIndex = remember{Integer(-1)}
     val viewModel: RepositoryViewModel = viewModel()
     val refreshing = viewModel.refreshUserMessages.collectAsState(false)
     val pullRefreshState = rememberPullRefreshState(refreshing.value, { viewModel.updateUserMessages() })
@@ -143,9 +188,6 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                 }
                 ShowWarningInformation()
 
-
-
-                                
                /* SwipeRefresh(
                     state = rememberSwipeRefreshState(isRefreshing),
                     onRefresh = { viewModel.updateForecast() },
@@ -162,13 +204,15 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                         Text(text = stringResource(id = R.string.text_nousermessages), textAlign = TextAlign.Center, fontSize = 14.sp, color = ColorText.copy(alpha = 0.2f))
                     }
                 else
-                Box(Modifier.pullRefresh(pullRefreshState)) {
-
+                Box(
+                    Modifier
+                        .pullRefresh(pullRefreshState)
+                        .fillMaxHeight()) {
                     LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
 
                         itemsIndexed(messages, { _, message -> message.id }) { index, item ->
                             val dismissState = rememberDismissState(
-                              /*  confirmStateChange = {
+                               /* confirmStateChange = {
                                     if (it == DismissValue.DismissedToStart){
                                        // viewModel.updateUserMessage(item.id, USERMESSAGE_DELETE)
                                         log("delete item ${item.id}...")
@@ -178,19 +222,37 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                             )
 
 
-                            if (dismissState.isDismissed(DismissDirection.EndToStart)) {
-                                viewModel.updateUserMessage(item.id, USERMESSAGE_DELETE)
-                                //log("delete item ${item.id}...")
-                            }
-
-
-                            //log("offset = ${dismissState.offset.value}")
                             val drag = remember {
                                 derivedStateOf {
                                     - dismissState.offset.value <= width_button
 
                                 }
                             }
+
+                            val isDissmissed = dismissState.isDismissed(DismissDirection.EndToStart)
+                            //if (isDissmissed) {//(dismissState.isDismissed(DismissDirection.EndToStart)) {
+                                //log("delete item ${item.id}...")
+                                /*CancelAction(content = {
+
+                                }) {
+                                    viewModel.updateUserMessage(item.id, USERMESSAGE_DELETE)
+
+                                }*/
+                                LaunchedEffect(isDissmissed) {
+                                    if (isDissmissed) {
+                                        coroutine.launch {
+                                            userMessage.copydata(item)
+                                            messageIndex.value = index
+                                            dismissState.reset()
+                                            if(isShowSnackbar.value)
+                                                isShowSnackbar.value = false
+                                            isShowSnackbar.value = true
+                                        }
+                                    }
+                                }
+                           // }
+
+
 
                                  LaunchedEffect(drag.value) {
                                      if (!drag.value) {
@@ -233,10 +295,10 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
 
                                     .animateItemPlacement()
                                     .clickable {
-                                    onSelectMessage(item)
-                                    if (item.read == 0)
-                                        viewModel.updateUserMessage(item.id, USERMESSAGE_READ)
-                                }
+                                        onSelectMessage(item)
+                                        if (item.read == 0)
+                                            viewModel.updateUserMessage(item.id, USERMESSAGE_READ)
+                                    }
                             ) {
                                 SwipeToDismiss(
                                     state = dismissState,
@@ -260,7 +322,7 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                                         )
                                         Box(
                                             Modifier
-                                               // .swipeable()
+                                                // .swipeable()
                                                 .fillMaxSize()
                                                 .background(colorDismiss),
                                                // .padding(horizontal = Dp(20f)),
@@ -372,9 +434,21 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                             }
                         }
                     }
+
+                    if (isShowSnackbar.value)
+                        CancelAction(modifier = Modifier.align(Alignment.BottomCenter), index = messageIndex.value, isShow = isShowSnackbar, content = {
+                            Text(text = userMessage.message)
+                        }) {
+
+                        }
+
+
                     PullRefreshIndicator(refreshing.value, pullRefreshState, Modifier.align(Alignment.TopCenter), contentColor = SelectedItemBottomNavi)
                 }
               //  }
+
+
         }
+
     }
 }

@@ -3,9 +3,17 @@ package com.training.shoplocal.classes
 import com.google.gson.annotations.SerializedName
 
 data class UserMessage(
-    @SerializedName("id")       val id          :Int,
-    @SerializedName("message")  val message     :String,
-    @SerializedName("type")     val type        :Int,
-    @SerializedName("read")     var read        :Int,
-    @SerializedName("date")     val date        : String
-)
+    @SerializedName("id")       var id          :Int = 0,
+    @SerializedName("message")  var message     :String = EMPTY_STRING,
+    @SerializedName("type")     var type        :Int = 0,
+    @SerializedName("read")     var read        :Int = 0,
+    @SerializedName("date")     var date        : String = EMPTY_STRING
+) {
+    fun copydata(value: UserMessage) {
+        id = value.id
+        message = value.message
+        type = value.type
+        read = value.read
+        date = value.date
+    }
+}
