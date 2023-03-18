@@ -62,15 +62,14 @@ private fun CancelAction(modifier: Modifier, isShow: MutableState<Boolean>, inde
                 EMPTY_STRING,
                 duration = SnackbarDuration.Short
             )
-            when (result) {
-                SnackbarResult.Dismissed -> {
+            if (result == SnackbarResult.Dismissed) {
                     isShow.value = false
                     //        (viewModel as RepositoryViewModel).showSnackbar(visible = false)
                 }
-                SnackbarResult.ActionPerformed -> {
+              /*  SnackbarResult.ActionPerformed -> {
 
-                }
-            }
+                }*/
+            //}
         }
 
     //    Box(Modifier.fillMaxSize()){
@@ -78,6 +77,7 @@ private fun CancelAction(modifier: Modifier, isShow: MutableState<Boolean>, inde
                 modifier = modifier.padding(bottom = 32.dp),//Modifier.align(Alignment.BottomCenter),
                 hostState = snackbarHostState.value,
                 //snackbar = { snackbarData: SnackbarData ->
+
                 snackbar = { _ ->
                     Card(
                         shape = RoundedCornerShape(6.dp),
