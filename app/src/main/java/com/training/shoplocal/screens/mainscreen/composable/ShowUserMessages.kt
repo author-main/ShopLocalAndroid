@@ -221,6 +221,9 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                                 }
                             Column(
                                 Modifier
+
+                                    .clip(RectangleShape)
+
                                     .animateItemPlacement()
                                     .clickable {
                                     onSelectMessage(item)
