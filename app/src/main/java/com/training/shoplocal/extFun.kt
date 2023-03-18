@@ -5,6 +5,10 @@ import android.content.Context
 import android.content.res.Resources
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
 import android.util.Base64
 import android.util.Log
 import android.util.Patterns
@@ -173,6 +177,25 @@ fun getFormattedStar(value: Float): String{
     val df = DecimalFormat("#.#")
     df.roundingMode = RoundingMode.HALF_EVEN
     return df.format(value)
+}
+
+fun vibrate(duration: Long) {
+    val vibe =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val vibratorManager =
+                AppShopLocal.appContext()
+                    .getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+            vibratorManager.defaultVibrator
+        } else {
+            @Suppress("DEPRECATION")
+            AppShopLocal.appContext()
+                .getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        }
+    val effect: VibrationEffect = VibrationEffect.createOneShot(
+        duration,
+        VibrationEffect.DEFAULT_AMPLITUDE
+    );
+    vibe.vibrate(effect)
 }
 
 

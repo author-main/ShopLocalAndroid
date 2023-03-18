@@ -1,7 +1,13 @@
 package com.training.shoplocal.screens.mainscreen.composable
 
+import android.content.Context
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,6 +18,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -23,6 +30,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.layout.ContentScale
@@ -36,19 +44,21 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.training.shoplocal.getStringArrayResource
-import com.training.shoplocal.log
-import com.training.shoplocal.viewmodel.RepositoryViewModel
+import com.training.shoplocal.*
 import com.training.shoplocal.R
+import com.training.shoplocal.viewmodel.RepositoryViewModel
 import com.training.shoplocal.classes.TAB_CHAR
+import com.training.shoplocal.classes.USERMESSAGE_DELETE
 import com.training.shoplocal.classes.USERMESSAGE_READ
 import com.training.shoplocal.classes.UserMessage
 import com.training.shoplocal.ui.theme.*
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 @Composable
 private fun ShowWarningInformation(){
@@ -84,7 +94,7 @@ private fun ShowWarningInformation(){
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: UserMessage) -> Unit = {}){
     val coroutine = rememberCoroutineScope()
@@ -92,6 +102,7 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
         with(LocalDensity.current) {
             100.dp.roundToPx().toFloat()
         }
+    //val paddingIcon = remember {(100.dp - 24.dp) / 2}
 
     /**
      * 0 - ОБЫЧНОЕ СООБЩЕНИЕ
@@ -159,9 +170,10 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                             val dismissState = rememberDismissState(
                                 confirmStateChange = {
                                     if (it == DismissValue.DismissedToStart){
-                                        log("delete item ${item.id}...")
+                                        viewModel.updateUserMessage(item.id, USERMESSAGE_DELETE)
+                                        //log("delete item ${item.id}...")
                                     }
-                                    true
+                                    false
                                 }
                             )
 
@@ -169,16 +181,23 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                             val drag = remember {
                                 derivedStateOf {
                                     - dismissState.offset.value <= width_button
+
                                 }
                             }
 
                                  LaunchedEffect(drag.value) {
                                      if (!drag.value) {
+                                        vibrate(30)
+                                     }
+
+                                    /* if (!drag.value) {
                                          log("block drag...")
                                          coroutine.launch {
                                              //dismissState.dismissDirection
                                          }
-                                     }
+                                     } else {
+                                         log("drag...")
+                                     }*/
                                  }
 
 
@@ -201,7 +220,9 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                                     else -> R.drawable.ic_usermessage
                                 }
                             Column(
-                                Modifier.clickable {
+                                Modifier
+                                    .animateItemPlacement()
+                                    .clickable {
                                     onSelectMessage(item)
                                     if (item.read == 0)
                                         viewModel.updateUserMessage(item.id, USERMESSAGE_READ)
@@ -221,7 +242,7 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                                         val colorDismiss by animateColorAsState(
                                             when (dismissState.targetValue) {
                                                 DismissValue.Default -> PrimaryDark
-                                                else -> Color.Red
+                                                else -> SelectedItem
                                             }
                                         )
                                         val scale by animateFloatAsState(
@@ -231,21 +252,37 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                                             Modifier
                                                // .swipeable()
                                                 .fillMaxSize()
-                                                .background(colorDismiss)
-                                                .padding(horizontal = Dp(20f)),
-                                            contentAlignment = Alignment.Center
+                                                .background(colorDismiss),
+                                               // .padding(horizontal = Dp(20f)),
+                                            contentAlignment = Alignment.CenterEnd
                                         ) {
-                                            Icon(
-                                                Icons.Default.Delete,
-                                                contentDescription = null,
-                                                modifier = Modifier.scale(scale)
-                                            )
+                                            Box(
+                                                Modifier
+                                                    .width(100.dp)
+                                                    .fillMaxHeight(),
+                                                    contentAlignment = Alignment.Center
+                                            ) {
+                                                Icon(
+                                                    Icons.Default.Close,
+                                                    contentDescription = null,
+                                                    modifier = Modifier
+                                                        .scale(scale)
+                                                )
+                                            }
                                         }
 
                                     },
                                     dismissContent = {
 
+
                                         Row(modifier = Modifier
+                                            .offset {
+                                                IntOffset(
+                                                    if (drag.value) 0 else
+                                                        -dismissState.offset.value.roundToInt() - width_button.roundToInt(),
+                                                    0
+                                                )
+                                            }
                                             .background(PrimaryDark)
                                             .padding(vertical = 8.dp)) {
                                             Image(

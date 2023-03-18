@@ -170,7 +170,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         }
         else {
             showSnackbar(message = getStringResource(R.string.message_login_error), type = MESSAGE.ERROR)
-            val vibe = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+          /*  val vibe = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 val vibratorManager =
                     AppShopLocal.appContext().getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
                     vibratorManager.defaultVibrator
@@ -179,7 +179,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                 AppShopLocal.appContext().getSystemService(VIBRATOR_SERVICE) as Vibrator
             }
             val effect: VibrationEffect = VibrationEffect.createOneShot(300, VibrationEffect.DEFAULT_AMPLITUDE);
-            vibe.vibrate(effect)
+            vibe.vibrate(effect)*/
+            vibrate(400)
         }
     }
     private val _authorizedUser = MutableStateFlow<Boolean>(false)
@@ -675,7 +676,6 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                 val listMessages = _userMessages.toMutableList()
                 if (what == USERMESSAGE_READ) {
                     listMessages.find {
-
                         it.id == id_message
                     }?.let {message ->
                         message.read = 1
@@ -688,10 +688,11 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                         it.id == id_message
                     }
                     message?.let{
-                        listMessages.remove(it)
                         if (it.read == 0)
                             _countUnreadMessages.value -= 1
+                        listMessages.remove(it)
                         recomposition = true
+
                     }
                 }
                 if (recomposition)
