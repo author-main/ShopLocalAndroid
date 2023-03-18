@@ -1,5 +1,7 @@
 package com.training.shoplocal.screens.mainscreen.composable
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -9,6 +11,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -16,12 +20,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -29,6 +35,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -41,6 +48,7 @@ import com.training.shoplocal.classes.TAB_CHAR
 import com.training.shoplocal.classes.USERMESSAGE_READ
 import com.training.shoplocal.classes.UserMessage
 import com.training.shoplocal.ui.theme.*
+import kotlinx.coroutines.launch
 
 @Composable
 private fun ShowWarningInformation(){
@@ -79,6 +87,12 @@ private fun ShowWarningInformation(){
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: UserMessage) -> Unit = {}){
+    val coroutine = rememberCoroutineScope()
+    val width_button =
+        with(LocalDensity.current) {
+            100.dp.roundToPx().toFloat()
+        }
+
     /**
      * 0 - ОБЫЧНОЕ СООБЩЕНИЕ
      * 1 - СООБЩЕНИЕ О ДОСТАВКЕ
@@ -138,6 +152,34 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                     LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
 
                         itemsIndexed(messages, { _, message -> message.id }) { index, item ->
+                            val dismissState = rememberDismissState(
+                                confirmStateChange = {
+                                    if (it == DismissValue.DismissedToStart){
+                                        log("delete item ${item.id}...")
+                                    }
+                                    true
+                                }
+                            )
+
+                            //log("offset = ${dismissState.offset.value}")
+                            val drag = remember {
+                                derivedStateOf {
+                                    - dismissState.offset.value <= width_button
+                                }
+                            }
+
+                                 LaunchedEffect(drag.value) {
+                                     if (!drag.value) {
+                                         log("block drag...")
+                                         coroutine.launch {
+                                             //dismissState.dismissDirection
+                                         }
+                                     }
+                                 }
+
+
+
+
 
                             /* }
 
@@ -161,86 +203,115 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                                         viewModel.updateUserMessage(item.id, USERMESSAGE_READ)
                                 }
                             ) {
-                                Row(modifier = Modifier.padding(vertical = 8.dp)) {
-                                    Image(
-                                        modifier = Modifier
-                                            .padding(end = 8.dp)
-                                            .align(Alignment.CenterVertically)
-                                            .size(48.dp),
-                                        imageVector = ImageVector.vectorResource(imageId),
-                                        contentScale = ContentScale.FillBounds,
-                                        contentDescription = null
-                                    )
-                                    Column(modifier = Modifier.weight(1f)) {
-                                        Row(
-                                            modifier = Modifier.fillMaxWidth(),
-                                            verticalAlignment = Alignment.CenterVertically
-                                        ) {
-
-                                            Row(
-                                                modifier = Modifier.weight(1f),
-                                                verticalAlignment = Alignment.CenterVertically
-                                            ) {
-                                                Text(
-                                                    //    modifier = Modifier.weight(1f),
-                                                    text = title[item.type],
-                                                    fontWeight = FontWeight.Medium,
-                                                    fontSize = 15.sp,
-                                                    color = colorTitle
-                                                    //color = if (item.read == 0) SelectedItemBottomNavi else TextFieldFont
-                                                )
-                                                if (item.read != 0) {
-                                                    DividerHorizontal(size = 4.dp)
-                                                    Icon(
-                                                        modifier = Modifier.size(16.dp),
-                                                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_check_circle),
-                                                        contentDescription = null,
-                                                        tint = SelectedItemBottomNavi
-                                                    )
-                                                }
+                                SwipeToDismiss(
+                                    state = dismissState,
+                                    modifier = Modifier
+                                        .padding(vertical = Dp(1f)),
+                                    directions = setOf(
+                                        DismissDirection.EndToStart
+                                    ),
+                                    dismissThresholds = {FractionalThreshold(0.2f)}/*{ direction ->
+                                        FractionalThreshold(if (direction == DismissDirection.EndToStart) 0.2f else 0.05f)
+                                    }*/,
+                                    background = {
+                                        val colorDismiss by animateColorAsState(
+                                            when (dismissState.targetValue) {
+                                                DismissValue.Default -> PrimaryDark
+                                                else -> Color.Red
                                             }
-                                            /* Box(modifier = Modifier
+                                        )
+                                        val scale by animateFloatAsState(
+                                            if (dismissState.targetValue == DismissValue.Default) 0.75f else 1f
+                                        )
+                                        Box(
+                                            Modifier
+                                                .fillMaxSize()
+                                                .background(colorDismiss)
+                                                .padding(horizontal = Dp(20f)),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Icon(
+                                                Icons.Default.Delete,
+                                                contentDescription = null,
+                                                modifier = Modifier.scale(scale)
+                                            )
+                                        }
+
+                                    },
+                                    dismissContent = {
+
+                                        Row(modifier = Modifier
+                                            .background(PrimaryDark)
+                                            .padding(vertical = 8.dp)) {
+                                            Image(
+                                                modifier = Modifier
+                                                    .padding(end = 8.dp)
+                                                    .align(Alignment.CenterVertically)
+                                                    .size(48.dp),
+                                                imageVector = ImageVector.vectorResource(imageId),
+                                                contentScale = ContentScale.FillBounds,
+                                                contentDescription = null
+                                            )
+                                            Column(modifier = Modifier.weight(1f)) {
+                                                Row(
+                                                    modifier = Modifier.fillMaxWidth(),
+                                                    verticalAlignment = Alignment.CenterVertically
+                                                ) {
+
+                                                    Row(
+                                                        modifier = Modifier.weight(1f),
+                                                        verticalAlignment = Alignment.CenterVertically
+                                                    ) {
+                                                        Text(
+                                                            //    modifier = Modifier.weight(1f),
+                                                            text = title[item.type],
+                                                            fontWeight = FontWeight.Medium,
+                                                            fontSize = 15.sp,
+                                                            color = colorTitle
+                                                            //color = if (item.read == 0) SelectedItemBottomNavi else TextFieldFont
+                                                        )
+                                                        if (item.read != 0) {
+                                                            DividerHorizontal(size = 4.dp)
+                                                            Icon(
+                                                                modifier = Modifier.size(16.dp),
+                                                                imageVector = ImageVector.vectorResource(
+                                                                    id = R.drawable.ic_check_circle
+                                                                ),
+                                                                contentDescription = null,
+                                                                tint = SelectedItemBottomNavi
+                                                            )
+                                                        }
+                                                    }
+                                                    /* Box(modifier = Modifier
                                     .clip(CircleShape)
                                     .background(if (item.read != 0) Color.Transparent else SelectedItemBottomNavi),
                                 ) {*/
-                                            Text(
-                                                // modifier = Modifier.padding(vertical = 2.dp, horizontal = 4.dp),
-                                                /* modifier = Modifier
+                                                    Text(
+                                                        // modifier = Modifier.padding(vertical = 2.dp, horizontal = 4.dp),
+                                                        /* modifier = Modifier
                                             .clip(CircleShape)
                                             .background(if (item.read != 0) Color.Transparent else SelectedItemBottomNavi),*/
-                                                /*.weight(1f),
+                                                        /*.weight(1f),
                                     textAlign = TextAlign.End,*/
-                                                text = item.date, fontSize = 12.sp,
-                                                color = //if (item.read == 0) ColorText else
-                                                TextFieldFont.copy(alpha = 0.5f)
-                                            )
-                                            // }
+                                                        text = item.date, fontSize = 12.sp,
+                                                        color = //if (item.read == 0) ColorText else
+                                                        TextFieldFont.copy(alpha = 0.5f)
+                                                    )
+                                                    // }
+                                                }
+                                                Text(
+                                                    text = item.message,
+                                                    fontFamily = font,
+                                                    fontSize = 14.sp
+                                                )
+                                            }
                                         }
-                                        Text(
-                                            text = item.message,
-                                            fontFamily = font,
-                                            fontSize = 14.sp
-                                        )
-                                    }
-                                }
+
+                                    })
+
+
                                 if (index < messages.size - 1)
-                                /*   Spacer(
-                            Modifier
-                                .height(1.dp)
-                                .fillMaxWidth()
-                                .background(
-                                    brush = Brush.horizontalGradient(
-                                        colors = listOf(
-                                            PrimaryDark,
-                                            Color(0x5BDDDDDD),
-                                            PrimaryDark
-                                        )
-                                    )
-                                )
-                        )*/
-
-
-                                    Spacer(
+                                  Spacer(
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .height(1.dp)
