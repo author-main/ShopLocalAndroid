@@ -168,14 +168,21 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
 
                         itemsIndexed(messages, { _, message -> message.id }) { index, item ->
                             val dismissState = rememberDismissState(
-                                confirmStateChange = {
+                              /*  confirmStateChange = {
                                     if (it == DismissValue.DismissedToStart){
-                                        viewModel.updateUserMessage(item.id, USERMESSAGE_DELETE)
-                                        //log("delete item ${item.id}...")
+                                       // viewModel.updateUserMessage(item.id, USERMESSAGE_DELETE)
+                                        log("delete item ${item.id}...")
                                     }
                                     false
-                                }
+                                }*/
                             )
+
+
+                            if (dismissState.isDismissed(DismissDirection.EndToStart)) {
+                                viewModel.updateUserMessage(item.id, USERMESSAGE_DELETE)
+                                //log("delete item ${item.id}...")
+                            }
+
 
                             //log("offset = ${dismissState.offset.value}")
                             val drag = remember {
