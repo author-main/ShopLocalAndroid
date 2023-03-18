@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.*
 import com.training.shoplocal.R
+import com.training.shoplocal.classes.EMPTY_STRING
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import com.training.shoplocal.classes.USERMESSAGE_DELETE
 import com.training.shoplocal.classes.USERMESSAGE_READ
@@ -57,9 +58,8 @@ private fun CancelAction(modifier: Modifier, isShow: MutableState<Boolean>, inde
     val snackbarHostState = remember { mutableStateOf(SnackbarHostState()) }
 
         LaunchedEffect(index) {
-            log("snackbar....")
             val result = snackbarHostState.value.showSnackbar(
-                "Checkit...",
+                EMPTY_STRING,
                 duration = SnackbarDuration.Short
             )
             when (result) {
@@ -75,21 +75,18 @@ private fun CancelAction(modifier: Modifier, isShow: MutableState<Boolean>, inde
 
     //    Box(Modifier.fillMaxSize()){
             SnackbarHost(
-                modifier = modifier,//Modifier.align(Alignment.BottomCenter),
+                modifier = modifier.padding(bottom = 32.dp),//Modifier.align(Alignment.BottomCenter),
                 hostState = snackbarHostState.value,
-                snackbar = { snackbarData: SnackbarData ->
+                //snackbar = { snackbarData: SnackbarData ->
+                snackbar = { _ ->
                     Card(
-                        shape = RoundedCornerShape(16.dp),
-                        //border = BorderStroke(1.dp, TextFieldFont),
-                        backgroundColor = TextFieldBg,
-                        modifier = Modifier
-                            .padding(16.dp)
-
-                            //.wrapContentSize()
-                        //    .background(TextOrange)
-                        //.align(Alignment.BottomCenter)
-
-                    ) {content()}
+                        shape = RoundedCornerShape(6.dp),
+                        backgroundColor = TextFieldBg
+                    ) {
+                        Box(modifier = Modifier.background(Color.Red).padding(8.dp), contentAlignment = Alignment.Center) {
+                            content()
+                        }
+                    }
 
 
                 })
@@ -255,9 +252,9 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
 
 
                                  LaunchedEffect(drag.value) {
-                                     if (!drag.value) {
+                                     if (!drag.value)
                                         vibrate(30)
-                                     }
+
 
                                     /* if (!drag.value) {
                                          log("block drag...")
@@ -437,7 +434,7 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
 
                     if (isShowSnackbar.value)
                         CancelAction(modifier = Modifier.align(Alignment.BottomCenter), index = messageIndex.value, isShow = isShowSnackbar, content = {
-                            Text(text = userMessage.message)
+                            Text(text = "Checkit...")//userMessage.message)
                         }) {
 
                         }
