@@ -53,7 +53,7 @@ import kotlin.math.roundToInt
 
 
 @Composable
-private fun CancelAction(modifier: Modifier, isShow: MutableState<Boolean>, index: Int, content: @Composable () -> Unit, onCancel: () -> Unit){
+private fun CancelAction(modifier: Modifier, isShow: MutableState<Boolean>, index: Int, content: @Composable () -> Unit, onCancel: (cancel: Boolean) -> Unit){
 
     val snackbarHostState = remember { mutableStateOf(SnackbarHostState()) }
 
@@ -63,6 +63,7 @@ private fun CancelAction(modifier: Modifier, isShow: MutableState<Boolean>, inde
                 duration = SnackbarDuration.Short
             )
             if (result == SnackbarResult.Dismissed) {
+                onCancel(false)
                     isShow.value = false
                     //        (viewModel as RepositoryViewModel).showSnackbar(visible = false)
                 }
@@ -435,8 +436,9 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                     if (isShowSnackbar.value)
                         CancelAction(modifier = Modifier.align(Alignment.BottomCenter), index = messageIndex.value, isShow = isShowSnackbar, content = {
                             Text(text = "Checkit...")//userMessage.message)
-                        }) {
-
+                        }) {cancel ->
+                            if (!cancel)
+                                viewModel.updateUserMessage(userMessage.id, USERMESSAGE_DELETE)
                         }
 
 
