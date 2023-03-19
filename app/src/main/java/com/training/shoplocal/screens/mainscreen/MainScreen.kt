@@ -52,6 +52,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.*
 import com.training.shoplocal.R
@@ -502,6 +503,8 @@ fun MainScreen(state: ModalBottomSheetState){
             }
     }
 
+
+
     val startLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
@@ -734,6 +737,18 @@ fun MainScreen(state: ModalBottomSheetState){
                                 .align(Alignment.CenterVertically)
                                 .clickable() {
 
+                                    val subject = getStringResource(R.string.text_subjectshare)
+                                    val extraText = detailProduct.name
+                                    val intent = Intent(Intent.ACTION_SEND)
+                                    intent.type = "text/plain"
+                                    intent.putExtra(Intent.EXTRA_SUBJECT, subject)
+                                    intent.putExtra(Intent.EXTRA_TEXT, extraText)
+
+                                    ContextCompat.startActivity(
+                                        context,
+                                        Intent.createChooser(intent, getStringResource(id = R.string.text_share)),
+                                        null
+                                    )
                                 }
                         )
                     }

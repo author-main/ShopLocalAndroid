@@ -103,4 +103,6 @@
     <string name="text_warninginformation1">Так мы сможем гарантировать безопасность вашего аккаунта.</string>
     <string name="text_nousermessages">Полковнику\nникто не пишет…</string>
     <string name="text_delete_usermessages">Сообщение удалено</string>
+    <string name="text_share">Поделиться</string>
+    <string name="text_subjectshare">LocalShop. Этот товар Вам понравится</string>
 </resources>
