@@ -2,6 +2,7 @@ package com.training.shoplocal.repository.retrofit
 
 import com.google.gson.GsonBuilder
 import com.training.shoplocal.classes.*
+import com.training.shoplocal.log
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

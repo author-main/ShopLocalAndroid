@@ -10,6 +10,7 @@ import com.training.shoplocal.classes.fodisplay.SORT_TYPE
 import com.training.shoplocal.classes.screenhelpers.DataScreen
 import com.training.shoplocal.classes.searcher.SearchQueryStorage
 import com.training.shoplocal.encodeBase64
+import com.training.shoplocal.log
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.screens.ScreenRouter
 import retrofit2.Response
@@ -69,6 +70,7 @@ class Repository: DAOinterface {
 
     fun getProducts(id: Int, part: Int, action: (products: List<Product>) -> Unit){
         //val order64 = encodeBase64(OrderDisplay.getOrderDislayQuery())
+        //log(OrderDisplay.getFilterQuery())
         //log(OrderDisplay.getFilterQuery())
         val order64 = encodeBase64(OrderDisplay.getFilterQuery())
         //log(order64)
