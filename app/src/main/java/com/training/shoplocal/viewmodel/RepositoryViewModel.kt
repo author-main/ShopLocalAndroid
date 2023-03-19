@@ -40,7 +40,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     private val _countUnreadMessages = MutableStateFlow<Int>(0)
     val countUnreadMessages = _countUnreadMessages.asStateFlow()
-    private fun setCountUnreadMessages(value: Int){
+    fun setCountUnreadMessages(value: Int){
         _countUnreadMessages.value = value
     }
 
@@ -658,43 +658,74 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     fun clearMessages(){
         _userMessages.clear()
     }
-    fun updateUserMessage(id_message: Int, what: Int) {
+
+
+    fun markDeletedUserMessages(id: Int, deleted: Boolean = true){
+        val message = _userMessages.find { msg -> msg.id == id }
+        message?.let {userMessage ->
+            //_userMessages[index].deleted = deleted
+            userMessage.deleted = deleted
+            if (deleted) {
+                if (userMessage.read == 0)
+                    _countUnreadMessages.value -= 1
+
+            } else {
+                if (userMessage.read == 0)
+                    _countUnreadMessages.value += 1
+            }
+        }
+    }
+
+    fun updateUserMessage(ids: IntArray, what: Int) {
         //0 - отметить как прочитанное
         //1 - удалить
         viewModelScope.launch {
             val result: Int =
                 try{
+                    val id_message = ids.joinToString(",")
                     val response = repository.updateUserMessage(USER_ID, what, id_message)
                     response.body()?.toInt() ?: 0
                 }
                 catch (_: Exception) {
                     0
                 }
-            //log("response = $result")
             if (result > 0) {
                 var recomposition = false
                 val listMessages = _userMessages.toMutableList()
                 if (what == USERMESSAGE_READ) {
-                    listMessages.find {
-                        it.id == id_message
-                    }?.let {message ->
-                        message.read = 1
-                        recomposition = true
-                        _countUnreadMessages.value -= 1
+                    var countUnread = _countUnreadMessages.value
+                    ids.forEach { id ->
+                        listMessages.find {
+                            it.id == id
+                        }?.let { message ->
+                            message.read = 1
+                            recomposition = true
+                            countUnread -= 1
+                            //_countUnreadMessages.value -= 1
+                        }
                     }
+                    _countUnreadMessages.value = countUnread
+
+
                 }
                 if (what == USERMESSAGE_DELETE) {
-                    val message = listMessages.find {
-                        it.id == id_message
+                  /*  var countUnread = _countUnreadMessages.value
+                    ids.forEach {id ->
+                        val message = listMessages.find {
+                            it.id == id
+                        }
+                        message?.let {
+                            if (it.read == 0)
+                                countUnread -= 1
+                            listMessages.remove(it)
+                            //recomposition = true
+                        }
                     }
-                    message?.let{
-                        if (it.read == 0)
-                            _countUnreadMessages.value -= 1
-                        listMessages.remove(it)
-                        recomposition = true
+                    _countUnreadMessages.value = countUnread*/
+                    recomposition = true
 
-                    }
                 }
+
                 if (recomposition)
                     setUserMessages(listMessages)
 

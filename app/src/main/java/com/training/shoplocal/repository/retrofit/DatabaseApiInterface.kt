@@ -54,6 +54,6 @@ interface DatabaseApiInterface {
 
     @FormUrlEncoded
     @POST("/api/update_message")
-    suspend fun updateUserMessage(@Field("id_user") id_user: Int, @Field("what") what: Int, @Field("id_message") id_message: Int): Response<Int>
+    suspend fun updateUserMessage(@Field("id_user") id_user: Int, @Field("what") what: Int, @Field("id_message") id_message: String): Response<Int>
 
 }

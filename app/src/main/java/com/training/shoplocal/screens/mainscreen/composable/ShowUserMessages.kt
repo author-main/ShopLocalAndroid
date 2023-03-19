@@ -45,6 +45,7 @@ import com.training.shoplocal.classes.USERMESSAGE_DELETE
 import com.training.shoplocal.classes.USERMESSAGE_READ
 import com.training.shoplocal.classes.UserMessage
 import com.training.shoplocal.ui.theme.*
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -53,27 +54,26 @@ import kotlin.math.roundToInt
 
 
 @Composable
-private fun CancelAction(modifier: Modifier, isShow: MutableState<Boolean>, index: Int, content: @Composable () -> Unit, onCancel: (cancel: Boolean) -> Unit){
-
+private fun CancelAction(modifier: Modifier, isShow: MutableState<Boolean>, id: Int, content: @Composable () -> Unit, onCancel: () -> Unit){
     val snackbarHostState = remember { mutableStateOf(SnackbarHostState()) }
 
-        LaunchedEffect(index) {
+        LaunchedEffect(id) {
+            delay(1500)
+            snackbarHostState.value.currentSnackbarData?.dismiss()
+        }
+
+        LaunchedEffect(id) {
             val result = snackbarHostState.value.showSnackbar(
                 EMPTY_STRING,
                 duration = SnackbarDuration.Short
             )
-            if (result == SnackbarResult.Dismissed) {
-                onCancel(false)
-                    isShow.value = false
-                    //        (viewModel as RepositoryViewModel).showSnackbar(visible = false)
-                }
-              /*  SnackbarResult.ActionPerformed -> {
 
-                }*/
-            //}
+            if (result == SnackbarResult.Dismissed) {
+                onCancel()
+                isShow.value = false
+                }
         }
 
-    //    Box(Modifier.fillMaxSize()){
             SnackbarHost(
                 modifier = modifier.padding(bottom = 32.dp),//Modifier.align(Alignment.BottomCenter),
                 hostState = snackbarHostState.value,
@@ -82,11 +82,9 @@ private fun CancelAction(modifier: Modifier, isShow: MutableState<Boolean>, inde
                 snackbar = { _ ->
                     Card(
                         shape = RoundedCornerShape(6.dp),
-                        backgroundColor = TextFieldBg
+                        backgroundColor = TextFieldBg,
                     ) {
-                        Box(modifier = Modifier.background(Color.Red).padding(8.dp), contentAlignment = Alignment.Center) {
-                            content()
-                        }
+                        content()
                     }
 
 
@@ -156,7 +154,7 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
     val USER_MESSAGE_GIFT             = 3
     data class Integer(var value: Int)
     val userMessage = remember{UserMessage()}
-    val messageIndex = remember{Integer(-1)}
+    //val messageIndex = remember{Integer(-1)}
     val viewModel: RepositoryViewModel = viewModel()
     val refreshing = viewModel.refreshUserMessages.collectAsState(false)
     val pullRefreshState = rememberPullRefreshState(refreshing.value, { viewModel.updateUserMessages() })
@@ -165,11 +163,26 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
     }//.collectAsState()
     val title = remember{getStringArrayResource(R.array.typemessage)}
     val font = remember { FontFamily(Font(R.font.roboto_light)) }
+    val fontCondensed = remember { FontFamily(Font(R.font.robotocondensed_regular)) }
     val close = remember{ mutableStateOf(false) }
+
+
+    fun deleteUserMessages(){
+        var ids = emptyArray<Int>()
+        messages.forEach {
+            if (it.deleted)
+                ids += it.id
+        }
+        if (ids.isNotEmpty())
+            viewModel.updateUserMessage(ids.toIntArray(), USERMESSAGE_DELETE)
+    }
+
     DisposableEffect(Unit) {
         viewModel.getMessages()
         onDispose {
             //log(messages.toString())
+            viewModel.setCountUnreadMessages(messages.count{msg-> msg.read == 0 && !msg.deleted})
+            deleteUserMessages()
             viewModel.clearMessages()
         }
     }
@@ -205,7 +218,7 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                 Box(
                     Modifier
                         .pullRefresh(pullRefreshState)
-                        .fillMaxHeight()) {
+                        .fillMaxSize()) {
                     LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
 
                         itemsIndexed(messages, { _, message -> message.id }) { index, item ->
@@ -240,10 +253,11 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                                     if (isDissmissed) {
                                         coroutine.launch {
                                             userMessage.copydata(item)
-                                            messageIndex.value = index
+                                            //messageIndex.value = index
                                             dismissState.reset()
                                             if(isShowSnackbar.value)
                                                 isShowSnackbar.value = false
+                                            viewModel.markDeletedUserMessages(userMessage.id)
                                             isShowSnackbar.value = true
                                         }
                                     }
@@ -294,8 +308,12 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                                     .animateItemPlacement()
                                     .clickable {
                                         onSelectMessage(item)
-                                        if (item.read == 0)
-                                            viewModel.updateUserMessage(item.id, USERMESSAGE_READ)
+                                        if (item.read == 0) {
+                                            viewModel.updateUserMessage(
+                                                IntArray(1) { item.id },
+                                                USERMESSAGE_READ
+                                            )
+                                        }
                                     }
                             ) {
                                 SwipeToDismiss(
@@ -344,7 +362,7 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                                     },
                                     dismissContent = {
 
-
+                                        if (!item.deleted)
                                         Row(modifier = Modifier
                                             .offset {
                                                 IntOffset(
@@ -422,7 +440,7 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                                     })
 
 
-                                if (index < messages.size - 1)
+                                  if (index < messages.size - 1 && !item.deleted)
                                   Spacer(
                                         modifier = Modifier
                                             .fillMaxWidth()
@@ -434,11 +452,30 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                     }
 
                     if (isShowSnackbar.value)
-                        CancelAction(modifier = Modifier.align(Alignment.BottomCenter), index = messageIndex.value, isShow = isShowSnackbar, content = {
-                            Text(text = "Checkit...")//userMessage.message)
-                        }) {cancel ->
-                            if (!cancel)
-                                viewModel.updateUserMessage(userMessage.id, USERMESSAGE_DELETE)
+                        CancelAction(modifier = Modifier.align(Alignment.BottomCenter), id = userMessage.id, isShow = isShowSnackbar, content = {
+                            Row(modifier = Modifier.padding(start = 16.dp, end = 8.dp),verticalAlignment = Alignment.CenterVertically) {
+                                Text(
+                                    text = stringResource(id = R.string.text_delete_usermessages),
+                                   // fontSize = 13.sp,
+                                    fontFamily = fontCondensed
+                                )//userMessage.message)
+                                TextButton(onClick = {
+                                    viewModel.markDeletedUserMessages(userMessage.id, false)
+                                    isShowSnackbar.value = false
+                                },
+                                 //   colors = ButtonDefaults.buttonColors(backgroundColor = TextFieldBg)
+                                ){
+                                    Text(text= stringResource(id = R.string.button_cancel),
+                                        color = SelectedItemBottomNavi,
+                                      //  fontSize = 13.sp,
+                                        fontFamily = fontCondensed,
+                                        letterSpacing = 0.sp
+                                    )
+                                }
+
+                            }
+                        }) {
+                            deleteUserMessages()
                         }
 
 

@@ -24,6 +24,6 @@ interface DatabaseCRUDInterface {
 
 
     suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte): Response<Int>
-    suspend fun updateUserMessage(id_user: Int, what: Int, id_message: Int): Response<Int>
+    suspend fun updateUserMessage(id_user: Int, what: Int, id_message: String): Response<Int>
   //  suspend fun getProducts( id: Int, part: Int) : List<Product>
 }

@@ -113,7 +113,7 @@ class DatabaseCRUD: DatabaseCRUDInterface {
         return DatabaseApi.updateFavorite(id_user, id_product, value)
     }
 
-    override suspend fun updateUserMessage(id_user: Int, what: Int, id_message: Int): Response<Int> {
+    override suspend fun updateUserMessage(id_user: Int, what: Int, id_message: String): Response<Int> {
         return DatabaseApi.updateUserMessage(id_user, what, id_message)
     }
 
