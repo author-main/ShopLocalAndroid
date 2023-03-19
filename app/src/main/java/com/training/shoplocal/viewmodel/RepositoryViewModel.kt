@@ -278,6 +278,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         coroutine.launch {*/
             showProgressCRUD()
             repository.getProducts(USER_ID, part) { listProducts ->
+                //log("loaded products...")
                 if (listProducts.isNotEmpty()) {
                     if (part == 1) {
                         val extractedData = getMaxPortion(listProducts[0].name)
