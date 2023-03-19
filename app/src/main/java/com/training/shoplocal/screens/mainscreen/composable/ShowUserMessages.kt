@@ -58,7 +58,7 @@ private fun CancelAction(modifier: Modifier, isShow: MutableState<Boolean>, id: 
     val snackbarHostState = remember { mutableStateOf(SnackbarHostState()) }
 
         LaunchedEffect(id) {
-            delay(1500)
+            delay(2000)
             snackbarHostState.value.currentSnackbarData?.dismiss()
         }
 
@@ -235,12 +235,16 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
 
                             val drag = remember {
                                 derivedStateOf {
-                                    - dismissState.offset.value <= width_button
-
+                                    - dismissState.offset.value < width_button
                                 }
                             }
 
                             val isDissmissed = dismissState.isDismissed(DismissDirection.EndToStart)
+                            val deletedColor by animateColorAsState(
+                                if (!isDissmissed)
+                                     PrimaryDark
+                                     else SelectedItem
+                            )
                             //if (isDissmissed) {//(dismissState.isDismissed(DismissDirection.EndToStart)) {
                                 //log("delete item ${item.id}...")
                                 /*CancelAction(content = {
@@ -362,7 +366,11 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                                     },
                                     dismissContent = {
 
+
+
+
                                         if (!item.deleted)
+
                                         Row(modifier = Modifier
                                             .offset {
                                                 IntOffset(
@@ -371,7 +379,9 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                                                     0
                                                 )
                                             }
-                                            .background(PrimaryDark)
+
+
+                                            .background(deletedColor)//PrimaryDark)
                                             .padding(vertical = 8.dp)) {
                                             Image(
                                                 modifier = Modifier
