@@ -81,7 +81,7 @@ private fun CancelAction(modifier: Modifier, isShow: MutableState<Boolean>, id: 
 
                 snackbar = { _ ->
                     Card(
-                        shape = RoundedCornerShape(6.dp),
+                        shape = RoundedCornerShape(12.dp),
                         backgroundColor = TextFieldBg,
                     ) {
                         content()
@@ -163,7 +163,7 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
     }//.collectAsState()
     val title = remember{getStringArrayResource(R.array.typemessage)}
     val font = remember { FontFamily(Font(R.font.roboto_light)) }
-    val fontCondensed = remember { FontFamily(Font(R.font.robotocondensed_regular)) }
+    val fontCondensed = remember { FontFamily(Font(R.font.robotocondensed_light)) }
     val close = remember{ mutableStateOf(false) }
 
 
@@ -466,7 +466,7 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                             Row(modifier = Modifier.padding(start = 16.dp, end = 8.dp),verticalAlignment = Alignment.CenterVertically) {
                                 Text(
                                     text = stringResource(id = R.string.text_delete_usermessages),
-                                   // fontSize = 13.sp,
+                                    fontSize = 14.sp,
                                     fontFamily = fontCondensed
                                 )//userMessage.message)
                                 TextButton(onClick = {
@@ -477,7 +477,7 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                                 ){
                                     Text(text= stringResource(id = R.string.button_cancel),
                                         color = SelectedItemBottomNavi,
-                                      //  fontSize = 13.sp,
+                                        fontSize = 14.sp,
                                         fontFamily = fontCondensed,
                                         letterSpacing = 0.sp
                                     )
