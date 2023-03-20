@@ -266,7 +266,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         return calcMaxPortion to name
     }
 
-    @Synchronized
+    //@Synchronized
     private fun getProducts(part: Int){
       // val exchangeData = exchangeDataMap[ExchangeData.GET_PRODUCTS] ?: false
       /*  if (lockDB) return
@@ -500,7 +500,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
      *  End Блок методов для управления журналом поисковых запросов
      */
 
-    @Synchronized
+    //@Synchronized
     fun findProductsRequest(query: String, value: Int = 0){
         if (value == -1) { //  Очистка результатов поиcка в BD
             repository.findProductsRequest(query, 0, UUID_QUERY, USER_ID){}

@@ -176,7 +176,7 @@ class OrderDisplay: ProviderDataDisplay{
     companion object {
         private lateinit var instance: ProviderDataDisplay//OrderDisplay
         //private var backupData: ProviderDataDisplay? = null
-        @Synchronized
+        //@Synchronized
         fun getInstance(): ProviderDataDisplay{//OrderDisplay {
             if (!this::instance.isInitialized)
                 instance = OrderDisplay()
