@@ -122,14 +122,18 @@ data class ImageLink(val link: String, val md5: String)
 @Composable
 fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBottomSheetState, modeview: VIEW_MODE = VIEW_MODE.CARD, onClick:(product: Product) -> Unit) {
 
-    val mode_View       = rememberUpdatedState(newValue = modeview)
-    val show_MoreButton = rememberUpdatedState(newValue = showMoreButton)
+    /*val mode_View       = rememberUpdatedState(newValue = modeview)
+    val show_MoreButton = rememberUpdatedState(newValue = showMoreButton)*/
+
+    /*val mode_View       = remember{ mutableStateOf(modeview)}
+    val show_MoreButton = remember{ mutableStateOf(showMoreButton)}*/
 
     val cardproduct = remember {
         product
     }
     fun isCardModeView() =
-        mode_View.value == VIEW_MODE.CARD
+        modeview == VIEW_MODE.CARD
+        //mode_View.value == VIEW_MODE.CARD
     val fontsize = if (isCardModeView()) 14.sp else 13.sp
     val fontSizeDescription = 15.sp//if (isCardModeView()) 16.sp else 15.sp
     val CARD_SIZE = if (isCardModeView()) 150 else 110
@@ -231,7 +235,8 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                         modifier = Modifier.align(if (isCardModeView()) Alignment.BottomStart else Alignment.TopStart),
                         percent = cardproduct.discount
                     )
-                    if (show_MoreButton.value) {
+                    //if (show_MoreButton.value) {
+                    if (showMoreButton) {
                         ButtonMore(
                             modifier = Modifier.align(Alignment.BottomEnd)
                         )
