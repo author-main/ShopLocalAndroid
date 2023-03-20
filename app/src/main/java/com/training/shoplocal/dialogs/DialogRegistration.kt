@@ -36,11 +36,9 @@ import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.training.shoplocal.DialogRouter
+import com.training.shoplocal.*
 import com.training.shoplocal.R
-import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.*
-import com.training.shoplocal.validateMail
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 
 
@@ -295,6 +293,7 @@ fun DialogRegistration(){
                                     if (result) {
                                         DialogRouter.reset()
                                         viewModel.getLoginState().checkFingerButtonState()
+                                        viewModel.showSnackbar(getStringResource(R.string.text_notifyreg))
                                     }
                                    // viewModel.getLoginState().hideProgress()
                                 },

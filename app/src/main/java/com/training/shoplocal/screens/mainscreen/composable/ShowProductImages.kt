@@ -400,7 +400,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
             }
             linkImage.status = Status.LOADING
             ImageLinkDownloader.downloadImage(
-                "$SERVER_URL/images_ls/${linkImage.link}",
+                "$SERVER_URL/$DIR_IMAGES/${linkImage.link}",
                 reduce,
                 callback = object : Callback {
                     override fun onComplete(image: ExtBitmap) {
