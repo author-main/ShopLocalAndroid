@@ -21,6 +21,7 @@ import com.training.shoplocal.R
 import com.training.shoplocal.log
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.ui.theme.PrimaryDark
+import com.training.shoplocal.ui.theme.SelectedItemBottomNavi
 import com.training.shoplocal.ui.theme.TextLightGray
 import com.training.shoplocal.ui.theme.TextOrange
 
@@ -57,9 +58,10 @@ fun ButtonUserAccessPanel(state: LoginViewState){
         ) {
             Text(
                 text = stringResource(id = R.string.btn_reg),
-                color = TextOrange,
+                color = SelectedItemBottomNavi,// TextOrange,
                 fontWeight = FontWeight.Light,
-                fontSize = 13.sp
+                fontSize = 13.sp,
+                letterSpacing = 0.sp
             )
         }
 
@@ -86,7 +88,8 @@ fun ButtonUserAccessPanel(state: LoginViewState){
                 text = stringResource(id = R.string.btn_rest),
                 color = TextOrange,
                 fontWeight = FontWeight.Light,
-                fontSize = 13.sp
+                fontSize = 13.sp,
+                letterSpacing = 0.sp
             )
         }
       }

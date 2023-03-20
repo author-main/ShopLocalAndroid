@@ -10,9 +10,9 @@ import com.training.shoplocal.ui.theme.SelectedItem
 import com.training.shoplocal.ui.theme.TextFieldBg
 import java.text.DecimalFormatSymbols
 //---------------------------------------------------------------------------------------------
-    const val SERVER_URL = "http://192.168.0.10"
+    //const val SERVER_URL = "http://192.168.0.10"
     const val DIR_IMAGES = "images_ls"
-    //const val SERVER_URL = "http://faceshot.ru"
+    const val SERVER_URL = "http://faceshot.ru"
 //---------------------------------------------------------------------------------------------
 
 const val USERMESSAGE_READ   = 0
