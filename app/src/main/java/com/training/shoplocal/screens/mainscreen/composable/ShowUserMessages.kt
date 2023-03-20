@@ -225,7 +225,11 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                                         )
                                         Box(
                                             Modifier
-                                               // .swipeable()
+                                                /*.swipeable(
+                                                    state = dismissState,
+                                                    enabled = drag.value,
+                                                    anchors = null
+                                                )*/
                                                 .fillMaxSize()
                                                 .background(colorDismiss)
                                                 .padding(horizontal = Dp(20f)),
