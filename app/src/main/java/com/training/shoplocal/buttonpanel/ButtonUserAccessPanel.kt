@@ -20,10 +20,7 @@ import com.training.shoplocal.DialogRouter
 import com.training.shoplocal.R
 import com.training.shoplocal.log
 import com.training.shoplocal.loginview.LoginViewState
-import com.training.shoplocal.ui.theme.PrimaryDark
-import com.training.shoplocal.ui.theme.SelectedItemBottomNavi
-import com.training.shoplocal.ui.theme.TextLightGray
-import com.training.shoplocal.ui.theme.TextOrange
+import com.training.shoplocal.ui.theme.*
 
 @Composable
 fun ButtonUserAccessPanel(state: LoginViewState){
@@ -58,7 +55,7 @@ fun ButtonUserAccessPanel(state: LoginViewState){
         ) {
             Text(
                 text = stringResource(id = R.string.btn_reg),
-                color = SelectedItemBottomNavi,// TextOrange,
+                color = TextOrange,
                 fontWeight = FontWeight.Light,
                 fontSize = 13.sp,
                 letterSpacing = 0.sp
