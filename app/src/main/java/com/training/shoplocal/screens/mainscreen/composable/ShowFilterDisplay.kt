@@ -338,7 +338,7 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay, reset: () -> Unit, perform: (
             MutableTransitionState(false)
         }
         visibleItem.targetState = expanded
-        androidx.compose.animation.AnimatedVisibility(
+        AnimatedVisibility(
             visibleState = visibleItem,
             enter = expandVertically(
                 animationSpec = tween(
@@ -353,7 +353,7 @@ fun ShowFilterDisplay(filter: ProviderDataDisplay, reset: () -> Unit, perform: (
                 )
             )
         ) {
-            Column() {
+            Column {
                 list.forEach { item ->
                     CustomCheckBox(
                         modifier = Modifier

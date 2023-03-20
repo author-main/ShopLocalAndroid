@@ -711,7 +711,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
                 when (activeContainer) {
                     Container.MAIN -> //ShowMessageCount(countUnreadMessages){
-                        ShowMessageCount(){
+                        ShowMessageCount {
                         openDialogMessages.value = true
                     }
                     Container.DETAIL -> {
@@ -735,7 +735,7 @@ fun MainScreen(state: ModalBottomSheetState){
                                 .size(24.dp)
                                 .clip(CircleShape)
                                 .align(Alignment.CenterVertically)
-                                .clickable() {
+                                .clickable {
 
                                     val subject = getStringResource(R.string.text_subjectshare)
                                     val extraText = detailProduct.name

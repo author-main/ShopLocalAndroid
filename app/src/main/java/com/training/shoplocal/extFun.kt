@@ -29,11 +29,11 @@ import kotlin.math.roundToInt
 //const val DEFAULT_STRRESOURCE_VALUE  = ""
 
 fun getStringArrayResource(@ArrayRes id: Int): Array<String> =
-    AppShopLocal.appContext().resources.getStringArray(id)
+    appContext().resources.getStringArray(id)
 
 fun getStringResource(@StringRes id: Int): String =
     try {
-        AppShopLocal.appContext().getString(id)
+        appContext().getString(id)
     }
     catch (e: Exception){
         EMPTY_STRING
@@ -62,7 +62,7 @@ fun isConnectedNet(): Boolean{
         if (capabilities != null)
             connected = capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || capabilities.hasTransport(
                 NetworkCapabilities.TRANSPORT_WIFI
-            );
+            )
     }
     return connected
 }
@@ -183,18 +183,18 @@ fun vibrate(duration: Long) {
     val vibe =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val vibratorManager =
-                AppShopLocal.appContext()
+                appContext()
                     .getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
             vibratorManager.defaultVibrator
         } else {
             @Suppress("DEPRECATION")
-            AppShopLocal.appContext()
+            appContext()
                 .getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         }
     val effect: VibrationEffect = VibrationEffect.createOneShot(
         duration,
         VibrationEffect.DEFAULT_AMPLITUDE
-    );
+    )
     vibe.vibrate(effect)
 }
 

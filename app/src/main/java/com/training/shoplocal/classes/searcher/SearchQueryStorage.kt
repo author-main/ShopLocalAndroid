@@ -15,7 +15,7 @@ enum class SearchState {
 }
 
 class SearchQueryStorage: SearchQueryStorageInterface {
-    private var changed = false;
+    private var changed = false
     private val listSQ = mutableListOf<String>()// getQueriesStorage().toMutableList()
 
     override val fileNameStorage: String =

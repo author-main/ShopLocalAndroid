@@ -22,7 +22,7 @@ data class User (
         password    = null
         val gson = Gson()
         val json = gson.toJson(this)
-        sharedPrefs.edit().putString("user", json).apply();
+        sharedPrefs.edit().putString("user", json).apply()
     }
 
     companion object {

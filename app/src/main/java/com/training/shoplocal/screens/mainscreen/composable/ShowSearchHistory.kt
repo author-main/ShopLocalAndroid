@@ -82,7 +82,7 @@ fun ShowSearchHistory(textSearch: MutableState<String>, searchState: State<Searc
     DisposableEffect(Unit) {
         showList.addAll(viewModel.getSearchHistoryList(true))
         initHistoryList = true
-        onDispose(){
+        onDispose {
             //log("on dispose....")
             if (searchState.value == SearchState.SEARCH_RESULT)
                 viewModel.putSearchHistoryQuery(textSearch.value.trim())

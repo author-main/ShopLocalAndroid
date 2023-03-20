@@ -18,7 +18,7 @@ import retrofit2.Call
 import retrofit2.Response
 import javax.crypto.Cipher
 
-class AccessUser(): AccessUserInterface {
+class AccessUser : AccessUserInterface {
     private var actionLogin: ((result: Int) -> Unit)? = null
     private lateinit var loginState: LoginViewState
     private var userFingerPrint: UserFingerPrint? = null

@@ -166,7 +166,7 @@ fun LoginView(state: LoginViewState) {
             ),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         )
-        Row() {
+        Row {
             for (index in 0 until LoginViewState.PASSWORD_LENGTH) {
                 val textColor = if (chars[index] == LoginViewState.emptyChar)
                     TextLightGray else TextOrange

@@ -42,7 +42,7 @@ class DownloadImageTask(private val link: String, private val reduce: Boolean, v
                     //df67318f8d0816b3b2ea29505075262a 1666444506000
                     conn.requestMethod = "GET"
                     val inputStream = conn.inputStream
-                    val outputStream = FileOutputStream(filenameTmp);
+                    val outputStream = FileOutputStream(filenameTmp)
                     val buffer = ByteArray(BUFFER_SIZE)
                     var count: Int
                     while (inputStream.read(buffer).also { count = it } > 0) {

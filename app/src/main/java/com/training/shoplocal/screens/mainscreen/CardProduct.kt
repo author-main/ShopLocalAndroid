@@ -386,7 +386,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                 Row(
                     modifier = Modifier
                         .fillMaxSize(),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = CenterVertically
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         DiscountText()
@@ -413,7 +413,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                         .fillMaxWidth()
                         //    .height(CARD_SIZE.dp)
                         .padding(horizontal = 10.dp, vertical = 6.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = CenterVertically
                 ) {
                     ProductImages()
 
@@ -423,7 +423,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                             .padding(start = 8.dp)
                     ) {
                         DescriptionText()
-                        Row() {
+                        Row {
                             Column(Modifier.weight(1f)) {
                                 ActionText()
                                 BrendText()
@@ -434,10 +434,10 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                             Spacer(modifier = Modifier.width(4.dp))
                         }
 
-                        Row() {
+                        Row {
                             Column(Modifier.weight(1f)) {
                                 StarPanel(cardproduct.star)
-                                Row() {
+                                Row {
                                     DiscountText()
                                     Spacer(modifier = Modifier.width(4.dp))
                                     PriceText()

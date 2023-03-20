@@ -48,8 +48,9 @@ data class Product(
                 brand           = 0,
                 sold            = 0,
                 linkimages      =  emptyList<String>()
-        ){}
-/**
+        )
+
+    /**
  * // Структура таблицы PRODUCTS //
  * `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
  * `name` VARCHAR(50) NOT NULL,

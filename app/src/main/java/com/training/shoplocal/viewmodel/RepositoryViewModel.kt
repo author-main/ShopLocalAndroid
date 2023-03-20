@@ -302,13 +302,13 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     }
 
     private fun getBrands(){
-        repository.getBrands() { list ->
+        repository.getBrands { list ->
             brands = list.associateBy { it.id } as HashMap<Int, Brand>
         }
     }
 
     private fun getCategories(){
-        repository.getCategories() { list ->
+        repository.getCategories { list ->
             categories = list.associateBy { it.id } as HashMap<Int, Category>
         }
     }

@@ -152,7 +152,7 @@ fun ShowDetailProduct(value: Product){
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ){
-                    Column(){
+                    Column {
                         Text(text = review.username, fontSize = 13.sp, fontWeight = FontWeight.Medium)
                         Text(text = review.date, fontSize = 12.sp, color = TextFieldFont.copy(alpha = 0.6f))
                     }
@@ -216,7 +216,7 @@ fun ShowDetailProduct(value: Product){
                         modifier = Modifier
                             .padding(vertical = 4.dp, horizontal = 8.dp)
                     ) {
-                        Row() {
+                        Row {
                             Text(
                                 text = textReview,
                                 color = SelectedItemBottomNavi,

@@ -32,7 +32,7 @@ fun ButtonPasswordPanel(state: LoginViewState){
     //log(canFingerPrint.toString())
     Column(horizontalAlignment = Alignment.CenterHorizontally){
         for (i in 0..3) {
-            Row(){
+            Row {
                 for (j in 1..3 ) {
                     val st = i * 3 + j
 //                    val char: Char= ((i * 3) + j).toChar()

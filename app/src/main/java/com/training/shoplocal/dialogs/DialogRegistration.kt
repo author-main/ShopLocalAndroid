@@ -113,7 +113,7 @@ fun DialogRegistration(){
             Text(text = label, fontFamily = labelFont,
                 modifier = Modifier.width(70.dp)
             )
-            Column(){
+            Column {
             Spacer(modifier = Modifier.height(8.dp))
             TextField(value = text.value, onValueChange = onTextChange,
                 Modifier
