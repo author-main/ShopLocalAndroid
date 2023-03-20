@@ -392,7 +392,6 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
         val linkImage = remember {
             linkImages[index]
         }
-
         LaunchedEffect(index) {
             fun checkMainImage() {
                 if (index == 0)
