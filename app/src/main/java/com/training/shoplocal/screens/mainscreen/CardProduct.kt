@@ -1,16 +1,10 @@
 package com.training.shoplocal.screens.mainscreen
 
-import androidx.compose.ui.platform.LocalDensity
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.DiscretePathEffect
-import androidx.compose.animation.core.*
-import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -19,15 +13,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
-import androidx.compose.ui.graphics.drawscope.rotate
-import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -38,23 +27,17 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.unit.toSize
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.*
 import com.training.shoplocal.AppShopLocal.Companion.appContext
 import com.training.shoplocal.R
 import com.training.shoplocal.classes.*
-import com.training.shoplocal.classes.downloader.Callback
-import com.training.shoplocal.classes.downloader.ExtBitmap
-import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 import com.training.shoplocal.classes.fodisplay.VIEW_MODE
 import com.training.shoplocal.screens.mainscreen.composable.DividerHorizontal
 import com.training.shoplocal.screens.mainscreen.composable.ShowProductImages
 import com.training.shoplocal.ui.theme.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.launch
-import java.math.RoundingMode
-import java.text.DecimalFormat
 
 @Composable
 fun DiscountPanel(modifier: Modifier, percent: Int){
@@ -128,9 +111,9 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
     /*val mode_View       = remember{ mutableStateOf(modeview)}
     val show_MoreButton = remember{ mutableStateOf(showMoreButton)}*/
 
-    val cardproduct = remember {
+    /*val product = remember {
         product
-    }
+    }*/
     fun isCardModeView() =
         modeview == VIEW_MODE.CARD
         //mode_View.value == VIEW_MODE.CARD
@@ -163,7 +146,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                 .border(1.dp, BorderButton, CircleShape)
                 .clickable {
                     scope.launch {
-                        viewModel.setSelectedProduct(cardproduct)
+                        viewModel.setSelectedProduct(product)
                         //log("card favorite ${cardproduct.favorite}")
                         state.show()
                     }
@@ -175,12 +158,12 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
         val observeSelectedProduct = viewModel.selectedProduct.collectAsState()
         val isfavorite = remember {
             derivedStateOf {
-                if (cardproduct.id == observeSelectedProduct.value.id) {
-                    cardproduct.favorite = observeSelectedProduct.value.favorite
+                if (product.id == observeSelectedProduct.value.id) {
+                    product.favorite = observeSelectedProduct.value.favorite
                     observeSelectedProduct.value.favorite > 0
                 }
                 else
-                    cardproduct.favorite > 0
+                    product.favorite > 0
             }
         }
         Box(modifier = modifier) {
@@ -205,8 +188,8 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                     .size(24.dp)
                     .clickable/*(interactionSource = remember { MutableInteractionSource() },
                            indication = rememberRipple(radius = 16.dp)) */{
-                        cardproduct.favorite = if (cardproduct.favorite > 0) 0 else 1
-                        viewModel.setProductFavorite(cardproduct)
+                        product.favorite = if (product.favorite > 0) 0 else 1
+                        viewModel.setProductFavorite(product)
                     }
             )
         }
@@ -228,12 +211,12 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                 contentAlignment = Alignment.Center
             ) {
 
-                    ShowProductImages(modifier = Modifier.fillMaxSize(), reduce = true, product = cardproduct){
-                       onClick(cardproduct)
+                    ShowProductImages(modifier = Modifier.fillMaxSize(), reduce = true, product = product){
+                       onClick(product)
                     }
                     DiscountPanel(
                         modifier = Modifier.align(if (isCardModeView()) Alignment.BottomStart else Alignment.TopStart),
-                        percent = cardproduct.discount
+                        percent = product.discount
                     )
                     //if (show_MoreButton.value) {
                     if (showMoreButton) {
@@ -279,7 +262,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
             Text(
                 modifier = Modifier.padding(horizontal = 4.dp),
                 fontSize = 15.sp,
-                text = getSalePrice(cardproduct.price, cardproduct.discount),
+                text = getSalePrice(product.price, product.discount),
                 fontWeight = FontWeight.SemiBold,
                 color = TextPrice
             )
@@ -288,9 +271,9 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
 
     @Composable
     fun PriceText(){
-        fun isDiscount() = cardproduct.discount > 0
+        fun isDiscount() = product.discount > 0
         val text = remember {
-            if (isDiscount()) getFormattedPrice(cardproduct.price) else getStringResource(
+            if (isDiscount()) getFormattedPrice(product.price) else getStringResource(
                 id = R.string.text_nodiscounts)
         }
         val style = remember{
@@ -333,7 +316,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
 
     @Composable
     fun ActionText(){
-        val promostr: String = cardproduct.getTypeSale()
+        val promostr: String = product.getTypeSale()
             /*if (cardproduct.star >= 4)
                 getStringResource(R.string.text_bestseller)
             else if (cardproduct.discount > 0)
@@ -357,7 +340,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
     @Composable
     fun DescriptionText(){
         Text(//modifier = Modifier.background(Color.Red),
-            text = cardproduct.name,
+            text = product.name,
             fontFamily = FontFamily(Font(R.font.robotocondensed_light)),
             fontSize = fontSizeDescription,
             color = TextDescription,
@@ -380,7 +363,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                         interactionSource = MutableInteractionSource(),
                         indication = null
                     ) {
-                        onClick(cardproduct)
+                        onClick(product)
                     }
             ) {
 
@@ -402,14 +385,14 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                 ActionText()
                 BrendText()
                 DescriptionText()
-                StarPanel(cardproduct.star)
+                StarPanel(product.star)
             }
         } else { // VIEW_MODE.ROW
             //if (mode_View.value == VIEW_MODE.ROW) {
             Column(Modifier
                 .clickable(interactionSource = MutableInteractionSource(),
                     indication = null) {
-                    onClick(cardproduct)
+                    onClick(product)
                 }
             ) {
                 Row(
@@ -441,7 +424,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
 
                         Row {
                             Column(Modifier.weight(1f)) {
-                                StarPanel(cardproduct.star)
+                                StarPanel(product.star)
                                 Row {
                                     DiscountText()
                                     Spacer(modifier = Modifier.width(4.dp))

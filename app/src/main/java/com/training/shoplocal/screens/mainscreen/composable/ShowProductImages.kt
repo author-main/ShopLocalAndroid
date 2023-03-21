@@ -1,10 +1,7 @@
 package com.training.shoplocal.screens.mainscreen.composable
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
@@ -22,7 +19,6 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.*
@@ -31,14 +27,12 @@ import com.training.shoplocal.classes.downloader.Callback
 import com.training.shoplocal.classes.downloader.ExtBitmap
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 import com.training.shoplocal.isEmpty
-import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.ui.theme.TextFieldBg
 import com.training.shoplocal.ui.theme.TextFieldFont
 import kotlinx.coroutines.*
 import kotlin.math.absoluteValue
 import kotlin.math.pow
-import kotlin.math.roundToInt
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -250,8 +244,8 @@ fun ShowImagesIndicator(modifier: Modifier, index: State<Int>, count: Int){
     }*/
     @Composable
     fun AnimateSymbol(selected: Boolean = false) {
-        val selectedColor = remember {TextFieldFont.copy(alpha = 0.7f)}
-        val symIndicator = remember {"●"}
+        val selectedColor = TextFieldFont.copy(alpha = 0.7f)
+        val symIndicator = "●"
         val animateColor by animateColorAsState(
             if (selected) selectedColor else TextFieldBg,
             animationSpec = tween(
@@ -341,9 +335,9 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
         var image: State<ImageBitmap> = mutableStateOf(EMPTY_IMAGE),
         var status: Status = Status.NONE
     )
-    val currentProduct = remember {
+    /*val product = remember {
         product
-    }
+    }*/
     /*var scale by remember {
         mutableStateOf(1f)
     }
@@ -354,7 +348,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
 
     val linkImages = remember {
         val entries = mutableListOf<ImageStatus>()
-        currentProduct.linkimages?.forEachIndexed { index, it ->
+        product.linkimages?.forEachIndexed { index, it ->
             entries.add(ImageStatus(id = index, link = it))
         }
         entries
