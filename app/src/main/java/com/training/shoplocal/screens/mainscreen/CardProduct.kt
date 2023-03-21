@@ -227,11 +227,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                     if (isCardModeView())
                         ButtonFavorite(
                             modifier = Modifier.align(Alignment.TopEnd)
-                        )/* {
-                        //log("setProductFavorite")
-                        viewModel.setProductFavorite(product.id, it)
-                    }*/
-              //  }
+                        )
             }
         }
 
@@ -254,6 +250,9 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
 
     @Composable
     fun DiscountText(){
+        val textDiscount = remember {
+            getSalePrice(product.price, product.discount)
+        }
         Card(
             modifier = Modifier.padding(top = 4.dp),
             backgroundColor = BgTextPrice,
@@ -262,7 +261,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
             Text(
                 modifier = Modifier.padding(horizontal = 4.dp),
                 fontSize = 15.sp,
-                text = getSalePrice(product.price, product.discount),
+                text = textDiscount,//getSalePrice(product.price, product.discount),
                 fontWeight = FontWeight.SemiBold,
                 color = TextPrice
             )
@@ -276,9 +275,9 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
             if (isDiscount()) getFormattedPrice(product.price) else getStringResource(
                 id = R.string.text_nodiscounts)
         }
-        val style = remember{
+        val style =
             TextStyle(textDecoration = if (isDiscount()) TextDecoration.LineThrough else TextDecoration.None)
-        }
+
             Text(
                 modifier = Modifier.padding(top = 4.dp),
                 fontSize = fontsize,
