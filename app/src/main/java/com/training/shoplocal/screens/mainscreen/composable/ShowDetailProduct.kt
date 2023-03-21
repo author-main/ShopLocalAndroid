@@ -62,8 +62,8 @@ import java.time.LocalDateTime
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ShowDetailProduct(value: Product){
-    val product = remember {value}
+fun ShowDetailProduct(product: Product){
+    //val product = remember {value}
     val viewBigImages = remember {
         mutableStateOf(false)
     }
