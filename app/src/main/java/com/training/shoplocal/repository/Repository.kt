@@ -175,7 +175,7 @@ class Repository: DAOinterface {
         }
     }
 
-
+    @Suppress("UNCHECKED_CAST")
     fun<T> setOrderDisplay(field: FieldFilter, value: T){
         val orderDisplay = OrderDisplay.getInstance()
         when (field) {
