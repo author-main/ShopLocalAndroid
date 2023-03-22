@@ -166,7 +166,6 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
     val fontCondensed = remember { FontFamily(Font(R.font.robotocondensed_light)) }
     val close = remember{ mutableStateOf(false) }
 
-
     fun deleteUserMessages(){
         var ids = emptyArray<Int>()
         messages.forEach {
