@@ -166,7 +166,6 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
     val fontCondensed = remember { FontFamily(Font(R.font.robotocondensed_light)) }
     val close = remember{ mutableStateOf(false) }
 
-
     fun deleteUserMessages(){
         var ids = emptyArray<Int>()
         messages.forEach {
@@ -182,7 +181,8 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
         onDispose {
             //log(messages.toString())
             viewModel.setCountUnreadMessages(messages.count{msg-> msg.read == 0 && !msg.deleted})
-            deleteUserMessages()
+            // Пока не  будем удалять сообщения на сервере
+            // -> deleteUserMessages()
             viewModel.clearMessages()
         }
     }
@@ -210,7 +210,10 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                      )
                  }
              ) {*/
-            if (messages.isEmpty())
+
+            val countMessages = messages.size - messages.count{message -> message.deleted}
+//            log("count messages = $count")
+            if (countMessages == 0)//(messages.isEmpty())
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text(text = stringResource(id = R.string.text_nousermessages), textAlign = TextAlign.Center, fontSize = 14.sp, color = ColorText.copy(alpha = 0.2f))
                 }
@@ -482,7 +485,8 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
 
                             }
                         }) {
-                            deleteUserMessages()
+                            // Пока не  будем удалять сообщения на сервере
+                            // -> deleteUserMessages()
                         }
 
 
