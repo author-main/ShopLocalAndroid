@@ -481,7 +481,8 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
 
                             }
                         }) {
-                            deleteUserMessages()
+                            // Пока не  будем удалять сообщения на сервере
+                            // -> deleteUserMessages()
                         }
 
 
