@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import com.training.shoplocal.*
 
 class DiskCache private constructor(private val cacheDir: String): ImageCache {
-    private val existsCacheStorage = createDirectory(cacheDir)
+//    private val existsCacheStorage = createDirectory(cacheDir)
     private val journal = Journal.getInstance(cacheDir)
 
     override fun getCacheDir(): String = cacheDir
@@ -104,8 +104,10 @@ class DiskCache private constructor(private val cacheDir: String): ImageCache {
             getInstance(cachedir)
         }
         private fun getInstance(cachedir: String){
-            if (!this::instance.isInitialized)
+            if (!this::instance.isInitialized) {
+                createDirectory(cachedir)
                 instance = DiskCache(cachedir)
+            }
         }
         fun getTimestamp(link: String) = instance.getTimestamp(link)
 
