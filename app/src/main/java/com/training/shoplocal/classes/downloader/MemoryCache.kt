@@ -5,7 +5,7 @@ import androidx.collection.LruCache
 import com.training.shoplocal.classes.SIZE_MEMORYCACHE
 import com.training.shoplocal.log
 
-class MemoryCache {
+class MemoryCache private constructor(){
     //private val maxMemory = Runtime.getRuntime().maxMemory() / 1024
     //private val maxCacheSize = (maxMemory / 10).toInt()
     private val maxCacheSize = SIZE_MEMORYCACHE * 1024 * 1024 // 8Mb Memory cache
@@ -29,25 +29,29 @@ class MemoryCache {
         cache.get(key) != null
 
     companion object {
+        //private val instance = MemoryCache()
         private lateinit var instance: MemoryCache
+        fun initStorage() {
+            getInstance()
+        }
         private fun getInstance() {
             if (!this::instance.isInitialized)
                 instance = MemoryCache()
         }
         fun put(key: String, bitmap: Bitmap) {
-            getInstance()
+            //getInstance()
             instance.put(key, bitmap)
         }
         fun get(key: String): Bitmap? {
-            getInstance()
+            //getInstance()
             return instance.get(key)
         }
         fun remove(key: String) {
-            getInstance()
+            //getInstance()
             instance.remove(key)
         }
         fun exist(key:String): Boolean {
-            getInstance()
+            //getInstance()
             return instance.exist(key)
         }
     }

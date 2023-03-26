@@ -3,9 +3,11 @@ package com.training.shoplocal.classes.downloader
 import android.graphics.Bitmap
 import com.training.shoplocal.*
 
-class DiskCache(private val cacheDir: String): ImageCache {
+class DiskCache private constructor(private val cacheDir: String): ImageCache {
     private val existsCacheStorage = createDirectory(cacheDir)
     private val journal = Journal.getInstance(cacheDir)
+
+    override fun getCacheDir(): String = cacheDir
 
     override fun getTimestamp(link: String): Long {
         val hash = getHashCacheFile(link)
@@ -70,7 +72,7 @@ class DiskCache(private val cacheDir: String): ImageCache {
         journal.put(getHashCacheFile(link), time)
     }
 
-    override fun remove(link: String, changeState: Boolean, cancel: Boolean) {
+    override fun remove(link: String, changeState: Boolean){//, cancel: Boolean) {
         val hash = getHashCacheFile(link)
         journal.remove(hash, changeState)
         if (!changeState)
@@ -94,5 +96,44 @@ class DiskCache(private val cacheDir: String): ImageCache {
         val filename = getFileNameFromHash(hash)
         deleteFile(filename)
         deleteFile("${filename}.$EXT_CACHETEMPFILE")
+    }
+
+    companion object {
+        private lateinit var instance: ImageCache
+        fun initStorage(cachedir: String){
+            getInstance(cachedir)
+        }
+        private fun getInstance(cachedir: String){
+            if (!this::instance.isInitialized)
+                instance = DiskCache(cachedir)
+        }
+        fun getTimestamp(link: String) = instance.getTimestamp(link)
+
+        fun placed(filesize: Long) = instance.placed(filesize)
+
+        fun normalizeJournal() {
+            instance.normalizeJournal()
+        }
+
+        fun get(link: String, timestamp: Long): Bitmap? = instance.get(link, timestamp)
+
+        fun put(link: String, time: Long = 0L) {
+            instance.put(link, time)
+        }
+
+        fun remove(link: String, changeState: Boolean){//, cancel: Boolean) {
+            instance.remove(link, changeState)//, cancel)
+        }
+
+        fun update(link: String, state: StateEntry, time: Long) {
+            instance.update(link, state, time)
+        }
+
+        fun clear() {
+            instance.clear()
+        }
+
+        fun getCacheDir() = instance.getCacheDir()
+
     }
 }

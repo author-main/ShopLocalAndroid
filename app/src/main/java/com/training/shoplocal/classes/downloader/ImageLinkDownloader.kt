@@ -22,21 +22,22 @@ enum class Source {
 data class ExtBitmap(var bitmap: Bitmap?, var source: Source)
 
 class ImageLinkDownloader private constructor() {
-    private var cachedir: String? = null
-    private var cacheStorage: ImageCache? = null
+    //private var cachedir: String? = null
+    //private var cacheStorage: ImageCache? = null
+    //private var cachedir = DiskCache.getCacheDir()
     private val executorService =
         Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
     private val listDownloadTask: HashMap<String, Future<ExtBitmap>> = hashMapOf()
     private fun normalizeJournal() {
-        cacheStorage?.normalizeJournal()
+        DiskCache.normalizeJournal()
     }
 
-    private fun setCacheDirectory(value: String) {
+  /*  private fun setCacheDirectory(value: String) {
         if (createDirectory(value)) {
             cachedir = value
             cacheStorage = DiskCache(cachedir!!)
         }
-    }
+    }*/
 
     @Synchronized
     private fun downloadImage(link: String, reduce: Boolean, callback: Callback) {
@@ -59,43 +60,43 @@ class ImageLinkDownloader private constructor() {
         }
 
 
-        cacheStorage?.put(link)
-        val timestamp = cacheStorage?.getTimestamp(link) ?: 0L
+        DiskCache.put(link)
+        val timestamp = DiskCache.getTimestamp(link) ?: 0L
         val task = DownloadImageTask(link, reduce) { extBitmap, fileTimestamp ->
             if (extBitmap.source != Source.NONE)
             {
                 extBitmap.bitmap?.let {uploaded ->
                     MemoryCache.put(md5MemoryLink, uploaded)
                 }
-                val filesize = getFileSize("$cachedir$md5link")
-                cacheStorage?.let { storage ->
+                val filesize = getFileSize("${DiskCache.getCacheDir()}$md5link")
+                //DiskCache.let { storage ->
                     if (timestamp != fileTimestamp) {
-                        if (storage.placed(filesize))
-                            storage.update(link, StateEntry.CLEAN, fileTimestamp)
+                        if (DiskCache.placed(filesize))
+                            DiskCache.update(link, StateEntry.CLEAN, fileTimestamp)
                         else
-                            storage.remove(link, changeState = true)
+                            DiskCache.remove(link, changeState = true)
                     }
-                }
+               // }
                // log("complete downloadimagetask $link")
                 callback.onComplete(extBitmap)
                 //normalizeJournal()
             } else {
-                cacheStorage?.remove(link, changeState = true)
+                DiskCache.remove(link, changeState = true)
                 callback.onFailure()
             }
 
 
                 /*?: run {
-                cacheStorage?.remove(link, changeState = true)
+                DiskCache.remove(link, changeState = true)
                 callback.onFailure()
                 //normalizeJournal()
             }*/
             //log("md5 = $md5link")
             normalizeJournal()
         }.apply {
-            //    val time = cacheStorage?.getTimestamp(link)
+            //    val time = DiskCache.getTimestamp(link)
             setCacheTimestamp(
-                timestamp = cacheStorage?.getTimestamp(link) ?: 0L
+                timestamp = DiskCache.getTimestamp(link) ?: 0L
             )
         }
         listDownloadTask[link] = executorService.submit(task)
@@ -105,7 +106,7 @@ class ImageLinkDownloader private constructor() {
         synchronized(this) {
             listDownloadTask[link]?.let { task ->
                 if (!task.isDone) {
-                    cacheStorage?.remove(link, changeState = true, true)
+                    DiskCache.remove(link, changeState = true)//, true)
                     task.cancel(true)
                 }
             }
@@ -119,7 +120,7 @@ class ImageLinkDownloader private constructor() {
             executorService.shutdownNow()
             listDownloadTask.forEach {
                 if (!it.value.isDone) {
-                    cacheStorage?.remove(it.key, changeState = true, true)
+                    DiskCache.remove(it.key, changeState = true)//, true)
                     it.value.cancel(true)
                 }
             }
@@ -130,9 +131,9 @@ class ImageLinkDownloader private constructor() {
     companion object {
         private var instance: ImageLinkDownloader? = null
         private fun getInstance(): ImageLinkDownloader =
-            instance ?: ImageLinkDownloader().apply {
+            instance ?: ImageLinkDownloader()/*.apply {
                 setCacheDirectory(getCacheDirectory())
-            }
+            }*/
 
 
         fun downloadImage(link: String?, reduce: Boolean = false, callback: Callback) {
