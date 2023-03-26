@@ -259,10 +259,11 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                                     coroutine.launch {
                                         userMessage.copydata(item)
                                         //messageIndex.value = index
-                                       // dismissState.reset()
+                                        //dismissState.reset()
                                         if(isShowSnackbar.value)
                                             isShowSnackbar.value = false
                                         viewModel.markDeletedUserMessages(userMessage.id)
+                                        dismissState.reset()
                                         isShowSnackbar.value = true
                                     }
                                 }
@@ -283,10 +284,17 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                                  }*/
                             }
 
-                            val deletedColor by animateColorAsState(
+                        /*    val deletedColor by animateColorAsState(
                                 if (drag.value)//isDissmissed)
                                     PrimaryDark
                                 else SelectedItem
+                            )*/
+
+                            val colorDismiss by animateColorAsState(
+                                when (dismissState.targetValue) {
+                                    DismissValue.Default -> PrimaryDark
+                                    else -> SelectedItem
+                                }
                             )
 
 
@@ -334,12 +342,12 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                                         FractionalThreshold(if (direction == DismissDirection.EndToStart) 0.2f else 0.05f)
                                     }*/,
                                     background = {
-                                        val colorDismiss by animateColorAsState(
+                                      /*  val colorDismiss by animateColorAsState(
                                             when (dismissState.targetValue) {
                                                 DismissValue.Default -> PrimaryDark
                                                 else -> SelectedItem
                                             }
-                                        )
+                                        )*/
                                         val scale by animateFloatAsState(
                                             if (dismissState.targetValue == DismissValue.Default) 0.75f else 1f
                                         )
@@ -384,7 +392,7 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                                                 }
 
 
-                                                .background(deletedColor)//PrimaryDark)
+                                                .background(colorDismiss)//deletedColor)//PrimaryDark)
                                                 .padding(vertical = 8.dp)) {
                                                 Image(
                                                     modifier = Modifier
