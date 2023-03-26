@@ -243,11 +243,11 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                             }
 
                             val isDissmissed = dismissState.isDismissed(DismissDirection.EndToStart)
-                            val deletedColor by animateColorAsState(
+                            /*val deletedColor by animateColorAsState(
                                 if (!isDissmissed)
                                     PrimaryDark
                                 else SelectedItem
-                            )
+                            )*/
                             //if (isDissmissed) {//(dismissState.isDismissed(DismissDirection.EndToStart)) {
                             //log("delete item ${item.id}...")
                             /*CancelAction(content = {
@@ -259,7 +259,7 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                                     coroutine.launch {
                                         userMessage.copydata(item)
                                         //messageIndex.value = index
-                                        dismissState.reset()
+                                       // dismissState.reset()
                                         if(isShowSnackbar.value)
                                             isShowSnackbar.value = false
                                         viewModel.markDeletedUserMessages(userMessage.id)
@@ -268,9 +268,6 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                                 }
                             }
                             // }
-
-
-
                             LaunchedEffect(drag.value) {
                                 if (!drag.value)
                                     vibrate(30)
@@ -285,6 +282,12 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                                      log("drag...")
                                  }*/
                             }
+
+                            val deletedColor by animateColorAsState(
+                                if (drag.value)//isDissmissed)
+                                    PrimaryDark
+                                else SelectedItem
+                            )
 
 
 
