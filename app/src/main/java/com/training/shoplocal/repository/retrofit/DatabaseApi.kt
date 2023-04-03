@@ -3,6 +3,7 @@ package com.training.shoplocal.repository.retrofit
 import com.google.gson.GsonBuilder
 import com.training.shoplocal.classes.*
 import com.training.shoplocal.log
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -12,9 +13,6 @@ object DatabaseApi {
     private const val QUERY_REGUSER     = "reg_user"
     private const val QUERY_LOGINUSER   = "login_user"
     private const val QUERY_RESTOREUSER = "restore_user"
-    //private const val url = "http://shop_local.ru"
-    //private const val url = "http://192.168.1.10"
-        //private const val url = "http://192.168.0.103"
 
     private var service: DatabaseApiInterface? = null
     init{

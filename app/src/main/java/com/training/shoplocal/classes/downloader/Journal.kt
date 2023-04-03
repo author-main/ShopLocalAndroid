@@ -214,7 +214,7 @@ class Journal private constructor(private val cacheDir: String) {
     *  @param hash хэш (имя) файла кэша
     */
    //@Synchronized
-   fun getCacheFileSize(hash: String): Long =
+  /* fun getCacheFileSize(hash: String): Long =
        entries[hash]?.let{
            //if (it.state != StateEntry.REMOVE)
            if (!removed(it))
@@ -222,7 +222,7 @@ class Journal private constructor(private val cacheDir: String) {
            else
                0L
        } ?: 0L
-
+*/
     //@Synchronized
     fun leavingCacheFiles(limit: Long): List<String> {
         val size = getCacheSize()
