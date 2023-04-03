@@ -1,15 +1,12 @@
 package com.training.shoplocal.viewmodel
 
 import android.content.Context
-import android.content.Context.VIBRATOR_SERVICE
 import android.os.*
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.training.shoplocal.*
 import com.training.shoplocal.classes.*
-import com.training.shoplocal.classes.downloader.MemoryCache
 import com.training.shoplocal.classes.fodisplay.FieldFilter
 import com.training.shoplocal.classes.fodisplay.ItemFilter
 import com.training.shoplocal.classes.fodisplay.OrderDisplay
@@ -18,7 +15,6 @@ import com.training.shoplocal.repository.Repository
 import com.training.shoplocal.screens.ScreenRouter
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.util.*
 import kotlin.collections.HashMap

@@ -98,7 +98,7 @@ class Journal private constructor(private val cacheDir: String) {
     }
 
     //@Synchronized
-    fun loadEntriesFromJournal(){
+    private fun loadEntriesFromJournal(){
         entries.clear()
         try {
             BufferedReader(FileReader(fileJournal)).use {

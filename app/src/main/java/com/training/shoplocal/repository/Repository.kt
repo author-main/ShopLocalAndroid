@@ -2,10 +2,7 @@ package com.training.shoplocal.repository
 
 
 import android.content.Context
-import com.training.shoplocal.AppShopLocal
 import com.training.shoplocal.classes.*
-import com.training.shoplocal.classes.downloader.DiskCache
-import com.training.shoplocal.classes.downloader.MemoryCache
 import com.training.shoplocal.classes.fodisplay.FieldFilter
 import com.training.shoplocal.classes.fodisplay.OrderDisplay
 import com.training.shoplocal.classes.fodisplay.SORT_PROPERTY
@@ -13,7 +10,6 @@ import com.training.shoplocal.classes.fodisplay.SORT_TYPE
 import com.training.shoplocal.classes.screenhelpers.DataScreen
 import com.training.shoplocal.classes.searcher.SearchQueryStorage
 import com.training.shoplocal.encodeBase64
-import com.training.shoplocal.log
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.screens.ScreenRouter
 import retrofit2.Response
@@ -22,10 +18,10 @@ import kotlin.collections.HashMap
 class Repository: DAOinterface {
     //private val dataDisplay = DataDisplay()
     val loginState = LoginViewState.getLoginState()
-    init {
+  /*  init {
         DiskCache.initStorage(AppShopLocal.appContext().applicationInfo.dataDir + "/cache/")
-        MemoryCache.initStorage()
-    }
+        memoryCache.initStorage()
+    }*/
 
     /**
      *  Реализация методов для получения доступа (регистрация, вход по паролю,

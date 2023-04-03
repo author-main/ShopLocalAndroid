@@ -17,6 +17,7 @@ data class User (
     /*private val sharedPrefs: SharedPreferences =
         AppShopLocal.appContext().getSharedPreferences(FILE_PREFERENCES, Context.MODE_PRIVATE)*/
 
+
     fun saveUserData(){
         id          = null
         password    = null

@@ -3,23 +3,29 @@ package com.training.shoplocal.classes.downloader
 import android.graphics.Bitmap
 import com.training.shoplocal.*
 
-class DiskCache private constructor(private val cacheDir: String): ImageCache {
+class DiskCache(override val cacheDir: String): ImageDiskCache {
 //    private val existsCacheStorage = createDirectory(cacheDir)
     private val journal = Journal.getInstance(cacheDir)
 
-    override fun getCacheDir(): String = cacheDir
+    //override fun getCacheDir(): String = cacheDir
 
     override fun getTimestamp(link: String): Long {
         val hash = getHashCacheFile(link)
         return journal.getTimestamp(hash)
     }
 
+  /*  override var cacheDir: String
+        get() = TODO("Not yet implemented")
+        set(value) {
+            dir
+        }
+*/
     override fun placed(filesize: Long): Boolean{
-        if (journal.getCacheSize() + filesize < CACHE_SIZE)
+        if (journal.getCacheSize() + filesize < DISK_CACHESIZE)
             return true
-        if (filesize > CACHE_SIZE)
+        if (filesize > DISK_CACHESIZE)
             return false
-        val listHash = journal.leavingCacheFiles(CACHE_SIZE - filesize)
+        val listHash = journal.leavingCacheFiles(DISK_CACHESIZE - filesize)
         if (listHash.isEmpty())
             return false
         listHash.forEach {hash ->
@@ -98,7 +104,7 @@ class DiskCache private constructor(private val cacheDir: String): ImageCache {
         deleteFile("${filename}.$EXT_CACHETEMPFILE")
     }
 
-    companion object {
+  /*  companion object {
         private lateinit var instance: ImageCache
         fun initStorage(cachedir: String){
             getInstance(cachedir)
@@ -137,5 +143,5 @@ class DiskCache private constructor(private val cacheDir: String): ImageCache {
 
         fun getCacheDir() = instance.getCacheDir()
 
-    }
+    }*/
 }

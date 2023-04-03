@@ -1,15 +1,8 @@
 package com.training.shoplocal.classes.downloader
 
 import android.graphics.Bitmap
-import android.os.Handler
-import android.os.Looper
 import com.training.shoplocal.*
-import com.training.shoplocal.classes.EMPTY_IMAGE
 import com.training.shoplocal.classes.EMPTY_STRING
-import kotlinx.coroutines.delay
-import java.io.IOException
-import java.net.HttpURLConnection
-import java.net.URL
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
 
@@ -22,6 +15,8 @@ enum class Source {
 data class ExtBitmap(var bitmap: Bitmap?, var source: Source)
 
 class ImageLinkDownloader private constructor() {
+    private val diskCache:ImageDiskCache = DiskCache(CACHE_DIR)
+    private val memoryCache: ImageMemoryCache = MemoryCache(8)
     //private var cachedir: String? = null
     //private var cacheStorage: ImageCache? = null
     //private var cachedir = DiskCache.getCacheDir()
@@ -29,7 +24,7 @@ class ImageLinkDownloader private constructor() {
         Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
     private val listDownloadTask: HashMap<String, Future<ExtBitmap>> = hashMapOf()
     private fun normalizeJournal() {
-        DiskCache.normalizeJournal()
+        diskCache.normalizeJournal()
     }
 
   /*  private fun setCacheDirectory(value: String) {
@@ -44,7 +39,7 @@ class ImageLinkDownloader private constructor() {
         val md5link = md5(fileNameFromPath(link))
         val md5MemoryLink = md5link + if (reduce) EMPTY_STRING else "_"
         //val reduceSym = if (reduce) EMPTY_STRING else "_"
-        val bitmapMemory = MemoryCache.get(md5MemoryLink)
+        val bitmapMemory = memoryCache.get(md5MemoryLink)
         if (bitmapMemory != null) {
            // log ("$link from memory cache")
             val extBitmap = ExtBitmap(bitmapMemory, Source.MEMORY_CACHE)
@@ -60,28 +55,28 @@ class ImageLinkDownloader private constructor() {
         }
 
 
-        DiskCache.put(link)
-        val timestamp = DiskCache.getTimestamp(link) ?: 0L
+        diskCache.put(link)
+        val timestamp = diskCache.getTimestamp(link) ?: 0L
         val task = DownloadImageTask(link, reduce) { extBitmap, fileTimestamp ->
             if (extBitmap.source != Source.NONE)
             {
                 extBitmap.bitmap?.let {uploaded ->
-                    MemoryCache.put(md5MemoryLink, uploaded)
+                    memoryCache.put(md5MemoryLink, uploaded)
                 }
-                val filesize = getFileSize("${DiskCache.getCacheDir()}$md5link")
+                val filesize = getFileSize("${diskCache.getCacheDirectory()}$md5link")
                 //DiskCache.let { storage ->
                     if (timestamp != fileTimestamp) {
-                        if (DiskCache.placed(filesize))
-                            DiskCache.update(link, StateEntry.CLEAN, fileTimestamp)
+                        if (diskCache.placed(filesize))
+                            diskCache.update(link, StateEntry.CLEAN, fileTimestamp)
                         else
-                            DiskCache.remove(link, changeState = true)
+                            diskCache.remove(link, changeState = true)
                     }
                // }
                // log("complete downloadimagetask $link")
                 callback.onComplete(extBitmap)
                 //normalizeJournal()
             } else {
-                DiskCache.remove(link, changeState = true)
+                diskCache.remove(link, changeState = true)
                 callback.onFailure()
             }
 
@@ -96,7 +91,7 @@ class ImageLinkDownloader private constructor() {
         }.apply {
             //    val time = DiskCache.getTimestamp(link)
             setCacheTimestamp(
-                timestamp = DiskCache.getTimestamp(link) ?: 0L
+                timestamp = diskCache.getTimestamp(link) ?: 0L
             )
         }
         listDownloadTask[link] = executorService.submit(task)
@@ -106,7 +101,7 @@ class ImageLinkDownloader private constructor() {
         synchronized(this) {
             listDownloadTask[link]?.let { task ->
                 if (!task.isDone) {
-                    DiskCache.remove(link, changeState = true)//, true)
+                    diskCache.remove(link, changeState = true)//, true)
                     task.cancel(true)
                 }
             }
@@ -120,7 +115,7 @@ class ImageLinkDownloader private constructor() {
             executorService.shutdownNow()
             listDownloadTask.forEach {
                 if (!it.value.isDone) {
-                    DiskCache.remove(it.key, changeState = true)//, true)
+                    diskCache.remove(it.key, changeState = true)//, true)
                     it.value.cancel(true)
                 }
             }
