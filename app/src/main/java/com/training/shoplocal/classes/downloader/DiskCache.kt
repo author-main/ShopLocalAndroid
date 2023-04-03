@@ -5,7 +5,8 @@ import com.training.shoplocal.*
 
 class DiskCache(override val cacheDir: String): ImageDiskCache {
 //    private val existsCacheStorage = createDirectory(cacheDir)
-    private val journal = Journal.getInstance(cacheDir)
+    private val journal = Journal(cacheDir)
+        //Journal.getInstance(cacheDir)
 
     //override fun getCacheDir(): String = cacheDir
 

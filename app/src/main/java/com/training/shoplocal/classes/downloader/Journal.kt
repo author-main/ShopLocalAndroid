@@ -8,7 +8,7 @@ import java.io.FileOutputStream
 import java.io.FileReader
 import java.io.IOException
 
-class Journal private constructor(private val cacheDir: String) {
+class Journal(private val cacheDir: String) {
     private data class CacheEntry(val hash: String) {
         var state:    StateEntry = StateEntry.CLEAN     // состояние файла
         var time:     Long = 0                          // дата создания/изменения файла кеша
@@ -274,10 +274,10 @@ class Journal private constructor(private val cacheDir: String) {
     fun getEntryState(hash: String): StateEntry =
         entries[hash]?.state ?: StateEntry.REMOVE
 
-   companion object {
+  /* companion object {
        private var instance: Journal? = null
        @JvmName("getInstance1")
        fun getInstance(cacheDir: String): Journal =
            instance ?: Journal(cacheDir)
-   }
+   }*/
 }
