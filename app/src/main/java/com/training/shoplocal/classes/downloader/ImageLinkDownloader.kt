@@ -34,7 +34,7 @@ class ImageLinkDownloader private constructor() {
         }
     }*/
 
-    @Synchronized
+    //@Synchronized
     private fun downloadImage(link: String, reduce: Boolean, callback: Callback) {
         val md5link = md5(fileNameFromPath(link))
         val md5MemoryLink = md5link + if (reduce) EMPTY_STRING else "_"
