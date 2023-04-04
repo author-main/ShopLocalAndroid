@@ -70,7 +70,7 @@ class DiskCache(override val cacheDir: String): ImageDiskCache {
 
         return bitmap
     }
-
+    @Synchronized
     override fun put(link: String, time: Long) {
        /* val state = if (time == 0L)
             StateEntry.DIRTY
@@ -78,14 +78,14 @@ class DiskCache(override val cacheDir: String): ImageDiskCache {
             StateEntry.CLEAN*/
         journal.put(getHashCacheFile(link), time)
     }
-
+    @Synchronized
     override fun remove(link: String, changeState: Boolean){//, cancel: Boolean) {
         val hash = getHashCacheFile(link)
         journal.remove(hash, changeState)
         if (!changeState)
             deleteCacheFile(hash)
     }
-
+    @Synchronized
     override fun update(link: String, state: StateEntry, time: Long) {
         val hash = getHashCacheFile(link)
         journal.update(hash, state, time)
