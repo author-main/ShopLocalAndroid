@@ -14,9 +14,12 @@ enum class Source {
 }
 data class ExtBitmap(var bitmap: Bitmap?, var source: Source)
 
-class ImageLinkDownloader private constructor() {
-    private val diskCache:ImageDiskCache = DiskCache(CACHE_DIR)
-    private val memoryCache: ImageMemoryCache = MemoryCache(8)
+class ImageLinkDownloader private constructor(
+    private val diskCache:ImageDiskCache,
+    private val memoryCache: ImageMemoryCache
+) {
+    /*private val diskCache:ImageDiskCache = DiskCache(CACHE_DIR)
+    private val memoryCache: ImageMemoryCache = MemoryCache(8)*/
     //private var cachedir: String? = null
     //private var cacheStorage: ImageCache? = null
     //private var cachedir = DiskCache.getCacheDir()
@@ -126,7 +129,10 @@ class ImageLinkDownloader private constructor() {
     companion object {
         private var instance: ImageLinkDownloader? = null
         private fun getInstance(): ImageLinkDownloader =
-            instance ?: ImageLinkDownloader()/*.apply {
+            instance ?: ImageLinkDownloader(
+                DiskCache(CACHE_DIR),
+                MemoryCache(8)
+            )/*.apply {
                 setCacheDirectory(getCacheDirectory())
             }*/
 
