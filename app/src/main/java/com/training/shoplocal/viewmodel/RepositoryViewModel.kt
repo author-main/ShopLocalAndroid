@@ -232,12 +232,12 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         repository.setContextFingerPrint(context)
     }
 
-    private fun getProduct(id: Int){
+  /*  private fun getProduct(id: Int){
         repository.getProduct(id) { product ->
             //log(product.toString())
             //_products.value = products.toMutableList()
         }
-    }
+    }*/
 
     /**
      * Получить max число порций, количество записей возвращается в первой строке результа

@@ -94,7 +94,7 @@ class ImageLinkDownloader private constructor(
         }.apply {
             //    val time = DiskCache.getTimestamp(link)
             setCacheTimestamp(
-                timestamp = diskCache.getTimestamp(link) ?: 0L
+                timestamp = diskCache.getTimestamp(link)
             )
         }
         listDownloadTask[link] = executorService.submit(task)
