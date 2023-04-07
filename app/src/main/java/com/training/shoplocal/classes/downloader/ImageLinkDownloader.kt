@@ -5,6 +5,7 @@ import com.training.shoplocal.*
 import com.training.shoplocal.classes.EMPTY_STRING
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
+import javax.inject.Inject
 
 enum class Source {
     NONE,         // ошибка загрузки
@@ -14,8 +15,9 @@ enum class Source {
 }
 data class ExtBitmap(var bitmap: Bitmap?, var source: Source)
 
-class ImageLinkDownloader( // private constructor(
-    private val diskCache   :ImageDiskCache,
+
+class ImageLinkDownloader @Inject constructor( // private constructor(
+    private val diskCache   : ImageDiskCache,
     private val memoryCache : ImageMemoryCache
 ) {
     /*private val diskCache:ImageDiskCache = DiskCache(CACHE_DIR)

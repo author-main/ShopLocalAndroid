@@ -8,6 +8,7 @@ class ImageCacheModule {
     fun provideJournalCache     (cacheDirectory: String): Journal        = Journal(cacheDirectory)
     fun provideDiskCache        (cacheDirectory: String): ImageDiskCache = DiskCache(cacheDirectory)
     fun provideMemoryCache      (cacheSize: Int): ImageMemoryCache       = MemoryCache(cacheSize)
+    /** Реализован @Inject на конструкторе класс ImageLinkDownloader
     fun provideImageDownloader  (diskCache: ImageDiskCache,
-                                 memoryCache: ImageMemoryCache)          = ImageLinkDownloader(diskCache, memoryCache)
+                                 memoryCache: ImageMemoryCache)          = ImageLinkDownloader(diskCache, memoryCache)*/
 }
