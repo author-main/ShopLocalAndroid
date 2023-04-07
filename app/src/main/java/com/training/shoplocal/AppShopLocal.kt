@@ -2,9 +2,20 @@ package com.training.shoplocal
 
 import android.app.Application
 import android.content.Context
+import com.training.shoplocal.dagger.AppComponent
+import com.training.shoplocal.dagger.DaggerAppComponent
 import com.training.shoplocal.repository.Repository
 
 class AppShopLocal: Application() {
+    private lateinit var appComponent: AppComponent
+    override fun onCreate() {
+        super.onCreate()
+        appComponent = DaggerAppComponent.builder()
+            .cacheDir(applicationInfo.dataDir + "/cache/")
+            .cacheSize(8)
+            .build()
+   }
+
     init {
         instance = this
     }

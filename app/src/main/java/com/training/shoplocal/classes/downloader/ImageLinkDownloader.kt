@@ -14,9 +14,9 @@ enum class Source {
 }
 data class ExtBitmap(var bitmap: Bitmap?, var source: Source)
 
-class ImageLinkDownloader private constructor(
-    private val diskCache:ImageDiskCache,
-    private val memoryCache: ImageMemoryCache
+class ImageLinkDownloader( // private constructor(
+    private val diskCache   :ImageDiskCache,
+    private val memoryCache : ImageMemoryCache
 ) {
     /*private val diskCache:ImageDiskCache = DiskCache(CACHE_DIR)
     private val memoryCache: ImageMemoryCache = MemoryCache(8)*/
