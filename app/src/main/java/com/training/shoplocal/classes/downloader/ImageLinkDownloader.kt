@@ -6,6 +6,7 @@ import com.training.shoplocal.classes.EMPTY_STRING
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
 import javax.inject.Inject
+import com.training.shoplocal.AppShopLocal.Companion.appComponent
 
 enum class Source {
     NONE,         // ошибка загрузки
@@ -20,6 +21,10 @@ class ImageLinkDownloader @Inject constructor( // private constructor(
     private val diskCache   : ImageDiskCache,
     private val memoryCache : ImageMemoryCache
 ) {
+
+    init {
+        appComponent.injectImageDownloader(this)
+    }
     /*private val diskCache:ImageDiskCache = DiskCache(CACHE_DIR)
     private val memoryCache: ImageMemoryCache = MemoryCache(8)*/
     //private var cachedir: String? = null

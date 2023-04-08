@@ -29,6 +29,8 @@ class AppShopLocal: Application() {
         instance = this
     }
     companion object {
+        val appComponent: AppComponent
+            get () = instance.appComponent
         private lateinit var instance: AppShopLocal
         private lateinit var repository: Repository
         fun appRepository(): Repository {
@@ -38,9 +40,6 @@ class AppShopLocal: Application() {
         }
         fun appContext(): Context =
             instance.applicationContext
-
-        val appComponent: AppComponent
-            get () = instance.appComponent
 
     }
 }
