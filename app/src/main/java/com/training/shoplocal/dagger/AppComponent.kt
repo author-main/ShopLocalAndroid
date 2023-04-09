@@ -11,10 +11,7 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = [CacheModule::class])//, dependencies = [ProviderCacheParam::class])
 interface AppComponent {
-    //fun injectImageDownloader(imageDownloader: ImageLinkDownloader)
-    val imageDownloader: ImageLinkDownloader
-    fun injectViewModel(viewModel: RepositoryViewModel)
-
+    fun injectRepositoryViewModel(viewModel: RepositoryViewModel)
     @Component.Builder
     interface Builder{
         @BindsInstance

@@ -36,7 +36,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
 
     init {
-        appComponent.injectViewModel(this)
+        appComponent.injectRepositoryViewModel(this)
     }
 
 
