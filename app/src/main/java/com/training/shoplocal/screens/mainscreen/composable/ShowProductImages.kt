@@ -22,6 +22,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.*
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.shoplocal.classes.*
 import com.training.shoplocal.classes.downloader.Callback
 import com.training.shoplocal.classes.downloader.ExtBitmap
@@ -30,7 +31,9 @@ import com.training.shoplocal.isEmpty
 import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.ui.theme.TextFieldBg
 import com.training.shoplocal.ui.theme.TextFieldFont
+import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.*
+import javax.inject.Inject
 import kotlin.math.absoluteValue
 import kotlin.math.pow
 
@@ -122,7 +125,7 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                 onDoubleTap = {
                     if (isZoom) {
                         val delta = (maxScale - minScale) / 2f
-                       if (scale >= minScale + delta) {
+                        if (scale >= minScale + delta) {
                             offsetX = 0f
                             offsetY = 0f
                             scale = minScale
@@ -130,7 +133,7 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                         } else {
                             scale = maxScale
                             enableScroll(false)
-                         }
+                        }
                         //animate = true
                     }
                 },
@@ -169,15 +172,15 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
 
     ){
         Image(source, modifier = Modifier
-                .fillMaxSize()
-                .graphicsLayer {
-                    if (isZoom) {
-                        scaleX = animScale
-                        scaleY = animScale
-                        translationX = animOffsetX
-                        translationY = animOffsetY
-                    }
-                }, contentDescription = null)
+            .fillMaxSize()
+            .graphicsLayer {
+                if (isZoom) {
+                    scaleX = animScale
+                    scaleY = animScale
+                    translationX = animOffsetX
+                    translationY = animOffsetY
+                }
+            }, contentDescription = null)
 
     }
 }
@@ -278,6 +281,8 @@ private enum class Status {
 @Composable
 fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, startIndex: MutableState<Int> = mutableStateOf(0), isZoom: Boolean = false, onLoadImage:((index: Int, image: ImageBitmap) -> Unit)? = null,
                       onChangeImage: ((index: Int) -> Unit)? = null, onClick: (product: Product) -> Unit = {}) {
+    val viewModel: RepositoryViewModel = viewModel()
+
     @Composable
     fun ProgressDownloadImage(size: Size) {
         if (size.width > 0) {
@@ -306,7 +311,8 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
                 )
             )
             Canvas(
-                modifier = Modifier.size(dpSize)
+                modifier = Modifier
+                    .size(dpSize)
                     .clip(RectangleShape)
             ) {
                 rotate(degrees = 45f) {
@@ -365,6 +371,9 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
 
     @Composable
     fun downloadImage(indexLink: Int): State<ImageBitmap> {
+/*        val imageDownloader = remember {
+
+        }*/
         /*val isMainImage = remember{
             index == 0
         }*/
@@ -392,7 +401,9 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
                     downloadedMainImage = true
             }
             linkImage.status = Status.LOADING
-            ImageLinkDownloader.downloadImage(
+            //ImageLinkDownloader.downloadImage(
+            viewModel.imageDownloader.downloadImage(
+            //viewModel.imageDownloader.downloadImage(
                 "$SERVER_URL/$DIR_IMAGES/${linkImage.link}",
                 reduce,
                 callback = object : Callback {
@@ -460,6 +471,8 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
 
     DisposableEffect(Unit){
         onDispose {
+            //ImageLinkDownloader.cancel()
+            //viewModel.imageDownloader.cancelAll()
             linkImages.clear()
         }
     }

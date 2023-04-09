@@ -6,7 +6,7 @@ import com.training.shoplocal.classes.EMPTY_STRING
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
 import javax.inject.Inject
-import com.training.shoplocal.AppShopLocal.Companion.appComponent
+import javax.inject.Singleton
 
 enum class Source {
     NONE,         // ошибка загрузки
@@ -16,15 +16,14 @@ enum class Source {
 }
 data class ExtBitmap(var bitmap: Bitmap?, var source: Source)
 
-
+@Singleton
 class ImageLinkDownloader @Inject constructor( // private constructor(
     private val diskCache   : ImageDiskCache,
     private val memoryCache : ImageMemoryCache
 ) {
-
-    init {
+   /* init {
         appComponent.injectImageDownloader(this)
-    }
+    }*/
     /*private val diskCache:ImageDiskCache = DiskCache(CACHE_DIR)
     private val memoryCache: ImageMemoryCache = MemoryCache(8)*/
     //private var cachedir: String? = null
@@ -44,8 +43,15 @@ class ImageLinkDownloader @Inject constructor( // private constructor(
         }
     }*/
 
-    //@Synchronized
-    private fun downloadImage(link: String, reduce: Boolean, callback: Callback) {
+//    @Synchronized
+
+
+    fun downloadImage(link: String?, reduce: Boolean = false, callback: Callback) {
+
+        if (link.isNullOrEmpty()) {
+            callback.onFailure()
+            return
+        }
         val md5link = md5(fileNameFromPath(link))
         val md5MemoryLink = md5link + if (reduce) EMPTY_STRING else "_"
         //val reduceSym = if (reduce) EMPTY_STRING else "_"
@@ -66,7 +72,7 @@ class ImageLinkDownloader @Inject constructor( // private constructor(
 
 
         diskCache.put(link)
-        val timestamp = diskCache.getTimestamp(link) ?: 0L
+        val timestamp = diskCache.getTimestamp(link)// ?: 0L
         val task = DownloadImageTask(link, reduce) { extBitmap, fileTimestamp ->
             if (extBitmap.source != Source.NONE)
             {
@@ -107,7 +113,7 @@ class ImageLinkDownloader @Inject constructor( // private constructor(
         listDownloadTask[link] = executorService.submit(task)
     }
 
-    fun cancelTask(link: String) {
+  /*  fun cancelTask(link: String) {
         synchronized(this) {
             listDownloadTask[link]?.let { task ->
                 if (!task.isDone) {
@@ -117,11 +123,12 @@ class ImageLinkDownloader @Inject constructor( // private constructor(
             }
             listDownloadTask.remove(link)
         }
-    }
+    }*/
 
     fun cancelAll() {
+
         if (listDownloadTask.isEmpty()) return
-        synchronized(this) {
+ //       synchronized(this) {
             executorService.shutdownNow()
             listDownloadTask.forEach {
                 if (!it.value.isDone) {
@@ -130,19 +137,21 @@ class ImageLinkDownloader @Inject constructor( // private constructor(
                 }
             }
             listDownloadTask.clear()
-        }
+ //       }
     }
 
-    companion object {
-        private var instance: ImageLinkDownloader? = null
+  /*  companion object {
+        private lateinit var instance: ImageLinkDownloader
         private fun getInstance(): ImageLinkDownloader =
-            instance ?: ImageLinkDownloader(
-                DiskCache(CACHE_DIR),
-                MemoryCache(8)
-            )/*.apply {
-                setCacheDirectory(getCacheDirectory())
-            }*/
-
+            if (this::instance.isInitialized)
+                instance
+            else {
+                log("recreate instance...")
+                ImageLinkDownloader(
+                    DiskCache(CACHE_DIR),
+                    MemoryCache(8)
+                )
+            }
 
         fun downloadImage(link: String?, reduce: Boolean = false, callback: Callback) {
             if (link.isNullOrEmpty())
@@ -151,16 +160,8 @@ class ImageLinkDownloader @Inject constructor( // private constructor(
                 getInstance().downloadImage(link, reduce, callback)
         }
 
-      /*  fun downloadCardImage(link: String?, callback: Callback) {
-            downloadImage(link, reduce = true, callback)
-        /*if (link.isNullOrEmpty())
-                callback.onFailure()
-            else
-                getInstance().downloadImage(link, reduce = true, callback)*/
-        }*/
-
         fun cancel(){
             getInstance().cancelAll()
         }
-    }
+    }*/
 }

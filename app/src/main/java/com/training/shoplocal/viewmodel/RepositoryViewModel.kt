@@ -7,6 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.training.shoplocal.*
 import com.training.shoplocal.classes.*
+import com.training.shoplocal.classes.downloader.DiskCache
+import com.training.shoplocal.classes.downloader.ImageLinkDownloader
+import com.training.shoplocal.classes.downloader.MemoryCache
 import com.training.shoplocal.classes.fodisplay.FieldFilter
 import com.training.shoplocal.classes.fodisplay.ItemFilter
 import com.training.shoplocal.classes.fodisplay.OrderDisplay
@@ -17,6 +20,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.util.*
+import javax.inject.Inject
 import kotlin.collections.HashMap
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
@@ -26,6 +30,12 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private fun accessFingerPrint(value: Boolean) {
         _accessFinger.value = value
     }*/
+    /*init {
+        appComponent.injectViewModel(this)
+    }*/
+
+  //  @Inject
+    val imageDownloader: ImageLinkDownloader = ImageLinkDownloader(DiskCache(CACHE_DIR), MemoryCache(8))
 
     private val _refreshUserMessages = MutableStateFlow<Boolean>(false)
     val refreshUserMessages = _refreshUserMessages.asStateFlow()
@@ -264,6 +274,11 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     //@Synchronized
     private fun getProducts(part: Int){
+/*        imageDownloader.cancelAll()
+        if (this::imageDownloader.isInitialized)
+            log(imageDownloader)
+        else
+            log("imageDownloader error...")*/
       // val exchangeData = exchangeDataMap[ExchangeData.GET_PRODUCTS] ?: false
       /*  if (lockDB) return
             lockDB = true*/

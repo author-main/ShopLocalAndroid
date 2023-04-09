@@ -7,6 +7,10 @@ import javax.inject.Inject
 
 class DiskCache(@CacheDir override val cacheDir: String): ImageDiskCache {
 //    private val existsCacheStorage = createDirectory(cacheDir)
+
+    init {
+        log ("create diskCache...")
+    }
     private val journal = Journal(cacheDir)
   /*  @Inject
     lateinit var journal: Journal*/

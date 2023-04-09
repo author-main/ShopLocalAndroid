@@ -7,14 +7,15 @@ import dagger.Provides
 @Module
 class ImageCacheModule {
     @Provides
-    fun provideJournalCache     (cacheDirectory: String): Journal        = Journal(cacheDirectory)
+    fun provideJournalCache(cacheDirectory: String): Journal        = Journal(cacheDirectory)
 
     @Provides
-    fun provideDiskCache        (cacheDirectory: String): ImageDiskCache = DiskCache(cacheDirectory)
+    fun provideDiskCache(cacheDirectory: String): ImageDiskCache    = DiskCache(cacheDirectory)
 
     @Provides
-    fun provideMemoryCache      (cacheSize: Int): ImageMemoryCache       = MemoryCache(cacheSize)
+    fun provideMemoryCache(cacheSize: Int): ImageMemoryCache        = MemoryCache(cacheSize)
     /** Реализован @Inject на конструкторе класс ImageLinkDownloader
+    @Provides
     fun provideImageDownloader  (diskCache: ImageDiskCache,
                                  memoryCache: ImageMemoryCache)          = ImageLinkDownloader(diskCache, memoryCache)*/
 }

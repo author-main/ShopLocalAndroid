@@ -81,7 +81,8 @@ fun AppScreen(){
                               ScreenItem.MainScreen -> {
                                   setOrderDisplayScreen()
                                         //OrderDisplay.getInstance().setScreen(ScreenRouter.getKeyValue())
-                                        ImageLinkDownloader.cancel()
+                                  //viewModel.imageDownloader.cancelAll()
+                                        //ImageLinkDownloader.cancel()
                                         MainScreen(state)
                                 //        log("mainscreen")
 
@@ -90,19 +91,22 @@ fun AppScreen(){
                               ScreenItem.CatalogScreen -> {
                                   setOrderDisplayScreen()
                                   //OrderDisplay.getInstance().setScreen(ScreenRouter.getKeyValue())
-                                  ImageLinkDownloader.cancel()
+                                  //viewModel.imageDownloader.cancelAll()
+                                  //ImageLinkDownloader.cancel()
                                   CatalogScreen()
                               }
                               ScreenItem.CartScreen -> {
                                   setOrderDisplayScreen()
                                   //OrderDisplay.getInstance().setScreen(ScreenRouter.getKeyValue())
-                                  ImageLinkDownloader.cancel()
+                                  //ImageLinkDownloader.cancel()
+                                  //viewModel.imageDownloader.cancelAll()
                                   CartScreen()
                               }
                               ScreenItem.ProfileScreen -> {
                                   setOrderDisplayScreen()
                                   //OrderDisplay.getInstance().setScreen(ScreenRouter.getKeyValue())
-                                  ImageLinkDownloader.cancel()
+                                 // viewModel.imageDownloader.cancelAll()
+                                  //ImageLinkDownloader.cancel()
                                   ProfileScreen()
                               }
                               else -> {}
