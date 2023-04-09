@@ -2,10 +2,10 @@ package com.training.shoplocal.classes.downloader
 
 import android.graphics.Bitmap
 import com.training.shoplocal.*
-import com.training.shoplocal.dagger.CacheDir
 import javax.inject.Inject
 
-class DiskCache(@CacheDir override val cacheDir: String): ImageDiskCache {
+//class DiskCache(@CacheDir override val cacheDir: String): ImageDiskCache {
+class DiskCache(override val cacheDir: String): ImageDiskCache {
 //    private val existsCacheStorage = createDirectory(cacheDir)
 
     init {

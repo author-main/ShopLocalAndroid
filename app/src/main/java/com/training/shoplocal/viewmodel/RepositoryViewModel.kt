@@ -31,12 +31,14 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private fun accessFingerPrint(value: Boolean) {
         _accessFinger.value = value
     }*/
-    /*init {
-        appComponent.injectViewModel(this)
-    }*/
-
     @Inject
-    lateinit var imageDownloader: ImageLinkDownloader// = ImageLinkDownloader(DiskCache(CACHE_DIR), MemoryCache(8))
+    lateinit var imageDownloader: ImageLinkDownloader// = appComponent.imageDownloader//: ImageLinkDownloader// = ImageLinkDownloader(DiskCache(CACHE_DIR), MemoryCache(8))
+
+
+    init {
+        appComponent.injectViewModel(this)
+    }
+
 
     private val _refreshUserMessages = MutableStateFlow<Boolean>(false)
     val refreshUserMessages = _refreshUserMessages.asStateFlow()

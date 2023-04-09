@@ -1,7 +1,6 @@
 package com.training.shoplocal.classes.downloader
 
 import com.training.shoplocal.*
-import com.training.shoplocal.dagger.CacheDir
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileFilter
@@ -9,7 +8,8 @@ import java.io.FileOutputStream
 import java.io.FileReader
 import java.io.IOException
 
-class Journal(@CacheDir private val cacheDir: String) {
+//class Journal(@CacheDir private val cacheDir: String) {
+class Journal(private val cacheDir: String) {
     private data class CacheEntry(val hash: String) {
         var state:    StateEntry = StateEntry.CLEAN     // состояние файла
         var time:     Long = 0                          // дата создания/изменения файла кеша

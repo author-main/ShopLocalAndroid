@@ -2,10 +2,10 @@ package com.training.shoplocal.classes.downloader
 
 import android.graphics.Bitmap
 import androidx.collection.LruCache
-import com.training.shoplocal.dagger.CacheSize
 import com.training.shoplocal.log
 
-class MemoryCache(@CacheSize override val sizeCache: Int): ImageMemoryCache{
+//class MemoryCache(@CacheSize override val sizeCache: Int): ImageMemoryCache{
+class MemoryCache(override val sizeCache: Int): ImageMemoryCache{
 
     //private val maxCacheSize = SIZE_MEMORYCACHE * 1024 * 1024 // 8Mb Memory cache
     init {
