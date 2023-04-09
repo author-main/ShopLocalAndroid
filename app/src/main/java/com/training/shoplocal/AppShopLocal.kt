@@ -11,7 +11,7 @@ class AppShopLocal: Application() {
     private lateinit var appComponent: AppComponent
     override fun onCreate() {
         super.onCreate()
-      /*  appComponent = DaggerAppComponent.builder()
+        appComponent = DaggerAppComponent.builder()
             .cacheDir(applicationInfo.dataDir + "/cache/")
             .cacheSize(8)
           /*  .providerCacheParam(
@@ -22,15 +22,15 @@ class AppShopLocal: Application() {
                         get() = 8
                 }
             )*/
-            .build()*/
+            .build()
    }
 
     init {
         instance = this
     }
     companion object {
-      /*  val appComponent: AppComponent
-            get () = instance.appComponent*/
+        val appComponent: AppComponent
+            get () = instance.appComponent
         private lateinit var instance: AppShopLocal
         private lateinit var repository: Repository
         fun appRepository(): Repository {

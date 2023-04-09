@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.training.shoplocal.*
+import com.training.shoplocal.AppShopLocal.Companion.appComponent
 import com.training.shoplocal.classes.*
 import com.training.shoplocal.classes.downloader.DiskCache
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
@@ -34,8 +35,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         appComponent.injectViewModel(this)
     }*/
 
-  //  @Inject
-    val imageDownloader: ImageLinkDownloader = ImageLinkDownloader(DiskCache(CACHE_DIR), MemoryCache(8))
+    @Inject
+    lateinit var imageDownloader: ImageLinkDownloader// = ImageLinkDownloader(DiskCache(CACHE_DIR), MemoryCache(8))
 
     private val _refreshUserMessages = MutableStateFlow<Boolean>(false)
     val refreshUserMessages = _refreshUserMessages.asStateFlow()

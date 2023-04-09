@@ -2,6 +2,7 @@ package com.training.shoplocal.classes.downloader
 
 import android.graphics.Bitmap
 import com.training.shoplocal.*
+import com.training.shoplocal.AppShopLocal.Companion.appComponent
 import com.training.shoplocal.classes.EMPTY_STRING
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
@@ -21,7 +22,7 @@ class ImageLinkDownloader @Inject constructor( // private constructor(
     private val diskCache   : ImageDiskCache,
     private val memoryCache : ImageMemoryCache
 ) {
-   /* init {
+    /*init {
         appComponent.injectImageDownloader(this)
     }*/
     /*private val diskCache:ImageDiskCache = DiskCache(CACHE_DIR)
