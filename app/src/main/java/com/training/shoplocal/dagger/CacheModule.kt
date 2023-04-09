@@ -5,7 +5,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class ImageCacheModule {
+class CacheModule {
     @Provides
     fun provideJournalCache(cacheDirectory: String): Journal        = Journal(cacheDirectory)
 
