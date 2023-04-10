@@ -3,14 +3,15 @@ package com.training.shoplocal.classes.downloader
 import android.graphics.Bitmap
 import androidx.collection.LruCache
 import com.training.shoplocal.log
+import javax.inject.Inject
 
 //class MemoryCache(@CacheSize override val sizeCache: Int): ImageMemoryCache{
-class MemoryCache(override val sizeCache: Int): ImageMemoryCache{
+class MemoryCache @Inject constructor (override val sizeCache: Int): ImageMemoryCache{
 
     //private val maxCacheSize = SIZE_MEMORYCACHE * 1024 * 1024 // 8Mb Memory cache
-    init {
+  /*  init {
         log ("create memoryCache...")
-    }
+    }*/
 
     private val cache = object: LruCache<String, Bitmap>(sizeCache * 1024 * 1024){
         override fun sizeOf(key: String, value: Bitmap): Int {

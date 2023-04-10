@@ -7,9 +7,10 @@ import java.io.FileFilter
 import java.io.FileOutputStream
 import java.io.FileReader
 import java.io.IOException
+import javax.inject.Inject
 
 //class Journal(@CacheDir private val cacheDir: String) {
-class Journal(private val cacheDir: String) {
+class Journal @Inject constructor(private val cacheDir: String) {
     private data class CacheEntry(val hash: String) {
         var state:    StateEntry = StateEntry.CLEAN     // состояние файла
         var time:     Long = 0                          // дата создания/изменения файла кеша

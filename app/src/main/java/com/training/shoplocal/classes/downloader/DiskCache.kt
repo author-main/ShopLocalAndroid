@@ -5,13 +5,14 @@ import com.training.shoplocal.*
 import javax.inject.Inject
 
 //class DiskCache(@CacheDir override val cacheDir: String): ImageDiskCache {
-class DiskCache(override val cacheDir: String): ImageDiskCache {
+class DiskCache @Inject constructor (override val cacheDir: String): ImageDiskCache {
 //    private val existsCacheStorage = createDirectory(cacheDir)
 
-    init {
+  /*  init {
         log ("create diskCache...")
-    }
-    private val journal = Journal(cacheDir)
+    }*/
+    @Inject
+    lateinit var journal: Journal// = Journal(cacheDir)
   /*  @Inject
     lateinit var journal: Journal*/
 
