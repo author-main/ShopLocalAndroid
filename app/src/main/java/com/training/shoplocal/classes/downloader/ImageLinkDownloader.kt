@@ -129,16 +129,32 @@ class ImageLinkDownloader @Inject constructor( // private constructor(
     fun cancelAll() {
 
         if (listDownloadTask.isEmpty()) return
- //       synchronized(this) {
-            executorService.shutdownNow()
-            listDownloadTask.forEach {
+        //log("before ${listDownloadTask.size}")
+        synchronized(this) {
+            //executorService.shutdownNow()
+            val iteratorTask = listDownloadTask.iterator()
+            while (iteratorTask.hasNext()) {
+                val entity = iteratorTask.next()
+                //log ("entity = ${entity.key}")
+                val deleteCacheFile = !entity.value.isDone
+                /*if (!entity.value.isDone)
+                    diskCache.remove(entity.key, changeState = true)//, true)*/
+                entity.value.cancel(true)
+                if (deleteCacheFile)
+                    diskCache.remove(entity.key, changeState = true)
+                iteratorTask.remove()
+            }
+            //log("after ${listDownloadTask.size}")
+            //log ("count tasks = ${listDownloadTask.size}")
+
+           /* listDownloadTask.forEach {
                 if (!it.value.isDone) {
                     diskCache.remove(it.key, changeState = true)//, true)
                     it.value.cancel(true)
                 }
-            }
-            listDownloadTask.clear()
- //       }
+            }*/
+          //  listDownloadTask.clear()
+        }
     }
 
   /*  companion object {

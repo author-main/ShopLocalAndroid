@@ -472,7 +472,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
     DisposableEffect(Unit){
         onDispose {
             //ImageLinkDownloader.cancel()
-            //viewModel.imageDownloader.cancelAll()
+            viewModel.imageDownloader.cancelAll()
             linkImages.clear()
         }
     }
