@@ -1,19 +1,23 @@
 package com.training.shoplocal.dagger
 
 import androidx.lifecycle.ViewModel
+import com.training.shoplocal.MainActivity
 import com.training.shoplocal.classes.downloader.*
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import dagger.Binds
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
+import java.lang.annotation.RetentionPolicy
 import javax.inject.Qualifier
+import javax.inject.Scope
 import javax.inject.Singleton
 
-@Singleton
-@Component(modules = [CacheModule::class])//, dependencies = [ProviderCacheParam::class])
+@ActivityMainScope
+@Component(modules = [CacheModule::class, BindsModule::class])//, dependencies = [ProviderCacheParam::class])
 interface AppComponent {
-    fun injectRepositoryViewModel(viewModel: RepositoryViewModel)
+    //fun injectRepositoryViewModel(viewModel: RepositoryViewModel)
+    fun injectMainActivity(mainActivity: MainActivity)
     @Component.Builder
     interface Builder{
         @BindsInstance
@@ -35,3 +39,6 @@ annotation class CacheDir
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
 annotation class CacheSize*/
+
+@Scope
+annotation class ActivityMainScope

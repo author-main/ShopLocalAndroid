@@ -2,6 +2,7 @@ package com.training.shoplocal.repository
 
 
 import android.content.Context
+import androidx.compose.ui.text.style.TextOverflow
 import com.training.shoplocal.classes.*
 import com.training.shoplocal.classes.fodisplay.FieldFilter
 import com.training.shoplocal.classes.fodisplay.OrderDisplay
@@ -13,15 +14,21 @@ import com.training.shoplocal.encodeBase64
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.screens.ScreenRouter
 import retrofit2.Response
+import javax.inject.Inject
 import kotlin.collections.HashMap
 
-class Repository: DAOinterface {
+class Repository @Inject constructor(
+    override val accessUser: AccessUserInterface,
+    override val databaseCRUD: DatabaseCRUDInterface
+): DAOinterface {
     //private val dataDisplay = DataDisplay()
-    val loginState = LoginViewState.getLoginState()
+   // val loginState = accessUser.loginState
   /*  init {
         DiskCache.initStorage(AppShopLocal.appContext().applicationInfo.dataDir + "/cache/")
         memoryCache.initStorage()
     }*/
+
+
 
     /**
      *  Реализация методов для получения доступа (регистрация, вход по паролю,
@@ -29,11 +36,11 @@ class Repository: DAOinterface {
      *  accessUser - класс реализующий все операции, поведение определено
      *  интерфейсом AccessUserInterface
      */
-    override var accessUser: AccessUserInterface = AccessUser().apply {
+    /*override var accessUser: AccessUserInterface = AccessUser().apply {
         this.updateViewWhen(loginState)
     }
 
-    override var databaseCRUD: DatabaseCRUDInterface = DatabaseCRUD()
+    override var databaseCRUD: DatabaseCRUDInterface = DatabaseCRUD()*/
 
     /** Context типа FragmentActivity главной активити приходится тянуть для отображения
      *  BiometricPrompt - диалог сканирования отпечатка
@@ -243,5 +250,18 @@ class Repository: DAOinterface {
                     action: (userMessages: List<UserMessage>) -> Unit){
         databaseCRUD.getMessages(id, action)
     }
+
+    fun resetLoginData() {
+        accessUser.loginState.reset()
+    }
+
+    fun getPassword() =
+        accessUser.loginState.getPassword()
+
+    fun setEmail(value: String) {
+        accessUser.loginState.setEmail(value)
+    }
+
+
 
 }

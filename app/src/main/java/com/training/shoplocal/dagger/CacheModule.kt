@@ -5,7 +5,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 
-@Module(includes = [BindsImageCache::class])
+@Module//(includes = [BindsImageCache::class])
 class CacheModule {
   /** Пересобрано с @Inject на конструкторе
     @Provides
@@ -20,15 +20,6 @@ class CacheModule {
     @Provides
     fun provideImageDownloader  (diskCache: ImageDiskCache,
                                  memoryCache: ImageMemoryCache)          = ImageLinkDownloader(diskCache, memoryCache)*/
-}
-
-@Module
-interface BindsImageCache {
-    @Binds
-    fun bindDiskCache_to_ImageDiskCache(diskCache: DiskCache): ImageDiskCache
-
-    @Binds
-    fun bindMemoryCache_to_ImageMemoryCache(memoryCache: MemoryCache): ImageMemoryCache
 }
 
 /*interface ProviderCacheParam {

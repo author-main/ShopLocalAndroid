@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import com.training.shoplocal.*
 import com.training.shoplocal.AppShopLocal.Companion.appComponent
 import com.training.shoplocal.classes.EMPTY_STRING
+import com.training.shoplocal.dagger.ActivityMainScope
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
 import javax.inject.Inject
@@ -17,7 +18,7 @@ enum class Source {
 }
 data class ExtBitmap(var bitmap: Bitmap?, var source: Source)
 
-@Singleton
+@ActivityMainScope
 class ImageLinkDownloader @Inject constructor( // private constructor(
     private val diskCache   : ImageDiskCache,
     private val memoryCache : ImageMemoryCache

@@ -6,7 +6,6 @@ import com.training.shoplocal.isConnectedNet
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.repository.retrofit.DatabaseApi
 import com.training.shoplocal.classes.User
-import com.training.shoplocal.log
 import com.training.shoplocal.userfingerprint.UserFingerPrint
 import com.training.shoplocal.userfingerprint.UserFingerPrintListener
 import com.training.shoplocal.validateMail
@@ -17,19 +16,22 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
 import javax.crypto.Cipher
+import javax.inject.Inject
 
-class AccessUser : AccessUserInterface {
+class AccessUser @Inject constructor(
+    override val loginState: LoginViewState
+): AccessUserInterface {
     private var actionLogin: ((result: Int) -> Unit)? = null
-    private lateinit var loginState: LoginViewState
+    //private lateinit var loginState: LoginViewState
     private var userFingerPrint: UserFingerPrint? = null
 
     override fun getContextFingerPrint(context: Context) {
         getUserFingerPrint(context as FragmentActivity)
     }
 
-    fun updateViewWhen(loginState: LoginViewState){
+  /*  fun updateViewWhen(loginState: LoginViewState){
         this.loginState = loginState
-    }
+    }*/
 
     override fun onLogin(
         action: ((result: Int) -> Unit)?,
@@ -41,9 +43,9 @@ class AccessUser : AccessUserInterface {
         //    if (!finger)
                 CoroutineScope(Dispatchers.Main).launch {
                     delay(400)
-                    loginState.clearPassword()
+                    this@AccessUser.loginState.clearPassword()
                 }
-            loginState.hideProgress()
+            this.loginState.hideProgress()
             action?.invoke(-1)
         }
 
@@ -78,8 +80,8 @@ class AccessUser : AccessUserInterface {
                         action?.invoke(id)
                         // log("$id")
                         if (finger)
-                            loginState.changePassword(password)
-                        loginState.clearPassword()
+                            this@AccessUser.loginState.changePassword(password)
+                        this@AccessUser.loginState.clearPassword()
                     } else {
                       //  log ("error login")
                         clearLoginPassword()
@@ -177,8 +179,8 @@ class AccessUser : AccessUserInterface {
                 userFingerPrintListener = object : UserFingerPrintListener {
                     override fun onComplete(cipher: Cipher?) {
                         cipher?.let {
-                            loginState.showProgress()
-                            onLogin(action = actionLogin, loginState.getEmail(), this@main.getPassword(it) ?: "", finger = true)
+                            this@AccessUser.loginState.showProgress()
+                            onLogin(action = actionLogin, this@AccessUser.loginState.getEmail(), this@main.getPassword(it) ?: "", finger = true)
                         }
                     }
                 }

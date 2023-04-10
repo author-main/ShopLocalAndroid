@@ -23,6 +23,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.*
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.training.shoplocal.ImageDownloader
 import com.training.shoplocal.classes.*
 import com.training.shoplocal.classes.downloader.Callback
 import com.training.shoplocal.classes.downloader.ExtBitmap
@@ -281,7 +282,9 @@ private enum class Status {
 @Composable
 fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, startIndex: MutableState<Int> = mutableStateOf(0), isZoom: Boolean = false, onLoadImage:((index: Int, image: ImageBitmap) -> Unit)? = null,
                       onChangeImage: ((index: Int) -> Unit)? = null, onClick: (product: Product) -> Unit = {}) {
-    val viewModel: RepositoryViewModel = viewModel()
+    //val viewModel: RepositoryViewModel = viewModel()
+
+    val imageDownloader = ImageDownloader.current
 
     @Composable
     fun ProgressDownloadImage(size: Size) {
@@ -402,7 +405,8 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
             }
             linkImage.status = Status.LOADING
             //ImageLinkDownloader.downloadImage(
-            viewModel.imageDownloader.downloadImage(
+            //viewModel.imageDownloader.downloadImage(
+            imageDownloader.downloadImage(
             //viewModel.imageDownloader.downloadImage(
                 "$SERVER_URL/$DIR_IMAGES/${linkImage.link}",
                 reduce,
@@ -472,7 +476,8 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
     DisposableEffect(Unit){
         onDispose {
             //ImageLinkDownloader.cancel()
-            viewModel.imageDownloader.cancelAll()
+            //viewModel.imageDownloader.cancelAll()
+            imageDownloader.cancelAll()
             linkImages.clear()
         }
     }

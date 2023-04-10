@@ -31,13 +31,13 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private fun accessFingerPrint(value: Boolean) {
         _accessFinger.value = value
     }*/
-    @Inject
+  /*  @Inject
     lateinit var imageDownloader: ImageLinkDownloader// = appComponent.imageDownloader//: ImageLinkDownloader// = ImageLinkDownloader(DiskCache(CACHE_DIR), MemoryCache(8))
 
 
     init {
         appComponent.injectRepositoryViewModel(this)
-    }
+    }*/
 
 
     private val _refreshUserMessages = MutableStateFlow<Boolean>(false)
@@ -86,7 +86,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     }
     fun closeApp(){
         USER_ID = -1
-        repository.loginState.reset()
+        repository.resetLoginData()
+        //loginState.reset()
         _products.value.clear()
         repository.clearMapScreenProducts()
         brands.values.clear()
@@ -206,13 +207,13 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private fun authorizeUser(value: Boolean = true){
         _authorizedUser.value = value
     }
-    fun getLoginState() = repository.loginState
+    fun getLoginState() = repository.accessUser.loginState
 
-    fun getPassword()   = repository.loginState.getPassword()
+    fun getPassword()   = repository.getPassword()
 
     fun removePassword()   = repository.removePassword()
 
-    fun setEmail(value: String)      = repository.loginState.setEmail(value)
+    fun setEmail(value: String)      = repository.setEmail(value)
 
     fun onRestoreUser(action: ((result: Boolean) -> Unit)?, email: String, password: String) {
         repository.onRestoreUser(action, email, password)

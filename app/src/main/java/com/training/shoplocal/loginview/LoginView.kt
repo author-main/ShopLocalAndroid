@@ -29,6 +29,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.training.shoplocal.classes.PASSWORD_LENGTH
+import com.training.shoplocal.classes.emptyChar
+import com.training.shoplocal.classes.fillChar
 import com.training.shoplocal.dialogs.ShowProgress
 import com.training.shoplocal.log
 import com.training.shoplocal.ui.theme.*
@@ -92,7 +95,7 @@ fun LoginView(state: LoginViewState) {
     //log("recomposition")
     //val passwordState = rememberSaveable(saver = PasswordViewState.Saver) { state }
     val chars = state.getPasswordChar()
-    val indexChar = chars.lastIndexOf(LoginViewState.fillChar)
+    val indexChar = chars.lastIndexOf(fillChar)
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         TextField(value = state.getEmail(), onValueChange = {
             //email = it
@@ -167,8 +170,8 @@ fun LoginView(state: LoginViewState) {
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         )
         Row {
-            for (index in 0 until LoginViewState.PASSWORD_LENGTH) {
-                val textColor = if (chars[index] == LoginViewState.emptyChar)
+            for (index in 0 until PASSWORD_LENGTH) {
+                val textColor = if (chars[index] == emptyChar)
                     TextLightGray else TextOrange
                 Box(
                     modifier = Modifier

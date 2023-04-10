@@ -53,3 +53,14 @@ enum class MESSAGE(@DrawableRes val icon: Int, val color: Color) {
     INFO    (R.drawable.ic_notifications,   TextFieldBg),
     WARNING (R.drawable.ic_warning,         TextFieldBg)
 }
+
+/**
+ *  Константы LoginViewState
+ */
+const val PASSWORD_LENGTH = 5
+const val emptyChar   = '○'
+const val fillChar    = '●'
+val arrayEmptyChar: CharArray = CharArray(PASSWORD_LENGTH).apply {
+    for (index in 0 until PASSWORD_LENGTH)
+        this[index] = emptyChar
+}

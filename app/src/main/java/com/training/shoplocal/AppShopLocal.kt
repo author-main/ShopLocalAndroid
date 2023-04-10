@@ -4,6 +4,9 @@ import android.app.Application
 import android.content.Context
 import com.training.shoplocal.dagger.AppComponent
 import com.training.shoplocal.dagger.DaggerAppComponent
+import com.training.shoplocal.loginview.LoginViewState
+import com.training.shoplocal.repository.AccessUser
+import com.training.shoplocal.repository.DatabaseCRUD
 //import com.training.shoplocal.dagger.ProviderCacheParam
 import com.training.shoplocal.repository.Repository
 
@@ -35,7 +38,10 @@ class AppShopLocal: Application() {
         private lateinit var repository: Repository
         fun appRepository(): Repository {
             if (!this::repository.isInitialized)
-                repository = Repository()
+                repository = Repository(AccessUser(
+                    LoginViewState()
+                ),
+                DatabaseCRUD())
             return repository
         }
         fun appContext(): Context =

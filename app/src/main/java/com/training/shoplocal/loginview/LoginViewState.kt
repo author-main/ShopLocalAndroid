@@ -5,6 +5,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.training.shoplocal.classes.User
+import com.training.shoplocal.classes.arrayEmptyChar
+import com.training.shoplocal.classes.fillChar
 import com.training.shoplocal.log
 import com.training.shoplocal.userfingerprint.UserFingerPrint
 import com.training.shoplocal.validateMail
@@ -159,7 +161,7 @@ class LoginViewState {
         return array
     }
 
-    companion object {
+   /* companion object {
         const val PASSWORD_LENGTH = 5
         const val emptyChar   = '○'
         const val fillChar    = '●'
@@ -177,6 +179,6 @@ class LoginViewState {
                 getPasswordState( value = it[0] as String )
             }
         )*/
-    }
+    }*/
 
 }

@@ -4,8 +4,9 @@ import com.training.shoplocal.classes.*
 import com.training.shoplocal.repository.retrofit.DatabaseApi
 import retrofit2.Call
 import retrofit2.Response
+import javax.inject.Inject
 
-class DatabaseCRUD: DatabaseCRUDInterface {
+class DatabaseCRUD @Inject constructor(): DatabaseCRUDInterface {
 
     override fun getCategories(action: (categories: List<Category>) -> Unit) {
         DatabaseApi.getCategories(object: retrofit2.Callback<List<Category>>{
