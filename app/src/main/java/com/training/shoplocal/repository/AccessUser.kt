@@ -29,6 +29,7 @@ class AccessUser @Inject constructor(
         getUserFingerPrint(context as FragmentActivity)
     }
 
+
   /*  fun updateViewWhen(loginState: LoginViewState){
         this.loginState = loginState
     }*/
