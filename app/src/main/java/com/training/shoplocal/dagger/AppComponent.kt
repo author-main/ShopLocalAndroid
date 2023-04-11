@@ -1,6 +1,7 @@
 package com.training.shoplocal.dagger
 
 import androidx.lifecycle.ViewModel
+import com.training.shoplocal.MainActivity
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import dagger.BindsInstance
