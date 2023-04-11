@@ -5,6 +5,7 @@ import com.training.shoplocal.classes.*
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 
 
 private class RetrofitService{
@@ -17,7 +18,8 @@ private class RetrofitService{
                 .baseUrl(SERVER_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build()
-            service = retrofit.create(DatabaseApiInterface::class.java)
+            service = retrofit.create<DatabaseApiInterface>()
+            //service = retrofit.create(DatabaseApiInterface::class.java)
         }
         fun getService() = service
 }

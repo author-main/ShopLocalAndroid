@@ -10,8 +10,9 @@ import com.training.shoplocal.classes.fillChar
 import com.training.shoplocal.log
 import com.training.shoplocal.userfingerprint.UserFingerPrint
 import com.training.shoplocal.validateMail
+import javax.inject.Inject
 
-class LoginViewState {
+class LoginViewState @Inject constructor() {
     /*private var onAccessUser: AccessUserInterface? = null
     fun addOnAccessUser(value: AccessUserInterface) {
         onAccessUser = value

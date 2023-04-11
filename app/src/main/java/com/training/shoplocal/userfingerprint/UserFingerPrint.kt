@@ -10,8 +10,9 @@ import com.training.shoplocal.AppShopLocal.Companion.appContext
 import com.training.shoplocal.R
 import com.training.shoplocal.getStringResource
 import javax.crypto.Cipher
+import javax.inject.Inject
 
-class UserFingerPrint(private val context: Context): UserFingerPrintInterface {
+class UserFingerPrint @Inject constructor(private val context: Context): UserFingerPrintInterface {
     override var userFingerPrintListener: UserFingerPrintListener? = null
     override fun authenticate(): Boolean {
         if (!canAuthenticate())
