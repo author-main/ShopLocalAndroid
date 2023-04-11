@@ -1,12 +1,10 @@
 package com.training.shoplocal.dagger
 
 import androidx.lifecycle.ViewModel
-import com.training.shoplocal.classes.downloader.*
+import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 import com.training.shoplocal.viewmodel.RepositoryViewModel
-import dagger.Binds
 import dagger.BindsInstance
 import dagger.Component
-import dagger.Module
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
@@ -26,12 +24,9 @@ interface AppComponent {
         fun build(): AppComponent
     }
 }
-
-
 /*@Qualifier
 @Retention(AnnotationRetention.RUNTIME)
 annotation class CacheDir
-
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
 annotation class CacheSize*/
