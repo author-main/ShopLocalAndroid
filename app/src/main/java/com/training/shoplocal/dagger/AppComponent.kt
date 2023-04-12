@@ -10,11 +10,18 @@ import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [CacheModule::class])//, dependencies = [ProviderCacheParam::class])
+@Component(modules = [CacheModule::class, BindsModule::class] )//, dependencies = [ProviderCacheParam::class])
 interface AppComponent {
     fun injectRepositoryViewModel(viewModel: RepositoryViewModel)
+   /* @Component.Factory
+    interface Factory{
+        fun create(@BindsInstance dir: String,
+                   @BindsInstance size: Int
+        ): AppComponent
+    }*/
     @Component.Builder
     interface Builder{
+
         @BindsInstance
         //fun cacheDir(@CacheDir dir: String): Builder
         fun cacheDir(dir: String): Builder
