@@ -2,6 +2,7 @@ package com.training.shoplocal.repository
 
 import android.content.Context
 import androidx.fragment.app.FragmentActivity
+import com.training.shoplocal.AppShopLocal.Companion.appContext
 import com.training.shoplocal.isConnectedNet
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.repository.retrofit.DatabaseApi
