@@ -3,6 +3,7 @@ package com.training.shoplocal
 import android.app.Application
 import android.content.Context
 import com.training.shoplocal.dagger.AppComponent
+import com.training.shoplocal.dagger.DaggerAppComponent
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.repository.AccessUser
 import com.training.shoplocal.repository.DatabaseCRUD
@@ -13,21 +14,14 @@ class AppShopLocal: Application() {
     private lateinit var appComponent: AppComponent
     override fun onCreate() {
         super.onCreate()
-       /* appComponent = DaggerAppComponent.factory().create(
+        appComponent = DaggerAppComponent
+            .factory().create(
             applicationInfo.dataDir + "/cache/",
             8
-        )*/
-        /*appComponent = DaggerAppComponent.builder()
+        )
+      /*  appComponent = DaggerAppComponent.builder()
             .cacheDir(applicationInfo.dataDir + "/cache/")
             .cacheSize(8)
-          /*  .providerCacheParam(
-                object : ProviderCacheParam {
-                    override val cacheDir: String
-                        get() = applicationInfo.dataDir + "/cache/"
-                    override val sizeDir: Int
-                        get() = 8
-                }
-            )*/
             .build()*/
    }
 

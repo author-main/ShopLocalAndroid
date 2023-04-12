@@ -5,7 +5,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 
-@Module//(includes = [BindsImageCache::class])
+@Module//(includes = [BindsModule::class])
 class CacheModule {
   /** Пересобрано с @Inject на конструкторе
     @Provides
