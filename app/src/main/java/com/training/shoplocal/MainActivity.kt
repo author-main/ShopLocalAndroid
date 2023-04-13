@@ -74,7 +74,7 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
             AccessUser(this, LoginViewState())
 
 
-        viewModel.passContextFingerPrint(this)
+        //viewModel.passContextFingerPrint(this)
         viewModel.setOnCloseApp {
             this.finish()
         }

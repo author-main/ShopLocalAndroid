@@ -51,9 +51,9 @@ class Repository @Inject constructor(
         accessUser = value
     }*/
 
-    fun setContextFingerPrint(context: Context){
+    /*fun setContextFingerPrint(context: Context){
         accessUser.getContextFingerPrint(context)
-    }
+    }*/
     fun onRestoreUser(action: ((result: Boolean) -> Unit)?, email: String, password: String) {
         accessUser.onRestoreUser(action, email, password)
     }

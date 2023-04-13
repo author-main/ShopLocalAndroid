@@ -28,9 +28,9 @@ class AccessUser @Inject constructor(
 
     private var userFingerPrint = getUserFingerPrint()
 
-    override fun getContextFingerPrint(context: Context) {
-        //getUserFingerPrint(context as FragmentActivity)
-    }
+    /*override fun getContextFingerPrint(context: Context) {
+        getUserFingerPrint(context as FragmentActivity)
+    }*/
 
     /*  fun updateViewWhen(loginState: LoginViewState){
           this.loginState = loginState
