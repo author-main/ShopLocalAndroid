@@ -68,11 +68,11 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
 //        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState)
 
-        appComponent.injectMainActivity(this)
+       // appComponent.injectMainActivity(this)
         mainActivitySubcomponent = appComponent.mainActivitySubcomponent().create(this)
         mainActivitySubcomponent.inject(this)
-        appRepository().accessUser = //accessUser
-            AccessUser(this, LoginViewState())
+        appRepository().accessUser = accessUser
+         //   AccessUser(this, LoginViewState())
 
 
         //viewModel.passContextFingerPrint(this)
