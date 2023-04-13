@@ -18,8 +18,10 @@ import com.training.shoplocal.classes.User.Companion.getUserData
 import com.training.shoplocal.classes.downloader.DiskCache
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 import com.training.shoplocal.classes.downloader.MemoryCache
+import com.training.shoplocal.dagger.MainActivitySubcomponent
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.repository.AccessUser
+import com.training.shoplocal.repository.AccessUserInterface
 import com.training.shoplocal.repository.Repository
 //import com.training.shoplocal.dagger.MainActivitySubcomponent
 import com.training.shoplocal.screens.appscreen.AppScreen
@@ -48,13 +50,13 @@ val ImageDownloader = staticCompositionLocalOf<ImageLinkDownloader> {
 }
 
 class MainActivity : FragmentActivity() {//ComponentActivity() {
-    //lateinit var mainActivitySubcomponent: MainActivitySubcomponent
+    lateinit var mainActivitySubcomponent: MainActivitySubcomponent
     @Inject
     lateinit var imageDownloader: ImageLinkDownloader
 
 
-  /*  @Inject
-    lateinit var repository: Repository*/
+    @Inject
+    lateinit var accessUser: AccessUserInterface
 
     private val viewModel: RepositoryViewModel by viewModels(factoryProducer = {
         FactoryViewModel(
@@ -64,13 +66,12 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
     })
     override fun onCreate(savedInstanceState: Bundle?) {
 //        AndroidInjection.inject(this);
-        //mainActivitySubcomponent = appComponent.mainActivitySubcomponent().create(this)
-        //mainActivitySubcomponent.inject(this)
         super.onCreate(savedInstanceState)
+
         appComponent.injectMainActivity(this)
-
-
-        appRepository().accessUser =
+        mainActivitySubcomponent = appComponent.mainActivitySubcomponent().create(this)
+        mainActivitySubcomponent.inject(this)
+        appRepository().accessUser = //accessUser
             AccessUser(this, LoginViewState())
 
 

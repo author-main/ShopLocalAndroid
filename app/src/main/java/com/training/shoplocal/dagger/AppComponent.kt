@@ -20,7 +20,7 @@ import javax.inject.Scope
 
 
 @ActivityMainScope
-@Component(modules = [CacheModule::class, BindsModule::class])//, SubcomponentsModule::class])//, dependencies = [ProviderCacheParam::class])
+@Component(modules = [CacheModule::class, BindsModule::class, SubcomponentsModule::class])//, dependencies = [ProviderCacheParam::class])
 interface AppComponent {
  //   fun injectApplication(application: AppShopLocal)
     fun injectMainActivity(activity: MainActivity)
@@ -31,7 +31,7 @@ interface AppComponent {
         ): AppComponent
     }
 
-  //  fun mainActivitySubcomponent(): MainActivitySubcomponent.Factory
+    fun mainActivitySubcomponent(): MainActivitySubcomponent.Factory
   /*  @Component.Builder
     interface Builder{
 
@@ -52,13 +52,13 @@ annotation class CacheDir
 @Retention(AnnotationRetention.RUNTIME)
 annotation class CacheSize*/
 
-/*@Module(subcomponents = [MainActivitySubcomponent::class])
+@Module(subcomponents = [MainActivitySubcomponent::class])
 interface SubcomponentsModule {
    /* @Binds
     @IntoMap
     @ClassKey(MainActivity::class)
     fun bindAndroidInjectorFactory(factory: MainActivitySubcomponent.Factory): AndroidInjector.Factory<*>*/
-}*/
+}
 
 @Module
 class CacheModule {
