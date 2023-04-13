@@ -18,6 +18,10 @@ import com.training.shoplocal.classes.User.Companion.getUserData
 import com.training.shoplocal.classes.downloader.DiskCache
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 import com.training.shoplocal.classes.downloader.MemoryCache
+import com.training.shoplocal.loginview.LoginViewState
+import com.training.shoplocal.repository.AccessUser
+import com.training.shoplocal.repository.Repository
+//import com.training.shoplocal.dagger.MainActivitySubcomponent
 import com.training.shoplocal.screens.appscreen.AppScreen
 import com.training.shoplocal.screens.LoginScreen
 import com.training.shoplocal.screens.ScreenItem
@@ -25,8 +29,8 @@ import com.training.shoplocal.screens.ScreenRouter
 import com.training.shoplocal.ui.theme.ShopLocalTheme
 import com.training.shoplocal.viewmodel.FactoryViewModel
 import com.training.shoplocal.viewmodel.RepositoryViewModel
+import dagger.android.AndroidInjection
 import javax.inject.Inject
-
 
 
 /*@Inject
@@ -43,9 +47,15 @@ val ImageDownloader = staticCompositionLocalOf<ImageLinkDownloader> {
     )*/
 }
 
-class MainActivity constructor(): FragmentActivity() {//ComponentActivity() {
+class MainActivity : FragmentActivity() {//ComponentActivity() {
+    //lateinit var mainActivitySubcomponent: MainActivitySubcomponent
     @Inject
     lateinit var imageDownloader: ImageLinkDownloader
+
+
+  /*  @Inject
+    lateinit var repository: Repository*/
+
     private val viewModel: RepositoryViewModel by viewModels(factoryProducer = {
         FactoryViewModel(
      this,
@@ -53,10 +63,17 @@ class MainActivity constructor(): FragmentActivity() {//ComponentActivity() {
         )
     })
     override fun onCreate(savedInstanceState: Bundle?) {
+//        AndroidInjection.inject(this);
+        //mainActivitySubcomponent = appComponent.mainActivitySubcomponent().create(this)
+        //mainActivitySubcomponent.inject(this)
         super.onCreate(savedInstanceState)
         appComponent.injectMainActivity(this)
-//        val context = LocalContext.current as FragmentActivity
-//        log("start app")
+
+
+        appRepository().accessUser =
+            AccessUser(this, LoginViewState())
+
+
         viewModel.passContextFingerPrint(this)
         viewModel.setOnCloseApp {
             this.finish()

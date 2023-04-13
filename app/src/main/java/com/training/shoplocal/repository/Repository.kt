@@ -10,23 +10,19 @@ import com.training.shoplocal.classes.fodisplay.SORT_PROPERTY
 import com.training.shoplocal.classes.fodisplay.SORT_TYPE
 import com.training.shoplocal.classes.screenhelpers.DataScreen
 import com.training.shoplocal.classes.searcher.SearchQueryStorage
-import com.training.shoplocal.dagger.ActivityMainScope
 import com.training.shoplocal.encodeBase64
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.screens.ScreenRouter
 import retrofit2.Response
 import javax.inject.Inject
 import kotlin.collections.HashMap
+
 class Repository @Inject constructor(
-    override val accessUser: AccessUserInterface,
     override val databaseCRUD: DatabaseCRUDInterface
 ): DAOinterface {
+    override lateinit var accessUser: AccessUserInterface
 
-    /*@Inject
-    override lateinit var accessUser: AccessUserInterface*/
-
-
-    //private val dataDisplay = DataDisplay()
+//private val dataDisplay = DataDisplay()
    // val loginState = accessUser.loginState
   /*  init {
         DiskCache.initStorage(AppShopLocal.appContext().applicationInfo.dataDir + "/cache/")
@@ -50,6 +46,11 @@ class Repository @Inject constructor(
     /** Context типа FragmentActivity главной активити приходится тянуть для отображения
      *  BiometricPrompt - диалог сканирования отпечатка
      */
+
+  /*  fun setAccessUser(value: AccessUserInterface){
+        accessUser = value
+    }*/
+
     fun setContextFingerPrint(context: Context){
         accessUser.getContextFingerPrint(context)
     }

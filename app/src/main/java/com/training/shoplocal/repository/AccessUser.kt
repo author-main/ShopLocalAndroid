@@ -2,7 +2,6 @@ package com.training.shoplocal.repository
 
 import android.content.Context
 import androidx.fragment.app.FragmentActivity
-import com.training.shoplocal.AppShopLocal.Companion.appContext
 import com.training.shoplocal.isConnectedNet
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.repository.retrofit.DatabaseApi
@@ -20,15 +19,17 @@ import javax.crypto.Cipher
 import javax.inject.Inject
 
 class AccessUser @Inject constructor(
+    override val context: Context,
     override val loginState: LoginViewState
 ): AccessUserInterface {
     private var actionLogin: ((result: Int) -> Unit)? = null
     //private lateinit var loginState: LoginViewState
-    //private var userFingerPrint = getUserFingerPrint()
-    private var userFingerPrint: UserFingerPrint? = null
+    //private var userFingerPrint: UserFingerPrint? = null
+
+    private var userFingerPrint = getUserFingerPrint()
 
     override fun getContextFingerPrint(context: Context) {
-        getUserFingerPrint(context as FragmentActivity)
+        //getUserFingerPrint(context as FragmentActivity)
     }
 
     /*  fun updateViewWhen(loginState: LoginViewState){
@@ -175,25 +176,7 @@ class AccessUser @Inject constructor(
         userFingerPrint?.putPassword(value)
     }
 
-
-  /*  private fun getUserFingerPrint() : UserFingerPrint? =
-        if (UserFingerPrint.canAuthenticate()) {
-            UserFingerPrint(context as FragmentActivity).apply main@ {
-                userFingerPrintListener = object : UserFingerPrintListener {
-                    override fun onComplete(cipher: Cipher?) {
-                        cipher?.let {
-                            this@AccessUser.loginState.showProgress()
-                            onLogin(action = actionLogin, this@AccessUser.loginState.getEmail(), this@main.getPassword(it) ?: "", finger = true)
-                        }
-                    }
-                }
-            }
-        }
-        else
-            null*/
-
-
-    fun getUserFingerPrint(context: Context) {
+  /*  private fun getUserFingerPrint(context: Context) {
         userFingerPrint = if (UserFingerPrint.canAuthenticate()) {
             UserFingerPrint(context).apply main@ {
                 userFingerPrintListener = object : UserFingerPrintListener {
@@ -208,7 +191,25 @@ class AccessUser @Inject constructor(
         }
         else
             null
+    }*/
+
+    private fun getUserFingerPrint(): UserFingerPrint? {
+        return if (UserFingerPrint.canAuthenticate()) {
+            UserFingerPrint(context as FragmentActivity).apply main@ {
+                userFingerPrintListener = object : UserFingerPrintListener {
+                    override fun onComplete(cipher: Cipher?) {
+                        cipher?.let {
+                            this@AccessUser.loginState.showProgress()
+                            onLogin(action = actionLogin, this@AccessUser.loginState.getEmail(), this@main.getPassword(it) ?: "", finger = true)
+                        }
+                    }
+                }
+            }
+        }
+        else
+            null
     }
+
 
     override fun onRemoveUserPassword() {
         userFingerPrint?.removePassword()

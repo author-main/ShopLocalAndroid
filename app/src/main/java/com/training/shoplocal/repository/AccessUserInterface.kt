@@ -1,10 +1,11 @@
 package com.training.shoplocal.repository
 
 import android.content.Context
+import androidx.fragment.app.FragmentActivity
 import com.training.shoplocal.loginview.LoginViewState
 
 interface AccessUserInterface {
-    //val context: Context
+    val context: Context
     val loginState: LoginViewState
     fun onLogin(action: ((result: Int) -> Unit)?, email: String, password: String, finger: Boolean = false)
     fun onRegisterUser(action: ((result: Boolean) -> Unit)?, vararg userdata: String, )

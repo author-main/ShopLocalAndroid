@@ -3,6 +3,6 @@ package com.training.shoplocal.repository
 import com.training.shoplocal.classes.Product
 
 interface DAOinterface {
-    val accessUser: AccessUserInterface
+    var accessUser: AccessUserInterface
     val databaseCRUD: DatabaseCRUDInterface
 }
