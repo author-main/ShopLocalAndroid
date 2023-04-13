@@ -18,7 +18,7 @@ import retrofit2.Response
 import javax.crypto.Cipher
 import javax.inject.Inject
 
-class AccessUser @Inject constructor(
+class AccessUser(
     override val context: Context,
     override val loginState: LoginViewState
 ): AccessUserInterface {
