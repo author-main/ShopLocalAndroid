@@ -24,5 +24,5 @@ interface MainActivitySubcomponent {//: AndroidInjector<MainActivity> {
 @Module
 class MainActivityModule{
     @Provides
-    fun provideAccessUser(context: Context, loginState: LoginViewState): AccessUserInterface        = AccessUser(context, loginState)
+    fun provideAccessUser(context: Context, loginState: LoginViewState): AccessUserInterface = AccessUser(context, loginState)
 }
