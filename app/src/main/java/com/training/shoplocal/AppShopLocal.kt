@@ -21,6 +21,10 @@ import javax.inject.Inject
 class AppShopLocal: Application() {//, HasAndroidInjector {
     /*@Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>*/
+
+    @Inject
+    lateinit var repository: Repository
+
     private lateinit var appComponent: AppComponent
     override fun onCreate() {
         super.onCreate()
@@ -29,7 +33,7 @@ class AppShopLocal: Application() {//, HasAndroidInjector {
             applicationInfo.dataDir + "/cache/",
             8
         )
-     //   appComponent.injectApplication(this)
+        appComponent.injectApplication(this)
     /*  appComponent = DaggerAppComponent.builder()
             .cacheDir(applicationInfo.dataDir + "/cache/")
             .cacheSize(8)
@@ -45,7 +49,8 @@ class AppShopLocal: Application() {//, HasAndroidInjector {
         val appComponent: AppComponent
             get () = instance.appComponent
         private lateinit var instance: AppShopLocal
-        private lateinit var repository: Repository
+        fun appRepository() = instance.repository
+        /*private lateinit var repository: Repository
         fun appRepository(): Repository {
             if (!this::repository.isInitialized)
                 repository = Repository(/*AccessUser(
@@ -53,7 +58,7 @@ class AppShopLocal: Application() {//, HasAndroidInjector {
                 ),*/
                 DatabaseCRUD())
             return repository
-        }
+        }*/
         fun appContext(): Context =
             instance.applicationContext
 
