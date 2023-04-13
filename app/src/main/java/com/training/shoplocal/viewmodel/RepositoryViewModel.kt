@@ -242,9 +242,9 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         repository.setOrderDisplay(field, value)
     }
 
-    fun passContextFingerPrint(context: Context) {
+    /*fun passContextFingerPrint(context: Context) {
         repository.setContextFingerPrint(context)
-    }
+    }*/
 
   /*  private fun getProduct(id: Int){
         repository.getProduct(id) { product ->
