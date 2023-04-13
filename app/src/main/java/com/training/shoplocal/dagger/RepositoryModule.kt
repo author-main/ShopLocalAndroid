@@ -20,6 +20,7 @@ import retrofit2.create
 
 @Module
 class RepositoryModule {
+
     @Provides
     fun provideDatabaseApi(): DatabaseApiInterface {
         val gson = GsonBuilder()

@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import com.training.shoplocal.dagger.AppComponent
 import com.training.shoplocal.dagger.DaggerAppComponent
+//import com.training.shoplocal.dagger.DaggerAppComponent
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.repository.AccessUser
 import com.training.shoplocal.repository.DatabaseCRUD
@@ -16,14 +17,14 @@ class AppShopLocal: Application() {
         super.onCreate()
         appComponent = DaggerAppComponent
             .factory().create(
-            applicationInfo.dataDir + "/cache/",
-            8
-        )
-      /*  appComponent = DaggerAppComponent.builder()
-            .cacheDir(applicationInfo.dataDir + "/cache/")
-            .cacheSize(8)
-            .build()*/
-   }
+                applicationInfo.dataDir + "/cache/",
+                8
+            )
+            /*  appComponent = DaggerAppComponent.builder()
+              .cacheDir(applicationInfo.dataDir + "/cache/")
+              .cacheSize(8)
+              .build()*/
+    }
 
     init {
         instance = this
@@ -38,7 +39,7 @@ class AppShopLocal: Application() {
                 repository = Repository(AccessUser(
                     LoginViewState()
                 ),
-                DatabaseCRUD())
+                    DatabaseCRUD())
             return repository
         }
         fun appContext(): Context =

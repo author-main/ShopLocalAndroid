@@ -43,7 +43,7 @@ val ImageDownloader = staticCompositionLocalOf<ImageLinkDownloader> {
     )*/
 }
 
-class MainActivity : FragmentActivity() {//ComponentActivity() {
+class MainActivity constructor(): FragmentActivity() {//ComponentActivity() {
     @Inject
     lateinit var imageDownloader: ImageLinkDownloader
     private val viewModel: RepositoryViewModel by viewModels(factoryProducer = {
