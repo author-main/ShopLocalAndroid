@@ -19,7 +19,7 @@ import javax.inject.Scope
 @ActivityMainScope
 @Component(modules = [CacheModule::class, BindsModule::class, SubcomponentsModule::class])//, dependencies = [ProviderCacheParam::class])
 interface AppComponent {
- //   fun injectApplication(application: AppShopLocal)
+    fun injectApplication(application: AppShopLocal)
     //fun injectMainActivity(activity: MainActivity)
     @Component.Factory
     interface Factory{
