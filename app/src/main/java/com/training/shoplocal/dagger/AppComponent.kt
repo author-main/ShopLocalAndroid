@@ -9,10 +9,7 @@ import com.training.shoplocal.repository.AccessUser
 import com.training.shoplocal.repository.AccessUserInterface
 import com.training.shoplocal.repository.DatabaseCRUD
 import com.training.shoplocal.repository.DatabaseCRUDInterface
-import dagger.Binds
-import dagger.BindsInstance
-import dagger.Component
-import dagger.Module
+import dagger.*
 import dagger.android.AndroidInjector
 import dagger.multibindings.ClassKey
 import dagger.multibindings.IntoMap
@@ -23,7 +20,7 @@ import javax.inject.Scope
 @Component(modules = [CacheModule::class, BindsModule::class, SubcomponentsModule::class])//, dependencies = [ProviderCacheParam::class])
 interface AppComponent {
  //   fun injectApplication(application: AppShopLocal)
-    fun injectMainActivity(activity: MainActivity)
+    //fun injectMainActivity(activity: MainActivity)
     @Component.Factory
     interface Factory{
         fun create(@BindsInstance dir: String,
@@ -62,6 +59,7 @@ interface SubcomponentsModule {
 
 @Module
 class CacheModule {
+
     /** Пересобрано с @Inject на конструкторе
     @Provides
     fun provideJournalCache(cacheDirectory: String): Journal        = Journal(cacheDirectory)
@@ -91,8 +89,8 @@ interface BindsModule {
     @Binds
     fun bindMemoryCache_to_ImageMemoryCache(memoryCache: MemoryCache): ImageMemoryCache
 
-    @Binds
-    fun bindAccessUser_to_AccessUserInterface(accessUser: AccessUser): AccessUserInterface
+   /* @Binds
+    fun bindAccessUser_to_AccessUserInterface(accessUser: AccessUser): AccessUserInterface*/
 
     @Binds
     fun bindDatabaseCRUD_to_DatabaseCRUDInterface(databaseCRUD: DatabaseCRUD): DatabaseCRUDInterface
