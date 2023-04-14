@@ -46,16 +46,16 @@ import kotlin.math.pow
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: ScrollableState?, isZoom: Boolean = false, onClick: () -> Unit){
+fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState<Boolean>, isZoom: Boolean = false, onClick: () -> Unit){
 
-    val coroutineScope = rememberCoroutineScope()
+  //  val coroutineScope = rememberCoroutineScope()
     fun enableScrolling(value: Boolean) {
-          scrollState?.run {
+        /*  scrollState?.run {
               coroutineScope.launch {
                   setScrolling(value)
               }
-          }
-       // scrollState.value = value
+          }*/
+        scrollState.value = value
     }
 
 
@@ -121,16 +121,18 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: ScrollableSt
                       },
             onDoubleClick = {
               //  log("double click...")
+              //  var enabled = false
                 if (isZoom) {
                     val delta = (maxScale - minScale) / 2f
                     scale = if (scale >= minScale + delta) {
+               //         enabled = true
                         offsetX = 0f
                         offsetY = 0f
                         minScale
                     } else {
                         maxScale
                     }
-
+             //       enableScrolling(enabled)
                 }
             },
         )
@@ -583,7 +585,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
 
             items(linkImages, {linkimage -> linkimage.id}) { item ->
                 if (!item.image.value.isEmpty()) {
-                    ZoomImage(modifier = Modifier.fillParentMaxSize(), item.image.value, scrollState = lazyRowState, isZoom = isZoom) {
+                    ZoomImage(modifier = Modifier.fillParentMaxSize(), item.image.value, scrollState = scrollState, isZoom = isZoom) {
                         onClick(product)
                     }
                 }
@@ -675,11 +677,11 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
     }
 }
 
-suspend fun ScrollableState.setScrolling(value: Boolean) {
+/*suspend fun ScrollableState.setScrolling(value: Boolean) {
     scroll(scrollPriority = MutatePriority.PreventUserInput) {
         when (value) {
             true -> Unit
             else -> awaitCancellation()
         }
     }
-}
+}*/
