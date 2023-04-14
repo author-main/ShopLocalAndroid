@@ -94,6 +94,7 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
         animate = false
      //   scale = animateScale.value
     }*/
+
     var offsetX by remember { mutableStateOf(0f) }
     var offsetY by remember { mutableStateOf(0f) }
     val animScale by animateFloatAsState(
