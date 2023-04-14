@@ -49,9 +49,6 @@ import kotlin.math.pow
 fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: ScrollableState?, isZoom: Boolean = false, onClick: () -> Unit){
 
     val coroutineScope = rememberCoroutineScope()
-
-
-
     fun enableScrolling(value: Boolean) {
           scrollState?.run {
               coroutineScope.launch {
@@ -73,19 +70,19 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: ScrollableSt
 
     val animScale by animateFloatAsState(
         targetValue = scale,
-        animationSpec = tween(durationMillis =200, easing = LinearEasing)/*,
+        animationSpec = tween(durationMillis =100, easing = LinearEasing)/*,
         finishedListener = {
             animate = false
         }*/
     )
     val animOffsetX by animateFloatAsState(
         targetValue = offsetX,//offsetX,
-        animationSpec = tween(durationMillis =200, easing = LinearEasing)
+        animationSpec = tween(durationMillis =100, easing = LinearEasing)
     )
 
     val animOffsetY by animateFloatAsState(
         targetValue = offsetY,//offsetY,
-        animationSpec = tween(durationMillis =200, easing = LinearEasing)
+        animationSpec = tween(durationMillis =100, easing = LinearEasing)
     )
 
     //log("offsetX $offsetX, offsetY $offsetY")
