@@ -53,7 +53,9 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
         mutableStateOf(false)
     }
     val selectedIndex = remember{mutableStateOf(index)}
+
     val startIndex    = remember{mutableStateOf(index)}
+
     val countImages = remember {product.linkimages?.size ?: 1}
     val images = remember {
         MutableList<MutableState<ImageBitmap>>(countImages){ mutableStateOf(EMPTY_IMAGE) }
@@ -66,8 +68,6 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
             openPopup.value = true
         }
     }
-
-
     fun onDissmiss(){
         coroutineScope.launch {
             openPopup.value = false
@@ -93,7 +93,6 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
                 focusable = true
             )
         ) {
-
                 AnimatedVisibility(
                     visible = openPopup.value,
                     enter = slideInHorizontally (
@@ -101,7 +100,6 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
                     ){ fullWidth ->
                         fullWidth * 2
                     } /* + fadeIn(
-
                             animationSpec = tween(durationMillis = 800)
                             )*/
                     ,
@@ -113,110 +111,110 @@ fun ShowBigProductImages(open: MutableState<Boolean>, product: Product, index: I
                             - fullWidth * 2
                         }
                     )
-
                     /*scaleOut(
                         animationSpec = tween(500)
                     )*/
                 ) {*/
-                AnimatedScreen(open, close) {
-                    Column(modifier = Modifier
+    AnimatedScreen(open, close) {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .background(PrimaryDark)) {
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .background(Color.White)
+            ) {
+                //val img = ImageBitmap.imageResource(R.drawable.ic_close)
+                //    log("start index = ${startIndex.value}")
+                ShowProductImages(
+                    modifier = Modifier
                         .fillMaxSize()
-                        .background(PrimaryDark)) {
-                        Box(
-                            modifier = Modifier
-                                .weight(1f)
-                                .background(Color.White)
-                        ) {
-                            //val img = ImageBitmap.imageResource(R.drawable.ic_close)
-                        //    log("start index = ${startIndex.value}")
-                            ShowProductImages(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(12.dp),
-                                product = product,
-                                reduce = false,
-                                startIndex = startIndex,
-                                isZoom = true,
-                                onLoadImage = {  index, image ->
-                                    images[index].value = image
-                                    //changedImage = !changedImage
-                              //      log("image[$index] $image")
-                                },
-                            onChangeImage = {
-                                //indexBigImage.value = it
-                               // startIndex.value = it
-                                selectedIndex.value = it
-                            }) {
+                        .padding(12.dp),
+                    product = product,
+                    reduce = false,
+                    startIndex = startIndex,
+                    isZoom = true,
+                    onLoadImage = {  index, image ->
+                        images[index].value = image
+                        //changedImage = !changedImage
+                        //      log("image[$index] $image")
+                    },
+                    onChangeImage = {
+                        //indexBigImage.value = it
+                        // startIndex.value = it
+                        selectedIndex.value = it
+                    }) {
 
-                            }
-                            Box(
+                }
+                Box(
+                    modifier = Modifier
+                        .padding(all = 8.dp)
+                        .align(Alignment.TopEnd)
+                        .requiredSize(24.dp)
+                        .clip(CircleShape)
+                        .background(Color.White)
+                        .clickable {
+                            close.value = true
+                        },
+                ) {
+                    Image(
+                        ImageVector.vectorResource(R.drawable.ic_close),
+                        colorFilter = ColorFilter.tint(TextFieldBg),
+                        contentDescription = null
+                    )
+                }
+            }
+
+            if (countImages > 1)
+            //if (countImages == 0)
+                Box(modifier = Modifier
+                    .padding(top = 4.dp)
+                    .fillMaxWidth()) {
+                    val imageViewSize = DpSize(45.dp, 50.dp)
+                    LazyRow(modifier = Modifier.align(Alignment.Center)) {
+                        itemsIndexed(images) { index, item ->
+                            //log("$item")
+                            //  log("image height = ${item.value.height}, width = ${item.value.width}")
+                            Surface(
                                 modifier = Modifier
-                                    .padding(all = 8.dp)
-                                    .align(Alignment.TopEnd)
-                                    .requiredSize(24.dp)
-                                    .clip(CircleShape)
-                                    .background(Color.White)
+                                    .padding(all = 4.dp)
                                     .clickable {
-                                        close.value = true
+                                        // log("selected index = $index")
+                                        //indexBigImage.value = index
+                                        selectedIndex.value = index
+                                        startIndex.value = index
                                     },
+                                border = BorderStroke(2.dp, if (index == selectedIndex.value) SelectedItemBottomNavi else Color.Transparent),
+                                color = Color.White,
+                                shape = RoundedCornerShape(6.dp)
                             ) {
-                                Image(
-                                    ImageVector.vectorResource(R.drawable.ic_close),
-                                    colorFilter = ColorFilter.tint(TextFieldBg),
-                                    contentDescription = null
-                                )
-                            }
-                        }
-                      //  log("recomposition...")
-                        if (countImages > 1)
-                        Box(modifier = Modifier
-                            .padding(top = 4.dp)
-                            .fillMaxWidth()) {
-                            val imageViewSize = DpSize(45.dp, 50.dp)
-                            LazyRow(modifier = Modifier.align(Alignment.Center)) {
-                                itemsIndexed(images) { index, item ->
-                                    //log("$item")
-                                  //  log("image height = ${item.value.height}, width = ${item.value.width}")
-                                    Surface(
-                                        modifier = Modifier
-                                            .padding(all = 4.dp)
-                                            .clickable {
-                                                // log("selected index = $index")
-                                                //indexBigImage.value = index
-                                                selectedIndex.value = index
-                                                startIndex.value = index
-                                            },
-                                        border = BorderStroke(2.dp, if (index == selectedIndex.value) SelectedItemBottomNavi else Color.Transparent),
-                                        color = Color.White,
-                                        shape = RoundedCornerShape(6.dp)
-                                    ) {
 
-                                        if (!item.value.isEmpty())
-                                        Image(
-                                            modifier = Modifier
-                                                .size(imageViewSize)
-                                                .padding(all = 4.dp)
-                                                /*.height(100.dp)
-                                                .width(75.dp)*/
-                                                /*  .clip(RoundedCornerShape(6.dp))
-                                                .border(
-                                                    BorderStroke(
-                                                        2.dp,
-                                                        if (index == indexBigImage.value) SelectedItemBottomNavi else Color.Transparent
-                                                    )
-                                                )*/
-                                                .background(Color.White),
-                                            //contentScale = ContentScale.Inside,
-                                            bitmap = item.value,
-                                            //imageVector = ImageVector.vectorResource(id = R.drawable.ic_close),
-                                            contentDescription = "index = $index"
-                                        )
-                                    }
-                                }
+                                if (!item.value.isEmpty())
+                                    Image(
+                                        modifier = Modifier
+                                            .size(imageViewSize)
+                                            .padding(all = 4.dp)
+                                            /*.height(100.dp)
+                                            .width(75.dp)*/
+                                            /*  .clip(RoundedCornerShape(6.dp))
+                                            .border(
+                                                BorderStroke(
+                                                    2.dp,
+                                                    if (index == indexBigImage.value) SelectedItemBottomNavi else Color.Transparent
+                                                )
+                                            )*/
+                                            .background(Color.White),
+                                        //contentScale = ContentScale.Inside,
+                                        bitmap = item.value,
+                                        //imageVector = ImageVector.vectorResource(id = R.drawable.ic_close),
+                                        contentDescription = "index = $index"
+                                    )
                             }
                         }
                     }
+                }
+        }
 
-            }
+    }
 
 }
