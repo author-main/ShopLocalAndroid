@@ -59,7 +59,7 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
     val maxScale: Float = 3f
     //val halfScale = remember { minScale + (maxScale - minScale) / 2f }
     var scale by remember {
-        enableScroll(true)
+        //enableScroll(true)
         mutableStateOf(1f)
     }
     //log("scale = $scale")
@@ -126,7 +126,7 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
     Box(modifier = modifier
         .clip(RectangleShape)
         .padding(8.dp)
-        /* .combinedClickable(
+      /*   .combinedClickable(
             enabled = true,
             interactionSource = remember { MutableInteractionSource() },
             indication = null,
@@ -137,14 +137,17 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                 if (isZoom) {
                     val delta = (maxScale - minScale) / 2f
                     if (scale >= minScale + delta) {
-                        offsetX = 0f
+                        resetZoomData()
+                        /*offsetX = 0f
                         offsetY = 0f
                         scale = minScale
-                        enableScroll(true)
+                        enableScroll(true)*/
                     } else {
                         scale = maxScale
                         enableScroll(false)
                     }
+                    //animate = true
+                    //log("scaleValue $scale")
                 }
             },
         )*/
