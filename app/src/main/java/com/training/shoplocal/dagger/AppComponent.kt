@@ -1,22 +1,15 @@
 package com.training.shoplocal.dagger
 
-import android.content.Context
 import com.training.shoplocal.AppShopLocal
-import com.training.shoplocal.MainActivity
 import com.training.shoplocal.classes.downloader.*
-import com.training.shoplocal.loginview.LoginViewState
-import com.training.shoplocal.repository.AccessUser
-import com.training.shoplocal.repository.AccessUserInterface
 import com.training.shoplocal.repository.DatabaseCRUD
 import com.training.shoplocal.repository.DatabaseCRUDInterface
 import dagger.*
-import dagger.android.AndroidInjector
-import dagger.multibindings.ClassKey
-import dagger.multibindings.IntoMap
 import javax.inject.Scope
+import javax.inject.Singleton
 
 
-@ActivityMainScope
+@Singleton
 @Component(modules = [CacheModule::class, BindsModule::class, SubcomponentsModule::class])//, dependencies = [ProviderCacheParam::class])
 interface AppComponent {
     fun injectApplication(application: AppShopLocal)

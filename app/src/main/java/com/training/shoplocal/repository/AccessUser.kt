@@ -6,6 +6,7 @@ import com.training.shoplocal.isConnectedNet
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.repository.retrofit.DatabaseApi
 import com.training.shoplocal.classes.User
+import com.training.shoplocal.dagger.ActivityMainScope
 import com.training.shoplocal.userfingerprint.UserFingerPrint
 import com.training.shoplocal.userfingerprint.UserFingerPrintListener
 import com.training.shoplocal.validateMail
