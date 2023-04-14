@@ -112,31 +112,31 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
 
         .clip(RectangleShape)
         .padding(8.dp)
-         .combinedClickable(
+        .combinedClickable(
             enabled = true,
             interactionSource = remember { MutableInteractionSource() },
             indication = null,
             onClick = {
-                    onClick()
-                      },
+                onClick()
+            },
             onDoubleClick = {
-              //  log("double click...")
-              //  var enabled = false
+                //  log("double click...")
+                //  var enabled = false
                 if (isZoom) {
                     val delta = (maxScale - minScale) / 2f
                     scale = if (scale >= minScale + delta) {
-               //         enabled = true
+                        //         enabled = true
                         offsetX = 0f
                         offsetY = 0f
                         minScale
                     } else {
                         maxScale
                     }
-             //       enableScrolling(enabled)
+                    //       enableScrolling(enabled)
                 }
             },
         )
-      /*  .pointerInput(Unit) {
+        /*  .pointerInput(Unit) {
             detectTapGestures(
                 onDoubleTap = {
                     if (isZoom) {
@@ -157,9 +157,10 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
         }*/
 
         .pointerInput(Unit) {
-           if (isZoom) {
+            if (isZoom) {
 
                 awaitEachGesture {
+
                     awaitFirstDown()
                     do {
                         val event = awaitPointerEvent()
@@ -174,56 +175,32 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                             offsetX = 0f
                             offsetY = 0f
                         }
-                        enableScrolling(scale == minScale)
+                        //enableScrolling(scale == minScale)
 
 
+                        /*                       //var enabled = scrollState.value
+                                              val event = awaitPointerEvent()
+                                              //  log(event.type)
+                                                  val scaleValue =
+                                                      minOf(maxOf(minScale, scale * event.calculateZoom()), maxScale)
+                                                  if (scaleValue > minScale) {
+                                                    //  enableScrolling(false)
+                                                      scale =
+                                                          scaleValue//minOf(maxOf(minScale, scale * scaleValue), maxScale)
+                                                      val eventOffset = event.calculatePan()
+                                                      offsetX += eventOffset.x
+                                                      offsetY += eventOffset.y
+                                                  } else {
+                                                      offsetX = 0f
+                                                      offsetY = 0f
 
+                                                    //  enabled = true
+                                              }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- /*                       //var enabled = scrollState.value
-                        val event = awaitPointerEvent()
-                        //  log(event.type)
-                            val scaleValue =
-                                minOf(maxOf(minScale, scale * event.calculateZoom()), maxScale)
-                            if (scaleValue > minScale) {
-                              //  enableScrolling(false)
-                                scale =
-                                    scaleValue//minOf(maxOf(minScale, scale * scaleValue), maxScale)
-                                val eventOffset = event.calculatePan()
-                                offsetX += eventOffset.x
-                                offsetY += eventOffset.y
-                            } else {
-                                offsetX = 0f
-                                offsetY = 0f
-
-                              //  enabled = true
-                        }
-
-                        enableScrolling(scale == minScale)*/
-                        } while (event.changes.any {
-                                it.pressed
-                            })
-
-
+                                              enableScrolling(scale == minScale)*/
+                    } while (event.changes.any {
+                            it.pressed
+                        })
 
 
                 }
@@ -260,6 +237,9 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                }
             }, contentDescription = null)
 
+    }
+    SideEffect {
+        enableScrolling(scale == minScale)
     }
 }
 
