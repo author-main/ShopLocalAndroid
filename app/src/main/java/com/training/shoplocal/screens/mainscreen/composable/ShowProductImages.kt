@@ -1,5 +1,6 @@
 package com.training.shoplocal.screens.mainscreen.composable
 
+import androidx.compose.foundation.MutatePriority
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
@@ -14,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.rotate
@@ -43,60 +45,31 @@ import kotlin.math.pow
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState<Boolean>? = null, isZoom: Boolean = false, onClick: () -> Unit){
+fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState<Boolean>, isZoom: Boolean = false, onClick: () -> Unit){
 
-    //val coroutineScope = rememberCoroutineScope()
-    fun enableScroll(enabled: Boolean) {
-      /*  scrollState?.run {
-            coroutineScope.launch {
-                value = enabled
-            }
-        }*/
-        scrollState?.value = enabled
+   // val coroutineScope = rememberCoroutineScope()
+
+
+
+    fun enableScrolling(value: Boolean) {
+         /* scrollState?.run {
+              coroutineScope.launch {
+                  setScrolling(value)
+              }
+          }*/
+        scrollState.value = value
     }
 
 
     val minScale: Float = 1f
     val maxScale: Float = 3f
-    //val halfScale = remember { minScale + (maxScale - minScale) / 2f }
     var scale by remember {
-        //enableScroll(true)
         mutableStateOf(1f)
     }
 
-
-    /*val transformState = rememberTransformableState { zoomChange, _, _ ->
-        scale *= zoomChange
-        if(scale < minScale)
-            scale = minScale
-        if (scale >maxScale)
-            scale = maxScale
-    }*/
-
-
-    //log("scale = $scale")
-
-   /* var animate by remember {
-        mutableStateOf(false)
-    }*/
-
-
-   /* val animateScale  = remember{ Animatable(0f) }
-
-    LaunchedEffect(animate) {
-        animateScale.animateTo(
-            targetValue = if (scale < halfScale) maxScale else minScale,
-            animationSpec = tween(
-                durationMillis = 300,
-            )
-        )
-      //  scale = animateScale.value
-        animate = false
-     //   scale = animateScale.value
-    }*/
-
     var offsetX by remember { mutableStateOf(0f) }
     var offsetY by remember { mutableStateOf(0f) }
+
     val animScale by animateFloatAsState(
         targetValue = scale,
         animationSpec = tween(durationMillis =200, easing = LinearEasing)/*,
@@ -105,24 +78,25 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
         }*/
     )
     val animOffsetX by animateFloatAsState(
-        targetValue = offsetX,
+        targetValue = offsetX,//offsetX,
         animationSpec = tween(durationMillis =200, easing = LinearEasing)
     )
 
     val animOffsetY by animateFloatAsState(
-        targetValue = offsetY,
+        targetValue = offsetY,//offsetY,
         animationSpec = tween(durationMillis =200, easing = LinearEasing)
     )
 
     //log("offsetX $offsetX, offsetY $offsetY")
 
-    fun resetZoomData() {
+  /*  fun resetZoomData() {
      //   log ("reset Zoom...")
-        offsetX = 0f
-        offsetY = 0f
+       /* offsetX = 0f
+        offsetY = 0f*/
+        offset.copy(0f, 0f)
         scale = minScale
         enableScroll(true)
-    }
+    }*/
 
 /*    val coroutineScope = rememberCoroutineScope()
     fun enableScroll(enabled: Boolean) {
@@ -139,32 +113,42 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
     Box(modifier = modifier
         .clip(RectangleShape)
         .padding(8.dp)
-      /*   .combinedClickable(
+         .combinedClickable(
             enabled = true,
             interactionSource = remember { MutableInteractionSource() },
             indication = null,
             onClick = {
-                onClick()
+                    onClick()
                       },
             onDoubleClick = {
                 if (isZoom) {
                     val delta = (maxScale - minScale) / 2f
-                    if (scale >= minScale + delta) {
-                        resetZoomData()
-                        /*offsetX = 0f
+                    var enabled = false
+                    scale = if (scale >= minScale + delta) {
+                        enabled = true
+                        offsetX = 0f
                         offsetY = 0f
-                        scale = minScale
-                        enableScroll(true)*/
+                     //   enableScrolling(true)
+                        minScale
+
+                        //resetZoomData()
+                        /*offsetX = 0f
+                                        offsetY = 0f
+                                        scale = minScale
+                                        enableScroll(true)*/
                     } else {
-                        scale = maxScale
-                        enableScroll(false)
+                     //   enabled = false
+                     //   enableScrolling(false)
+                        maxScale
                     }
+                    enableScrolling(enabled)
+
                     //animate = true
-                    //log("scaleValue $scale")
+                    //log("scrollState ${scrollState.value}")
                 }
             },
-        )*/
-        .pointerInput(Unit) {
+        )
+     /*   .pointerInput(Unit) {
             detectTapGestures(
                 onDoubleTap = {
                    // log("isZoom $isZoom")
@@ -188,33 +172,41 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                     onClick()
                 }
             )
-        }
+        }*/
 
         .pointerInput(Unit) {
-            if (isZoom) {
+           if (isZoom) {
+
                 awaitEachGesture {
+
                     awaitFirstDown()
                     do {
+                        //var enabled = scrollState.value
                         val event = awaitPointerEvent()
-                      //  log(event.type)
-                            val scaleValue = event.calculateZoom()
-                            if (scaleValue != 1f) {
-                                val lScale = minOf(maxOf(minScale, scale * scaleValue), maxScale)
-                                scale = lScale
-                            }
-                            if (scale != 1f) {
-                                val offset = event.calculatePan()
-                                offsetX += offset.x
-                                offsetY += offset.y
+                        //  log(event.type)
+                            val scaleValue =
+                                minOf(maxOf(minScale, scale * event.calculateZoom()), maxScale)
+                            if (scaleValue > minScale) {
+                              //  enableScrolling(false)
+                                scale =
+                                    scaleValue//minOf(maxOf(minScale, scale * scaleValue), maxScale)
+                                val eventOffset = event.calculatePan()
+                                offsetX += eventOffset.x
+                                offsetY += eventOffset.y
                             } else {
                                 offsetX = 0f
                                 offsetY = 0f
-                            }
-                            enableScroll(scale == 1f)
-                          //log("enable scroll = ${scale == 1f}")
-                    } while (event.changes.any {
-                            it.pressed
-                    })
+
+                              //  enabled = true
+                        }
+
+                        enableScrolling(scale == minScale)
+                        } while (event.changes.any {
+                                it.pressed
+                            })
+
+
+
 
                 }
             }
@@ -242,7 +234,8 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                     scaleY = animScale
                     translationX = animOffsetX
                     translationY = animOffsetY
-                    log("scale...")
+                    //log("scale...")
+
                }
             }, contentDescription = null)
 
@@ -559,6 +552,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
                 size = coordinates.size.toSize()
             }
     ) {
+
         LazyRow(
             state = lazyRowState,
             userScrollEnabled = scrollState.value,
@@ -639,6 +633,7 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
                 ProgressDownloadImage(size)
              }
         onChangeImage?.let {changeImage ->
+
             val indexImage = remember {
                 derivedStateOf {
                     var index = lazyRowState.firstVisibleItemIndex
@@ -648,7 +643,6 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
                     if (lazyRowState.layoutInfo.visibleItemsInfo.isNotEmpty())
                         if (offset > half.width)
                             index += 1
-                    //selectedIndex.value = index
                     index
                 }
             }
@@ -660,3 +654,12 @@ fun ShowProductImages(modifier: Modifier, product: Product, reduce: Boolean, sta
         }
     }
 }
+
+/*suspend fun ScrollableState.setScrolling(value: Boolean) {
+    scroll(scrollPriority = MutatePriority.PreventUserInput) {
+        when (value) {
+            true -> Unit
+            else -> awaitCancellation()
+        }
+    }
+}*/
