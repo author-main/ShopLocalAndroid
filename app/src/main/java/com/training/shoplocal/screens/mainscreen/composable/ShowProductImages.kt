@@ -165,18 +165,17 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                         val event = awaitPointerEvent()
                         scale =//*= event.calculateZoom()
                             minOf(maxOf(minScale, scale * event.calculateZoom()), maxScale)
-
                         if (scale > minScale) {
-                            enableScrolling(false)
                             val offset = event.calculatePan()
                             offsetX += offset.x
                             offsetY += offset.y
-                            enableScrolling(true)
                         } else {
                             scale = minScale
                             offsetX = 0f
                             offsetY = 0f
                         }
+                        enableScrolling(scale == minScale)
+
 
 
 
