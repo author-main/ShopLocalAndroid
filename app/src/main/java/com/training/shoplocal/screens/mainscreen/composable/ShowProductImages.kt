@@ -158,9 +158,7 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
 
         .pointerInput(Unit) {
             if (isZoom) {
-
                 awaitEachGesture {
-
                     awaitFirstDown()
                     do {
                         val event = awaitPointerEvent()
@@ -220,25 +218,27 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
 
 
     ){
+        //log("pointerInput scale = $scale")
         Image(source,
             //contentScale = ContentScale.Fit,
             modifier = Modifier
-            .fillMaxSize()
-        //    .transformable(state = transformState)
-            .graphicsLayer {
-                if (isZoom) {
-                    scaleX = animScale
-                    scaleY = animScale
+                .fillMaxSize()
+                //    .transformable(state = transformState)
+                .graphicsLayer {
+                    if (isZoom) {
+                        scaleX = animScale
+                        scaleY = animScale
 
-                    translationX = animOffsetX
-                    translationY = animOffsetY
-                    //log("scale...")
+                        translationX = animOffsetX
+                        translationY = animOffsetY
+                        //log("scale...")
 
-               }
-            }, contentDescription = null)
+                    }
+                }, contentDescription = null)
 
     }
     SideEffect {
+        //log("scale = $scale")
         enableScrolling(scale == minScale)
     }
 }
