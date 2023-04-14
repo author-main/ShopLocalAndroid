@@ -18,6 +18,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -62,6 +63,17 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
         //enableScroll(true)
         mutableStateOf(1f)
     }
+
+
+    /*val transformState = rememberTransformableState { zoomChange, _, _ ->
+        scale *= zoomChange
+        if(scale < minScale)
+            scale = minScale
+        if (scale >maxScale)
+            scale = maxScale
+    }*/
+
+
     //log("scale = $scale")
 
    /* var animate by remember {
@@ -183,21 +195,22 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                     awaitFirstDown()
                     do {
                         val event = awaitPointerEvent()
-                        val scaleValue = event.calculateZoom()
-                        if (scaleValue != 1f) {
-                            val lScale = minOf(maxOf(minScale, scale * scaleValue), maxScale)
-                            scale = lScale
-                        }
-                        if (scale != 1f) {
-                            val offset = event.calculatePan()
-                            offsetX += offset.x
-                            offsetY += offset.y
-                        } else {
-                            offsetX = 0f
-                            offsetY = 0f
-                        }
-                        enableScroll(scale == 1f)
-                        //log("enable scroll = ${scale == 1f}")
+                      //  log(event.type)
+                            val scaleValue = event.calculateZoom()
+                            if (scaleValue != 1f) {
+                                val lScale = minOf(maxOf(minScale, scale * scaleValue), maxScale)
+                                scale = lScale
+                            }
+                            if (scale != 1f) {
+                                val offset = event.calculatePan()
+                                offsetX += offset.x
+                                offsetY += offset.y
+                            } else {
+                                offsetX = 0f
+                                offsetY = 0f
+                            }
+                            enableScroll(scale == 1f)
+                          //log("enable scroll = ${scale == 1f}")
                     } while (event.changes.any {
                             it.pressed
                     })
@@ -206,10 +219,22 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
             }
         }
 
+       /* .pointerInput(Unit) {
+            detectTransformGestures { _, _, zoom, _ ->
+                scale = when {
+                    scale < minScale -> minScale
+                    scale > maxScale -> maxScale
+                    else -> scale * zoom
+                }
+                enableScroll(scale == 1f)
+            }
+        }*/
+
 
     ){
         Image(source, modifier = Modifier
             .fillMaxSize()
+        //    .transformable(state = transformState)
             .graphicsLayer {
                 if (isZoom) {
                     scaleX = animScale
