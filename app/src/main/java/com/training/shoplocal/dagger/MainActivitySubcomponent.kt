@@ -11,7 +11,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.Subcomponent
 
-
+@ActivityMainScope
 @Subcomponent(modules = [MainActivityModule::class])
 interface MainActivitySubcomponent {//: AndroidInjector<MainActivity> {
     @Subcomponent.Factory
@@ -23,6 +23,6 @@ interface MainActivitySubcomponent {//: AndroidInjector<MainActivity> {
 
 @Module
 class MainActivityModule{
-    @Provides
+    @[Provides ActivityMainScope]
     fun provideAccessUser(context: Context, loginState: LoginViewState): AccessUserInterface = AccessUser(context, loginState)
 }

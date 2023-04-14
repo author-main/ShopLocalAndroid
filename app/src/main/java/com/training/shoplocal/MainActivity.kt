@@ -18,6 +18,7 @@ import com.training.shoplocal.classes.User.Companion.getUserData
 import com.training.shoplocal.classes.downloader.DiskCache
 import com.training.shoplocal.classes.downloader.ImageLinkDownloader
 import com.training.shoplocal.classes.downloader.MemoryCache
+import com.training.shoplocal.dagger.ActivityMainScope
 import com.training.shoplocal.dagger.MainActivitySubcomponent
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.repository.AccessUser

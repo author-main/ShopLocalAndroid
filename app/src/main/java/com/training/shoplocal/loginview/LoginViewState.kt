@@ -7,11 +7,13 @@ import androidx.compose.runtime.setValue
 import com.training.shoplocal.classes.User
 import com.training.shoplocal.classes.arrayEmptyChar
 import com.training.shoplocal.classes.fillChar
+import com.training.shoplocal.dagger.ActivityMainScope
 import com.training.shoplocal.log
 import com.training.shoplocal.userfingerprint.UserFingerPrint
 import com.training.shoplocal.validateMail
 import javax.inject.Inject
 
+@ActivityMainScope
 class LoginViewState @Inject constructor() {
     /*private var onAccessUser: AccessUserInterface? = null
     fun addOnAccessUser(value: AccessUserInterface) {
