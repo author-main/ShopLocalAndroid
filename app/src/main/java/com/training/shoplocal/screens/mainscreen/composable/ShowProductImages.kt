@@ -85,7 +85,7 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
     var offsetX by remember { mutableStateOf(0f) }
     var offsetY by remember { mutableStateOf(0f) }
     val animScale by animateFloatAsState(
-        targetValue = scale,//if (scale < halfScale) 1f else maxScale,
+        targetValue = scale,
         animationSpec = tween(durationMillis =200, easing = LinearEasing)/*,
         finishedListener = {
             animate = false
@@ -165,6 +165,7 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                             enableScroll(false)
                         }
                         //animate = true
+                        //log("scaleValue $scale")
                     }
                 },
                 onTap = {
@@ -180,12 +181,10 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                     do {
                         val event = awaitPointerEvent()
                         val scaleValue = event.calculateZoom()
-
                         if (scaleValue != 1f) {
                             val lScale = minOf(maxOf(minScale, scale * scaleValue), maxScale)
                             scale = lScale
                         }
-                        //log("scaleValue $scale")
                         if (scale != 1f) {
                             val offset = event.calculatePan()
                             offsetX += offset.x
@@ -215,7 +214,7 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                     translationX = animOffsetX
                     translationY = animOffsetY
                     log("scale...")
-                }
+               }
             }, contentDescription = null)
 
     }
