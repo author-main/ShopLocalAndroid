@@ -22,8 +22,7 @@ import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.*
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.*
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -110,9 +109,8 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
 
 
 
-
+    var layout: LayoutCoordinates? = null
     Box(modifier = modifier
-
         .clip(RectangleShape)
         .padding(8.dp)
         .combinedClickable(
@@ -175,12 +173,8 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
             }*/
 
             if (isZoom) {
-                fun getBoundValue(offset: Float, half: Float): Float {
-                    return if (abs(offset) > half) {
-                        val znak = if (offset < 0) -1 else 1
-                        znak * half
-                    } else
-                        offset
+                fun changedOffset(offset: Float, half: Float): Boolean {
+                    return abs(offset) < half
                 }
 
                 awaitEachGesture {
@@ -195,13 +189,23 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                             val offset = event.calculatePan()
                             //offsetX += offset.x
                             //offsetY += offset.y
-                            val halfX = centerX * scale
-                            val halfY = centerY * scale
+                            val scaleImage = minOf(
+                                layout!!.size.width / source.width.toFloat(),
+                                layout!!.size.height / source.height.toFloat()
+                            )
+                            val halfX =  source.width/2f  * scaleImage * scale - layout!!.size.width  / 2f
+                            val halfY =  source.height/2f * scaleImage * scale - layout!!.size.height / 2f
+                            val shiftX = offsetX + offset.x
+                            val shiftY = offsetY + offset.y
+                            if (changedOffset(shiftX, halfX))
+                                offsetX = shiftX
 
-                            offsetX = getBoundValue(offsetX + offset.x, halfX)
-                            offsetY = getBoundValue(offsetY + offset.y, halfY)
+                            if (changedOffset(shiftY, halfY))
+                                offsetY = shiftY
 
-                            //log("offsetX $offsetX, halfX $halfX - offsetY $offsetY, halfY $halfY")
+
+                            /*    offsetX = getBoundValue(offsetX + offset.x, halfX)
+                            offsetY = getBoundValue(offsetY + offset.y, halfY)*/
 
                         } else {
                             scale = minScale
@@ -233,8 +237,9 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
     ){
         //log("pointerInput scale = $scale")
         Image(source,
-            contentScale = ContentScale.Fit,
+            //contentScale = ContentScale.Fit,
             modifier = Modifier
+                .onPlaced { layout = it }
                 .fillMaxSize()
                 //    .transformable(state = transformState)
                 .graphicsLayer {
