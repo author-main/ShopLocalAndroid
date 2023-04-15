@@ -47,7 +47,7 @@ import kotlin.math.pow
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState<Boolean>, isZoom: Boolean = false, onClick: () -> Unit){
-    val sourceName = rememberUpdatedState(newValue = source.toString())
+    val sourceName = rememberUpdatedState(newValue = source.toString()) //для обновления state в pointerInput
   //  val coroutineScope = rememberCoroutineScope()
     fun enableScrolling(value: Boolean) {
         /*  scrollState?.run {
