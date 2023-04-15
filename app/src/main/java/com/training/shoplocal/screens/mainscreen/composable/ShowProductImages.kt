@@ -124,14 +124,13 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                 if (isZoom) {
                     val delta = (maxScale - minScale) / 2f
                     scale = if (scale >= minScale + delta) {
-
                         offsetX = 0f
                         offsetY = 0f
                         minScale
                     } else {
                         maxScale
                     }
-                    //       enableScrolling(enabled)
+                    enableScrolling(scale==minScale)
                 }
             },
         )
@@ -177,7 +176,6 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                     awaitFirstDown()
                     do {
                         val event = awaitPointerEvent()
-                        //if (event.type == PointerEventType.Move){}
                         scale =
                             minOf(maxOf(minScale, scale * event.calculateZoom()), maxScale)
 
@@ -214,7 +212,7 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
     ){
         //log("pointerInput scale = $scale")
         Image(source,
-            //contentScale = ContentScale.Fit,
+            contentScale = ContentScale.Fit,
             modifier = Modifier
                 .fillMaxSize()
                 //    .transformable(state = transformState)
