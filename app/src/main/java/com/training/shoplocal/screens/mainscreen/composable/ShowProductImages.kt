@@ -47,7 +47,7 @@ import kotlin.math.pow
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState<Boolean>, isZoom: Boolean = false, onClick: () -> Unit){
-
+    val sourceName = rememberUpdatedState(newValue = source.toString())
   //  val coroutineScope = rememberCoroutineScope()
     fun enableScrolling(value: Boolean) {
         /*  scrollState?.run {
@@ -57,7 +57,6 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
           }*/
         scrollState.value = value
     }
-
 
     val minScale: Float = 1f
     val maxScale: Float = 3f
@@ -125,7 +124,7 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                 if (isZoom) {
                     val delta = (maxScale - minScale) / 2f
                     scale = if (scale >= minScale + delta) {
-                        //         enabled = true
+
                         offsetX = 0f
                         offsetY = 0f
                         minScale
@@ -156,14 +155,32 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
             )
         }*/
 
-        .pointerInput(Unit) {
+        .pointerInput(sourceName) {
+            /*  detectTransformGestures { _, offset, zoom, _ ->
+                if (isZoom) {
+                    scale =
+                        minOf(maxOf(minScale, scale*zoom), maxScale)
+                    if (scale > minScale) {
+                        offsetX += offset.x
+                        offsetY += offset.y
+                    } else {
+                        scale = minScale
+                        offsetX = 0f
+                        offsetY = 0f
+                    }
+                }
+            }*/
+
             if (isZoom) {
+
                 awaitEachGesture {
                     awaitFirstDown()
                     do {
                         val event = awaitPointerEvent()
-                        scale =//*= event.calculateZoom()
+                        scale =
                             minOf(maxOf(minScale, scale * event.calculateZoom()), maxScale)
+
+                        //log("scale = $scale")
                         if (scale > minScale) {
                             val offset = event.calculatePan()
                             offsetX += offset.x
@@ -173,34 +190,9 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                             offsetX = 0f
                             offsetY = 0f
                         }
-                        //enableScrolling(scale == minScale)
-
-
-                        /*                       //var enabled = scrollState.value
-                                              val event = awaitPointerEvent()
-                                              //  log(event.type)
-                                                  val scaleValue =
-                                                      minOf(maxOf(minScale, scale * event.calculateZoom()), maxScale)
-                                                  if (scaleValue > minScale) {
-                                                    //  enableScrolling(false)
-                                                      scale =
-                                                          scaleValue//minOf(maxOf(minScale, scale * scaleValue), maxScale)
-                                                      val eventOffset = event.calculatePan()
-                                                      offsetX += eventOffset.x
-                                                      offsetY += eventOffset.y
-                                                  } else {
-                                                      offsetX = 0f
-                                                      offsetY = 0f
-
-                                                    //  enabled = true
-                                              }
-
-                                              enableScrolling(scale == minScale)*/
                     } while (event.changes.any {
                             it.pressed
                         })
-
-
                 }
             }
         }
