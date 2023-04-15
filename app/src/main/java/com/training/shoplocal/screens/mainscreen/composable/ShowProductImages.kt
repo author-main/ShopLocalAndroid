@@ -246,11 +246,8 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                     if (isZoom) {
                         scaleX = animScale
                         scaleY = animScale
-
                         translationX = animOffsetX
                         translationY = animOffsetY
-                        //log("scale...")
-
                     }
                 }, contentDescription = null)
 
