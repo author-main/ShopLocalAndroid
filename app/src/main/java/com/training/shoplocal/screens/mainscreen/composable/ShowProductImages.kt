@@ -177,6 +177,7 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                     awaitFirstDown()
                     do {
                         val event = awaitPointerEvent()
+                        //if (event.type == PointerEventType.Move){}
                         scale =
                             minOf(maxOf(minScale, scale * event.calculateZoom()), maxScale)
 
