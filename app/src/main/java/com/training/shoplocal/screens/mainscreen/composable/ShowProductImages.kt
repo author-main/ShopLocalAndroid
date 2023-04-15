@@ -40,6 +40,7 @@ import com.training.shoplocal.ui.theme.TextFieldFont
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import kotlinx.coroutines.*
 import javax.inject.Inject
+import kotlin.math.abs
 import kotlin.math.absoluteValue
 import kotlin.math.pow
 
@@ -63,6 +64,9 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
     var scale by remember {
         mutableStateOf(1f)
     }
+
+    val centerX = remember{source.width / 2f}
+    val centerY = remember{source.height / 2f}
 
     var offsetX by remember { mutableStateOf(0f) }
     var offsetY by remember { mutableStateOf(0f) }
@@ -171,6 +175,13 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
             }*/
 
             if (isZoom) {
+                fun getBoundValue(offset: Float, half: Float): Float {
+                    return if (abs(offset) > half) {
+                        val znak = if (offset < 0) -1 else 1
+                        znak * half
+                    } else
+                        offset
+                }
 
                 awaitEachGesture {
                     awaitFirstDown()
@@ -182,13 +193,23 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                         //log("scale = $scale")
                         if (scale > minScale) {
                             val offset = event.calculatePan()
-                            offsetX += offset.x
-                            offsetY += offset.y
+                            //offsetX += offset.x
+                            //offsetY += offset.y
+                            val halfX = centerX * scale
+                            val halfY = centerY * scale
+
+                            offsetX = getBoundValue(offsetX + offset.x, halfX)
+                            offsetY = getBoundValue(offsetY + offset.y, halfY)
+
+                            //log("offsetX $offsetX, halfX $halfX - offsetY $offsetY, halfY $halfY")
+
                         } else {
                             scale = minScale
                             offsetX = 0f
                             offsetY = 0f
                         }
+
+
                         enableScrolling(scale == minScale)
                     } while (event.changes.any {
                             it.pressed
