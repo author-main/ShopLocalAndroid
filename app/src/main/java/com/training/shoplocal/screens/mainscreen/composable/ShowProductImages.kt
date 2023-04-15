@@ -191,6 +191,7 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                             offsetX = 0f
                             offsetY = 0f
                         }
+                        enableScrolling(scale == minScale)
                     } while (event.changes.any {
                             it.pressed
                         })
@@ -230,10 +231,10 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                 }, contentDescription = null)
 
     }
-    SideEffect {
+  /*  SideEffect {
         //log("scale = $scale")
         enableScrolling(scale == minScale)
-    }
+    }*/
 }
 
 @Composable
