@@ -127,12 +127,12 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                     val delta = (maxScale - minScale) / 2f
                     scale = if (scale >= minScale + delta) {
                    // scale = if (scale == maxScale) {
-                        log ("min")
+                        //log ("min")
                         offsetX = 0f
                         offsetY = 0f
                         minScale
                     } else {
-                        log ("max")
+                        //log ("max")
                         maxScale
                     }
                     enableScrolling(scale==minScale)
