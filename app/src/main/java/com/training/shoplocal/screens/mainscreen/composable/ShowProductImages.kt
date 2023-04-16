@@ -197,13 +197,13 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                                 offsetX = 0f
                                 offsetY = 0f
                             } else {
-                                scale = eventScale
                                 if (offsetX != 0f) {
-
+                                    offsetX = eventScale * offsetX / scale// - layout!!.size.width / 2f
                                 }
                                 if (offsetY != 0f) {
-
+                                    offsetY = eventScale * offsetY / scale// - layout!!.size.height / 2f
                                 }
+                                scale = eventScale
                             }
                         }
                             else {
