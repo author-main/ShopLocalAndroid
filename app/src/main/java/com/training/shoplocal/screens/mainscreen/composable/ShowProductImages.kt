@@ -126,10 +126,13 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                 if (isZoom) {
                     val delta = (maxScale - minScale) / 2f
                     scale = if (scale >= minScale + delta) {
+                   // scale = if (scale == maxScale) {
+                        log ("min")
                         offsetX = 0f
                         offsetY = 0f
                         minScale
                     } else {
+                        log ("max")
                         maxScale
                     }
                     enableScrolling(scale==minScale)
@@ -181,39 +184,37 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                     awaitFirstDown()
                     do {
                         val event = awaitPointerEvent()
-                        scale =
+                        val eventScale =
                             minOf(maxOf(minScale, scale * event.calculateZoom()), maxScale)
-
-                        //log("scale = $scale")
-                        if (scale > minScale) {
-                            val offset = event.calculatePan()
-                            //offsetX += offset.x
-                            //offsetY += offset.y
-                            val scaleImage = minOf(
-                                layout!!.size.width / source.width.toFloat(),
-                                layout!!.size.height / source.height.toFloat()
-                            )
-                            val halfX =  source.width/2f  * scaleImage * scale - layout!!.size.width  / 2f
-                            val halfY =  source.height/2f * scaleImage * scale - layout!!.size.height / 2f
-                            val shiftX = offsetX + offset.x
-                            val shiftY = offsetY + offset.y
-                            if (changedOffset(shiftX, halfX))
-                                offsetX = shiftX
-
-                            if (changedOffset(shiftY, halfY))
-                                offsetY = shiftY
+                        val offset = event.calculatePan()
+                        val eventOffsetX = offsetX + offset.x
+                        val eventOffsetY = offsetY + offset.y
 
 
-                            /*    offsetX = getBoundValue(offsetX + offset.x, halfX)
-                            offsetY = getBoundValue(offsetY + offset.y, halfY)*/
-
-                        } else {
-                            scale = minScale
-                            offsetX = 0f
-                            offsetY = 0f
+                        if (eventScale != scale) {
+                            if (eventScale == minScale) {
+                                scale = 1f
+                                offsetX = 0f
+                                offsetY = 0f
+                            } else
+                                scale = eventScale
                         }
-
-
+                            else {
+                                if (eventOffsetX != offsetX || eventOffsetY != offsetY) {
+                                    val scaleImage = minOf(
+                                        layout!!.size.width / source.width.toFloat(),
+                                        layout!!.size.height / source.height.toFloat()
+                                    )
+                                    val halfX =
+                                        source.width / 2f * scaleImage * scale - layout!!.size.width / 2f
+                                    val halfY =
+                                        source.height / 2f * scaleImage * scale - layout!!.size.height / 2f
+                                    if (changedOffset(eventOffsetX, halfX))
+                                        offsetX = eventOffsetX
+                                    if (changedOffset(eventOffsetY, halfY))
+                                        offsetY = eventOffsetY
+                                }
+                            }
                         enableScrolling(scale == minScale)
                     } while (event.changes.any {
                             it.pressed
