@@ -42,6 +42,7 @@ import javax.inject.Inject
 import kotlin.math.abs
 import kotlin.math.absoluteValue
 import kotlin.math.pow
+import kotlin.math.roundToInt
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -58,14 +59,10 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
         scrollState.value = value
     }
 
-    val minScale: Float = 1f
     val maxScale: Float = 3f
     var scale by remember {
         mutableStateOf(1f)
     }
-
-    val centerX = remember{source.width / 2f}
-    val centerY = remember{source.height / 2f}
 
     var offsetX by remember { mutableStateOf(0f) }
     var offsetY by remember { mutableStateOf(0f) }
@@ -124,18 +121,18 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                 //  log("double click...")
                 //  var enabled = false
                 if (isZoom) {
-                    val delta = (maxScale - minScale) / 2f
-                    scale = if (scale >= minScale + delta) {
+                    val delta = (maxScale - 1f) / 2f
+                    scale = if (scale >= 1f + delta) {
                    // scale = if (scale == maxScale) {
                         //log ("min")
                         offsetX = 0f
                         offsetY = 0f
-                        minScale
+                        1f
                     } else {
                         //log ("max")
                         maxScale
                     }
-                    enableScrolling(scale==minScale)
+                    enableScrolling(scale==1f)
                 }
             },
         )
@@ -185,44 +182,64 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                     do {
                         val event = awaitPointerEvent()
                         val eventScale =
-                            minOf(maxOf(minScale, scale * event.calculateZoom()), maxScale)
-                        val offset = event.calculatePan()
-                        val eventOffsetX = offsetX + offset.x
-                        val eventOffsetY = offsetY + offset.y
+                            minOf(maxOf(1f, scale * event.calculateZoom()), maxScale)
+                        val eventOffset = event.calculatePan()
+                        val eventOffsetX = offsetX + eventOffset.x
+                        val eventOffsetY = offsetY + eventOffset.y
 
 
                         if (eventScale != scale) {
-                            if (eventScale == minScale) {
-                                scale = 1f
+                            if (eventScale == 1f) {
+                                //scale = 1f
                                 offsetX = 0f
                                 offsetY = 0f
                             } else {
+                                fun getOffset(offset: Float, layoutOffset: Int): Float {
+                                    val maxOffset1 = layoutOffset / 2f * (eventScale - 1)
+                                    val maxOffset2 = layoutOffset / 2f * (scale - 1)
+                                    val delta = maxOffset2 - maxOffset1
+                                    val znak = if (offset < 0) 1 else -1
+                                    return (offset + znak * delta).roundToInt().toFloat()
+                                }
                                 if (offsetX != 0f) {
-                                    offsetX = eventScale * offsetX / scale// - layout!!.size.width / 2f
+                                    offsetX = getOffset(offsetX, layout!!.size.width)
+                                    /*val maxOffset1 = layout!!.size.width / 2f * (eventScale - 1)
+                                    val maxOffset2 = layout!!.size.width / 2f * (scale - 1)
+                                    val delta = maxOffset2 - maxOffset1
+                                    val znak = if (eventOffsetX < 0) 1 else -1
+                                    offsetX = (offsetX + znak * delta).roundToInt().toFloat()*/
                                 }
                                 if (offsetY != 0f) {
-                                    offsetY = eventScale * offsetY / scale// - layout!!.size.height / 2f
+                                    offsetY = getOffset(offsetY, layout!!.size.height)
+                                   /* val maxOffset1 = layout!!.size.height / 2f * (eventScale - 1)
+                                    val maxOffset2 = layout!!.size.height / 2f * (scale - 1)
+                                    val delta = maxOffset2 - maxOffset1
+                                    val znak = if (eventOffsetY < 0) 1 else -1
+                                    offsetY = (offsetY + znak * delta).roundToInt().toFloat()*/
                                 }
-                                scale = eventScale
                             }
+                            scale = eventScale
                         }
                             else {
                                 if (eventOffsetX != offsetX || eventOffsetY != offsetY) {
-                                    val scaleImage = minOf(
+                                   // log("offsetX = $eventOffsetX")
+                                  /*  val scaleImage = minOf(
                                         layout!!.size.width / source.width.toFloat(),
                                         layout!!.size.height / source.height.toFloat()
-                                    )
+                                    )*/
                                     val halfX =
-                                        source.width / 2f * scaleImage * scale - layout!!.size.width / 2f
+                                        //source.width / 2f * scaleImage * scale - layout!!.size.width / 2f
+                                        layout!!.size.width / 2f * (scale - 1f)
                                     val halfY =
-                                        source.height / 2f * scaleImage * scale - layout!!.size.height / 2f
+                                        //source.height / 2f * scaleImage * scale - layout!!.size.height / 2f
+                                        layout!!.size.height / 2f * (scale - 1f)
                                     if (changedOffset(eventOffsetX, halfX))
-                                        offsetX = eventOffsetX
+                                        offsetX = eventOffsetX.roundToInt().toFloat()
                                     if (changedOffset(eventOffsetY, halfY))
-                                        offsetY = eventOffsetY
+                                        offsetY = eventOffsetY.roundToInt().toFloat()
                                 }
                             }
-                        enableScrolling(scale == minScale)
+                        enableScrolling(scale == 1f)
                     } while (event.changes.any {
                             it.pressed
                         })
