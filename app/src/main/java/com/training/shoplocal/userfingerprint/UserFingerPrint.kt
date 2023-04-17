@@ -9,6 +9,7 @@ import com.training.shoplocal.dagger.ActivityMainScope
 import com.training.shoplocal.getStringResource
 import javax.crypto.Cipher
 import javax.inject.Inject
+
 @ActivityMainScope
 class UserFingerPrint @Inject constructor(private val context: Context): UserFingerPrintInterface {
     @Inject

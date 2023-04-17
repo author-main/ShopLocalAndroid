@@ -18,7 +18,8 @@ import java.security.spec.AlgorithmParameterSpec
 import javax.crypto.Cipher
 import javax.inject.Inject
 
-class UserPasswordStorage constructor(): UserPasswordStorageInterface {
+@ActivityMainScope
+class UserPasswordStorage @Inject constructor(): UserPasswordStorageInterface {
     //private val filePreferences = "settings"
     //private val keyPassword     = "password"
     private val sharedPrefs: SharedPreferences =

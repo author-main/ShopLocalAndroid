@@ -33,12 +33,15 @@ class MainActivityModule{
     @[Provides ActivityMainScope]
     fun provideAccessUser(context: Context, loginState: LoginViewState): AccessUserInterface = AccessUser(context, loginState)
 
-    @[Provides ActivityMainScope]
-    fun providePasswordStorage(): UserPasswordStorageInterface = UserPasswordStorage()
+   /* @[Provides ActivityMainScope]
+    fun providePasswordStorage(): UserPasswordStorageInterface = UserPasswordStorage()*/
+
+    /*@[Provides ActivityMainScope]
+    fun provideFingerPrint(context: Context): UserFingerPrint = UserFingerPrint(context)*/
 }
 
 @Module
 interface BindsMainActivityModule {
-   /* @Binds
-    fun bindUserPasswordStorage_to_UserPasswordStorageInterface(passwordStorage: UserPasswordStorage): UserPasswordStorageInterface*/
+    @Binds
+    fun bindUserPasswordStorage_to_UserPasswordStorageInterface(passwordStorage: UserPasswordStorage): UserPasswordStorageInterface
 }

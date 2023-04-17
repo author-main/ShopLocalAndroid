@@ -7,6 +7,7 @@ import com.training.shoplocal.isConnectedNet
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.repository.retrofit.DatabaseApi
 import com.training.shoplocal.classes.User
+import com.training.shoplocal.dagger.ActivityMainScope
 import com.training.shoplocal.userfingerprint.UserFingerPrint
 import com.training.shoplocal.userfingerprint.UserFingerPrintInterface
 import com.training.shoplocal.userfingerprint.UserFingerPrintListener
@@ -25,6 +26,7 @@ class AccessUser(
     override val loginState: LoginViewState
 ): AccessUserInterface {
     private var actionLogin: ((result: Int) -> Unit)? = null
+
     private var userFingerPrint: UserFingerPrint? = null
 
     override fun setFingerPrint(value: UserFingerPrint) {
@@ -208,8 +210,7 @@ class AccessUser(
         //lateinit var userFingerPrint: UserFingerPrint
         return if (fingerPrintCanAuthenticate()) {
             //UserFingerPrint(context as FragmentActivity)
-            userFingerPrint
-                ?.apply main@ {
+            userFingerPrint?.apply main@ {
                     userFingerPrintListener = object : UserFingerPrintListener {
                         override fun onComplete(cipher: Cipher?) {
                             cipher?.let {
