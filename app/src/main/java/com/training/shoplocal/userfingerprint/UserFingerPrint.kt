@@ -11,7 +11,8 @@ import javax.crypto.Cipher
 import javax.inject.Inject
 @ActivityMainScope
 class UserFingerPrint @Inject constructor(private val context: Context): UserFingerPrintInterface {
-    override val userPasswordStorage: UserPasswordStorageInterface = UserPasswordStorage()
+    @Inject
+    override lateinit var userPasswordStorage: UserPasswordStorageInterface// = UserPasswordStorage()
     override var userFingerPrintListener: UserFingerPrintListener? = null
     override fun authenticate(): Boolean {
         /*if (!canAuthenticate())

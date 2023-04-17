@@ -8,13 +8,15 @@ import com.training.shoplocal.repository.DatabaseCRUD
 import com.training.shoplocal.repository.DatabaseCRUDInterface
 import com.training.shoplocal.userfingerprint.UserFingerPrint
 import com.training.shoplocal.userfingerprint.UserFingerPrintInterface
+import com.training.shoplocal.userfingerprint.UserPasswordStorage
+import com.training.shoplocal.userfingerprint.UserPasswordStorageInterface
 import dagger.*
 import javax.inject.Scope
 import javax.inject.Singleton
 
 
 @Singleton
-@Component(modules = [CacheModule::class, BindsModule::class, SubcomponentsModule::class])//, dependencies = [ProviderCacheParam::class])
+@Component(modules = [CacheModule::class, BindsAppModule::class, SubcomponentsModule::class])//, dependencies = [ProviderCacheParam::class])
 interface AppComponent {
     fun injectApplication(application: AppShopLocal)
     //fun injectMainActivity(activity: MainActivity)
@@ -78,7 +80,7 @@ class CacheModule {
 }*/
 
 @Module
-interface BindsModule {
+interface BindsAppModule {
 
     @Binds
     fun bindDiskCache_to_ImageDiskCache(diskCache: DiskCache): ImageDiskCache
@@ -88,6 +90,10 @@ interface BindsModule {
 
     /*@Binds
     fun bindAccessUser_to_AccessUserInterface(accessUser: AccessUser): AccessUserInterface*/
+
+
+    /*@Binds
+    fun bindUserPasswordStorage_to_UserPasswordStorageInterface(passwordStorage: UserPasswordStorage): UserPasswordStorageInterface*/
 
     @Binds
     fun bindDatabaseCRUD_to_DatabaseCRUDInterface(databaseCRUD: DatabaseCRUD): DatabaseCRUDInterface

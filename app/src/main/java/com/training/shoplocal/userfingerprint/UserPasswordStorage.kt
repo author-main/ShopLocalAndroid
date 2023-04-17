@@ -9,14 +9,16 @@ import android.util.Base64
 import com.training.shoplocal.AppShopLocal.Companion.appContext
 import com.training.shoplocal.classes.FILE_PREFERENCES
 import com.training.shoplocal.classes.KEY_PASSWORD
+import com.training.shoplocal.dagger.ActivityMainScope
 import java.security.KeyPairGenerator
 import java.security.KeyStore
 import java.security.PrivateKey
 import java.security.PublicKey
 import java.security.spec.AlgorithmParameterSpec
 import javax.crypto.Cipher
+import javax.inject.Inject
 
-class UserPasswordStorage: UserPasswordStorageInterface {
+class UserPasswordStorage constructor(): UserPasswordStorageInterface {
     //private val filePreferences = "settings"
     //private val keyPassword     = "password"
     private val sharedPrefs: SharedPreferences =
