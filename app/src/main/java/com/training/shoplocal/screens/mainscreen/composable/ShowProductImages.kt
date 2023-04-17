@@ -111,13 +111,13 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
         //.background(Color.Red)
         .clip(RectangleShape)
         .padding(8.dp)
-        .combinedClickable(
+      /*  .combinedClickable(
             enabled = true,
             interactionSource = remember { MutableInteractionSource() },
             indication = null,
             onClick = {
                 onClick()
-            },
+            }/*,
             onDoubleClick = {
                 //  log("double click...")
                 //  var enabled = false
@@ -135,29 +135,36 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                     }
                     enableScrolling(scale==1f)
                 }
-            },
-        )
-        /*  .pointerInput(Unit) {
+            },*/
+        )*/
+          .pointerInput(Unit) {
             detectTapGestures(
                 onDoubleTap = {
                     if (isZoom) {
-                        val delta = (maxScale - minScale) / 2f
-                        scale = if (scale >= minScale + delta) {
+                        val delta = (maxScale - 1f) / 2f
+                        scale = if (scale >= 1f + delta) {
                             offsetX = 0f
                             offsetY = 0f
-                            minScale
+                            1f
                         } else {
                             maxScale
                         }
+                        enableScrolling(scale==1f)
                     }
                 },
                 onTap = {
                     onClick()
                 }
             )
-        }*/
+        }
 
         .pointerInput(sourceName) {
+
+         /*   detectTapGestures(
+                onDoubleTap = {
+                    println("Inner double click")
+                }
+            )*/
             /*  detectTransformGestures { _, offset, zoom, _ ->
                 if (isZoom) {
                     scale =
