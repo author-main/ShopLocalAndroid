@@ -29,7 +29,7 @@ class AccessUser(
 
     override fun setFingerPrint(value: UserFingerPrint) {
         userFingerPrint = value
-        getUserFingerPrint()
+        setParamUserFingerPrint()
     }
 
     //private lateinit var loginState: LoginViewState
@@ -204,7 +204,7 @@ class AccessUser(
             null
     }*/
 
-    private fun getUserFingerPrint(): UserFingerPrint? {
+    private fun setParamUserFingerPrint(): UserFingerPrint? {
         //lateinit var userFingerPrint: UserFingerPrint
         return if (fingerPrintCanAuthenticate()) {
             //UserFingerPrint(context as FragmentActivity)
