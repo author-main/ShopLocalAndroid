@@ -200,19 +200,38 @@ fun ZoomImage(modifier: Modifier, source: ImageBitmap, scrollState: MutableState
                                 offsetX = 0f
                                 offsetY = 0f
                             } else {
+                               /* fun getOffsetDelta(imageSize: Int, direction: Int): Float {
+                                    val size = imageSize / 2f * scaleImage
+                                    val offsetScalePrev = scale      * size
+                                    val offsetScale     = eventScale * size
+                                    val delta = offsetScale - offsetScalePrev
+
+
+                                    return direction * delta.roundToInt().toFloat()
+                                }*/
+
                                 if (offsetX != 0f) {
                                     val offsetScalePrev = scale      * (source.width / 2f * scaleImage)
                                     val offsetScale     = eventScale * (source.width / 2f * scaleImage)
                                     val delta = offsetScale - offsetScalePrev
                                     val znak = if (eventOffsetX < 0) -1 else 1
-                                    offsetX += znak * delta.roundToInt().toFloat()
+                                    //offsetX += znak * delta.roundToInt().toFloat()
+                                    var offset_X = (offsetX + znak * delta).roundToInt().toFloat()
+                                    if (abs(offset_X) > offsetScale)
+                                        offset_X = offsetScale
+                                    offsetX = offset_X
                                 }
                                 if (offsetY != 0f) {
+                                    //val offset_Y = offsetY + getOffsetDelta(source.height, if (eventOffsetY < 0) -1 else 1)
                                     val offsetScalePrev = scale      * (source.height / 2f * scaleImage)
                                     val offsetScale     = eventScale * (source.height / 2f * scaleImage)
                                     val delta = offsetScale - offsetScalePrev
                                     val znak = if (eventOffsetY < 0) -1 else 1
-                                    offsetY += znak * delta.roundToInt().toFloat()
+                                    //offsetY += znak * delta.roundToInt().toFloat()
+                                    var offset_Y = (offsetY + znak * delta).roundToInt().toFloat()
+                                    if (abs(offset_Y) > offsetScale)
+                                        offset_Y = offsetScale
+                                    offsetY = offset_Y
                                 }
                             }
                             scale = eventScale
