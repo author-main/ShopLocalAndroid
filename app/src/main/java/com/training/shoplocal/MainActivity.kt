@@ -30,6 +30,8 @@ import com.training.shoplocal.screens.LoginScreen
 import com.training.shoplocal.screens.ScreenItem
 import com.training.shoplocal.screens.ScreenRouter
 import com.training.shoplocal.ui.theme.ShopLocalTheme
+import com.training.shoplocal.userfingerprint.UserFingerPrint
+import com.training.shoplocal.userfingerprint.UserFingerPrintInterface
 import com.training.shoplocal.viewmodel.FactoryViewModel
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 import dagger.android.AndroidInjection
@@ -55,9 +57,11 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
     @Inject
     lateinit var imageDownloader: ImageLinkDownloader
 
-
     @Inject
     lateinit var accessUser: AccessUserInterface
+
+    @Inject
+    lateinit var userFingerPrint: UserFingerPrint
 
     private val viewModel: RepositoryViewModel by viewModels(factoryProducer = {
         FactoryViewModel(
@@ -73,6 +77,7 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
         mainActivitySubcomponent = appComponent.mainActivitySubcomponent().create(this)
         mainActivitySubcomponent.inject(this)
         appRepository().accessUser = accessUser
+        accessUser.setFingerPrint(userFingerPrint)
          //   AccessUser(this, LoginViewState())
 
 

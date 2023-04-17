@@ -15,7 +15,7 @@ import java.text.DecimalFormatSymbols
     const val DIR_IMAGES = "images_ls"
     const val SERVER_URL = "http://faceshot.ru"
 //---------------------------------------------------------------------------------------------
-
+const val KEY_PASSWORD = "password"
 const val USERMESSAGE_READ   = 0
 const val USERMESSAGE_DELETE = 1
 

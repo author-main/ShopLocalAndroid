@@ -3,6 +3,8 @@ package com.training.shoplocal.repository
 import android.content.Context
 import androidx.fragment.app.FragmentActivity
 import com.training.shoplocal.loginview.LoginViewState
+import com.training.shoplocal.userfingerprint.UserFingerPrint
+import com.training.shoplocal.userfingerprint.UserFingerPrintInterface
 
 interface AccessUserInterface {
     val context: Context
@@ -13,4 +15,5 @@ interface AccessUserInterface {
     fun onFingerPrint(action: ((result: Int) -> Unit)?, email: String)
     //fun getContextFingerPrint(context: Context)
     fun onRemoveUserPassword()
+    fun setFingerPrint(value: UserFingerPrint)
 }

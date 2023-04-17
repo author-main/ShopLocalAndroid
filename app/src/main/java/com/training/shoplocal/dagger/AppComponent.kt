@@ -2,8 +2,12 @@ package com.training.shoplocal.dagger
 
 import com.training.shoplocal.AppShopLocal
 import com.training.shoplocal.classes.downloader.*
+import com.training.shoplocal.repository.AccessUser
+import com.training.shoplocal.repository.AccessUserInterface
 import com.training.shoplocal.repository.DatabaseCRUD
 import com.training.shoplocal.repository.DatabaseCRUDInterface
+import com.training.shoplocal.userfingerprint.UserFingerPrint
+import com.training.shoplocal.userfingerprint.UserFingerPrintInterface
 import dagger.*
 import javax.inject.Scope
 import javax.inject.Singleton
@@ -82,11 +86,14 @@ interface BindsModule {
     @Binds
     fun bindMemoryCache_to_ImageMemoryCache(memoryCache: MemoryCache): ImageMemoryCache
 
-   /* @Binds
+    /*@Binds
     fun bindAccessUser_to_AccessUserInterface(accessUser: AccessUser): AccessUserInterface*/
 
     @Binds
     fun bindDatabaseCRUD_to_DatabaseCRUDInterface(databaseCRUD: DatabaseCRUD): DatabaseCRUDInterface
+
+   /* @Binds
+    fun bindUserFingerPrint_to_UserFingerPrintInterface(userFingerPrint: UserFingerPrint): UserFingerPrintInterface*/
 }
 
 

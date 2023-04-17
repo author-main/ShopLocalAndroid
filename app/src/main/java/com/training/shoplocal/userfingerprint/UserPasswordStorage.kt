@@ -8,6 +8,7 @@ import android.security.keystore.KeyProperties.KEY_ALGORITHM_RSA
 import android.util.Base64
 import com.training.shoplocal.AppShopLocal.Companion.appContext
 import com.training.shoplocal.classes.FILE_PREFERENCES
+import com.training.shoplocal.classes.KEY_PASSWORD
 import java.security.KeyPairGenerator
 import java.security.KeyStore
 import java.security.PrivateKey
@@ -17,7 +18,7 @@ import javax.crypto.Cipher
 
 class UserPasswordStorage: UserPasswordStorageInterface {
     //private val filePreferences = "settings"
-    private val keyPassword     = "password"
+    //private val keyPassword     = "password"
     private val sharedPrefs: SharedPreferences =
         appContext().getSharedPreferences(FILE_PREFERENCES, Context.MODE_PRIVATE)
     private val providerKeyStore: String = "AndroidKeyStore"
@@ -66,7 +67,7 @@ class UserPasswordStorage: UserPasswordStorageInterface {
             keyStore
         } catch (e: Exception) {
             //keyStore?.deleteEntry(alias)
-            sharedPrefs.edit().remove(keyPassword).apply()
+            sharedPrefs.edit().remove(KEY_PASSWORD).apply()
             null
         }
     }
@@ -92,18 +93,18 @@ class UserPasswordStorage: UserPasswordStorageInterface {
                 passwordUTF
             )
             encryptPassword?.let {
-                sharedPrefs.edit().putString(keyPassword, encryptPassword).apply()
+                sharedPrefs.edit().putString(KEY_PASSWORD, encryptPassword).apply()
             }
         } catch (_: Exception){}
     }
 
     override fun removePassword() {
-        sharedPrefs.edit().remove(keyPassword).apply()
+        sharedPrefs.edit().remove(KEY_PASSWORD).apply()
     }
 
     override fun getPassword(cipher: Cipher): String? {
         return try {
-            val encryptedPassword = sharedPrefs.getString(keyPassword, null) ?: return null
+            val encryptedPassword = sharedPrefs.getString(KEY_PASSWORD, null) ?: return null
             val passwordBase64: ByteArray = Base64.decode(encryptedPassword, Base64.DEFAULT)
             val password = cipher.doFinal(passwordBase64) ?: return null
             String(password)
@@ -112,8 +113,8 @@ class UserPasswordStorage: UserPasswordStorageInterface {
         }
     }
 
-    override fun existPasswordStore() =
-        !sharedPrefs.getString(keyPassword, null).isNullOrBlank()
+    /*override fun existPasswordStore() =
+        !sharedPrefs.getString(keyPassword, null).isNullOrBlank()*/
 
     override fun getDecryptCipher(): Cipher? {
         val keyStore = getKeyStore() ?: return null

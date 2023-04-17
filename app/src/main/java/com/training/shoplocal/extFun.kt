@@ -1,7 +1,7 @@
 package com.training.shoplocal
 
-import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.res.Resources
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -15,12 +15,11 @@ import android.util.Patterns
 import android.widget.Toast
 import androidx.annotation.ArrayRes
 import androidx.annotation.StringRes
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.compose.ui.graphics.ImageBitmap
 import com.training.shoplocal.AppShopLocal.Companion.appContext
-import com.training.shoplocal.classes.DECIMAL_SEPARATOR
-import com.training.shoplocal.classes.EMPTY_STRING
-import com.training.shoplocal.classes.WORD_RATE
-import com.training.shoplocal.classes.WORD_REVIEW
+import com.training.shoplocal.classes.*
 import java.math.RoundingMode
 import java.nio.charset.Charset
 import java.text.DecimalFormat
@@ -198,6 +197,15 @@ fun vibrate(duration: Long) {
     vibe.vibrate(effect)
 }
 
+fun fingerPrintCanAuthenticate() =
+    BiometricManager.from(appContext())
+        .canAuthenticate(BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS
+
+fun existPasswordStore(): Boolean {
+    val sharedPrefs: SharedPreferences =
+        appContext().getSharedPreferences(FILE_PREFERENCES, Context.MODE_PRIVATE)
+    return !sharedPrefs.getString(KEY_PASSWORD, null).isNullOrBlank()
+}
 
 
 

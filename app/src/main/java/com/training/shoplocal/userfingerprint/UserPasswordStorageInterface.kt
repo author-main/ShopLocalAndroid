@@ -6,6 +6,6 @@ interface UserPasswordStorageInterface {
     fun removePassword()
     fun putPassword(password: String)
     fun getPassword(cipher: Cipher): String?
-    fun existPasswordStore(): Boolean
+    //fun existPasswordStore(): Boolean
     fun getDecryptCipher(): Cipher?
 }

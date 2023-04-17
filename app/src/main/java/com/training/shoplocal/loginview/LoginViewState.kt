@@ -1,5 +1,6 @@
 package com.training.shoplocal.loginview
 
+import com.training.shoplocal.fingerPrintCanAuthenticate
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -8,8 +9,7 @@ import com.training.shoplocal.classes.User
 import com.training.shoplocal.classes.arrayEmptyChar
 import com.training.shoplocal.classes.fillChar
 import com.training.shoplocal.dagger.ActivityMainScope
-import com.training.shoplocal.log
-import com.training.shoplocal.userfingerprint.UserFingerPrint
+import com.training.shoplocal.existPasswordStore
 import com.training.shoplocal.validateMail
 import javax.inject.Inject
 
@@ -74,7 +74,7 @@ class LoginViewState @Inject constructor() {
 
 
     private fun canAuthenticate() =
-        UserFingerPrint.canAuthenticate() && UserFingerPrint.existPasswordStore()
+        fingerPrintCanAuthenticate() && existPasswordStore()
 
     fun checkFingerButtonState(){
         enableFingerButton.value = canAuthenticate()
