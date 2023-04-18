@@ -300,7 +300,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         repository.getProducts(USER_ID, portion) { listProducts ->
             if (listProducts.isNotEmpty()) {
                 loadedPortion++
-                log("loadedPortion = $loadedPortion")
+                //log("loadedPortion = $loadedPortion")
                 if (loadedPortion == 1)
                     _products.value.clear()
                 _products.value.addAll(listProducts)
@@ -483,7 +483,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         return data.firstItemIndex// to data.firstItemOffset
     }
 
-    private fun getPortion(size: Int = 0): Int{
+ /*   private fun getPortion(size: Int = 0): Int{
         val count = if (size == 0)
                         products.value.size
                     else size
@@ -494,7 +494,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         if (value > 0)
             portion += 1
         return portion
-    }
+    }*/
 
     /**
      *  Блок методов для управления журналом поисковых запросов
