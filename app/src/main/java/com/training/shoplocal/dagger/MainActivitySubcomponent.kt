@@ -12,6 +12,8 @@ import com.training.shoplocal.repository.AccessUser
 import com.training.shoplocal.repository.AccessUserInterface
 import com.training.shoplocal.repository.DatabaseCRUD
 import com.training.shoplocal.repository.DatabaseCRUDInterface
+import com.training.shoplocal.repository.retrofit.DatabaseApi
+import com.training.shoplocal.repository.retrofit.DatabaseApiInterface
 import com.training.shoplocal.userfingerprint.UserFingerPrint
 import com.training.shoplocal.userfingerprint.UserFingerPrintInterface
 import com.training.shoplocal.userfingerprint.UserPasswordStorage
@@ -31,7 +33,7 @@ interface MainActivitySubcomponent {//: AndroidInjector<MainActivity> {
 @Module
 class MainActivityModule{
     @[Provides ActivityMainScope]
-    fun provideAccessUser(context: Context, loginState: LoginViewState): AccessUserInterface = AccessUser(context, loginState)
+    fun provideAccessUser(context: Context, loginState: LoginViewState, databaseApi: DatabaseCRUDInterface): AccessUserInterface = AccessUser(context, loginState, databaseApi)
 
    /* @[Provides ActivityMainScope]
     fun providePasswordStorage(): UserPasswordStorageInterface = UserPasswordStorage()*/

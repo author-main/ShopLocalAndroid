@@ -1,15 +1,11 @@
 package com.training.shoplocal.repository
 
 import android.content.Context
-import androidx.fragment.app.FragmentActivity
 import com.training.shoplocal.fingerPrintCanAuthenticate
 import com.training.shoplocal.isConnectedNet
 import com.training.shoplocal.loginview.LoginViewState
-import com.training.shoplocal.repository.retrofit.DatabaseApi
 import com.training.shoplocal.classes.User
-import com.training.shoplocal.dagger.ActivityMainScope
 import com.training.shoplocal.userfingerprint.UserFingerPrint
-import com.training.shoplocal.userfingerprint.UserFingerPrintInterface
 import com.training.shoplocal.userfingerprint.UserFingerPrintListener
 import com.training.shoplocal.validateMail
 import kotlinx.coroutines.CoroutineScope
@@ -23,11 +19,13 @@ import javax.inject.Inject
 
 class AccessUser(
     override val context: Context,
-    override val loginState: LoginViewState
+    override val loginState: LoginViewState,
+    override val databaseApi: DatabaseCRUDInterface
 ): AccessUserInterface {
     private var actionLogin: ((result: Int) -> Unit)? = null
-
     private var userFingerPrint: UserFingerPrint? = null
+    /*@Inject
+    lateinit var databaseApi: DatabaseCRUDInterface*/
 
     override fun setFingerPrint(value: UserFingerPrint) {
         userFingerPrint = value
@@ -79,7 +77,19 @@ class AccessUser(
                 email       = email,
                 password    = password
             )
-            DatabaseApi.loginUser(user, object: retrofit2.Callback<User>{
+            databaseApi.loginUser(user) {id ->
+
+                    if (id > 0) {
+                        saveUserPassword(password)
+                        user.saveUserData()
+                        action?.invoke(id)
+                        if (finger)
+                            this@AccessUser.loginState.changePassword(password)
+                        this@AccessUser.loginState.clearPassword()
+                    } else
+                        clearLoginPassword()
+            }
+            /*databaseApi.loginUser(user, object: retrofit2.Callback<User>{
                 override fun onResponse(call: Call<User>, response: Response<User>) {
                     /*
                          0 - No access to the database
@@ -107,7 +117,7 @@ class AccessUser(
                 override fun onFailure(call: Call<User>, t: Throwable) {
                     clearLoginPassword()
                 }
-            })
+            })*/
         } else
             clearLoginPassword()
     }
@@ -128,7 +138,15 @@ class AccessUser(
 
 
         if (isConnectedNet()) {
-            DatabaseApi.regUser(user, object: retrofit2.Callback<User>{
+            databaseApi.regUser(user) {id ->
+                val result = id > 0
+                if (result) {
+                    saveUserPassword(user.password!!)
+                    user.saveUserData()
+                }
+                action?.invoke(result)
+            }
+            /*databaseApi.regUser(user, object: retrofit2.Callback<User>{
                 override fun onResponse(call: Call<User>, response: Response<User>) {
                     /*
                          0 - No access to the database
@@ -148,7 +166,7 @@ class AccessUser(
                 override fun onFailure(call: Call<User>, t: Throwable) {
                     action?.invoke(false)
                 }
-            })
+            })*/
         }
     }
 
@@ -164,7 +182,12 @@ class AccessUser(
         )
 
         if (isConnectedNet())
-            DatabaseApi.restoreUser(user, object: retrofit2.Callback<User>{
+
+            databaseApi.regUser(user) {id ->
+                action?.invoke(id > 0)
+            }
+
+           /* databaseApi.restoreUser(user, object: retrofit2.Callback<User>{
                 override fun onResponse(call: Call<User>, response: Response<User>) {
                     action?.invoke((response.body()?.id ?: 0) > 0)
                 }
@@ -172,7 +195,7 @@ class AccessUser(
                 override fun onFailure(call: Call<User>, t: Throwable) {
                     action?.invoke(false)
                 }
-            })
+            })*/
         /*  val gson = Gson()
           val json = gson.toJson(user)
           log(json)*/

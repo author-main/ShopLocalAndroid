@@ -5,11 +5,59 @@ import com.training.shoplocal.repository.retrofit.DatabaseApi
 import retrofit2.Call
 import retrofit2.Response
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class DatabaseCRUD @Inject constructor(): DatabaseCRUDInterface {
+@Singleton
+class DatabaseCRUD @Inject constructor(private val databaseApi: DatabaseApi): DatabaseCRUDInterface {
+
+    override fun loginUser(user: User, action: (userId: Int) -> Unit) {
+        databaseApi.loginUser(user, object: retrofit2.Callback<User>{
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                val id = response.body()?.id ?: 0
+                if (id > 0)
+                    action(id)
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                action(-1)
+            }
+        })
+    }
+
+    override fun regUser(user: User, action: (userId: Int) -> Unit) {
+        databaseApi.regUser(user, object: retrofit2.Callback<User> {
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                val id = response.body()?.id ?: 0
+                if (id > 0)
+                    action(id)
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                action(-1)
+            }
+        }
+        )
+    }
+
+    override fun restoreUser(user: User, action: (userId: Int) -> Unit) {
+        databaseApi.restoreUser(user,
+            object : retrofit2.Callback<User>{
+                override fun onResponse(call: Call<User>, response: Response<User>) {
+                    val id = response.body()?.id ?: 0
+                    if (id > 0)
+                        action(id)
+                }
+
+                override fun onFailure(call: Call<User>, t: Throwable) {
+                    action(-1)
+                }
+            }
+        )
+
+    }
 
     override fun getCategories(action: (categories: List<Category>) -> Unit) {
-        DatabaseApi.getCategories(object: retrofit2.Callback<List<Category>>{
+        databaseApi.getCategories(object: retrofit2.Callback<List<Category>>{
             override fun onResponse(call: Call<List<Category>>, response: Response<List<Category>>) {
                 response.body()?.let {
                     action.invoke(
@@ -24,7 +72,7 @@ class DatabaseCRUD @Inject constructor(): DatabaseCRUDInterface {
     }
 
     override fun getBrands(action: (brands: List<Brand>) -> Unit) {
-        DatabaseApi.getBrands(object: retrofit2.Callback<List<Brand>>{
+        databaseApi.getBrands(object: retrofit2.Callback<List<Brand>>{
             override fun onResponse(call: Call<List<Brand>>, response: Response<List<Brand>>) {
                 response.body()?.let {
                     action.invoke(
@@ -39,7 +87,7 @@ class DatabaseCRUD @Inject constructor(): DatabaseCRUDInterface {
     }
 
     override fun getProducts(id: Int, part: Int, order: String, action: (products: List<Product>) -> Unit) {
-        DatabaseApi.getProducts(id, part, order, object: retrofit2.Callback<List<Product>>{
+        databaseApi.getProducts(id, part, order, object: retrofit2.Callback<List<Product>>{
             override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
 
                     response.body()?.let {
@@ -66,7 +114,7 @@ class DatabaseCRUD @Inject constructor(): DatabaseCRUDInterface {
         userid: Int,
         action: (products: List<Product>) -> Unit
     ) {
-        DatabaseApi.getFoundProducts(query,
+        databaseApi.getFoundProducts(query,
             order,
             portion,
             uuid,
@@ -91,7 +139,7 @@ class DatabaseCRUD @Inject constructor(): DatabaseCRUDInterface {
 
     override fun getProduct(id: Int, action: (product: Product) -> Unit ){
        // log("getPromotionProduct")
-        DatabaseApi.getProduct(id, object: retrofit2.Callback<Product> {
+        databaseApi.getProduct(id, object: retrofit2.Callback<Product> {
 
             override fun onResponse(call: Call<Product>, response: Response<Product>) {
                 response.body()?.let {
@@ -111,18 +159,18 @@ class DatabaseCRUD @Inject constructor(): DatabaseCRUDInterface {
     }
 
     override suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte): Response<Int> {
-        return DatabaseApi.updateFavorite(id_user, id_product, value)
+        return databaseApi.updateFavorite(id_user, id_product, value)
     }
 
     override suspend fun updateUserMessage(id_user: Int, what: Int, id_message: String): Response<Int> {
-        return DatabaseApi.updateUserMessage(id_user, what, id_message)
+        return databaseApi.updateUserMessage(id_user, what, id_message)
     }
 
     override fun getReviewProduct(
         id: Int,
         action: (reviews: List<Review>) -> Unit
     ) {
-        DatabaseApi.getReviewProduct(id, object: retrofit2.Callback<List<Review>>{
+        databaseApi.getReviewProduct(id, object: retrofit2.Callback<List<Review>>{
             override fun onResponse(call: Call<List<Review>>, response: Response<List<Review>>) {
                 response.body()?.let {
                     action(it)
@@ -141,7 +189,7 @@ class DatabaseCRUD @Inject constructor(): DatabaseCRUDInterface {
         id: Int,
         action: (userMessages: List<UserMessage>) -> Unit
     ) {
-        DatabaseApi.getMessages(id, object: retrofit2.Callback<List<UserMessage>> {
+        databaseApi.getMessages(id, object: retrofit2.Callback<List<UserMessage>> {
 
             override fun onResponse(call: Call<List<UserMessage>>, response: Response<List<UserMessage>>) {
                 response.body()?.let {

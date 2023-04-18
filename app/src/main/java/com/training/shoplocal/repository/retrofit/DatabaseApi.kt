@@ -6,9 +6,11 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
+import javax.inject.Inject
+import javax.inject.Singleton
 
-
-private class RetrofitService{
+/*@Singleton
+class RetrofitService @Inject constructor(){
         private val service: DatabaseApiInterface
         init{
             val gson = GsonBuilder()
@@ -24,12 +26,15 @@ private class RetrofitService{
         fun getService() = service
 }
 
-class DatabaseApi{
-    companion object {
-        private val retrofitService = RetrofitService().getService()
-        private const val QUERY_REGUSER = "reg_user"
-        private const val QUERY_LOGINUSER = "login_user"
-        private const val QUERY_RESTOREUSER = "restore_user"
+@Singleton
+class DatabaseApi @Inject constructor(private val retrofitApi: RetrofitService){
+    //companion object {
+        private val retrofitService = retrofitApi.getService()*/
+@Singleton
+class DatabaseApi @Inject constructor(private val retrofitService: DatabaseApiInterface){
+        private val QUERY_REGUSER   = "reg_user"
+        private val QUERY_LOGINUSER = "login_user"
+        private val QUERY_RESTOREUSER = "restore_user"
 /*    init{
         val gson = GsonBuilder()
             .setLenient()
@@ -200,4 +205,4 @@ class DatabaseApi{
 
 
 
-}
+//}
