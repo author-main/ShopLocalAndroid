@@ -125,7 +125,3 @@ class RepositoryModule {
         return retrofit.create()
     }
 }
-
-
-@Scope
-annotation class ActivityMainScope

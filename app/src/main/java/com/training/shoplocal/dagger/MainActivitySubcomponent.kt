@@ -19,6 +19,7 @@ import com.training.shoplocal.userfingerprint.UserFingerPrintInterface
 import com.training.shoplocal.userfingerprint.UserPasswordStorage
 import com.training.shoplocal.userfingerprint.UserPasswordStorageInterface
 import dagger.*
+import javax.inject.Scope
 
 @ActivityMainScope
 @Subcomponent(modules = [MainActivityModule::class, BindsMainActivityModule::class])
@@ -47,3 +48,6 @@ interface BindsMainActivityModule {
     @Binds
     fun bindUserPasswordStorage_to_UserPasswordStorageInterface(passwordStorage: UserPasswordStorage): UserPasswordStorageInterface
 }
+
+@Scope
+annotation class ActivityMainScope
