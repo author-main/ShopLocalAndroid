@@ -297,7 +297,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         showProgressCRUD()
         loadState = LoadState.LOADING
         val portion = loadedPortion + 1
-        log("loadedPortion = $portion")
+       // log("loadedPortion = $portion")
         repository.getProducts(USER_ID, portion) { listProducts ->
             if (listProducts.isNotEmpty()) {
                 loadedPortion++
