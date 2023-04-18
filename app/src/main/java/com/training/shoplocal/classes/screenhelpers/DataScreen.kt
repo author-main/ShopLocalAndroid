@@ -7,7 +7,7 @@ import com.training.shoplocal.classes.fodisplay.ProviderDataDisplay
 data class DataScreen(
     var firstItemIndex:                     Int = 0,
     //var firstItemOffset:                    Int = 0,
-    var maxPortion:                         Int = -1,
+    var loadedPortion:                      Int = 0,
     var products:                           MutableList<Product> = mutableListOf(),
     var datadisplay:                        ProviderDataDisplay = OrderDisplay()
 )

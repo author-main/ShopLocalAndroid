@@ -374,6 +374,7 @@ fun MainScreen(state: ModalBottomSheetState){
             }
 
             //viewModel.putComposeViewStack(Container.SEARCH)
+            viewModel.startLoadedData()
             viewModel.findProductsRequest(query)//textSearch.value.trim())
             searchState.value = SearchState.SEARCH_RESULT
             panelOffsetHeightPx.value = 0f
@@ -917,13 +918,12 @@ fun MainScreen(state: ModalBottomSheetState){
 
                 val nextPart = remember {
                     derivedStateOf {
-                        val total: Int = products.size /SIZE_PORTION
+/*                        val total: Int = products.size /SIZE_PORTION
                         val remains    = products.size % SIZE_PORTION
-                       // log("product size = ${products.size}, total = $total, remains = $remains")
                         val upload = if (remains > 0)
                                         false else
-                                     total > 0
-                        upload && viewModel.nextPortionAvailable() &&
+                                     total > 0*/
+                      //  upload && viewModel.nextPortionAvailable() &&
                         stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.index == stateGrid.layoutInfo.totalItemsCount - 1
                                 //&& stateGrid.isScrollInProgress
                                 //&& stateGrid.layoutInfo.visibleItemsInfo.last().offset.y > 0
@@ -939,10 +939,12 @@ fun MainScreen(state: ModalBottomSheetState){
 
 
                 LaunchedEffect(nextPart.value) {
-                    if (nextPart.value) {
-                        //log ("nextpart changed...")
+                    //log("next portion... ${nextPart.value}")
+                    if (nextPart.value)
                         viewModel.getNextPortionData(isSearchMode, textSearch.value.trim())
-                    }
+/*                    if (nextPart.value) {
+                        viewModel.getNextPortionData(isSearchMode, textSearch.value.trim())
+                    }*/
                 }
 
 

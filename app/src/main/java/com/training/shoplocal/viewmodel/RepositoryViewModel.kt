@@ -25,6 +25,19 @@ import javax.inject.Inject
 import kotlin.collections.HashMap
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
+
+    enum class LoadState {IDLE, LOADING}
+    private var loadState = LoadState.IDLE
+    private var loadedPortion = 0
+
+
+
+
+
+
+
+
+
     //var SIZE_PORTION = 10
     /*private val _accessFinger = MutableStateFlow<Boolean>(false)
     val accessFinger = _accessFinger.asStateFlow()
@@ -115,7 +128,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     /*var deviceUuid =
         UUID(androidId.hashCode(), tmDevice.hashCode() as Long shl 32 or tmSerial.hashCode())*/
     private val UUID_QUERY = System.nanoTime().toString()
-    private var maxPortion: Int = -1
+    //private var maxPortion: Int = -1
     //private val UUID_QUERY: String = UUID.randomUUID().toString()
     //private var lockDB = false
     //private val reflexRepository = Repository::class.java.methods
@@ -133,7 +146,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         _hiddenBottomNavigation.value = false
     }
 
-    private var loadedPortion = 0
+
     private val _selectedProduct = MutableStateFlow<Product>(Product())
     val selectedProduct = _selectedProduct.asStateFlow()
 
@@ -164,7 +177,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         if (result) {
             //accessFingerPrint(true)
             hideSnackbar()
-            maxPortion = -1
+            //maxPortion = -1
             USER_ID = it
             /*ScreenRouter.navigateTo(ScreenItem.MainScreen)
             setOrderDisplay(FieldFilter.SCREEN, ScreenItem.MainScreen.key.value)*/
@@ -175,7 +188,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             getMessages(getCountUnread = true)
 //            exchangeDataMap[ExchangeData.GET_PRODUCTS] = false
             loadedPortion = 0
-            getProducts(1)
+            //getProducts(1)
+            getProducts()
             authorizeUser()
         }
         else {
@@ -253,13 +267,13 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         }
     }*/
 
-    /**
+  /*  /**
      * Получить max число порций, количество записей возвращается в первой строке результа
      * выборки продуктов в формате &lt;count&gt; name
      * @param value первый элемент списка продуктов
      * @return Pair<max, name>, где max - число порций, name - наименование продукта
-     */
-    private fun getMaxPortion(value: String): Pair<Int, String>{
+     */*/
+    /*private fun getMaxPortion(value: String): Pair<Int, String>{
         var calcMaxPortion = 0
         var name = ""
         if (value.startsWith('<')) {
@@ -274,26 +288,32 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             }
         }
         return calcMaxPortion to name
-    }
+    }*/
 
     //@Synchronized
-    private fun getProducts(part: Int){
-/*        imageDownloader.cancelAll()
-        if (this::imageDownloader.isInitialized)
-            log(imageDownloader)
-        else
-            log("imageDownloader error...")*/
-      // val exchangeData = exchangeDataMap[ExchangeData.GET_PRODUCTS] ?: false
-      /*  if (lockDB) return
-            lockDB = true*/
-          //  exchangeDataMap[ExchangeData.GET_PRODUCTS] = true
+   // private fun getProducts(part: Int){
+    private fun getProducts(){
+        if (loadState != LoadState.IDLE) return
+        showProgressCRUD()
+        loadState = LoadState.LOADING
+        val portion = loadedPortion + 1
+        repository.getProducts(USER_ID, portion) { listProducts ->
+            if (listProducts.isNotEmpty()) {
+                loadedPortion++
+                log("loadedPortion = $loadedPortion")
+                if (loadedPortion == 1)
+                    _products.value.clear()
+                _products.value.addAll(listProducts)
+
+            }
+            loadState = LoadState.IDLE
+            hideProgressCRUD()
+        }
 
 
-            /*val coroutine = CoroutineScope(Job() + Dispatchers.IO)
-        coroutine.launch {*/
-            showProgressCRUD()
+
+         /*   showProgressCRUD()
             repository.getProducts(USER_ID, part) { listProducts ->
-                //log("loaded products...")
                 if (listProducts.isNotEmpty()) {
                     if (part == 1) {
                         val extractedData = getMaxPortion(listProducts[0].name)
@@ -302,18 +322,14 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                         _products.value.clear()
                     }
                     loadedPortion = part
-
                     val list = _products.value.toMutableList().apply { addAll(listProducts) }
                     _products.value = list
                 } else {
                     if (part == 1)
                         _products.value = mutableListOf()
                 }
-                //lockDB = false
                 hideProgressCRUD()
-            //}
-
-        }
+        }*/
     }
 
     private fun getBrands(){
@@ -428,14 +444,11 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         }
     }*/
 
-    fun nextPortionAvailable() =
-        loadedPortion + 1<= maxPortion
+ /*   fun nextPortionAvailable() =
+        loadedPortion + 1<= maxPortion*/
 
     fun getNextPortionData(searchMode: Boolean, textSearch: String){
-      /* val nextPortion = loadedPortion + 1//getPortion()+1
-        if (nextPortion <= maxPortion) */
-        if (nextPortionAvailable()) {
-            //log("load partion")
+/*        if (nextPortionAvailable()) {
             val nextPortion = loadedPortion + 1
             if (searchMode) {
                 //log("next portion = $nextPortion, max portion = $maxPortion")
@@ -443,13 +456,20 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             } else {
                 getProducts(nextPortion)
             }
-        }
+        }*/
+
+
+        if (searchMode) {
+            findProductsRequest(textSearch)
+        } else
+            getProducts()
     }
 
     fun saveScreenProducts(key: ScreenRouter.KEYSCREEN, firstIndex: Int) {//, firstOffset: Int) {
+        log("save screen data...")
         repository.saveScreenProducts(key,
 //            DataScreen(firstIndex, firstOffset, maxPortion, products.value)
-            DataScreen(firstIndex, maxPortion, products.value, OrderDisplay.clone())
+            DataScreen(firstIndex, loadedPortion, products.value, OrderDisplay.clone())
         )
     }
 
@@ -457,9 +477,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     //    log("restore")
         val data = repository.restoreScreenProducts(key)
         OrderDisplay.restoreDataDisplay(data.datadisplay)
-        maxPortion = data.maxPortion
         _products.value = data.products//repository.restoreScreenProducts(key)//.toMutableList()
-        loadedPortion = getPortion() // количество загруженных порций
+        loadedPortion = data.loadedPortion // количество загруженных порций
         //log("firstIndex ${data.firstItemIndex}, firstOffset ${data.firstItemOffset}")
         return data.firstItemIndex// to data.firstItemOffset
     }
@@ -516,66 +535,32 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
      */
 
     //@Synchronized
-    fun findProductsRequest(query: String, value: Int = 0){
-        if (value == -1) { //  Очистка результатов поиcка в BD
+    fun findProductsRequest(query: String, clear: Boolean = false){
+        if (loadState != LoadState.IDLE)
+            return
+        loadState = LoadState.LOADING
+        if (clear) { //  Очистка результатов поиcка в BD
             repository.findProductsRequest(query, 0, UUID_QUERY, USER_ID){}
+            loadState = LoadState.IDLE
             return
         }
-
-
-/*        val list = _products.value.toMutableList()
-        list.addAll(_products.value)
-        _products.value = mutableListOf()
-        _products.value = list
-        return*/
-
-       // if (lockDB) return
         searchQuery = query
         showProgressCRUD()
-        var portion = value
-        if (value == 0) {
-            loadedPortion = 0
-            //UUID_QUERY = UUID.randomUUID()
-            portion = 1
-            //lockDB = false
-                //_products.value.clear()// = mutableListOf()
-            //log("clear products")
-        }
-      //  lockDB = true
-        //log ("find portion = $portion")
-        //repository.findProductsRequest(query, portion, UUID_QUERY.toString(), USER_ID) { listFound ->
-            repository.findProductsRequest(query, portion, UUID_QUERY, USER_ID) { listFound ->
-             //   log ("size ${listFound.size}")
-                //setSelectedProduct(Product())
-                if (listFound.isNotEmpty()) {
-                    //_products.value = listFound.toMutableList()
-                    //log("get portion $portion")
-                    if (portion == 1) {
-                        val extractedData = getMaxPortion(listFound[0].name)
-                        maxPortion = extractedData.first
-                        listFound[0].name = extractedData.second
-                        _products.value.clear()
-                    }
-                    val list = _products.value.toMutableList().apply { addAll(listFound) }
-                    _products.value = list
-                    loadedPortion = portion
-                } else {
-                    if (portion == 1)
-                        _products.value = mutableListOf()
-                }
-              // lockDB = false
-                hideProgressCRUD()
+        val portion = loadedPortion + 1
+        repository.findProductsRequest(query, portion, UUID_QUERY, USER_ID) { listFound ->
+            if (listFound.isNotEmpty()) {
+                loadedPortion++
+                if (loadedPortion == 1)
+                    _products.value.clear()
+                _products.value.addAll(listFound)
             }
-
-        /*INSERT INTO new_table_name
-        SELECT labels.label,shortabstracts.ShortAbstract,images.LinkToImage,types.Type
-        FROM ner.images,ner.labels,ner.shortabstracts,ner.types
-        WHERE labels.Resource=images.Resource AND labels.Resource=shortabstracts.Resource
-                AND labels.Resource=types.Resource;*/
+            loadState = LoadState.IDLE
+            hideProgressCRUD()
+        }
     }
 
     fun clearResultSearch(){
-        findProductsRequest("*", -1)
+        findProductsRequest("*", true)
     }
 
     fun putComposeViewStack(value: Container) {
@@ -631,12 +616,12 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     }*/
 
     fun filterProducts(searchMode: Boolean = false){
-        maxPortion = -1
         loadedPortion = 0
         if (searchMode) {
             findProductsRequest(searchQuery)
         } else {
-            getProducts(1)
+           // getProducts(1)
+            getProducts()
         }
     }
 
@@ -748,6 +733,11 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             }
         }
 
+    }
+
+    fun startLoadedData(){
+        loadedPortion = 0
+        loadState = LoadState.IDLE
     }
 
  }
