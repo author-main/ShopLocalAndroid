@@ -1,6 +1,7 @@
 package com.training.shoplocal.repository
 
 import com.training.shoplocal.classes.*
+import com.training.shoplocal.log
 import com.training.shoplocal.repository.retrofit.DatabaseApi
 import retrofit2.Call
 import retrofit2.Response
