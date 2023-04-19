@@ -1,6 +1,7 @@
 package com.training.shoplocal.userfingerprint
 
 import android.content.Context
+import androidx.activity.ComponentActivity
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
@@ -11,7 +12,7 @@ import javax.crypto.Cipher
 import javax.inject.Inject
 
 @ActivityMainScope
-class UserFingerPrint @Inject constructor(private val context: Context): UserFingerPrintInterface {
+class UserFingerPrint @Inject constructor(private val context: ComponentActivity): UserFingerPrintInterface {
     @Inject
     override lateinit var userPasswordStorage: UserPasswordStorageInterface// = UserPasswordStorage()
     override var userFingerPrintListener: UserFingerPrintListener? = null

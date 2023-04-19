@@ -1,10 +1,13 @@
 package com.training.shoplocal.repository
 
+import android.app.Activity
 import android.content.Context
+import androidx.activity.ComponentActivity
 import com.training.shoplocal.fingerPrintCanAuthenticate
 import com.training.shoplocal.isConnectedNet
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.classes.User
+import com.training.shoplocal.dagger.ActivityMainScope
 import com.training.shoplocal.userfingerprint.UserFingerPrint
 import com.training.shoplocal.userfingerprint.UserFingerPrintListener
 import com.training.shoplocal.validateMail
@@ -18,7 +21,7 @@ import javax.crypto.Cipher
 import javax.inject.Inject
 
 class AccessUser(
-    override val context: Context,
+    //override val context: Context,
     override val loginState: LoginViewState,
     override val databaseApi: DatabaseCRUDInterface
 ): AccessUserInterface {

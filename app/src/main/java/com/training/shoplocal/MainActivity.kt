@@ -53,7 +53,7 @@ val ImageDownloader = staticCompositionLocalOf<ImageLinkDownloader> {
 }
 
 class MainActivity : FragmentActivity() {//ComponentActivity() {
-    lateinit var mainActivitySubcomponent: MainActivitySubcomponent
+   // lateinit var mainActivitySubcomponent: MainActivitySubcomponent
     @Inject
     lateinit var imageDownloader: ImageLinkDownloader
 
@@ -63,19 +63,22 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
     @Inject
     lateinit var userFingerPrint: UserFingerPrint
 
-    private val viewModel: RepositoryViewModel by viewModels(factoryProducer = {
+    @Inject
+    lateinit var viewModel: RepositoryViewModel
+   /* private val viewModel: RepositoryViewModel by viewModels(factoryProducer = {
         FactoryViewModel(
      this,
             appRepository()
         )
-    })
+    })*/
     override fun onCreate(savedInstanceState: Bundle?) {
 //        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState)
 
        // appComponent.injectMainActivity(this)
-        mainActivitySubcomponent = appComponent.mainActivitySubcomponent().create(this)
-        mainActivitySubcomponent.inject(this)
+        //mainActivitySubcomponent =
+        appComponent.mainActivitySubcomponent().create(this).inject(this)
+        //mainActivitySubcomponent.inject(this)
         appRepository().accessUser = accessUser
         accessUser.setFingerPrint(userFingerPrint)
          //   AccessUser(this, LoginViewState())

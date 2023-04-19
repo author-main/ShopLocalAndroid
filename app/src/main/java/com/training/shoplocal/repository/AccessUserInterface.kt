@@ -1,13 +1,14 @@
 package com.training.shoplocal.repository
 
 import android.content.Context
+import androidx.activity.ComponentActivity
 import androidx.fragment.app.FragmentActivity
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.userfingerprint.UserFingerPrint
 import com.training.shoplocal.userfingerprint.UserFingerPrintInterface
 
 interface AccessUserInterface {
-    val context: Context
+    //val context: Context
     val loginState: LoginViewState
     val databaseApi: DatabaseCRUDInterface
     fun onLogin(action: ((result: Int) -> Unit)?, email: String, password: String, finger: Boolean = false)

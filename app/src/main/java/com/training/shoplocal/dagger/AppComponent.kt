@@ -1,18 +1,19 @@
 package com.training.shoplocal.dagger
 
+import androidx.activity.ComponentActivity
+import androidx.lifecycle.ViewModelProvider
 import com.google.gson.GsonBuilder
 import com.training.shoplocal.AppShopLocal
 import com.training.shoplocal.classes.SERVER_URL
 import com.training.shoplocal.classes.downloader.*
-import com.training.shoplocal.repository.AccessUser
-import com.training.shoplocal.repository.AccessUserInterface
-import com.training.shoplocal.repository.DatabaseCRUD
-import com.training.shoplocal.repository.DatabaseCRUDInterface
+import com.training.shoplocal.repository.*
 import com.training.shoplocal.repository.retrofit.DatabaseApiInterface
 import com.training.shoplocal.userfingerprint.UserFingerPrint
 import com.training.shoplocal.userfingerprint.UserFingerPrintInterface
 import com.training.shoplocal.userfingerprint.UserPasswordStorage
 import com.training.shoplocal.userfingerprint.UserPasswordStorageInterface
+import com.training.shoplocal.viewmodel.FactoryViewModel
+import com.training.shoplocal.viewmodel.RepositoryViewModel
 import dagger.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -24,6 +25,7 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = [CacheModule::class, RepositoryModule::class, BindsAppModule::class, SubcomponentsModule::class])//, dependencies = [ProviderCacheParam::class])
 interface AppComponent {
+
     fun injectApplication(application: AppShopLocal)
     //fun injectMainActivity(activity: MainActivity)
     @Component.Factory
@@ -61,6 +63,8 @@ interface SubcomponentsModule {
     @ClassKey(MainActivity::class)
     fun bindAndroidInjectorFactory(factory: MainActivitySubcomponent.Factory): AndroidInjector.Factory<*>*/
 }
+
+
 
 @Module
 class CacheModule {
