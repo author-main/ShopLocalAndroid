@@ -324,10 +324,12 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                                     .clickable {
                                         onSelectMessage(item)
                                         if (item.read == 0) {
-                                            viewModel.updateUserMessage(
-                                                IntArray(1) { item.id },
-                                                USERMESSAGE_READ
-                                            )
+                                            // Пока не будем помечать на сервере сообщения как прочитанные
+                                            /* -> viewModel.updateUserMessage(
+                                                    IntArray(1) { item.id },
+                                                    USERMESSAGE_READ
+                                                  )*/
+
                                         }
                                     }
                             ) {
