@@ -918,8 +918,9 @@ fun MainScreen(state: ModalBottomSheetState){
 
                 val nextPart = remember {
                     derivedStateOf {
-                        val total: Int = products.size /SIZE_PORTION
+                        val total: Int = products.size / SIZE_PORTION
                         val remains    = products.size % SIZE_PORTION
+                       // log ("products size = ${products.size}, total = $total, remains = $remains")
                         val upload = if (remains > 0) false
                                      else total > 0
                         upload && //viewModel.nextPortionAvailable() &&
@@ -927,7 +928,6 @@ fun MainScreen(state: ModalBottomSheetState){
                                 //&& stateGrid.isScrollInProgress
                                 //&& stateGrid.layoutInfo.visibleItemsInfo.last().offset.y > 0
                                 && stateGrid.layoutInfo.viewportEndOffset - stateGrid.layoutInfo.visibleItemsInfo.last().offset.y >= stateGrid.layoutInfo.visibleItemsInfo.last().size.height / 2
-
                     }
                 }
 
@@ -938,7 +938,7 @@ fun MainScreen(state: ModalBottomSheetState){
 
 
                 LaunchedEffect(nextPart.value) {
-                    //log("next portion... ${nextPart.value}")
+                //    log("next portion... ${nextPart.value}")
                     if (nextPart.value)
                         viewModel.getNextPortionData(isSearchMode, textSearch.value.trim())
 /*                    if (nextPart.value) {
