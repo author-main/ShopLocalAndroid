@@ -683,8 +683,11 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         //1 - удалить
         viewModelScope.launch {
             val result = 1
-           /* -> Пока не будет изменять данные на сервере
-            val result: Int =
+           /*
+               ******************************************************************************
+                                Пока не будет изменять данные на сервере
+               *******************************************************************************
+                val result: Int =
                 try{
                     val id_message = ids.joinToString(",")
                     val response = repository.updateUserMessage(USER_ID, what, id_message)
@@ -692,7 +695,10 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                 }
                 catch (_: Exception) {
                     0
-                }*/
+                }
+                *****************************************************************************
+            */
+
             if (result > 0) {
                 var recomposition = false
                 val listMessages = _userMessages.toMutableList()
