@@ -51,7 +51,7 @@ class MainActivityModule{
         return ViewModelProvider(
             activity.viewModelStore,
             FactoryViewModel(activity, repository, activity.intent.extras)
-        )[RepositoryViewModel::class.java]
+        )[(RepositoryViewModel::class.java)]
     }
 
 

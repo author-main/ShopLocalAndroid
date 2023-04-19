@@ -16,8 +16,10 @@ import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.screens.ScreenRouter
 import retrofit2.Response
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.collections.HashMap
 
+@Singleton
 class Repository @Inject constructor(
     override val databaseCRUD: DatabaseCRUDInterface
 ): DAOinterface {
