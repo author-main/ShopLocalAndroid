@@ -58,64 +58,36 @@ annotation class CacheSize*/
 
 @Module(subcomponents = [MainActivitySubcomponent::class])
 interface SubcomponentsModule {
-   /* @Binds
-    @IntoMap
-    @ClassKey(MainActivity::class)
-    fun bindAndroidInjectorFactory(factory: MainActivitySubcomponent.Factory): AndroidInjector.Factory<*>*/
 }
-
-
 
 @Module
 class CacheModule {
 
-    /** Пересобрано с @Inject на конструкторе
-    @Provides
-    fun provideJournalCache(cacheDirectory: String): Journal        = Journal(cacheDirectory)
-
-    @Provides
+/*  @Provides
     fun provideDiskCache(cacheDirectory: String): ImageDiskCache    = DiskCache(cacheDirectory)
 
     @Provides
-    fun provideMemoryCache(cacheSize: Int): ImageMemoryCache        = MemoryCache(cacheSize)*/
-    /** Реализован @Inject на конструкторе класс ImageLinkDownloader
-    @Provides
     fun provideImageDownloader  (diskCache: ImageDiskCache,
-    memoryCache: ImageMemoryCache)          = ImageLinkDownloader(diskCache, memoryCache)*/
-}
+    memoryCache: ImageMemoryCache)          = ImageLinkDownloader(diskCache, memoryCache)
+*/
 
-/*interface ProviderCacheParam {
-    val cacheDir:   String
-    val sizeDir:    Int
-}*/
+}
 
 @Module
 interface BindsAppModule {
-
     @Binds
     fun bindDiskCache_to_ImageDiskCache(diskCache: DiskCache): ImageDiskCache
 
     @Binds
     fun bindMemoryCache_to_ImageMemoryCache(memoryCache: MemoryCache): ImageMemoryCache
 
-    /*@Binds
-    fun bindAccessUser_to_AccessUserInterface(accessUser: AccessUser): AccessUserInterface*/
-
-
-    /*@Binds
-    fun bindUserPasswordStorage_to_UserPasswordStorageInterface(passwordStorage: UserPasswordStorage): UserPasswordStorageInterface*/
-
     @Binds
     fun bindDatabaseCRUD_to_DatabaseCRUDInterface(databaseCRUD: DatabaseCRUD): DatabaseCRUDInterface
-
-   /* @Binds
-    fun bindUserFingerPrint_to_UserFingerPrintInterface(userFingerPrint: UserFingerPrint): UserFingerPrintInterface*/
 }
 
 
 @Module
 class RepositoryModule {
-
     @Singleton
     @Provides
     fun provideDatabaseApi(): DatabaseApiInterface {

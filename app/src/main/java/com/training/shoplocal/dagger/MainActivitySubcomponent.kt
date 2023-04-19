@@ -36,9 +36,7 @@ interface MainActivitySubcomponent {//: AndroidInjector<MainActivity> {
 
     @Subcomponent.Factory
     interface Factory {//: AndroidInjector.Factory<MainActivity>
-        //fun create(@BindsInstance context: Context,
         fun create(@BindsInstance activity: ComponentActivity) : MainActivitySubcomponent
-        //fun create(@BindsInstance activity: ComponentActivity) : MainActivitySubcomponent
     }
     fun inject(mainActivity: MainActivity)
 }
@@ -54,31 +52,15 @@ class MainActivityModule{
         )[(RepositoryViewModel::class.java)]
     }
 
-
-    /*@[Provides ActivityMainScope]
-    fun provideAccessUser(context: Context, loginState: LoginViewState, databaseApi: DatabaseCRUDInterface): AccessUserInterface
-        = AccessUser(context, loginState, databaseApi)*/
-
-
     @[Provides ActivityMainScope]
     fun provideAccessUser(loginState: LoginViewState, databaseApi: DatabaseCRUDInterface): AccessUserInterface
             = AccessUser(loginState, databaseApi)
-
-
-   /* @[Provides ActivityMainScope]
-    fun providePasswordStorage(): UserPasswordStorageInterface = UserPasswordStorage()*/
-
-    /*@[Provides ActivityMainScope]
-    fun provideFingerPrint(context: Context): UserFingerPrint = UserFingerPrint(context)*/
 }
 
 @Module
 interface BindsMainActivityModule {
     @Binds
     fun bindUserPasswordStorage_to_UserPasswordStorageInterface(passwordStorage: UserPasswordStorage): UserPasswordStorageInterface
-
-    /*@Binds
-    fun bindComponentActivity_to_Context(activity: ComponentActivity): Context*/
 }
 
 @Scope
