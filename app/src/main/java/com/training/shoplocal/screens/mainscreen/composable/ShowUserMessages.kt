@@ -181,8 +181,7 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
         onDispose {
             //log(messages.toString())
             viewModel.setCountUnreadMessages(messages.count{msg-> msg.read == 0 && !msg.deleted})
-            // Пока не  будем удалять сообщения на сервере
-            // -> deleteUserMessages()
+            deleteUserMessages()
             viewModel.clearMessages()
         }
     }
@@ -324,11 +323,10 @@ fun ShowUserMessages(open: MutableState<Boolean>, onSelectMessage: (message: Use
                                     .clickable {
                                         onSelectMessage(item)
                                         if (item.read == 0) {
-                                            // Пока не будем помечать на сервере сообщения как прочитанные
-                                            /* -> viewModel.updateUserMessage(
-                                                    IntArray(1) { item.id },
-                                                    USERMESSAGE_READ
-                                                  )*/
+                                            viewModel.updateUserMessage(
+                                                IntArray(1) { item.id },
+                                                USERMESSAGE_READ
+                                            )
 
                                         }
                                     }
