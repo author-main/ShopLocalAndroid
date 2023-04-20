@@ -77,7 +77,7 @@ class DownloadImageTask(private val link: String, private val reduce: Boolean, v
             source = Source.NONE
         }*/
 
-        /*Handler(Looper.getMainLooper()).post {
+       /* Handler(Looper.getMainLooper()).post {
             Thread.sleep(3000)
             callback(bitmap, fileTimestamp)
         }*/
