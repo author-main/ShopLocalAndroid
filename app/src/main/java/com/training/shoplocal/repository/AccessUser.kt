@@ -87,8 +87,10 @@ class AccessUser(
                         user.saveUserData()
                         action?.invoke(id)
                         if (finger)
-                            this@AccessUser.loginState.changePassword(password)
-                        this@AccessUser.loginState.clearPassword()
+                        //    this@AccessUser.
+                            loginState.changePassword(password)
+                        //this@AccessUser.
+                        loginState.clearPassword()
                     } else
                         clearLoginPassword()
             }
