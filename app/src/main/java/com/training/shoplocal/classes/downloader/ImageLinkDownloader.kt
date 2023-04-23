@@ -45,7 +45,7 @@ class ImageLinkDownloader @Inject constructor( // private constructor(
 
 //    @Synchronized
 
-
+    @Synchronized
     fun downloadImage(link: String?, reduce: Boolean = false, callback: Callback) {
 
         if (link.isNullOrEmpty()) {
