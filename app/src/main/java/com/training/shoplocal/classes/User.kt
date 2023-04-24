@@ -14,19 +14,23 @@ data class User (
     @SerializedName("phone")        val phone: String?,
     @SerializedName("password")     var password: String?,
     @SerializedName("token")        var token: String?
+
 ) {
     /*private val sharedPrefs: SharedPreferences =
         AppShopLocal.appContext().getSharedPreferences(FILE_PREFERENCES, Context.MODE_PRIVATE)*/
 
-    fun isNotEmpty() = !token.isNullOrEmpty() ?: false
 
     fun saveUserData(){
         id          = null
         password    = null
+        token       = null
         val gson = Gson()
         val json = gson.toJson(this)
         sharedPrefs.edit().putString("user", json).apply()
     }
+
+    fun validUser() =
+        !token.isNullOrEmpty()
 
     companion object {
         private val sharedPrefs: SharedPreferences =
@@ -41,17 +45,14 @@ data class User (
             }
         }
 
-        fun getEmptyUser() =
-            User(
+        fun getEmptyInstance() =
+            User(null,
                 null,
                 null,
                 null,
                 null,
                 null,
-                null,
-                null
-            )
-
+                null)
     }
 }
 

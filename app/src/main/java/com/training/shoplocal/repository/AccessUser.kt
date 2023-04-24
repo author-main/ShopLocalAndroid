@@ -3,8 +3,6 @@ package com.training.shoplocal.repository
 import android.app.Activity
 import android.content.Context
 import androidx.activity.ComponentActivity
-import com.training.shoplocal.classes.EMPTY_IMAGE
-import com.training.shoplocal.classes.EMPTY_STRING
 import com.training.shoplocal.fingerPrintCanAuthenticate
 import com.training.shoplocal.isConnectedNet
 import com.training.shoplocal.loginview.LoginViewState
@@ -27,7 +25,7 @@ class AccessUser(
     override val loginState: LoginViewState,
     override val databaseApi: DatabaseCRUDInterface
 ): AccessUserInterface {
-    private var actionLogin: ((token: String?) -> Unit)? = null
+    private var actionLogin: ((result: Int) -> Unit)? = null
     private var userFingerPrint: UserFingerPrint? = null
     /*@Inject
     lateinit var databaseApi: DatabaseCRUDInterface*/
@@ -53,8 +51,7 @@ class AccessUser(
       }*/
 
     override fun onLogin(
-        //action: ((result: Int) -> Unit)?,
-        action: ((token: String?) -> Unit)?,
+        action: ((result: Int) -> Unit)?,
         email: String,
         password: String,
         finger: Boolean
@@ -66,8 +63,7 @@ class AccessUser(
                     this@AccessUser.loginState.clearPassword()
                 }
             this.loginState.hideProgress()
-            //action?.invoke(-1)
-            action?.invoke(null)
+            action?.invoke(-1)
         }
 
         if (email.isBlank() || password.isBlank() || !validateMail(email)) {
@@ -76,21 +72,26 @@ class AccessUser(
         }
 
         if (isConnectedNet()) {
+          /*  val user = User(
+                id          = null,
+                firstname   = null,
+                lastname    = null,
+                phone       = null,
+                email       = email,
+                password    = password,
+                token       = null
+            )*/
+            databaseApi.loginUser(email, password) {id ->
 
-            val user = User.getUserData() ?: User.getEmptyUser()
-            val noSavedUser = user.email == null
-            user.email       = email
-            user.password    = password
-            databaseApi.loginUser(user) {responseUser ->
-                    val token = responseUser.token ?: EMPTY_STRING
-                    //if (id > 0) {
-                    if (token.isNotEmpty()) {
+                    if (id > 0) {
                         saveUserPassword(password)
-                        if (noSavedUser)
-                            responseUser.saveUserData()
-                            //user.saveUserData()
-                        //action?.invoke(id)
-                        action?.invoke(token)
+                        if (User.getUserData() == null) {
+                            // нужно получить данные пользователя с сервера и сохранить
+                            val user = User.getEmptyInstance()
+                            user.email = email
+                            user.saveUserData()
+                        }
+                        action?.invoke(id)
                         if (finger)
                         //    this@AccessUser.
                             loginState.changePassword(password)
@@ -213,7 +214,7 @@ class AccessUser(
           log(json)*/
     }
 
-    override fun onFingerPrint(action: ((token: String?) -> Unit)?, email: String) {
+    override fun onFingerPrint(action: ((result: Int) -> Unit)?, email: String) {
         if (validateMail(email)) {
             actionLogin = action
             userFingerPrint?.authenticate()

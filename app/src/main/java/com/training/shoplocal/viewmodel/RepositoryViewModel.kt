@@ -173,7 +173,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private val _products = MutableStateFlow<MutableList<Product>>(mutableListOf<Product>())
     val products = _products.asStateFlow()
 
-    private val actionLogin: (token: String?) -> Unit = {
+    private val actionLogin: (result: Int) -> Unit = {
         val result = it > 0
         if (result) {
             //accessFingerPrint(true)
@@ -239,8 +239,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     }
 
     fun onLogin(email: String, password: String, finger: Boolean = false) {
-        repository.onLogin({ token ->
-            actionLogin(token)
+        repository.onLogin({ result ->
+            actionLogin(result)
         }, email, password, finger)
 
     }

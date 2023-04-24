@@ -59,7 +59,10 @@ class DatabaseApi @Inject constructor(private val retrofitService: DatabaseApiIn
             queryUser(QUERY_REGUSER, user, callback)
         }
 
-        fun loginUser(user: User, callback: retrofit2.Callback<User>) {
+        fun loginUser(mail: String, password: String, callback: retrofit2.Callback<User>) {
+            val user = User.getEmptyInstance()
+            user.email      = mail
+            user.password   = password
             queryUser(QUERY_LOGINUSER, user, callback)
         }
 
