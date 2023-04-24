@@ -99,7 +99,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         onCloseApp = value
     }
     fun closeApp(){
-        USER_ID = -1
+        //USER_ID = -1
+        USER_TOKEN = null
         repository.resetLoginData()
         //loginState.reset()
         _products.value.clear()
@@ -161,7 +162,11 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         _selectedProduct.value = product.copy(favorite = product.favorite)
     }
 
-    private var USER_ID: Int = -1
+    //private var USER_ID: Int = -1
+
+    private var USER_TOKEN: String? = null
+
+
     private var brands = hashMapOf<Int, Brand>()
         //listOf<Brand>()
     private var categories = hashMapOf<Int, Category>()
@@ -173,20 +178,19 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private val _products = MutableStateFlow<MutableList<Product>>(mutableListOf<Product>())
     val products = _products.asStateFlow()
 
-    private val actionLogin: (result: Int) -> Unit = {
-        val result = it > 0
-        if (result) {
+    private val actionLogin: (token: String?) -> Unit = {token ->
+        if (token != null) {
             //accessFingerPrint(true)
             hideSnackbar()
             //maxPortion = -1
-            USER_ID = it
+            USER_TOKEN = token
             /*ScreenRouter.navigateTo(ScreenItem.MainScreen)
             setOrderDisplay(FieldFilter.SCREEN, ScreenItem.MainScreen.key.value)*/
             containerStack.pop()
             putComposeViewStack(Container.MAIN)
             getBrands()
             getCategories()
-            getMessages(getCountUnread = true)
+            getMessages(requestNumberUnread = true)
 //            exchangeDataMap[ExchangeData.GET_PRODUCTS] = false
             loadedPortion = 0
             //getProducts(1)
@@ -239,8 +243,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     }
 
     fun onLogin(email: String, password: String, finger: Boolean = false) {
-        repository.onLogin({ result ->
-            actionLogin(result)
+        repository.onLogin({ token ->
+            actionLogin(token)
         }, email, password, finger)
 
     }
@@ -294,12 +298,15 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     //@Synchronized
    // private fun getProducts(part: Int){
     private fun getProducts(){
+
+        if (!validToken()) return
+        //log(USER_TOKEN)
         if (loadState != LoadState.IDLE) return
         showProgressCRUD()
         loadState = LoadState.LOADING
         val portion = loadedPortion + 1
        // log("loadedPortion = $portion")
-        repository.getProducts(USER_ID, portion) { listProducts ->
+        repository.getProducts(USER_TOKEN!!, portion) { listProducts ->
             if (listProducts.isNotEmpty()) {
                 loadedPortion++
                 if (loadedPortion == 1)
@@ -394,6 +401,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
 
     fun setProductFavorite(product: Product){
+        if (!validToken()) return
         //val favorite: Byte = if (product.favorite > 0) 1 else 0
         //log("favorite ${product.favorite}")
 
@@ -412,7 +420,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             if (result > 0) {
 
             }*/
-            repository.updateFavorite(USER_ID, product.id, product.favorite)
+            repository.updateFavorite(USER_TOKEN!!, product.id, product.favorite)
         }
         var currentProduct: Product? = null
         products.value.find { it.id== product.id }?.let {
@@ -467,7 +475,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     }
 
     fun saveScreenProducts(key: ScreenRouter.KEYSCREEN, firstIndex: Int) {//, firstOffset: Int) {
-        log("save screen data...")
+
         repository.saveScreenProducts(key,
 //            DataScreen(firstIndex, firstOffset, maxPortion, products.value)
             DataScreen(firstIndex, loadedPortion, products.value, OrderDisplay.clone())
@@ -537,18 +545,19 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     //@Synchronized
     fun findProductsRequest(query: String, clear: Boolean = false){
+        if (!validToken()) return
         if (loadState != LoadState.IDLE)
             return
         loadState = LoadState.LOADING
         if (clear) { //  Очистка результатов поиcка в BD
-            repository.findProductsRequest(query, 0, UUID_QUERY, USER_ID){}
+            repository.findProductsRequest(query, 0, UUID_QUERY, USER_TOKEN!!){}
             loadState = LoadState.IDLE
             return
         }
         searchQuery = query
         showProgressCRUD()
         val portion = loadedPortion + 1
-        repository.findProductsRequest(query, portion, UUID_QUERY, USER_ID) { listFound ->
+        repository.findProductsRequest(query, portion, UUID_QUERY, USER_TOKEN!!) { listFound ->
             if (listFound.isNotEmpty()) {
                 loadedPortion++
                 if (loadedPortion == 1)
@@ -642,11 +651,13 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
      * @param id идентификатор пользователя, если отрицательное значение - возвращает количество
      * непрочитанных сообщений (в первой записи списка, в поле id)
      */
-    fun getMessages(getCountUnread: Boolean = false) {
-        val passId = if (getCountUnread) -USER_ID else USER_ID
-        repository.getMessages(passId) {messages ->
+    fun getMessages(requestNumberUnread: Boolean = false) {
+        //val token = if (getCountUnread) -USER_ID else USER_TOKEN
+        if (!validToken()) return
+
+        repository.getMessages(USER_TOKEN!!, requestNumberUnread) {messages ->
             if (messages.isNotEmpty()) {
-                if (passId < 0)
+                if (requestNumberUnread)
                     setCountUnreadMessages(messages[0].id)
                 else {
                     setUserMessages(messages)
@@ -679,25 +690,28 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     }
 
     fun updateUserMessage(ids: IntArray, what: Int) {
+        if (!validToken()) return
         //0 - отметить как прочитанное
         //1 - удалить
+
         viewModelScope.launch {
-            val result = 1
-           /*
-               ******************************************************************************
+              val result = 1
+
+           /*    ******************************************************************************
                                 Пока не будет изменять данные на сервере
-               *******************************************************************************
-                val result: Int =
+                 ********************************************************************************/
+                /*val result: Int =
                 try{
                     val id_message = ids.joinToString(",")
-                    val response = repository.updateUserMessage(USER_ID, what, id_message)
+                    log(USER_TOKEN)
+                    val response = repository.updateUserMessage(USER_TOKEN!!, what, id_message)
                     response.body()?.toInt() ?: 0
                 }
                 catch (_: Exception) {
                     0
-                }
-                *****************************************************************************
-            */
+                }*/
+            //    *****************************************************************************
+
 
             if (result > 0) {
                 var recomposition = false
@@ -718,8 +732,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
 
                 }
-                if (what == USERMESSAGE_DELETE) {
-                  /*  var countUnread = _countUnreadMessages.value
+              /*  if (what == USERMESSAGE_DELETE) {
+                    var countUnread = _countUnreadMessages.value
                     ids.forEach {id ->
                         val message = listMessages.find {
                             it.id == id
@@ -731,10 +745,10 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                             //recomposition = true
                         }
                     }
-                    _countUnreadMessages.value = countUnread*/
+                    _countUnreadMessages.value = countUnread
                     recomposition = true
 
-                }
+                }*/
 
                 if (recomposition)
                     setUserMessages(listMessages)
@@ -748,5 +762,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         loadedPortion = 0
         loadState = LoadState.IDLE
     }
+
+    private fun validToken() =
+        USER_TOKEN != null
 
  }

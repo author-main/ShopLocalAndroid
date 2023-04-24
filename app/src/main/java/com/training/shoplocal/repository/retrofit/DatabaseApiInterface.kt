@@ -15,7 +15,7 @@ interface DatabaseApiInterface {
     fun getProduct(@Query("id") id: Int): Call<Product>
 
     @GET("/api/get_products")
-    fun getProducts(@Query("id") id: Int,
+    fun getProducts(@Query("token") token: String,
                     @Query("part") part: Int,
                     @Query("order") order: String): Call<List<Product>>
 
@@ -24,7 +24,7 @@ interface DatabaseApiInterface {
                          @Query("order") order: String,
                          @Query("portion") portion: Int,
                          @Query("uuid") uuid: String,
-                         @Query("userid") userid: Int): Call<List<Product>>
+                         @Query("token") token: String): Call<List<Product>>
 
 
     @GET("/api/get_reviews_product")
@@ -42,7 +42,7 @@ interface DatabaseApiInterface {
     fun getCategories(): Call<List<Category>>
 
     @GET("/api/get_messages")
-    fun getMessages(@Query("id") id:Int): Call<List<UserMessage>>
+    fun getMessages(@Query("token") token: String, @Query("count") requestCount: Int): Call<List<UserMessage>>
 
     /**
      *  Используем response без обработки результата запроса.
@@ -50,10 +50,10 @@ interface DatabaseApiInterface {
      */
     @FormUrlEncoded
     @POST("/api/update_favorite")
-    suspend fun updateFavorite(@Field("id_user") id_user: Int, @Field("id_product") id_product: Int, @Field("favorite") value: Byte): Response<Int>
+    suspend fun updateFavorite(@Field("token") token: String, @Field("id_product") id_product: Int, @Field("favorite") value: Byte): Response<Int>
 
     @FormUrlEncoded
     @POST("/api/update_message")
-    suspend fun updateUserMessage(@Field("id_user") id_user: Int, @Field("what") what: Int, @Field("id_message") id_message: String): Response<Int>
+    suspend fun updateUserMessage(@Field("token") token: String, @Field("what") what: Int, @Field("id_message") id_message: String): Response<Int>
 
 }

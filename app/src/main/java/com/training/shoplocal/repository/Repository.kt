@@ -62,10 +62,10 @@ class Repository @Inject constructor(
     fun onRegisterUser(action: ((result: Boolean) -> Unit)?, vararg userdata: String) {
         accessUser.onRegisterUser(action, *userdata)
     }
-    fun onLogin(action: (result: Int) -> Unit, email: String, password: String, finger: Boolean = false) {
+    fun onLogin(action: (token: String?) -> Unit, email: String, password: String, finger: Boolean = false) {
         accessUser.onLogin(action, email, password, finger)
     }
-    fun onFingerPrint(action: ((result: Int) -> Unit)?, email: String) {
+    fun onFingerPrint(action: ((token: String?) -> Unit)?, email: String) {
       /*  val actionState : (result: Int) -> Unit = {
             loginState.fillPassword()
             action?.invoke(it)
@@ -86,12 +86,12 @@ class Repository @Inject constructor(
         databaseCRUD.getProduct(id, action)
     }
 
-    fun getProducts(id: Int, part: Int, action: (products: List<Product>) -> Unit){
+    fun getProducts(token:String, part: Int, action: (products: List<Product>) -> Unit){
         //val order64 = encodeBase64(OrderDisplay.getOrderDislayQuery())
         //log(OrderDisplay.getFilterQuery())
         val order64 = encodeBase64(OrderDisplay.getFilterQuery())
-        //log(order64)
-        databaseCRUD.getProducts(id, part, order64, action)
+        //log("$token $order64 $part")
+        databaseCRUD.getProducts(token, part, order64, action)
     }
 
     fun getBrands(action: (brands: List<Brand>) -> Unit){
@@ -102,12 +102,12 @@ class Repository @Inject constructor(
         databaseCRUD.getCategories(action)
     }
 
-    suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte): Response<Int>{
-        return databaseCRUD.updateFavorite(id_user, id_product, value)
+    suspend fun updateFavorite(token: String, id_product: Int, value: Byte): Response<Int>{
+        return databaseCRUD.updateFavorite(token, id_product, value)
     }
 
-    suspend fun updateUserMessage(id_user: Int, what: Int, id_message: String): Response<Int>{
-        return databaseCRUD.updateUserMessage(id_user, what, id_message)
+    suspend fun updateUserMessage(token: String, what: Int, id_message: String): Response<Int>{
+        return databaseCRUD.updateUserMessage(token, what, id_message)
     }
 
     /*suspend fun getProducts(id: Int, part: Int): List<Product> =
@@ -214,9 +214,9 @@ class Repository @Inject constructor(
                                  order: String,
                                  portion: Int,
                                  uuid: String,
-                                 userid: Int,
+                                 token: String,
                                  action: (products: List<Product>) -> Unit){
-        databaseCRUD.getFoundProducts(query, order, portion, uuid, userid, action)
+        databaseCRUD.getFoundProducts(query, order, portion, uuid, token, action)
     }
 
     fun getReviewProduct(id: Int,
@@ -232,7 +232,7 @@ class Repository @Inject constructor(
      * @param UUID_query уникальный id запроса
      * @param userId id пользователя
      */
-    fun findProductsRequest(query: String, portion: Int, UUID_query: String, userId: Int, action: (products: List<Product>) -> Unit ){
+    fun findProductsRequest(query: String, portion: Int, UUID_query: String, token: String, action: (products: List<Product>) -> Unit ){
         /*val orderDisplay = OrderDisplay.getInstance()
         orderDisplay.setSortType(SORT_TYPE.DESCENDING)
         orderDisplay.setSortProperty(SORT_PROPERTY.POPULAR)
@@ -250,12 +250,15 @@ class Repository @Inject constructor(
         log("UUID = $UUID_query")
         log("userid = $userId")*/
 
-        getFoundProducts(query64, order64, portion, UUID_query, userId, action)
+
+        getFoundProducts(query64, order64, portion, UUID_query, token, action)
     }
 
-    fun getMessages(id: Int,
+    fun getMessages(token: String,
+                    requestNumberUnread: Boolean,
                     action: (userMessages: List<UserMessage>) -> Unit){
-        databaseCRUD.getMessages(id, action)
+        //log("token = $token, $requestNumberUnread")
+        databaseCRUD.getMessages(token, if (requestNumberUnread) 1 else 0, action)
     }
 
     fun resetLoginData() {

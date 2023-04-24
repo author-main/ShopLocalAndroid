@@ -8,6 +8,7 @@ import com.training.shoplocal.isConnectedNet
 import com.training.shoplocal.loginview.LoginViewState
 import com.training.shoplocal.classes.User
 import com.training.shoplocal.dagger.ActivityMainScope
+import com.training.shoplocal.log
 import com.training.shoplocal.userfingerprint.UserFingerPrint
 import com.training.shoplocal.userfingerprint.UserFingerPrintListener
 import com.training.shoplocal.validateMail
@@ -25,7 +26,7 @@ class AccessUser(
     override val loginState: LoginViewState,
     override val databaseApi: DatabaseCRUDInterface
 ): AccessUserInterface {
-    private var actionLogin: ((result: Int) -> Unit)? = null
+    private var actionLogin: ((token: String?) -> Unit)? = null
     private var userFingerPrint: UserFingerPrint? = null
     /*@Inject
     lateinit var databaseApi: DatabaseCRUDInterface*/
@@ -34,6 +35,8 @@ class AccessUser(
         userFingerPrint = value
         setParamUserFingerPrint()
     }
+
+    var processLogin = false
 
     //private lateinit var loginState: LoginViewState
     //private var userFingerPrint: UserFingerPrint? = null
@@ -51,11 +54,15 @@ class AccessUser(
       }*/
 
     override fun onLogin(
-        action: ((result: Int) -> Unit)?,
+        action: ((token: String?) -> Unit)?,
         email: String,
         password: String,
         finger: Boolean
     ) {
+
+        if (processLogin) return
+        processLogin = true
+
         fun clearLoginPassword(){
         //    if (!finger)
                 CoroutineScope(Dispatchers.Main).launch {
@@ -63,7 +70,7 @@ class AccessUser(
                     this@AccessUser.loginState.clearPassword()
                 }
             this.loginState.hideProgress()
-            action?.invoke(-1)
+            action?.invoke(null)
         }
 
         if (email.isBlank() || password.isBlank() || !validateMail(email)) {
@@ -81,13 +88,15 @@ class AccessUser(
                 password    = password,
                 token       = null
             )*/
+
             databaseApi.loginUser(email, password) {user ->
                     if (user.validUser()) {
                     //if (id > 0) {
                         saveUserPassword(password)
                         if (User.getUserData() == null)
                             user.saveUserData()
-                        action?.invoke(user.id!!)
+                        //action?.invoke(user.id!!)
+                        action?.invoke(user.token!!)
                         if (finger)
                         //    this@AccessUser.
                             loginState.changePassword(password)
@@ -95,6 +104,7 @@ class AccessUser(
                         loginState.clearPassword()
                     } else
                         clearLoginPassword()
+                processLogin = false
             }
             /*databaseApi.loginUser(user, object: retrofit2.Callback<User>{
                 override fun onResponse(call: Call<User>, response: Response<User>) {
@@ -125,8 +135,10 @@ class AccessUser(
                     clearLoginPassword()
                 }
             })*/
-        } else
+        } else {
             clearLoginPassword()
+            processLogin = false
+        }
     }
 
     override fun onRegisterUser(action: ((result: Boolean) -> Unit)?, vararg userdata: String) {
@@ -210,7 +222,7 @@ class AccessUser(
           log(json)*/
     }
 
-    override fun onFingerPrint(action: ((result: Int) -> Unit)?, email: String) {
+    override fun onFingerPrint(action: ((token: String?) -> Unit)?, email: String) {
         if (validateMail(email)) {
             actionLogin = action
             userFingerPrint?.authenticate()

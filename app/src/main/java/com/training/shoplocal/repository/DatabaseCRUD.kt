@@ -92,8 +92,8 @@ class DatabaseCRUD @Inject constructor(private val databaseApi: DatabaseApi): Da
         })
     }
 
-    override fun getProducts(id: Int, part: Int, order: String, action: (products: List<Product>) -> Unit) {
-        databaseApi.getProducts(id, part, order, object: retrofit2.Callback<List<Product>>{
+    override fun getProducts(token: String, part: Int, order: String, action: (products: List<Product>) -> Unit) {
+        databaseApi.getProducts(token, part, order, object: retrofit2.Callback<List<Product>>{
             override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
 
                     response.body()?.let {
@@ -117,14 +117,14 @@ class DatabaseCRUD @Inject constructor(private val databaseApi: DatabaseApi): Da
         order: String,
         portion: Int,
         uuid: String,
-        userid: Int,
+        token: String,
         action: (products: List<Product>) -> Unit
     ) {
         databaseApi.getFoundProducts(query,
             order,
             portion,
             uuid,
-            userid,
+            token,
             object: retrofit2.Callback<List<Product>>{
             override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
                     //log("response  " + response.body()?.toString())
@@ -164,12 +164,12 @@ class DatabaseCRUD @Inject constructor(private val databaseApi: DatabaseApi): Da
 
     }
 
-    override suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte): Response<Int> {
-        return databaseApi.updateFavorite(id_user, id_product, value)
+    override suspend fun updateFavorite(token: String, id_product: Int, value: Byte): Response<Int> {
+        return databaseApi.updateFavorite(token, id_product, value)
     }
 
-    override suspend fun updateUserMessage(id_user: Int, what: Int, id_message: String): Response<Int> {
-        return databaseApi.updateUserMessage(id_user, what, id_message)
+    override suspend fun updateUserMessage(token: String, what: Int, id_message: String): Response<Int> {
+        return databaseApi.updateUserMessage(token, what, id_message)
     }
 
     override fun getReviewProduct(
@@ -192,10 +192,12 @@ class DatabaseCRUD @Inject constructor(private val databaseApi: DatabaseApi): Da
     }*/
 
     override fun getMessages(
-        id: Int,
+        token: String,
+        requestNumberUnread: Int,
         action: (userMessages: List<UserMessage>) -> Unit
     ) {
-        databaseApi.getMessages(id, object: retrofit2.Callback<List<UserMessage>> {
+        //log("token = $token, request = $requestNumberUnread")
+        databaseApi.getMessages(token, requestNumberUnread, object: retrofit2.Callback<List<UserMessage>> {
 
             override fun onResponse(call: Call<List<UserMessage>>, response: Response<List<UserMessage>>) {
                 response.body()?.let {

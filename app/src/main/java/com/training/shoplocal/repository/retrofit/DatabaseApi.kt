@@ -80,13 +80,13 @@ class DatabaseApi @Inject constructor(private val retrofitService: DatabaseApiIn
         }
 
         fun getProducts(
-            id: Int,
+            token: String,
             part: Int,
             order: String,
             callback: retrofit2.Callback<List<Product>>
         ) {
             try {
-                val call: retrofit2.Call<List<Product>> = retrofitService.getProducts(id, part, order)
+                val call: retrofit2.Call<List<Product>> = retrofitService.getProducts(token, part, order)
                 call.enqueue(callback)
             } catch (e: Exception) {
                 //log(e.message ?: "error")
@@ -99,12 +99,12 @@ class DatabaseApi @Inject constructor(private val retrofitService: DatabaseApiIn
             order: String,
             portion: Int,
             uuid: String,
-            userid: Int,
+            token: String,
             callback: retrofit2.Callback<List<Product>>
         ) {
             try {
                 val call: retrofit2.Call<List<Product>> =
-                    retrofitService.getFoundProducts(query, order, portion, uuid, userid)
+                    retrofitService.getFoundProducts(query, order, portion, uuid, token)
                 call.enqueue(callback)
             } catch (_: Exception) {
             }
@@ -135,16 +135,16 @@ class DatabaseApi @Inject constructor(private val retrofitService: DatabaseApiIn
         return list
     }*/
 
-        suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte): Response<Int> {
+        suspend fun updateFavorite(token: String, id_product: Int, value: Byte): Response<Int> {
             /*try {
             retrofitInstance!!.updateFavorite(id_user, id_product, value)
         } catch(_: Exception){
         }*/
-            return retrofitService.updateFavorite(id_user, id_product, value)
+            return retrofitService.updateFavorite(token, id_product, value)
         }
 
-        suspend fun updateUserMessage(id_user: Int, what: Int, id_message: String): Response<Int> {
-            return retrofitService.updateUserMessage(id_user, what, id_message)
+        suspend fun updateUserMessage(token: String, what: Int, id_message: String): Response<Int> {
+            return retrofitService.updateUserMessage(token, what, id_message)
         }
 
         fun getBrands(callback: retrofit2.Callback<List<Brand>>) {
@@ -165,9 +165,11 @@ class DatabaseApi @Inject constructor(private val retrofitService: DatabaseApiIn
             }
         }
 
-        fun getMessages(id: Int, callback: retrofit2.Callback<List<UserMessage>>) {
+        fun getMessages(token: String,
+                        requestNumberUnread: Int,
+                        callback: retrofit2.Callback<List<UserMessage>>) {
             try {
-                val call: retrofit2.Call<List<UserMessage>> = retrofitService.getMessages(id)
+                val call: retrofit2.Call<List<UserMessage>> = retrofitService.getMessages(token, requestNumberUnread)
                 call.enqueue(callback)
             } catch (e: Exception) {
                 // log(e.message ?: "error")

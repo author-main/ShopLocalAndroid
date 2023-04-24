@@ -10,7 +10,7 @@ interface DatabaseCRUDInterface {
     fun restoreUser(user: User, action: (userId: Int) -> Unit = {})
     fun getCategories()
     fun getProduct( id: Int, action: (product: Product) -> Unit = {})
-    fun getProducts( id: Int,
+    fun getProducts( token: String,
                      part: Int,
                      order: String,
                      action:(products: List<Product>) -> Unit = {})
@@ -18,16 +18,16 @@ interface DatabaseCRUDInterface {
                          order: String,
                          portion: Int,
                          uuid: String,
-                         userid: Int,
+                         token: String,
                          action: (products: List<Product>) -> Unit = {})
     fun getBrands( action: (brands: List<Brand>) -> Unit = {})
     fun getReviewProduct(id: Int,
                          action: (reviews: List<Review>) -> Unit = {})
     fun getCategories( action: (categories: List<Category>) -> Unit = {})
-    fun getMessages(id: Int, action: (userMessages: List<UserMessage>) -> Unit = {})
+    fun getMessages(token: String, requestNumberUnread: Int, action: (userMessages: List<UserMessage>) -> Unit = {})
 
 
-    suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte): Response<Int>
-    suspend fun updateUserMessage(id_user: Int, what: Int, id_message: String): Response<Int>
+    suspend fun updateFavorite(token: String, id_product: Int, value: Byte): Response<Int>
+    suspend fun updateUserMessage(token: String, what: Int, id_message: String): Response<Int>
   //  suspend fun getProducts( id: Int, part: Int) : List<Product>
 }
