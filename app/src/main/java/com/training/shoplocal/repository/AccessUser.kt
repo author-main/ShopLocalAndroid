@@ -3,6 +3,8 @@ package com.training.shoplocal.repository
 import android.app.Activity
 import android.content.Context
 import androidx.activity.ComponentActivity
+import com.training.shoplocal.classes.EMPTY_IMAGE
+import com.training.shoplocal.classes.EMPTY_STRING
 import com.training.shoplocal.fingerPrintCanAuthenticate
 import com.training.shoplocal.isConnectedNet
 import com.training.shoplocal.loginview.LoginViewState
@@ -25,7 +27,7 @@ class AccessUser(
     override val loginState: LoginViewState,
     override val databaseApi: DatabaseCRUDInterface
 ): AccessUserInterface {
-    private var actionLogin: ((result: Int) -> Unit)? = null
+    private var actionLogin: ((token: String?) -> Unit)? = null
     private var userFingerPrint: UserFingerPrint? = null
     /*@Inject
     lateinit var databaseApi: DatabaseCRUDInterface*/
@@ -51,7 +53,8 @@ class AccessUser(
       }*/
 
     override fun onLogin(
-        action: ((result: Int) -> Unit)?,
+        //action: ((result: Int) -> Unit)?,
+        action: ((token: String?) -> Unit)?,
         email: String,
         password: String,
         finger: Boolean
@@ -63,7 +66,8 @@ class AccessUser(
                     this@AccessUser.loginState.clearPassword()
                 }
             this.loginState.hideProgress()
-            action?.invoke(-1)
+            //action?.invoke(-1)
+            action?.invoke(null)
         }
 
         if (email.isBlank() || password.isBlank() || !validateMail(email)) {
@@ -77,13 +81,16 @@ class AccessUser(
             val noSavedUser = user.email == null
             user.email       = email
             user.password    = password
-            databaseApi.loginUser(user) {id ->
-
-                    if (id > 0) {
+            databaseApi.loginUser(user) {responseUser ->
+                    val token = responseUser.token ?: EMPTY_STRING
+                    //if (id > 0) {
+                    if (token.isNotEmpty()) {
                         saveUserPassword(password)
                         if (noSavedUser)
-                            user.saveUserData()
-                        action?.invoke(id)
+                            responseUser.saveUserData()
+                            //user.saveUserData()
+                        //action?.invoke(id)
+                        action?.invoke(token)
                         if (finger)
                         //    this@AccessUser.
                             loginState.changePassword(password)
@@ -206,7 +213,7 @@ class AccessUser(
           log(json)*/
     }
 
-    override fun onFingerPrint(action: ((result: Int) -> Unit)?, email: String) {
+    override fun onFingerPrint(action: ((token: String?) -> Unit)?, email: String) {
         if (validateMail(email)) {
             actionLogin = action
             userFingerPrint?.authenticate()
