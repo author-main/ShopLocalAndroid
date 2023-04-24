@@ -8,7 +8,7 @@ import com.training.shoplocal.AppShopLocal
 
 data class User (
     @SerializedName("id")           var id: Int?,
-    @SerializedName("email")        val email: String?,
+    @SerializedName("email")        var email: String?,
     @SerializedName("firstname")    val firstname: String?,
     @SerializedName("lastname")     val lastname: String?,
     @SerializedName("phone")        val phone: String?,
@@ -41,7 +41,7 @@ data class User (
             }
         }
 
-        fun getUser() =
+        fun getEmptyUser() =
             User(
                 null,
                 null,

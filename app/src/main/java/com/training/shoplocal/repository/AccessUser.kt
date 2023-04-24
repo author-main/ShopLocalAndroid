@@ -72,20 +72,17 @@ class AccessUser(
         }
 
         if (isConnectedNet()) {
-            val user = User(
-                id          = null,
-                firstname   = null,
-                lastname    = null,
-                phone       = null,
-                email       = email,
-                password    = password,
-                token       = null
-            )
+
+            val user = User.getUserData() ?: User.getEmptyUser()
+            val noSavedUser = user.email == null
+            user.email       = email
+            user.password    = password
             databaseApi.loginUser(user) {id ->
 
                     if (id > 0) {
                         saveUserPassword(password)
-                        user.saveUserData()
+                        if (noSavedUser)
+                            user.saveUserData()
                         action?.invoke(id)
                         if (finger)
                         //    this@AccessUser.
