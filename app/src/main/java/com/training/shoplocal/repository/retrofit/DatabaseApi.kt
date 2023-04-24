@@ -132,12 +132,12 @@ class DatabaseApi @Inject constructor(private val retrofitService: DatabaseApiIn
         return list
     }*/
 
-        suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte): Response<Int> {
+        suspend fun updateFavorite(token: String, id_product: Int, value: Byte): Response<Int> {
             /*try {
             retrofitInstance!!.updateFavorite(id_user, id_product, value)
         } catch(_: Exception){
         }*/
-            return retrofitService.updateFavorite(id_user, id_product, value)
+            return retrofitService.updateFavorite(token, id_product, value)
         }
 
         suspend fun updateUserMessage(id_user: Int, what: Int, id_message: String): Response<Int> {

@@ -11,16 +11,20 @@ import javax.inject.Singleton
 @Singleton
 class DatabaseCRUD @Inject constructor(private val databaseApi: DatabaseApi): DatabaseCRUDInterface {
 
-    override fun loginUser(user: User, action: (userId: Int) -> Unit) {
+    //override fun loginUser(user: User, action: (userId: Int) -> Unit) {
+    override fun loginUser(user: User, action: (userData: User) -> Unit) {
         databaseApi.loginUser(user, object: retrofit2.Callback<User>{
             override fun onResponse(call: Call<User>, response: Response<User>) {
-                val id = response.body()?.id ?: 0
+                //log(response.body())
+                /*val id = response.body()?.id ?: 0
                 if (id > 0)
-                    action(id)
+                    action(id)*/
+                action(response.body() ?: User.getEmptyUser())
+
             }
 
             override fun onFailure(call: Call<User>, t: Throwable) {
-                action(-1)
+                action(User.getEmptyUser())
             }
         })
     }
@@ -87,7 +91,7 @@ class DatabaseCRUD @Inject constructor(private val databaseApi: DatabaseApi): Da
         })
     }
 
-    override fun getProducts(id: Int, part: Int, order: String, action: (products: List<Product>) -> Unit) {
+    override fun getProducts(token: String, part: Int, order: String, action: (products: List<Product>) -> Unit) {
         databaseApi.getProducts(id, part, order, object: retrofit2.Callback<List<Product>>{
             override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
 
@@ -112,7 +116,7 @@ class DatabaseCRUD @Inject constructor(private val databaseApi: DatabaseApi): Da
         order: String,
         portion: Int,
         uuid: String,
-        userid: Int,
+        token: String,
         action: (products: List<Product>) -> Unit
     ) {
         databaseApi.getFoundProducts(query,
@@ -159,8 +163,8 @@ class DatabaseCRUD @Inject constructor(private val databaseApi: DatabaseApi): Da
 
     }
 
-    override suspend fun updateFavorite(id_user: Int, id_product: Int, value: Byte): Response<Int> {
-        return databaseApi.updateFavorite(id_user, id_product, value)
+    override suspend fun updateFavorite(token: String, id_product: Int, value: Byte): Response<Int> {
+        return databaseApi.updateFavorite(token, id_product, value)
     }
 
     override suspend fun updateUserMessage(id_user: Int, what: Int, id_message: String): Response<Int> {
