@@ -15,7 +15,7 @@ class DatabaseCRUD @Inject constructor(private val databaseApi: DatabaseApi): Da
         databaseApi.loginUser(mail, password, object: retrofit2.Callback<User>{
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 val user = response.body() ?: User.getEmptyInstance()
-                log(user)
+               // log(user)
                 if (user.validUser())
                     action(user)
                /* val id = response.body()?.id ?: 0
