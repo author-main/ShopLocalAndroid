@@ -8,23 +8,21 @@ import com.training.shoplocal.AppShopLocal
 
 data class User (
     @SerializedName("id")           var id: Int?,
-    @SerializedName("email")        var email: String?,
+    @SerializedName("email")        val email: String?,
     @SerializedName("firstname")    val firstname: String?,
     @SerializedName("lastname")     val lastname: String?,
     @SerializedName("phone")        val phone: String?,
     @SerializedName("password")     var password: String?,
-    @SerializedName("token")        var token:    String?
+    @SerializedName("token")        var token: String?
 ) {
     /*private val sharedPrefs: SharedPreferences =
         AppShopLocal.appContext().getSharedPreferences(FILE_PREFERENCES, Context.MODE_PRIVATE)*/
 
-
-    fun isNotEmpty() = token?.isNotEmpty() ?: false
+    fun isNotEmpty() = !token.isNullOrEmpty() ?: false
 
     fun saveUserData(){
         id          = null
         password    = null
-        token       = null
         val gson = Gson()
         val json = gson.toJson(this)
         sharedPrefs.edit().putString("user", json).apply()
@@ -43,19 +41,16 @@ data class User (
             }
         }
 
-        fun getEmptyUser(): User {
-            return User(
-                id          = null,
-                firstname   = null,
-                lastname    = null,
-                phone       = null,
-                email       = null,
-                password    = null,
-                token       = null
+        fun getUser() =
+            User(
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
             )
-        }
-
-
 
     }
 }

@@ -62,10 +62,10 @@ class Repository @Inject constructor(
     fun onRegisterUser(action: ((result: Boolean) -> Unit)?, vararg userdata: String) {
         accessUser.onRegisterUser(action, *userdata)
     }
-    fun onLogin(action: (token: String?) -> Unit, email: String, password: String, finger: Boolean = false) {
+    fun onLogin(action: (result: Int) -> Unit, email: String, password: String, finger: Boolean = false) {
         accessUser.onLogin(action, email, password, finger)
     }
-    fun onFingerPrint(action: ((token: String?) -> Unit)?, email: String) {
+    fun onFingerPrint(action: ((result: Int) -> Unit)?, email: String) {
       /*  val actionState : (result: Int) -> Unit = {
             loginState.fillPassword()
             action?.invoke(it)
@@ -253,9 +253,9 @@ class Repository @Inject constructor(
         getFoundProducts(query64, order64, portion, UUID_query, userId, action)
     }
 
-    fun getMessages(token: String,
+    fun getMessages(id: Int,
                     action: (userMessages: List<UserMessage>) -> Unit){
-        databaseCRUD.getMessages(token, action)
+        databaseCRUD.getMessages(id, action)
     }
 
     fun resetLoginData() {

@@ -1,11 +1,16 @@
 package com.training.shoplocal.viewmodel
 
+import android.content.Context
 import android.os.*
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.training.shoplocal.*
+import com.training.shoplocal.AppShopLocal.Companion.appComponent
 import com.training.shoplocal.classes.*
+import com.training.shoplocal.classes.downloader.DiskCache
+import com.training.shoplocal.classes.downloader.ImageLinkDownloader
+import com.training.shoplocal.classes.downloader.MemoryCache
 import com.training.shoplocal.classes.fodisplay.FieldFilter
 import com.training.shoplocal.classes.fodisplay.ItemFilter
 import com.training.shoplocal.classes.fodisplay.OrderDisplay
@@ -16,6 +21,8 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.collections.HashMap
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
@@ -92,7 +99,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         onCloseApp = value
     }
     fun closeApp(){
-        USER_TOKEN = EMPTY_STRING
+        USER_ID = -1
         repository.resetLoginData()
         //loginState.reset()
         _products.value.clear()
@@ -154,7 +161,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         _selectedProduct.value = product.copy(favorite = product.favorite)
     }
 
-    private var USER_TOKEN: String = EMPTY_STRING
+    private var USER_ID: Int = -1
     private var brands = hashMapOf<Int, Brand>()
         //listOf<Brand>()
     private var categories = hashMapOf<Int, Category>()
@@ -166,14 +173,13 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private val _products = MutableStateFlow<MutableList<Product>>(mutableListOf<Product>())
     val products = _products.asStateFlow()
 
-    private val actionLogin: (token: String?) -> Unit = {
-        //val result = it != null
-            //it > 0
-        if (it != null) {
+    private val actionLogin: (result: Int) -> Unit = {
+        val result = it > 0
+        if (result) {
             //accessFingerPrint(true)
             hideSnackbar()
             //maxPortion = -1
-            USER_TOKEN = it
+            USER_ID = it
             /*ScreenRouter.navigateTo(ScreenItem.MainScreen)
             setOrderDisplay(FieldFilter.SCREEN, ScreenItem.MainScreen.key.value)*/
             containerStack.pop()
@@ -233,8 +239,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     }
 
     fun onLogin(email: String, password: String, finger: Boolean = false) {
-        repository.onLogin({ token ->
-            actionLogin(token)
+        repository.onLogin({ result ->
+            actionLogin(result)
         }, email, password, finger)
 
     }
@@ -293,7 +299,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         loadState = LoadState.LOADING
         val portion = loadedPortion + 1
        // log("loadedPortion = $portion")
-        repository.getProducts(USER_TOKEN, portion) { listProducts ->
+        repository.getProducts(USER_ID, portion) { listProducts ->
             if (listProducts.isNotEmpty()) {
                 loadedPortion++
                 if (loadedPortion == 1)
@@ -406,7 +412,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             if (result > 0) {
 
             }*/
-            repository.updateFavorite(USER_TOKEN, product.id, product.favorite)
+            repository.updateFavorite(USER_ID, product.id, product.favorite)
         }
         var currentProduct: Product? = null
         products.value.find { it.id== product.id }?.let {
@@ -535,14 +541,14 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             return
         loadState = LoadState.LOADING
         if (clear) { //  Очистка результатов поиcка в BD
-            repository.findProductsRequest(query, 0, UUID_QUERY, USER_TOKEN){}
+            repository.findProductsRequest(query, 0, UUID_QUERY, USER_ID){}
             loadState = LoadState.IDLE
             return
         }
         searchQuery = query
         showProgressCRUD()
         val portion = loadedPortion + 1
-        repository.findProductsRequest(query, portion, UUID_QUERY, USER_TOKEN) { listFound ->
+        repository.findProductsRequest(query, portion, UUID_QUERY, USER_ID) { listFound ->
             if (listFound.isNotEmpty()) {
                 loadedPortion++
                 if (loadedPortion == 1)
@@ -637,7 +643,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
      * непрочитанных сообщений (в первой записи списка, в поле id)
      */
     fun getMessages(getCountUnread: Boolean = false) {
-        val passId = if (getCountUnread) -USER_TOKEN else USER_TOKEN
+        val passId = if (getCountUnread) -USER_ID else USER_ID
         repository.getMessages(passId) {messages ->
             if (messages.isNotEmpty()) {
                 if (passId < 0)
