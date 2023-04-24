@@ -81,17 +81,13 @@ class AccessUser(
                 password    = password,
                 token       = null
             )*/
-            databaseApi.loginUser(email, password) {id ->
-
-                    if (id > 0) {
+            databaseApi.loginUser(email, password) {user ->
+                    if (user.validUser()) {
+                    //if (id > 0) {
                         saveUserPassword(password)
-                        if (User.getUserData() == null) {
-                            // нужно получить данные пользователя с сервера и сохранить
-                            val user = User.getEmptyInstance()
-                            user.email = email
+                        if (User.getUserData() == null)
                             user.saveUserData()
-                        }
-                        action?.invoke(id)
+                        action?.invoke(user.id!!)
                         if (finger)
                         //    this@AccessUser.
                             loginState.changePassword(password)

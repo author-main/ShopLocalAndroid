@@ -11,16 +11,21 @@ import javax.inject.Singleton
 @Singleton
 class DatabaseCRUD @Inject constructor(private val databaseApi: DatabaseApi): DatabaseCRUDInterface {
 
-    override fun loginUser(mail: String, password: String, action: (userId: Int) -> Unit) {
+    override fun loginUser(mail: String, password: String, action: (user: User) -> Unit) {
         databaseApi.loginUser(mail, password, object: retrofit2.Callback<User>{
             override fun onResponse(call: Call<User>, response: Response<User>) {
-                val id = response.body()?.id ?: 0
+                val user = response.body() ?: User.getEmptyInstance()
+                log(user)
+                if (user.validUser())
+                    action(user)
+               /* val id = response.body()?.id ?: 0
                 if (id > 0)
-                    action(id)
+                    action(id)*/
             }
 
             override fun onFailure(call: Call<User>, t: Throwable) {
-                action(-1)
+                //action(-1)
+                action(User.getEmptyInstance())
             }
         })
     }

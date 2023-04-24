@@ -5,7 +5,7 @@ import retrofit2.Response
 
 interface DatabaseCRUDInterface {
     //fun loginUser(  user: User, action: (userId: Int) -> Unit = {})
-    fun loginUser(mail: String, password: String, action: (userId: Int) -> Unit = {})
+    fun loginUser(mail: String, password: String, action: (user: User) -> Unit = {})
     fun regUser(    user: User, action: (userId: Int) -> Unit = {})
     fun restoreUser(user: User, action: (userId: Int) -> Unit = {})
     fun getCategories()
