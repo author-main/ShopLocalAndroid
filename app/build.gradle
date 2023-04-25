@@ -35,6 +35,12 @@ android {
         jvmTarget = '17'
     }
 
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+        }
+    }
+
     /*kapt {
         generateStubs = true
     }*/
