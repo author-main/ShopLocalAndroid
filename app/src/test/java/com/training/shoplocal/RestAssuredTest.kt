@@ -25,9 +25,12 @@ class RestAssuredTest {
     @ValueSource(strings = ["myshansky@inbox.ru"]) // <- введите email для тестирования
     @DisplayName("Получение токена пользователя по email")
     fun getUserToken(email: String){
+        //val email = "myshansky@inbox.ru";
         val token = given()
             .contentType(ContentType.JSON)
+            //.pathParam("email", "myshansky@inbox.ru")
             .get("$SERVER_TEST_API/get_user_token?email=$email")
+            //.get("$SERVER_TEST_API/get_user_token?email={email}", email)
             .then()//.log().all()
             .extract().body().jsonPath().getString("token")
         println()
