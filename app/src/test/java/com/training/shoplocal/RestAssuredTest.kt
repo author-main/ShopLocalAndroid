@@ -19,7 +19,6 @@ class RestAssuredTest {
     -Dfile.encoding=UTF-8
     */
     private val SERVER_TEST_API = "http://192.168.1.10/api/test"
-
     /*private fun getMail(): Stream<String> = Stream.of("myshansky@inbox.ru")
     @MethodSource("getMail")*/
     @ParameterizedTest
