@@ -18,7 +18,7 @@ class RestAssuredTest {
     -Dconsole.encoding=UTF-8
     -Dfile.encoding=UTF-8
     */
-    private val SERVER_TEST_API = "http://192.168.1.10/api/test"
+    private val SERVER_TEST_API = "http://192.168.0.10/api/test"
     /*private fun getMail(): Stream<String> = Stream.of("myshansky@inbox.ru")
     @MethodSource("getMail")*/
     @ParameterizedTest
@@ -31,7 +31,7 @@ class RestAssuredTest {
             //.pathParam("email", "myshansky@inbox.ru")
             .get("$SERVER_TEST_API/get_user_token?email=$email")
             //.get("$SERVER_TEST_API/get_user_token?email={email}", email)
-            .then()//.log().all()
+            .then().log().all()
             .extract().body().jsonPath().getString("token")
         println()
         println(">>> token = $token")
