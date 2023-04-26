@@ -4,6 +4,7 @@ import io.restassured.RestAssured.given
 import io.restassured.http.ContentType
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
@@ -33,9 +34,27 @@ class RestAssuredTest {
             //.get("$SERVER_TEST_API/get_user_token?email={email}", email)
             .then().log().all()
             .extract().body().jsonPath().getString("token")
-        println()
+        println(" ")
         println(">>> token = $token")
-        println()
+        println(" ")
         Assertions.assertTrue(token.length > 1)
     }
+
+  /*  @Test
+    fun getProducts(){
+        //val email = "myshansky@inbox.ru";
+        val token = given()
+            .contentType(ContentType.JSON)
+            //.pathParam("email", "myshansky@inbox.ru")
+            .get("$SERVER_TEST_API/get_user_token?email=$email")
+            //.get("$SERVER_TEST_API/get_user_token?email={email}", email)
+            .then().log().all()
+            .extract().body().jsonPath().getString("token")
+        println(" ")
+        println(">>> token = $token")
+        println(" ")
+        Assertions.assertTrue(token.length > 1)
+    }*/
+
+
 }
