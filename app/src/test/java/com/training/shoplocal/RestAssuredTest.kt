@@ -7,35 +7,31 @@ import io.restassured.path.json.JsonPath
 import org.hamcrest.Matchers.notNullValue
 import org.junit.Assert
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.matchesPattern
+import org.hamcrest.Matchers.matchesRegex
+
 
 class RestAssuredTest {
-    private val SERVER_TEST_API = "http://192.168.0.10/api/test"
+    /*
+    Для отображения русской кодировки добавить в studio64.exe.vmoptions:
+    -Dconsole.encoding=UTF-8
+    -Dfile.encoding=UTF-8
+    */
+    private val SERVER_TEST_API = "http://192.168.1.10/api/test"
     @Test
+    @DisplayName("Получение токена пользователя по email")
     fun getUserToken(){
-        val response = given()
+        val token = given()
             .contentType(ContentType.JSON)
             .get("$SERVER_TEST_API/get_user_token?email=myshansky@inbox.ru")
             .then().log().all()
-            //.extract().body().jsonPath()
-            .body("token", notNullValue())
-            .extract().response()
-        val jsonPath: JsonPath = response.jsonPath()
-        //Assertions.assertEquals(jsonPath, null)
-        val i = 0
-
+            .extract().body().jsonPath().getString("token")
+        println()
+        println(">>> token = $token")
+        println()
+        Assertions.assertTrue(token.length > 1)
     }
-
-    @Test
-    fun easyTest(){
-        Assertions.assertNotSame(2,3)
-
-    }
-
-
-
-    /* @Test
-     fun getListProducts(){
-
-     }*/
 }
