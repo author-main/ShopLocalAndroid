@@ -26,6 +26,7 @@ public class Specification {
             RequestSpecBuilder()
                 .setBaseUri(URL)
                 .setContentType(ContentType.JSON)
+               // .addFilter(AllureRestAssured())
                 //.log(LogDetail.ALL)
                 .build()
 
@@ -72,13 +73,8 @@ class RestAssuredTest {
     @ValueSource(strings = ["myshansky@inbox.ru"]) // <- email для тестирования
     @DisplayName("Получение токена пользователя по email")
     fun getUserToken(email: String){
-        //val email = "myshansky@inbox.ru";
         val token = given()
-            //.contentType(ContentType.JSON)
-            //.pathParam("email", email)
-            //.get("$SERVER_TEST_API/get_user_token?email=$email")
             .get("$SERVER_TESTAPI/get_user_token?email=$email")
-            //.get("$SERVER_TEST_API/get_user_token?email={email}", email)
             .then().log().all()
             .extract().body().jsonPath().getString("token")
         println(" ")
@@ -91,7 +87,7 @@ class RestAssuredTest {
     @DisplayName("Получение списка продуктов")
     fun getProducts(){
         val token = "76543d30bead8837c2256c33d467fcfd"      // <- токен пользователя
-        val page  = 1                                      // <- порция данных продуктов
+        val page  = 2                                      // <- порция данных продуктов
         val response = given()
             //.contentType(ContentType.JSON)
             .pathParam("token", token)

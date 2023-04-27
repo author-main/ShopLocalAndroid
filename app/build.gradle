@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'io.qameta.allure' version '2.11.2'
 }
 
 android {
@@ -40,6 +41,20 @@ android {
             useJUnitPlatform()
         }
     }
+
+    allure {
+        autoconfigure = true
+        version = '2.21.0'
+    }
+
+  /*  allure {
+        autoconfigure = true
+        version = '2.11.2'
+        clean = true
+        reportDir = file("$projectDir/build/allure-report")
+        resultsDir = file("$projectDir/build/allure-results")
+        downloadLinkFormat = 'https://dl.bintray.com/qameta/maven/io/qameta/allure/allure-commandline/%s/allure-commandline-%<s.zip'
+    }*/
 
     /*kapt {
         generateStubs = true
@@ -91,20 +106,28 @@ dependencies {
 
 
     def dagger_ver = "2.45"
-    implementation "com.google.dagger:dagger:${dagger_ver}"
-    implementation "com.google.dagger:dagger-android:${dagger_ver}"
-    implementation "com.google.dagger:dagger-android-support:${dagger_ver}"
-    kapt "com.google.dagger:dagger-compiler:${dagger_ver}"
-    kapt "com.google.dagger:dagger-android-processor:${dagger_ver}"
+    implementation "com.google.dagger:dagger:$dagger_ver"
+    implementation "com.google.dagger:dagger-android:$dagger_ver"
+    implementation "com.google.dagger:dagger-android-support:$dagger_ver"
+    kapt "com.google.dagger:dagger-compiler:$dagger_ver"
+    kapt "com.google.dagger:dagger-android-processor:$dagger_ver"
 
+    def junitVersion = '5.9.3'
+    testImplementation  "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+    testRuntimeOnly     "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+    testImplementation  "io.rest-assured:kotlin-extensions:5.3.0"
+    testImplementation  "io.rest-assured:rest-assured:5.3.0"
+    testImplementation  "io.rest-assured:json-path:5.3.0"
+    testImplementation  "io.rest-assured:json-schema-validator:5.3.0"
+    testImplementation  "org.junit.jupiter:junit-jupiter-params:$junitVersion"
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
-    testImplementation "io.rest-assured:kotlin-extensions:5.3.0"
-    testImplementation "io.rest-assured:rest-assured:5.3.0"
-    testImplementation "io.rest-assured:json-path:5.3.0"
-    testImplementation "io.rest-assured:json-schema-validator:5.3.0"
-    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.9.2'
+    // Allure
+    def allureVersion = '2.21.0'
+    testRuntimeOnly     "io.qameta.allure:allure-junit5:$allureVersion"
+    testImplementation  "io.qameta.allure:allure-java-commons:$allureVersion"
+    testImplementation  "io.qameta.allure:allure-attachments:$allureVersion"
+    testImplementation  "io.qameta.allure:allure-generator:$allureVersion"
+    testImplementation  "io.qameta.allure:allure-httpclient:$allureVersion"
 
 
     //implementation "androidx.compose.material:material-icons-extended:1.3.1"
