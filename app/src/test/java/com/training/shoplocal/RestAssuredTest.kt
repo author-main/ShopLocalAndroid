@@ -43,8 +43,8 @@ class RestAssuredTest {
     @Test
     @DisplayName("Получение списка продуктов")
     fun getProducts(){
-        val token = "542ed70b4602f422ce1dba45a9a59c86"    // <- токен пользователя
-        val page  = 2                  // <- порция данных продуктов
+        val token = "542ed70b4602f422ce1dba45a9a59c86"      // <- токен пользователя
+        val page  = 2                                       // <- порция данных продуктов
         val response = given()
         //val products = given()
             .contentType(ContentType.JSON)
@@ -57,6 +57,12 @@ class RestAssuredTest {
             .extract().response()
         val jsonPath = response.jsonPath()
         val products = jsonPath.getList<Product>(".", Product::class.java)
+
+        /*
+        проверка на наличие продуктов
+        */
+        Assertions.assertTrue(products.isNotEmpty())
+
         /*
         проверка на избранные продукты
         */
