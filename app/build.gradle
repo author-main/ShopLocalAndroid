@@ -47,19 +47,6 @@ android {
         version = '2.21.0'
     }
 
-  /*  allure {
-        autoconfigure = true
-        version = '2.11.2'
-        clean = true
-        reportDir = file("$projectDir/build/allure-report")
-        resultsDir = file("$projectDir/build/allure-results")
-        downloadLinkFormat = 'https://dl.bintray.com/qameta/maven/io/qameta/allure/allure-commandline/%s/allure-commandline-%<s.zip'
-    }*/
-
-    /*kapt {
-        generateStubs = true
-    }*/
-
     buildFeatures {
         compose true
     }
