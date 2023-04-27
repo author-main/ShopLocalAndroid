@@ -23,7 +23,7 @@ class RestAssuredTest {
     /*private fun getMail(): Stream<String> = Stream.of("myshansky@inbox.ru")
     @MethodSource("getMail")*/
     @ParameterizedTest
-    @ValueSource(strings = ["myshansky@inbox.ru"]) // <- введите email для тестирования
+    @ValueSource(strings = ["myshansky@inbox.ru"]) // <- email для тестирования
     @DisplayName("Получение токена пользователя по email")
     fun getUserToken(email: String){
         //val email = "myshansky@inbox.ru";
@@ -46,13 +46,11 @@ class RestAssuredTest {
         val token = "542ed70b4602f422ce1dba45a9a59c86"      // <- токен пользователя
         val page  = 2                                       // <- порция данных продуктов
         val response = given()
-        //val products = given()
             .contentType(ContentType.JSON)
             .pathParam("token", token)
             .pathParam("page", page)
             .get("$SERVER_TEST_API/get_products?token={token}&page={page}")
-            //.get("$SERVER_TEST_API/get_user_token?email={email}", email)
-            .then().log().all()
+            .then()
             //.extract().body().jsonPath().getList<Product>(".", Product::class.java)
             .extract().response()
         val jsonPath = response.jsonPath()
