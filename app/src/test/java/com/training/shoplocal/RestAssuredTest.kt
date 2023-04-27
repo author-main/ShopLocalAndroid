@@ -1,6 +1,5 @@
 package com.training.shoplocal
 
-import com.fasterxml.jackson.databind.JsonNode
 import com.training.shoplocal.classes.Product
 import io.restassured.RestAssured
 import io.restassured.RestAssured.given
@@ -11,14 +10,12 @@ import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import io.restassured.specification.ResponseSpecification
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-import kotlin.AssertionError as AssertionError1
 
 public class Specification {
     companion object {
