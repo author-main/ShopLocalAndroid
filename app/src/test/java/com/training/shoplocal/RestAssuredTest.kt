@@ -1,6 +1,7 @@
 package com.training.shoplocal
 
 import com.training.shoplocal.classes.Product
+import io.qameta.allure.Feature
 import io.restassured.RestAssured
 import io.restassured.RestAssured.given
 import io.restassured.builder.RequestSpecBuilder
@@ -40,6 +41,7 @@ public class Specification {
     }
 }
 
+@DisplayName("Тестирование ShopLocal API")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS) // при каждом тестирование не создается новый класс
 class RestAssuredTest {
     /*
@@ -69,6 +71,7 @@ class RestAssuredTest {
     @ParameterizedTest
     @ValueSource(strings = ["myshansky@inbox.ru"]) // <- email для тестирования
     @DisplayName("Получение токена пользователя по email")
+    @Feature("Получение токена пользователя")
     fun getUserToken(email: String){
         val token = given()
             .get("$SERVER_TESTAPI/get_user_token?email=$email")
