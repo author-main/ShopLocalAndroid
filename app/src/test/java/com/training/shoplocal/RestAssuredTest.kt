@@ -83,7 +83,7 @@ class RestAssuredTest {
     @Test
     @DisplayName("Получение списка продуктов")
     fun getProducts(){
-        val token = "76543d30bead8837c2256c33d467fcfd"      // <- токен пользователя
+        val token = "4e9caf100b3bd3b26d1cd58f79775a2f"      // <- токен пользователя
         val page  = 2                                      // <- порция данных продуктов
         val response = given()
             //.contentType(ContentType.JSON)
@@ -144,3 +144,15 @@ class RestAssuredTest {
 
 
 }
+
+
+/*
+From now you just need to execute your test and after tests run gradle task allureReport
+that creates Allure report or allureServethat creates Allure report and opens it
+in the default browser.
+*/
+
+/*
+Создаём новую конфигурацию запуска: Run — Edit Configurations… — + — Gradle.
+Gradle project = kotlinallure, Tasks = clean test allureReport
+*/
