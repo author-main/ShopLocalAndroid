@@ -29,7 +29,7 @@ class RestAssuredTest {
         //val email = "myshansky@inbox.ru";
         val token = given()
             .contentType(ContentType.JSON)
-            //.pathParam("email", "myshansky@inbox.ru")
+            //.pathParam("email", email)
             .get("$SERVER_TEST_API/get_user_token?email=$email")
             //.get("$SERVER_TEST_API/get_user_token?email={email}", email)
             .then().log().all()
