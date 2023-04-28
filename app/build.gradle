@@ -3,7 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'io.qameta.allure' version '2.11.2'
+//    id 'io.qameta.allure' version '2.11.2'
 }
 
 android {
@@ -42,17 +42,17 @@ android {
         }
     }
 
-    allure {
+/*    allure {
         autoconfigure = true
         version = '2.21.0'
-    }
+    }*/
 
     buildFeatures {
         compose true
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.4"
+        kotlinCompilerExtensionVersion = "1.4.6"
     }
     packagingOptions {
         resources {
