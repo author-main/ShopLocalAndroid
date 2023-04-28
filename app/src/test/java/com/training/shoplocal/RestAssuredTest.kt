@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
+import org.junit.runner.RunWith
 
 public class Specification {
     companion object {
@@ -24,6 +25,7 @@ public class Specification {
             RequestSpecBuilder()
                 .setBaseUri(URL)
                 .setContentType(ContentType.JSON)
+                //.addFilter(AllureRestAssured())
                // .addFilter(AllureRestAssured())
                 //.log(LogDetail.ALL)
                 .build()
@@ -40,7 +42,6 @@ public class Specification {
         }
     }
 }
-
 @DisplayName("Тестирование ShopLocal API")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS) // при каждом тестирование не создается новый класс
 class RestAssuredTest {
@@ -49,7 +50,7 @@ class RestAssuredTest {
     -Dconsole.encoding=UTF-8
     -Dfile.encoding=UTF-8
     */
-    private val SERVER_URI = "http://192.168.0.10"
+    private val SERVER_URI = "http://192.168.1.10"
     private val SERVER_TESTAPI = "/api/test"
 
     /*init {
@@ -71,7 +72,7 @@ class RestAssuredTest {
     @ParameterizedTest
     @ValueSource(strings = ["myshansky@inbox.ru"]) // <- email для тестирования
     @DisplayName("Получение токена пользователя по email")
-    @Feature("Получение токена пользователя")
+    //@Feature("Получение токена пользователя")
     fun getUserToken(email: String){
         val token = given()
             .get("$SERVER_TESTAPI/get_user_token?email=$email")
@@ -86,7 +87,7 @@ class RestAssuredTest {
     @Test
     @DisplayName("Получение списка продуктов")
     fun getProducts(){
-        val token = "4e9caf100b3bd3b26d1cd58f79775a2f"      // <- токен пользователя
+        val token = "ca91ae86f28120ddaaa62383835b285b"      // <- токен пользователя
         val page  = 2                                      // <- порция данных продуктов
         val response = given()
             //.contentType(ContentType.JSON)
