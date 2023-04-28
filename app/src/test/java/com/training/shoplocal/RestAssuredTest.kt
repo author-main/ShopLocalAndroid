@@ -1,7 +1,7 @@
 package com.training.shoplocal
 
 import com.training.shoplocal.classes.Product
-import io.qameta.allure.Feature
+//import io.qameta.allure.Feature
 import io.restassured.RestAssured
 import io.restassured.RestAssured.given
 import io.restassured.builder.RequestSpecBuilder
