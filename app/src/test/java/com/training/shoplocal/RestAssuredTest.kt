@@ -50,7 +50,7 @@ class RestAssuredTest {
     -Dconsole.encoding=UTF-8
     -Dfile.encoding=UTF-8
     */
-    private val SERVER_URI = "http://192.168.1.10"
+    private val SERVER_URI = "http://192.168.0.10"
     private val SERVER_TESTAPI = "/api/test"
 
     /*init {
