@@ -49,7 +49,8 @@ class RestAssuredTest {
     -Dconsole.encoding=UTF-8
     -Dfile.encoding=UTF-8
     */
-    private val SERVER_URI = "http://192.168.1.10"
+    //private val SERVER_URI = "http://192.168.1.10"
+    private val SERVER_URI = "http://faceshot.ru"
     private val SERVER_TESTAPI = "/api/test"
 
     /*init {
@@ -86,8 +87,8 @@ class RestAssuredTest {
     @Test
     @DisplayName("Получение списка продуктов")
     fun getProducts(){
-        val token = "16a13d57dfaee75825ae07a8ce45e6e6"      // <- токен пользователя
-        val page  = 3                                      // <- порция данных продуктов
+        val token = "d4044abf2667620e5f9f0adb8ea59378"      // <- токен пользователя
+        val page  = 2                                     // <- порция данных продуктов
         val response = given()
             //.contentType(ContentType.JSON)
             .pathParam("token", token)
@@ -98,22 +99,22 @@ class RestAssuredTest {
             .extract().response()
         val jsonPath = response.jsonPath()
         val products = jsonPath.getList<Product>(".", Product::class.java)
-        var success = false
+        //var success = false
         Assertions.assertAll(
             {
-                success = products.isNotEmpty()
+                val success = products.isNotEmpty()
                 if (!success)
                     println(">>> Продукты не загружены")
                 Assertions.assertTrue(success)
             },
             {
-                success = products.any { it.favorite > 0 }
+                val success = products.any { it.favorite > 0 }
                 if (!success)
                     println(">>> У пользователя нет продуктов в избранном")
                 Assertions.assertTrue(success)
             },
             {
-                success = products.any { it.discount >= 2 }
+                val success = products.any { it.discount >= 2 }
                 if (!success)
                     println(">>> Скидок нет")
                 Assertions.assertTrue(success)
@@ -159,3 +160,5 @@ in the default browser.
 Создаём новую конфигурацию запуска: Run — Edit Configurations… — + — Gradle.
 Gradle project = kotlinallure, Tasks = clean test allureReport
 */
+
+//org.gradle.warning.mode=all

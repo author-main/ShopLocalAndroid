@@ -100,14 +100,22 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$dagger_ver"
 
     def junitVersion = '5.9.3'
-    testImplementation  "org.junit.jupiter:junit-jupiter-api:$junitVersion"
-    testRuntimeOnly     "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+    //testImplementation  "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+    //testRuntimeOnly     "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+    testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation  "io.rest-assured:kotlin-extensions:5.3.0"
     testImplementation  "io.rest-assured:rest-assured:5.3.0"
     testImplementation  "io.rest-assured:json-path:5.3.0"
     testImplementation  "io.rest-assured:json-schema-validator:5.3.0"
     testImplementation  "org.junit.jupiter:junit-jupiter-params:$junitVersion"
     testImplementation  "org.mockito:mockito-core:5.3.1"
+
+
+
+
+
+
     // Allure
 /*    def allureVersion = '2.21.0'
     testRuntimeOnly     "io.qameta.allure:allure-junit5:$allureVersion"
