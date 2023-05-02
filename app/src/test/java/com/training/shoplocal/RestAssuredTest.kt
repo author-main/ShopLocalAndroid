@@ -150,15 +150,4 @@ class RestAssuredTest {
 }
 
 
-/*
-From now you just need to execute your test and after tests run gradle task allureReport
-that creates Allure report or allureServethat creates Allure report and opens it
-in the default browser.
-*/
-
-/*
-Создаём новую конфигурацию запуска: Run — Edit Configurations… — + — Gradle.
-Gradle project = kotlinallure, Tasks = clean test allureReport
-*/
-
 //org.gradle.warning.mode=all
