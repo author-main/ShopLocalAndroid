@@ -26,8 +26,7 @@ public class Specification {
                 .setBaseUri(URL)
                 .setContentType(ContentType.JSON)
                 //.addFilter(AllureRestAssured())
-               // .addFilter(AllureRestAssured())
-                //.log(LogDetail.ALL)
+                .log(LogDetail.ALL)
                 .build()
 
         fun responceSpecCode200(): ResponseSpecification =
@@ -50,7 +49,7 @@ class RestAssuredTest {
     -Dconsole.encoding=UTF-8
     -Dfile.encoding=UTF-8
     */
-    private val SERVER_URI = "http://192.168.0.10"
+    private val SERVER_URI = "http://192.168.1.10"
     private val SERVER_TESTAPI = "/api/test"
 
     /*init {
@@ -76,7 +75,7 @@ class RestAssuredTest {
     fun getUserToken(email: String){
         val token = given()
             .get("$SERVER_TESTAPI/get_user_token?email=$email")
-            .then().log().all()
+            .then()//.log().all()
             .extract().body().jsonPath().getString("token")
         println(" ")
         println(">>> token = $token")
@@ -87,7 +86,7 @@ class RestAssuredTest {
     @Test
     @DisplayName("Получение списка продуктов")
     fun getProducts(){
-        val token = "ee6f5ca44221b80c08032d180664469f"      // <- токен пользователя
+        val token = "16a13d57dfaee75825ae07a8ce45e6e6"      // <- токен пользователя
         val page  = 3                                      // <- порция данных продуктов
         val response = given()
             //.contentType(ContentType.JSON)
