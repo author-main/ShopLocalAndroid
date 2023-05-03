@@ -87,7 +87,7 @@ class RestAssuredTest {
     @Test
     @DisplayName("Получение списка продуктов")
     fun getProducts(){
-        val token = "d4044abf2667620e5f9f0adb8ea59378"      // <- токен пользователя
+        val token = "6120d709347207a175c047445462c0dd"      // <- токен пользователя
         val page  = 2                                     // <- порция данных продуктов
         val response = given()
             //.contentType(ContentType.JSON)
