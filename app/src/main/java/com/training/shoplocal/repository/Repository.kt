@@ -89,6 +89,7 @@ class Repository @Inject constructor(
     fun getProducts(token:String, part: Int, action: (products: List<Product>) -> Unit){
         //val order64 = encodeBase64(OrderDisplay.getOrderDislayQuery())
         //log(OrderDisplay.getFilterQuery())
+        //log(OrderDisplay.getFilterQuery())
         val order64 = encodeBase64(OrderDisplay.getFilterQuery())
         //log("$token $order64 $part")
         databaseCRUD.getProducts(token, part, order64, action)

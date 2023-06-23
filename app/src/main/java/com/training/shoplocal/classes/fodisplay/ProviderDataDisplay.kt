@@ -2,6 +2,9 @@ package com.training.shoplocal.classes.fodisplay
 
 import androidx.compose.runtime.*
 import com.training.shoplocal.classes.DECIMAL_SEPARATOR
+import com.training.shoplocal.classes.EMPTY_STRING
+import com.training.shoplocal.classes.ID_BRAND
+import com.training.shoplocal.classes.ID_CATEGORY
 import com.training.shoplocal.log
 
 
@@ -69,7 +72,31 @@ interface ProviderDataDisplay {
          *  6 - filter_discount:    скидка
          *  7 - filrter_screen:     текущий экран
          */
-        return "$sort_order $sort_type $filter_category $filter_brend $filter_favorite $filter_price $filter_discount $filter_screen"
+
+        val sectionCategory = if (filter_category == "-1") EMPTY_STRING else "$ID_CATEGORY[$filter_category]"
+        val sectionBrand = if (filter_brend == "-1") EMPTY_STRING else "$ID_BRAND[$filter_brend]"
+        val emptySections = sectionCategory.isEmpty() && sectionBrand.isEmpty()
+
+        val section = if (emptySections) "-1" else {
+            val aSections = arrayOf<String>(sectionCategory, sectionBrand)
+            var str = aSections.joinToString("-")
+            str = str.trimStart('-')
+            str.trimEnd('-')
+
+            //str.trimStart('-')
+            /*var str = EMPTY_STRING
+            aSections.forEach {section ->
+                if (section.isNotEmpty())
+                    str += "$section-"
+            }
+            str*/
+        }
+        //    else "$ID_CATEGORY[$filter_category]-$ID_BRAND[$filter_brend]"
+        //log(section)
+        //log ("$sort_order $sort_type $section $filter_favorite $filter_price $filter_discount $filter_screen")
+
+        //return "$sort_order $sort_type $filter_category $filter_brend $filter_favorite $filter_price $filter_discount $filter_screen"
+        return "$sort_order $sort_type $section $filter_favorite $filter_price $filter_discount $filter_screen"
     }
 
 

@@ -49,7 +49,7 @@ class DatabaseApi @Inject constructor(private val retrofitService: DatabaseApiIn
             callback: retrofit2.Callback<List<Product>>
         ) {
             try {
-                com.training.shoplocal.log(order)
+                //com.training.shoplocal.log(order)
                 val call: retrofit2.Call<List<Product>> = retrofitService.getProducts(token, part, order)
                 call.enqueue(callback)
             } catch (_: Exception) {
