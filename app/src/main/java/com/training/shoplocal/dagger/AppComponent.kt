@@ -25,53 +25,21 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = [CacheModule::class, RepositoryModule::class, BindsAppModule::class, SubcomponentsModule::class])//, dependencies = [ProviderCacheParam::class])
 interface AppComponent {
-
     fun injectApplication(application: AppShopLocal)
-    //fun injectMainActivity(activity: MainActivity)
     @Component.Factory
     interface Factory{
         fun create(@BindsInstance dir: String,
                    @BindsInstance size: Int
         ): AppComponent
     }
-
     fun mainActivitySubcomponent(): MainActivitySubcomponent.Factory
-  /*  @Component.Builder
-    interface Builder{
-
-        @BindsInstance
-        //fun cacheDir(@CacheDir dir: String): Builder
-        fun cacheDir(dir: String): Builder
-        @BindsInstance
-        //fun cacheSize(@CacheSize size: Int): Builder
-        fun cacheSize(size: Int): Builder
-        //fun providerCacheParam(cacheParam: ProviderCacheParam): Builder
-        fun build(): AppComponent
-    }*/
 }
-/*@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class CacheDir
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class CacheSize*/
 
 @Module(subcomponents = [MainActivitySubcomponent::class])
-interface SubcomponentsModule {
-}
+interface SubcomponentsModule
 
 @Module
-class CacheModule {
-
-/*  @Provides
-    fun provideDiskCache(cacheDirectory: String): ImageDiskCache    = DiskCache(cacheDirectory)
-
-    @Provides
-    fun provideImageDownloader  (diskCache: ImageDiskCache,
-    memoryCache: ImageMemoryCache)          = ImageLinkDownloader(diskCache, memoryCache)
-*/
-
-}
+class CacheModule
 
 @Module
 interface BindsAppModule {

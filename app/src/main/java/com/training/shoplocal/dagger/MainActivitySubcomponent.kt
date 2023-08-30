@@ -25,15 +25,7 @@ import javax.inject.Singleton
 
 @ActivityMainScope
 @Subcomponent(modules = [MainActivityModule::class, BindsMainActivityModule::class])
-interface MainActivitySubcomponent {//: AndroidInjector<MainActivity> {
-
-    /*@Subcomponent.Builder
-    interface Builder {
-        @BindsInstance
-        fun componentActivity(activity: ComponentActivity): Builder
-        fun build(): MainActivitySubcomponent
-    }*/
-
+interface MainActivitySubcomponent {
     @Subcomponent.Factory
     interface Factory {//: AndroidInjector.Factory<MainActivity>
         fun create(@BindsInstance activity: ComponentActivity) : MainActivitySubcomponent
