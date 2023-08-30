@@ -15,33 +15,15 @@ import javax.inject.Inject
 
 @ActivityMainScope
 class LoginViewState @Inject constructor() {
-    /*private var onAccessUser: AccessUserInterface? = null
-    fun addOnAccessUser(value: AccessUserInterface) {
-        onAccessUser = value
-    }*/
-
     private var progress by mutableStateOf(false)
-
     private val userEmail = User.getUserData()?.email ?: ""
     private var email by mutableStateOf(userEmail)
     private var enableFingerButton: MutableState<Boolean> = mutableStateOf(canAuthenticate())
-
     private var pressedButtons = false
     private var focused = false
     private var password by mutableStateOf("")
     private var errorEmail by mutableStateOf(true)
     private var animated = false
-
-/*    private var force by mutableStateOf(false)
-
-    fun forceRecomposition(){
-        force = !force
-        log(force.toString())
-    }
-
-    fun getForceAction() = force*/
-
-//    var onLogin: ((password:String) -> Boolean)? = null
 
     fun reset(){
         progress = false
@@ -78,7 +60,6 @@ class LoginViewState @Inject constructor() {
 
     fun checkFingerButtonState(){
         enableFingerButton.value = canAuthenticate()
-        //log(enableFingerButton.toString())
     }
 
     fun isEnabledFingerButton() = enableFingerButton
@@ -122,11 +103,6 @@ class LoginViewState @Inject constructor() {
         pressedButtons
 
     fun changeChar(value: Char){
-
-        /*if (password.length == 5) {
-            log ("key down")
-            return
-        }*/
         pressedButtons = true
          animated = false
         if (value == ' ')
@@ -157,57 +133,9 @@ class LoginViewState @Inject constructor() {
 
     fun getPasswordChar(): CharArray {
         val array = arrayEmptyChar.clone()
-        //if (password!="xxxxx" && password != "")
             password.forEachIndexed { index, _ ->
                 array[index] = fillChar
             }
         return array
     }
-
-   /* companion object {
-        const val PASSWORD_LENGTH = 5
-        const val emptyChar   = '○'
-        const val fillChar    = '●'
-        private val arrayEmptyChar: CharArray = CharArray(PASSWORD_LENGTH).apply {
-            for (index in 0 until PASSWORD_LENGTH)
-                this[index] = emptyChar
-        }
-
-        fun getLoginState(value: String = "") = LoginViewState().apply { this.password = value }
-
-     /*   @Suppress("UNCHECKED_CAST")
-        val Saver: Saver<PasswordViewState,Any> = listSaver(
-            save = { listOf(it.password) },
-            restore = {
-                getPasswordState( value = it[0] as String )
-            }
-        )*/
-    }*/
-
 }
-
-/*
-fun generateRandomSalt(): ByteArray {
-  val random = SecureRandom()
-  val salt = ByteArray(16)
-  random.nextBytes(salt)
-  return salt
-}
-
-private fun ByteArray.toHexString(): String =
-  HexFormat.of().formatHex(this)
-
-private const val ALGORITHM = "PBKDF2WithHmacSHA512"
-private const val ITERATIONS = 120_000
-private const val KEY_LENGTH = 256
-private const val SECRET = "SomeRandomSecret"
-fun generateHash(password: String, salt: String): String {
-  val combinedSalt = "$salt$SECRET".toByteArray()
-  val factory: SecretKeyFactory = SecretKeyFactory.getInstance(ALGORITHM)
-  val spec: KeySpec = PBEKeySpec(password.toCharArray(), combinedSalt, ITERATIONS, KEY_LENGTH)
-  val key: SecretKey = factory.generateSecret(spec)
-  val hash: ByteArray = key.encoded
-  return hash.toHexString()
-}
-
- */

@@ -42,16 +42,6 @@ import java.time.format.TextStyle
 
 @Composable
 fun LoginView(state: LoginViewState) {
-   /* val viewModel: RepositoryViewModel = viewModel()
-    val accessFinger by viewModel.accessFinger.collectAsState()
-    log("access finger $accessFinger")*/
-  /*  LaunchedEffect(accessFinger) {
-        if (accessFinger)
-            state.fillPassword()
-    }*/
-
-
-
     @Composable
     fun textChar(value: Char, color: Color){
         Text(
@@ -60,47 +50,18 @@ fun LoginView(state: LoginViewState) {
             color = color
         )
     }
-    //Log.v("shoplocal", "recomposition ${state.getPassword()}")
-    //val focusRequester = remember { FocusRequester() }
-    //val errorEmail = rememberSaveable { mutableStateOf(false) }
-    //val focused= remember { mutableStateOf(false) }
-    val focusManager = LocalFocusManager.current
+     val focusManager = LocalFocusManager.current
     val visible = MutableTransitionState(false)
-        //val passwordState = remember { state }
-    //var email = remember {state.getEmail()}
-
-
-  /*  if (state.isPressedButtons())
-        log("isPressed")
-
-    if (state.isFocused())
-        log("isFocused")*/
-
-   /* val stateFocused = remember {
-        derivedStateOf {
-            state.isPressedButtons() && state.isFocused()
-        }
-    }*/
-
-   // log(stateFocused.value.toString())
-
-
-
     if (state.isPressedButtons() && state.isFocused()) {
         focusManager.clearFocus(true)
         state.setPressedButtons(false)
         state.setFocus(false)
     }
-
-    //log("recomposition")
-    //val passwordState = rememberSaveable(saver = PasswordViewState.Saver) { state }
     val chars = state.getPasswordChar()
     val indexChar = chars.lastIndexOf(fillChar)
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         TextField(value = state.getEmail(), onValueChange = {
-            //email = it
             state.setEmail(it)
-//            state.setEmail(it)
         },
             Modifier
                 .fillMaxWidth()
@@ -115,33 +76,7 @@ fun LoginView(state: LoginViewState) {
                         else
                             !validateMail(state.getEmail())
                     )
-
-                    /*if (focusState.isFocused)
-                        errorEmail.value = false
-                    if (focusState.hasFocus)
-                        errorEmail.value = !validateMail(email.value)*/
-
-/*                when {
-                    focusState.isFocused -> {
-                        passwordState.setPressedButtons(false)
-                    }
-                    focusState.hasFocus -> {
-                        passwordState.setPressedButtons(true)
-                    }
-                }*/
-
-                }
-               /* .focusRequester(focusRequester)
-                .onFocusChanged {
-                    if (it.isFocused)
-                        passwordState.setPressedButtons(false)
-                }*/,
-
-           /* keyboardActions = KeyboardActions(
-                onAny = {
-                    Log.v("shoplocal", "focus");
-                    passwordState.setFocus(true)}
-            ) ,*/
+                },
             trailingIcon = {
                 if (state.getErrorEmail())
                     Icon(Icons.Filled.Email, contentDescription = "", tint = SelectedItem)
@@ -152,12 +87,9 @@ fun LoginView(state: LoginViewState) {
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = TextFieldBg,
                 cursorColor = TextFieldFont,
-                //disabledLabelColor = lightBlue,*/
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
             ),
-            //label = { Text("Email") },
-            //placeholder = { Text("Email") },
             shape = RoundedCornerShape(16.dp),
             singleLine = true,
             keyboardActions = KeyboardActions (
@@ -179,7 +111,6 @@ fun LoginView(state: LoginViewState) {
                     contentAlignment = Alignment.Center
                 ) {
                     if (state.isAnimated() && index == indexChar) {
-                        //Log.v("shoplocal", "animated")
                         androidx.compose.animation.AnimatedVisibility(
                             visibleState = visible,
                             enter = fadeIn(
