@@ -37,23 +37,12 @@ import com.training.shoplocal.viewmodel.RepositoryViewModel
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
-
-/*@Inject
-lateinit var downloader: ImageLinkDownloader*/
-
 @SuppressLint("CompositionLocalNaming")
 val ImageDownloader = staticCompositionLocalOf<ImageLinkDownloader> {
     error("initialization...")
-
-    //downloader
-    /*ImageLinkDownloader(
-        DiskCache(CACHE_DIR),
-        MemoryCache(8)
-    )*/
 }
 
 class MainActivity : FragmentActivity() {//ComponentActivity() {
-   // lateinit var mainActivitySubcomponent: MainActivitySubcomponent
     @Inject
     lateinit var imageDownloader: ImageLinkDownloader
 
@@ -65,36 +54,17 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
 
     @Inject
     lateinit var viewModel: RepositoryViewModel
-   /* private val viewModel: RepositoryViewModel by viewModels(factoryProducer = {
-        FactoryViewModel(
-     this,
-            appRepository()
-        )
-    })*/
-    override fun onCreate(savedInstanceState: Bundle?) {
-//        AndroidInjection.inject(this);
-        super.onCreate(savedInstanceState)
 
-       // appComponent.injectMainActivity(this)
-        //mainActivitySubcomponent =
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         appComponent.mainActivitySubcomponent().create(this).inject(this)
-        //mainActivitySubcomponent.inject(this)
         appRepository().accessUser = accessUser
         accessUser.setFingerPrint(userFingerPrint)
-         //   AccessUser(this, LoginViewState())
-
-
-        //viewModel.passContextFingerPrint(this)
         viewModel.setOnCloseApp {
             this.finish()
         }
-//        val repository = AppShopLocal.appRepository();
-        //val user = getUserData()
-
-        //val passwordState = PasswordViewState.getPasswordState()
         setContent {
             ShopLocalTheme(true) {
-
                 CompositionLocalProvider(ImageDownloader provides imageDownloader) {
                     Surface(
                         modifier = Modifier.fillMaxSize(),
@@ -108,11 +78,8 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
         }
     }
 
-
     @Composable
     fun ShowScreen(){
-        /*ScreenRouter.navigateTo(ScreenItem.MainScreen)
-        AppScreen()*/
         val authorizedUser: Boolean by viewModel.authorizedUser.collectAsState()
         if (authorizedUser) {
             AppScreen()
@@ -133,25 +100,4 @@ class MainActivity : FragmentActivity() {//ComponentActivity() {
             }
         }
     }
-
-
 }
-
-
-
-
-
-
-
-/*@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    ShopLocalTheme {
-        Greeting("Android")
-    }
-}*/

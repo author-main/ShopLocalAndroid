@@ -17,8 +17,6 @@ class UserFingerPrint @Inject constructor(private val context: ComponentActivity
     override lateinit var userPasswordStorage: UserPasswordStorageInterface// = UserPasswordStorage()
     override var userFingerPrintListener: UserFingerPrintListener? = null
     override fun authenticate(): Boolean {
-        /*if (!canAuthenticate())
-            return false*/
         val cipher = userPasswordStorage.getDecryptCipher() ?: return false
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle(getStringResource(R.string.biometric_title))
@@ -49,35 +47,6 @@ class UserFingerPrint @Inject constructor(private val context: ComponentActivity
         return BiometricPrompt(context as FragmentActivity, executor, callback)
     }
 
-  /*  fun existPasswordStore() =
-        userPasswordStorage.existPasswordStore()
-    }
-
-    fun putPassword(value: String) {
-        userPasswordStorage.putPassword(value)
-    }
-
-    fun getPassword(cipher: Cipher) =
-        userPasswordStorage.getPassword(cipher)
-
-    fun removePassword() {
-        userPasswordStorage.removePassword()
-    }*/
-
-
-  /*  companion object {
-        private val userPasswordStorage: UserPasswordStorageInterface = UserPasswordStorage()//null
-        fun canAuthenticate() =
-            BiometricManager.from(appContext())
-                .canAuthenticate(BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS
-
-    fun existPasswordStore() =
-            userPasswordStorage.existPasswordStore()
-    }*/
-
-    /*fun existPasswordStore() =
-        userPasswordStorage.existPasswordStore()*/
-
     fun putPassword(value: String) {
         userPasswordStorage.putPassword(value)
     }
@@ -88,5 +57,4 @@ class UserFingerPrint @Inject constructor(private val context: ComponentActivity
     fun removePassword() {
         userPasswordStorage.removePassword()
     }
-
 }

@@ -26,54 +26,20 @@ import javax.inject.Singleton
 import kotlin.collections.HashMap
 
 class RepositoryViewModel(private val repository: Repository) : ViewModel() {
-
     enum class LoadState {IDLE, LOADING}
     private var loadState = LoadState.IDLE
     private var loadedPortion = 0
-
-
-
-
-
-
-
-
-
-    //var SIZE_PORTION = 10
-    /*private val _accessFinger = MutableStateFlow<Boolean>(false)
-    val accessFinger = _accessFinger.asStateFlow()
-    private fun accessFingerPrint(value: Boolean) {
-        _accessFinger.value = value
-    }*/
-  /*  @Inject
-    lateinit var imageDownloader: ImageLinkDownloader// = appComponent.imageDownloader//: ImageLinkDownloader// = ImageLinkDownloader(DiskCache(CACHE_DIR), MemoryCache(8))
-
-
-    init {
-        appComponent.injectRepositoryViewModel(this)
-    }*/
-
-
     private val _refreshUserMessages = MutableStateFlow<Boolean>(false)
     val refreshUserMessages = _refreshUserMessages.asStateFlow()
     fun updateUserMessages(){
         _refreshUserMessages.value = true
         getMessages()
     }
-
     private val _countUnreadMessages = MutableStateFlow<Int>(0)
     val countUnreadMessages = _countUnreadMessages.asStateFlow()
     fun setCountUnreadMessages(value: Int){
         _countUnreadMessages.value = value
     }
-
-   /* private val _userMessages = MutableStateFlow<MutableList<UserMessage>>(mutableListOf())
-    val userMessages = _userMessages.asStateFlow()
-    private fun setUserMessages(value: List<UserMessage>){
-        _userMessages.value = mutableListOf<UserMessage>(*value.toTypedArray()) // * spread operator, входной параметр элементы массива/списка
-    }*/
-
-
     private var _userMessages = mutableStateListOf<UserMessage>()
     val userMessages: List<UserMessage> = _userMessages
     private fun setUserMessages(value: List<UserMessage>){
@@ -82,14 +48,12 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             addAll(value)
         }
     }
-
-
-
     private val _reviews = MutableStateFlow(listOf<Review>())
     val reviews = _reviews.asStateFlow()
     private fun setReviews(value: List<Review>) {
         _reviews.value = value
     }
+
     fun clearReviews(){
         _reviews.value = listOf()
     }
@@ -99,10 +63,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         onCloseApp = value
     }
     fun closeApp(){
-        //USER_ID = -1
         USER_TOKEN = null
         repository.resetLoginData()
-        //loginState.reset()
         _products.value.clear()
         repository.clearMapScreenProducts()
         brands.values.clear()
@@ -127,19 +89,10 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     private val containerStack = Stack<Container>().apply {
         push(Container.LOGIN)
     }
-    /*var deviceUuid =
-        UUID(androidId.hashCode(), tmDevice.hashCode() as Long shl 32 or tmSerial.hashCode())*/
     private val UUID_QUERY = System.nanoTime().toString()
-    //private var maxPortion: Int = -1
-    //private val UUID_QUERY: String = UUID.randomUUID().toString()
-    //private var lockDB = false
-    //private val reflexRepository = Repository::class.java.methods
-    //log(reflexRepository.toString())
     private val _hiddenBottomNavigation = MutableStateFlow<Boolean>(false)
     val hiddenBottomNavigation = _hiddenBottomNavigation.asStateFlow()
-  /*  fun setPortionDataDB(value: Int) {
-        SIZE_PORTION = value
-    }*/
+
     fun hideBottomNavigation() {
         _hiddenBottomNavigation.value = true
     }
@@ -148,67 +101,34 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         _hiddenBottomNavigation.value = false
     }
 
-
     private val _selectedProduct = MutableStateFlow<Product>(Product())
     val selectedProduct = _selectedProduct.asStateFlow()
 
     @JvmName("setSelectedProduct1")
     fun setSelectedProduct(product: Product){
-        /*if (product.favorite < 1) {
-            if (OrderDisplay.getInstance().getFavorite() == 1) {
-                _products.value.remove(product)
-            }
-        }*/
         _selectedProduct.value = product.copy(favorite = product.favorite)
     }
 
-    //private var USER_ID: Int = -1
-
     private var USER_TOKEN: String? = null
-
-
     private var brands = hashMapOf<Int, Brand>()
-        //listOf<Brand>()
     private var categories = hashMapOf<Int, Category>()
-        //listOf<Category>()
-
-    /*private val _products = MutableStateFlow<MutableList<Product>>(mutableListOf<Product>())
-    val products = _products.asStateFlow()*/
-
     private val _products = MutableStateFlow<MutableList<Product>>(mutableListOf<Product>())
     val products = _products.asStateFlow()
-
     private val actionLogin: (token: String?) -> Unit = {token ->
         if (token != null) {
-            //accessFingerPrint(true)
             hideSnackbar()
-            //maxPortion = -1
             USER_TOKEN = token
-            /*ScreenRouter.navigateTo(ScreenItem.MainScreen)
-            setOrderDisplay(FieldFilter.SCREEN, ScreenItem.MainScreen.key.value)*/
             containerStack.pop()
             putComposeViewStack(Container.MAIN)
             getBrands()
             getCategories()
             getMessages(requestNumberUnread = true)
-//            exchangeDataMap[ExchangeData.GET_PRODUCTS] = false
             loadedPortion = 0
-            //getProducts(1)
             getProducts()
             authorizeUser()
         }
         else {
             showSnackbar(message = getStringResource(R.string.message_login_error), type = MESSAGE.ERROR)
-          /*  val vibe = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                val vibratorManager =
-                    AppShopLocal.appContext().getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
-                    vibratorManager.defaultVibrator
-            } else {
-                @Suppress("DEPRECATION")
-                AppShopLocal.appContext().getSystemService(VIBRATOR_SERVICE) as Vibrator
-            }
-            val effect: VibrationEffect = VibrationEffect.createOneShot(300, VibrationEffect.DEFAULT_AMPLITUDE);
-            vibe.vibrate(effect)*/
             vibrate(400)
         }
     }
@@ -261,83 +181,23 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         repository.setOrderDisplay(field, value)
     }
 
-    /*fun passContextFingerPrint(context: Context) {
-        repository.setContextFingerPrint(context)
-    }*/
-
-  /*  private fun getProduct(id: Int){
-        repository.getProduct(id) { product ->
-            //log(product.toString())
-            //_products.value = products.toMutableList()
-        }
-    }*/
-
-  /*  /**
-     * Получить max число порций, количество записей возвращается в первой строке результа
-     * выборки продуктов в формате &lt;count&gt; name
-     * @param value первый элемент списка продуктов
-     * @return Pair<max, name>, где max - число порций, name - наименование продукта
-     */*/
-    /*private fun getMaxPortion(value: String): Pair<Int, String>{
-        var calcMaxPortion = 0
-        var name = ""
-        if (value.startsWith('<')) {
-            val index = value.indexOf('>')
-            try {
-                if (index != -1) {
-                    val count = value.substring(1, index).toInt()
-                    name = value.substring(index + 1)
-                    calcMaxPortion = getPortion(count)
-                }
-            } catch (_: Exception) {
-            }
-        }
-        return calcMaxPortion to name
-    }*/
-
-    //@Synchronized
-   // private fun getProducts(part: Int){
     private fun getProducts(){
 
         if (!validToken()) return
-        //log(USER_TOKEN)
         if (loadState != LoadState.IDLE) return
         showProgressCRUD()
         loadState = LoadState.LOADING
         val portion = loadedPortion + 1
-       // log("loadedPortion = $portion")
         repository.getProducts(USER_TOKEN!!, portion) { listProducts ->
             if (listProducts.isNotEmpty()) {
                 loadedPortion++
                 if (loadedPortion == 1)
                     _products.value.clear()
                 _products.value.addAll(listProducts)
-
             }
             loadState = LoadState.IDLE
             hideProgressCRUD()
         }
-
-
-
-         /*   showProgressCRUD()
-            repository.getProducts(USER_ID, part) { listProducts ->
-                if (listProducts.isNotEmpty()) {
-                    if (part == 1) {
-                        val extractedData = getMaxPortion(listProducts[0].name)
-                        maxPortion = extractedData.first
-                        listProducts[0].name = extractedData.second
-                        _products.value.clear()
-                    }
-                    loadedPortion = part
-                    val list = _products.value.toMutableList().apply { addAll(listProducts) }
-                    _products.value = list
-                } else {
-                    if (part == 1)
-                        _products.value = mutableListOf()
-                }
-                hideProgressCRUD()
-        }*/
     }
 
     private fun getBrands(){
@@ -358,17 +218,9 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     fun getCategory(id: Int) =
         categories[id]?.name ?: EMPTY_STRING
-        //categories.find {it.id == id}?.name ?: ""
-
 
     fun getSectionFilter(): HashMap<Int, MutableList<ItemFilter>>{
         val map = kotlin.collections.HashMap<Int, MutableList<ItemFilter>>()
-
-       /* val categoryKey =
-            ItemFilter(
-                id = CATEGORY_ITEM,
-                name = getStringResource(R.string.text_category)
-            )*/
         val list = mutableListOf<ItemFilter>()
         categories.forEach {
             list.add(
@@ -379,13 +231,6 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             )
         }
         map[CATEGORY_ITEM] = list.toMutableList()
-
-
-       /* val brendKey =
-            ItemFilter(
-                id = BREND_ITEM,
-                name = getStringResource(R.string.text_brend)
-            )*/
         list.clear()
         brands.forEach {
             list.add(
@@ -402,25 +247,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     fun setProductFavorite(product: Product){
         if (!validToken()) return
-        //val favorite: Byte = if (product.favorite > 0) 1 else 0
-        //log("favorite ${product.favorite}")
-
         viewModelScope.launch {
-            /*
-            Если нужно обработать результат
-            val result: Int =
-            try{
-               val response = repository.updateFavorite(USER_ID, product.id, product.favorite)
-               response.body()?.toInt() ?: 0
-               // log("response = ${response.body()}")
-            }
-            catch (_: Exception) {
-               0
-            }
-            if (result > 0) {
-
-            }*/
-            repository.updateFavorite(USER_TOKEN!!, product.id, product.favorite)
+          repository.updateFavorite(USER_TOKEN!!, product.id, product.favorite)
         }
         var currentProduct: Product? = null
         products.value.find { it.id== product.id }?.let {
@@ -441,33 +269,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         setSelectedProduct(product)
     }
 
-
-    /*fun setProductFavorite(id: Int, value: Boolean){
-        val favorite: Byte = if (value) 1 else 0
-        products.value.find { it.id== id }?.let{
-            it.favorite = favorite
-            setSelectedProduct(it)
-            viewModelScope.launch {
-                repository.updateFavorite(USER_ID, it.id, favorite)
-            }
-        }
-    }*/
-
- /*   fun nextPortionAvailable() =
-        loadedPortion + 1<= maxPortion*/
-
     fun getNextPortionData(searchMode: Boolean, textSearch: String){
-/*        if (nextPortionAvailable()) {
-            val nextPortion = loadedPortion + 1
-            if (searchMode) {
-                //log("next portion = $nextPortion, max portion = $maxPortion")
-                findProductsRequest(textSearch, nextPortion)
-            } else {
-                getProducts(nextPortion)
-            }
-        }*/
-
-
         if (searchMode) {
             findProductsRequest(textSearch)
         } else
@@ -475,44 +277,22 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     }
 
     fun saveScreenProducts(key: ScreenRouter.KEYSCREEN, firstIndex: Int) {//, firstOffset: Int) {
-
         repository.saveScreenProducts(key,
-//            DataScreen(firstIndex, firstOffset, maxPortion, products.value)
             DataScreen(firstIndex, loadedPortion, products.value, OrderDisplay.clone())
         )
     }
 
     fun restoreScreenProducts(key: ScreenRouter.KEYSCREEN): Int{//} Pair<Int, Int> {
-    //    log("restore")
         val data = repository.restoreScreenProducts(key)
         OrderDisplay.restoreDataDisplay(data.datadisplay)
         _products.value = data.products//repository.restoreScreenProducts(key)//.toMutableList()
         loadedPortion = data.loadedPortion // количество загруженных порций
-        //log("firstIndex ${data.firstItemIndex}, firstOffset ${data.firstItemOffset}")
         return data.firstItemIndex// to data.firstItemOffset
     }
-
- /*   private fun getPortion(size: Int = 0): Int{
-        val count = if (size == 0)
-                        products.value.size
-                    else size
-        /*val value = products.value.size % SIZE_PORTION
-        var portion = products.value.size/ SIZE_PORTION*/
-        val value   = count % SIZE_PORTION
-        var portion = count / SIZE_PORTION
-        if (value > 0)
-            portion += 1
-        return portion
-    }*/
-
     /**
      *  Блок методов для управления журналом поисковых запросов
      */
     fun getSearchHistoryList(fromFile: Boolean = false): List<String> {
-/*        val callable = Callable<List<String>> {
-            repository.getSearchHistoryList()
-        }
-        return Executors.newSingleThreadExecutor().submit(callable).get()*/
         return repository.getSearchHistoryList(fromFile)
     }
 
@@ -543,7 +323,6 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
      *  End Блок методов для управления журналом поисковых запросов
      */
 
-    //@Synchronized
     fun findProductsRequest(query: String, clear: Boolean = false){
         if (!validToken()) return
         if (loadState != LoadState.IDLE)
@@ -579,7 +358,6 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
             containerStack.push(value)
             _activeContainer.value = value
         }
-     //   log(containerStack)
     }
 
     fun getPrevContainer(): Container? {
@@ -593,37 +371,8 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         containerStack.pop()
         val value = containerStack.peek()
         _activeContainer.value = value
-     //   log(containerStack)
-        return value//containerStacks.peek()
+        return value
     }
-
-/*    fun removeComposeViewStack(): ComposeView {
-        val value = composeViewStack.pop()
-        log(composeViewStack)
-        return value//composeViewStack.pop()
-    }*/
-
-  /*  fun getContainerStack(): Container {
-        return _activeContainer.value//containerStack.peek()
-    }*/
-
- /*   fun existImageCache(filename: String?, convert: Boolean = false):Boolean {
-        if (filename == null)
-            return false
-        val hash = if (convert)
-            md5(filename) else filename
-        //log("hash = $hash")
-        var exist = false
-        if (MemoryCache.exist(hash))
-            exist = true
-        else {
-            val pathFile = CACHE_DIR + filename //getCacheDirectory() + filename
-          //  log("path = $pathFile")
-            if (fileExists(pathFile))
-                exist = true
-        }
-        return exist
-    }*/
 
     fun filterProducts(searchMode: Boolean = false){
         loadedPortion = 0
@@ -652,9 +401,7 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
      * непрочитанных сообщений (в первой записи списка, в поле id)
      */
     fun getMessages(requestNumberUnread: Boolean = false) {
-        //val token = if (getCountUnread) -USER_ID else USER_TOKEN
         if (!validToken()) return
-
         repository.getMessages(USER_TOKEN!!, requestNumberUnread) {messages ->
             if (messages.isNotEmpty()) {
                 if (requestNumberUnread)
@@ -664,14 +411,12 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                     setCountUnreadMessages(messages.count { it.read == 0 })
                 }
             }
-         //   log("messages updates...")
             _refreshUserMessages.value = false
         }
     }
     fun clearMessages(){
         _userMessages.clear()
     }
-
 
     fun markDeletedUserMessages(id: Int, deleted: Boolean = true){
         val message = _userMessages.find { msg -> msg.id == id }
@@ -691,14 +436,11 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
 
     fun updateUserMessage(ids: IntArray, what: Int) {
         if (!validToken()) return
-        //0 - отметить как прочитанное
-        //1 - удалить
-
         viewModelScope.launch {
               val result = 1
 
            /*    ******************************************************************************
-                                Пока не будет изменять данные на сервере
+                                Пока не будем изменять данные на сервере
                  ********************************************************************************/
                 /*val result: Int =
                 try{
@@ -725,34 +467,12 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
                             message.read = 1
                             recomposition = true
                             countUnread -= 1
-                            //_countUnreadMessages.value -= 1
                         }
                     }
                     _countUnreadMessages.value = countUnread
-
-
                 }
-              /*  if (what == USERMESSAGE_DELETE) {
-                    var countUnread = _countUnreadMessages.value
-                    ids.forEach {id ->
-                        val message = listMessages.find {
-                            it.id == id
-                        }
-                        message?.let {
-                            if (it.read == 0)
-                                countUnread -= 1
-                            listMessages.remove(it)
-                            //recomposition = true
-                        }
-                    }
-                    _countUnreadMessages.value = countUnread
-                    recomposition = true
-
-                }*/
-
                 if (recomposition)
                     setUserMessages(listMessages)
-
             }
         }
 

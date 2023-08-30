@@ -26,14 +26,8 @@ interface DatabaseApiInterface {
                          @Query("uuid") uuid: String,
                          @Query("token") token: String): Call<List<Product>>
 
-
     @GET("/api/get_reviews_product")
     fun getReviewProduct(@Query("id") id: Int): Call<List<Review>>
-
-
-    /*@GET("/api/get_promo_products")
-    suspend fun getProducts(@Query("id") id: Int, @Query("part") part: Int): Response<List<Product>>*/
-
 
     @GET("/api/get_brands")
     fun getBrands(): Call<List<Brand>>
@@ -55,5 +49,4 @@ interface DatabaseApiInterface {
     @FormUrlEncoded
     @POST("/api/update_message")
     suspend fun updateUserMessage(@Field("token") token: String, @Field("what") what: Int, @Field("id_message") id_message: String): Response<Int>
-
 }

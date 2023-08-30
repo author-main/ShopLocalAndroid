@@ -10,21 +10,15 @@ import javax.inject.Singleton
 
 @Singleton
 class DatabaseCRUD @Inject constructor(private val databaseApi: DatabaseApi): DatabaseCRUDInterface {
-
     override fun loginUser(mail: String, password: String, action: (user: User) -> Unit) {
         databaseApi.loginUser(mail, password, object: retrofit2.Callback<User>{
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 val user = response.body() ?: User.getEmptyInstance()
-               // log(user)
                 if (user.validUser())
                     action(user)
-               /* val id = response.body()?.id ?: 0
-                if (id > 0)
-                    action(id)*/
             }
 
             override fun onFailure(call: Call<User>, t: Throwable) {
-                //action(-1)
                 action(User.getEmptyInstance())
             }
         })
@@ -97,15 +91,11 @@ class DatabaseCRUD @Inject constructor(private val databaseApi: DatabaseApi): Da
             override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
 
                     response.body()?.let {
-                       // if (it.isNotEmpty()) {
-                            action(it)
-                       // }
+                        action(it)
                     }
             }
 
             override fun onFailure(call: Call<List<Product>>, t: Throwable) {
-                //log(t.message ?: "ошибка")
-                //log("ошибка")
                 action.invoke(listOf<Product>())
             }
         })
@@ -127,26 +117,19 @@ class DatabaseCRUD @Inject constructor(private val databaseApi: DatabaseApi): Da
             token,
             object: retrofit2.Callback<List<Product>>{
             override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
-                    //log("response  " + response.body()?.toString())
                     response.body()?.let {
-                     //   if (it.isNotEmpty()) {
-                            //log("found ok")
-                            action.invoke(it)
-                     //   }
+                        action.invoke(it)
                     }
             }
 
             override fun onFailure(call: Call<List<Product>>, t: Throwable) {
-               // log("found failure")
                 action.invoke(listOf<Product>())
             }
         })
     }
 
     override fun getProduct(id: Int, action: (product: Product) -> Unit ){
-       // log("getPromotionProduct")
         databaseApi.getProduct(id, object: retrofit2.Callback<Product> {
-
             override fun onResponse(call: Call<Product>, response: Response<Product>) {
                 response.body()?.let {
                         action.invoke(it)
@@ -154,14 +137,11 @@ class DatabaseCRUD @Inject constructor(private val databaseApi: DatabaseApi): Da
             }
 
             override fun onFailure(call: Call<Product>, t: Throwable) {
-
             }
-
         })
     }
 
     override fun getCategories() {
-
     }
 
     override suspend fun updateFavorite(token: String, id_product: Int, value: Byte): Response<Int> {
@@ -187,18 +167,14 @@ class DatabaseCRUD @Inject constructor(private val databaseApi: DatabaseApi): Da
                 action(listOf<Review>())
             }
         })
-    }    /* override suspend fun getProducts(id: Int, part: Int): List<Product> {
-        return DatabaseApi.getProducts(id, part)
-    }*/
+    }
 
     override fun getMessages(
         token: String,
         requestNumberUnread: Int,
         action: (userMessages: List<UserMessage>) -> Unit
     ) {
-        //log("token = $token, request = $requestNumberUnread")
         databaseApi.getMessages(token, requestNumberUnread, object: retrofit2.Callback<List<UserMessage>> {
-
             override fun onResponse(call: Call<List<UserMessage>>, response: Response<List<UserMessage>>) {
                 response.body()?.let {
                     action(it)
@@ -208,7 +184,6 @@ class DatabaseCRUD @Inject constructor(private val databaseApi: DatabaseApi): Da
             override fun onFailure(call: Call<List<UserMessage>>, t: Throwable) {
                     action(listOf<UserMessage>())
             }
-
         })
     }
 }

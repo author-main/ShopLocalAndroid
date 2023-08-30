@@ -22,36 +22,17 @@ import javax.crypto.Cipher
 import javax.inject.Inject
 
 class AccessUser(
-    //override val context: Context,
     override val loginState: LoginViewState,
     override val databaseApi: DatabaseCRUDInterface
 ): AccessUserInterface {
     private var actionLogin: ((token: String?) -> Unit)? = null
     private var userFingerPrint: UserFingerPrint? = null
-    /*@Inject
-    lateinit var databaseApi: DatabaseCRUDInterface*/
 
     override fun setFingerPrint(value: UserFingerPrint) {
         userFingerPrint = value
         setParamUserFingerPrint()
     }
-
     var processLogin = false
-
-    //private lateinit var loginState: LoginViewState
-    //private var userFingerPrint: UserFingerPrint? = null
-
-
-
-    //private val userFingerPrint = getUserFingerPrint()
-
-    /*override fun getContextFingerPrint(context: Context) {
-        getUserFingerPrint(context as FragmentActivity)
-    }*/
-
-    /*  fun updateViewWhen(loginState: LoginViewState){
-          this.loginState = loginState
-      }*/
 
     override fun onLogin(
         action: ((token: String?) -> Unit)?,
@@ -64,7 +45,6 @@ class AccessUser(
         processLogin = true
 
         fun clearLoginPassword(){
-        //    if (!finger)
                 CoroutineScope(Dispatchers.Main).launch {
                     delay(400)
                     this@AccessUser.loginState.clearPassword()
@@ -79,62 +59,20 @@ class AccessUser(
         }
 
         if (isConnectedNet()) {
-          /*  val user = User(
-                id          = null,
-                firstname   = null,
-                lastname    = null,
-                phone       = null,
-                email       = email,
-                password    = password,
-                token       = null
-            )*/
-
-            databaseApi.loginUser(email, password) {user ->
+           databaseApi.loginUser(email, password) {user ->
                     if (user.validUser()) {
-                    //if (id > 0) {
                         saveUserPassword(password)
                         if (User.getUserData() == null)
                             user.saveUserData()
                         //action?.invoke(user.id!!)
                         action?.invoke(user.token!!)
                         if (finger)
-                        //    this@AccessUser.
                             loginState.changePassword(password)
-                        //this@AccessUser.
                         loginState.clearPassword()
                     } else
                         clearLoginPassword()
                 processLogin = false
             }
-            /*databaseApi.loginUser(user, object: retrofit2.Callback<User>{
-                override fun onResponse(call: Call<User>, response: Response<User>) {
-                    /*
-                         0 - No access to the database
-                        -1 - User data error
-                        -2 - User data reuse
-                        -3 - Registration error
-                    */
-                    val id = response.body()?.id ?: 0
-                  //  log("id = $id")
-                    if (id > 0) {
-                        //user.id = id
-                        saveUserPassword(password)
-                        user.saveUserData()
-                        action?.invoke(id)
-                        // log("$id")
-                        if (finger)
-                            this@AccessUser.loginState.changePassword(password)
-                        this@AccessUser.loginState.clearPassword()
-                    } else {
-                      //  log ("error login")
-                        clearLoginPassword()
-                    }
-                }
-
-                override fun onFailure(call: Call<User>, t: Throwable) {
-                    clearLoginPassword()
-                }
-            })*/
         } else {
             clearLoginPassword()
             processLogin = false
@@ -151,12 +89,6 @@ class AccessUser(
             password    = userdata[4],
             token       = null
         )
-
-        /* val gson = Gson()
-         val json = gson.toJson(user)
-         log(json)*/
-
-
         if (isConnectedNet()) {
             databaseApi.regUser(user) {id ->
                 val result = id > 0
@@ -166,28 +98,7 @@ class AccessUser(
                 }
                 action?.invoke(result)
             }
-            /*databaseApi.regUser(user, object: retrofit2.Callback<User>{
-                override fun onResponse(call: Call<User>, response: Response<User>) {
-                    /*
-                         0 - No access to the database
-                        -1 - User data error
-                        -2 - User data reuse
-                        -3 - Registration error
-                    */
-                    //val id = response.body()?.id ?: 0
-                    val result = (response.body()?.id ?: 0) > 0
-                    if (result) {
-                        saveUserPassword(user.password!!)
-                        user.saveUserData()
-                    }
-                    action?.invoke(result)
-                }
-
-                override fun onFailure(call: Call<User>, t: Throwable) {
-                    action?.invoke(false)
-                }
-            })*/
-        }
+         }
     }
 
     override fun onRestoreUser(action: ((result: Boolean) -> Unit)?, email: String, password: String) {
@@ -201,25 +112,10 @@ class AccessUser(
             password    = password,
             token       = null
         )
-
         if (isConnectedNet())
-
             databaseApi.regUser(user) {id ->
                 action?.invoke(id > 0)
             }
-
-           /* databaseApi.restoreUser(user, object: retrofit2.Callback<User>{
-                override fun onResponse(call: Call<User>, response: Response<User>) {
-                    action?.invoke((response.body()?.id ?: 0) > 0)
-                }
-
-                override fun onFailure(call: Call<User>, t: Throwable) {
-                    action?.invoke(false)
-                }
-            })*/
-        /*  val gson = Gson()
-          val json = gson.toJson(user)
-          log(json)*/
     }
 
     override fun onFingerPrint(action: ((token: String?) -> Unit)?, email: String) {
@@ -233,27 +129,8 @@ class AccessUser(
         userFingerPrint?.putPassword(value)
     }
 
-  /*  private fun getUserFingerPrint(context: Context) {
-        userFingerPrint = if (UserFingerPrint.canAuthenticate()) {
-            UserFingerPrint(context).apply main@ {
-                userFingerPrintListener = object : UserFingerPrintListener {
-                    override fun onComplete(cipher: Cipher?) {
-                        cipher?.let {
-                            this@AccessUser.loginState.showProgress()
-                            onLogin(action = actionLogin, this@AccessUser.loginState.getEmail(), this@main.getPassword(it) ?: "", finger = true)
-                        }
-                    }
-                }
-            }
-        }
-        else
-            null
-    }*/
-
     private fun setParamUserFingerPrint(): UserFingerPrint? {
-        //lateinit var userFingerPrint: UserFingerPrint
         return if (fingerPrintCanAuthenticate()) {
-            //UserFingerPrint(context as FragmentActivity)
             userFingerPrint?.apply main@ {
                     userFingerPrintListener = object : UserFingerPrintListener {
                         override fun onComplete(cipher: Cipher?) {
@@ -268,7 +145,6 @@ class AccessUser(
         else
             null
     }
-
 
     override fun onRemoveUserPassword() {
         userFingerPrint?.removePassword()

@@ -25,8 +25,6 @@ import java.nio.charset.Charset
 import java.text.DecimalFormat
 import kotlin.math.roundToInt
 
-//const val DEFAULT_STRRESOURCE_VALUE  = ""
-
 fun getStringArrayResource(@ArrayRes id: Int): Array<String> =
     appContext().resources.getStringArray(id)
 
@@ -51,7 +49,6 @@ fun validateMail(email: String): Boolean {
     return !(email.isBlank() || !Patterns.EMAIL_ADDRESS.matcher(email).matches())
 }
 
-
 fun isConnectedNet(): Boolean{
     var connected = false
     val connectivityManager = appContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -70,16 +67,12 @@ fun mToast(value: String){
     Toast.makeText(appContext(), value, Toast.LENGTH_LONG).show()
 }
 
-
-
-
 fun getFormattedPrice(value: Float): String{
     val result = value.roundToInt()
     val dec = DecimalFormat("#,###.00")
     dec.roundingMode = RoundingMode.HALF_EVEN
     return dec.format(result) + getStringResource(R.string.currency)
 }
-
 
 val Int.Dp: Int
     get() = (this / Resources.getSystem().displayMetrics.density).toInt()
@@ -90,15 +83,8 @@ val Int.Px: Int
 fun ImageBitmap.isEmpty(): Boolean =
     this.width == 1 || this.height == 1
 
-fun encodeBase64(value: String): String //{
-
-    //val result
+fun encodeBase64(value: String): String
     = Base64.encodeToString(value.toByteArray(charset = Charset.defaultCharset()), Base64.NO_WRAP)
-    //log("encode $result")
-    /*val decode = Base64.decode(result, Base64.NO_WRAP).decodeToString()
-    log("decode $decode")*/
-   // return result
-//}
 
 fun getAfterWord(count: Int, what: Int): String {
     val idResource = when (what) {
@@ -122,49 +108,6 @@ fun getAfterWord(count: Int, what: Int): String {
         else  -> aWord[2]
     }
 }
-
-
-
-/*fun getReview(count: Int) : String {
-/*  1                    отзыв
-    2, 3, 4             отзыва
-    0, 5, 6, 7, 8, 9    отзывов */
-    val aReview = getStringArrayResource(R.array.review)
-    var sReview = count.toString()
-    if (sReview.length >=2 )
-        sReview = sReview.substring(sReview.length - 2)
-
-    val iReview = sReview.toInt()
-    if (iReview in 11..14)
-        return aReview[2]
-
-    return when (iReview.toString().last().toString().toInt()) {
-        1     -> aReview[0]
-        2,3,4 -> aReview[1]
-        else  -> aReview[2]
-    }
-}
-
-fun getRate(rate: Int): String{
-    val aRate = getStringArrayResource(R.array.rate)
-    var sRate = rate.toString()
-    if (sRate.length >=2 )
-       sRate = sRate.substring(sRate.length - 2)
-
-    val iRate = sRate.toInt()
-    if (iRate in 11..14)
-        return aRate[2]
-
-     return when (iRate.toString().last().toString().toInt()) {
-        1     -> aRate[0]
-        2,3,4 -> aRate[1]
-        else  -> aRate[2]
-    }
-/*          1                   оценка
-            2, 3, 4             оценки
-            0, 5, 6, 7, 8, 9    оценок*/
-}
-*/
 
 fun getDiscountPrice(price: Float, percent: Int) =
     price - (price * percent/100f)
@@ -206,6 +149,3 @@ fun existPasswordStore(): Boolean {
         appContext().getSharedPreferences(FILE_PREFERENCES, Context.MODE_PRIVATE)
     return !sharedPrefs.getString(KEY_PASSWORD, null).isNullOrBlank()
 }
-
-
-

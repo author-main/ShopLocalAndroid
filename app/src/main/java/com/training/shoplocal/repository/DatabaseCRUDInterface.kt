@@ -4,7 +4,6 @@ import com.training.shoplocal.classes.*
 import retrofit2.Response
 
 interface DatabaseCRUDInterface {
-    //fun loginUser(  user: User, action: (userId: Int) -> Unit = {})
     fun loginUser(mail: String, password: String, action: (user: User) -> Unit = {})
     fun regUser(    user: User, action: (userId: Int) -> Unit = {})
     fun restoreUser(user: User, action: (userId: Int) -> Unit = {})
@@ -25,9 +24,6 @@ interface DatabaseCRUDInterface {
                          action: (reviews: List<Review>) -> Unit = {})
     fun getCategories( action: (categories: List<Category>) -> Unit = {})
     fun getMessages(token: String, requestNumberUnread: Int, action: (userMessages: List<UserMessage>) -> Unit = {})
-
-
     suspend fun updateFavorite(token: String, id_product: Int, value: Byte): Response<Int>
     suspend fun updateUserMessage(token: String, what: Int, id_message: String): Response<Int>
-  //  suspend fun getProducts( id: Int, part: Int) : List<Product>
 }

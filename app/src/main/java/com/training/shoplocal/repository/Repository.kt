@@ -24,38 +24,12 @@ class Repository @Inject constructor(
     override val databaseCRUD: DatabaseCRUDInterface
 ): DAOinterface {
     override lateinit var accessUser: AccessUserInterface
-//private val dataDisplay = DataDisplay()
-   // val loginState = accessUser.loginState
-  /*  init {
-        DiskCache.initStorage(AppShopLocal.appContext().applicationInfo.dataDir + "/cache/")
-        memoryCache.initStorage()
-    }*/
-
-
-
     /**
      *  Реализация методов для получения доступа (регистрация, вход по паролю,
      *  восстановление, вход по отпечатку)
      *  accessUser - класс реализующий все операции, поведение определено
      *  интерфейсом AccessUserInterface
      */
-    /*override var accessUser: AccessUserInterface = AccessUser().apply {
-        this.updateViewWhen(loginState)
-    }
-
-    override var databaseCRUD: DatabaseCRUDInterface = DatabaseCRUD()*/
-
-    /** Context типа FragmentActivity главной активити приходится тянуть для отображения
-     *  BiometricPrompt - диалог сканирования отпечатка
-     */
-
-  /*  fun setAccessUser(value: AccessUserInterface){
-        accessUser = value
-    }*/
-
-    /*fun setContextFingerPrint(context: Context){
-        accessUser.getContextFingerPrint(context)
-    }*/
     fun onRestoreUser(action: ((result: Boolean) -> Unit)?, email: String, password: String) {
         accessUser.onRestoreUser(action, email, password)
     }
@@ -66,18 +40,11 @@ class Repository @Inject constructor(
         accessUser.onLogin(action, email, password, finger)
     }
     fun onFingerPrint(action: ((token: String?) -> Unit)?, email: String) {
-      /*  val actionState : (result: Int) -> Unit = {
-            loginState.fillPassword()
-            action?.invoke(it)
-        }
-        accessUser.onFingerPrint(actionState, email)*/
         accessUser.onFingerPrint(action, email)
     }
     fun removePassword(){
         accessUser.onRemoveUserPassword()
     }
-
-    //fun getDataDisplay() = dataDisplay
 
     /**
      *  Реализация методов для получения данных из базы данных MySQL
@@ -87,10 +54,7 @@ class Repository @Inject constructor(
     }
 
     fun getProducts(token:String, part: Int, action: (products: List<Product>) -> Unit){
-        //val order64 = encodeBase64(OrderDisplay.getOrderDislayQuery())
-        //log(OrderDisplay.getFilterQuery())
         val order64 = encodeBase64(OrderDisplay.getFilterQuery())
-        //log("$token $order64 $part")
         databaseCRUD.getProducts(token, part, order64, action)
     }
 
@@ -109,10 +73,6 @@ class Repository @Inject constructor(
     suspend fun updateUserMessage(token: String, what: Int, id_message: String): Response<Int>{
         return databaseCRUD.updateUserMessage(token, what, id_message)
     }
-
-    /*suspend fun getProducts(id: Int, part: Int): List<Product> =
-        databaseCRUD.getProducts(id, part)*/
-
 
     /**
      *  Блок методов для управления журналом поисковых запросов
@@ -169,8 +129,6 @@ class Repository @Inject constructor(
     }
 
     fun restoreScreenProducts(key: ScreenRouter.KEYSCREEN): DataScreen {
-        //список продуктов List&ltProduct&gt;
-      //  log(MapScreenProducts[key]?.firstItemIndex.toString())
         val dataScreen =
             MapScreenProducts[key]?.copy() ?: DataScreen()
         MapScreenProducts.remove(key)
@@ -224,8 +182,6 @@ class Repository @Inject constructor(
         databaseCRUD.getReviewProduct(id, action)
     }
 
-
-
     /**
      * @param query строка поиска
      * @param portion порция (часть) подгружаемых данных, значение -1 - инициализация выполнения поискового запроса
@@ -233,31 +189,14 @@ class Repository @Inject constructor(
      * @param userId id пользователя
      */
     fun findProductsRequest(query: String, portion: Int, UUID_query: String, token: String, action: (products: List<Product>) -> Unit ){
-        /*val orderDisplay = OrderDisplay.getInstance()
-        orderDisplay.setSortType(SORT_TYPE.DESCENDING)
-        orderDisplay.setSortProperty(SORT_PROPERTY.POPULAR)
-        orderDisplay.setBrend(1)
-        orderDisplay.setCategory(3)
-        orderDisplay.setFavorite(1)
-        orderDisplay.setPriceRange(10.00f to 100.00f)*/
-        //log(UUID_query)
-        /*log("filter ${OrderDisplay.getFilterQuery()}")
-        log("search query $query")*/
         val order64 = encodeBase64(OrderDisplay.getFilterQuery())
         val query64 = encodeBase64(query)
-        /*log("query = $query64")
-        log("filter = $order64")
-        log("UUID = $UUID_query")
-        log("userid = $userId")*/
-
-
         getFoundProducts(query64, order64, portion, UUID_query, token, action)
     }
 
     fun getMessages(token: String,
                     requestNumberUnread: Boolean,
                     action: (userMessages: List<UserMessage>) -> Unit){
-        //log("token = $token, $requestNumberUnread")
         databaseCRUD.getMessages(token, if (requestNumberUnread) 1 else 0, action)
     }
 
@@ -271,7 +210,4 @@ class Repository @Inject constructor(
     fun setEmail(value: String) {
         accessUser.loginState.setEmail(value)
     }
-
-
-
 }

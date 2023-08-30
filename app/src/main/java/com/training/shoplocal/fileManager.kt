@@ -10,7 +10,6 @@ import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import kotlin.math.roundToInt
 
-
 val CART_IMAGE_SIZE = 150.Px
 const val HASH_LENGTH = 32
 const val DISK_CACHESIZE  = 50 * 1024 * 1024  // 50Мб

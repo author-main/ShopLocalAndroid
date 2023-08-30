@@ -20,14 +20,11 @@ import javax.inject.Inject
 
 @ActivityMainScope
 class UserPasswordStorage @Inject constructor(): UserPasswordStorageInterface {
-    //private val filePreferences = "settings"
-    //private val keyPassword     = "password"
     private val sharedPrefs: SharedPreferences =
         appContext().getSharedPreferences(FILE_PREFERENCES, Context.MODE_PRIVATE)
     private val providerKeyStore: String = "AndroidKeyStore"
     private val alias = appContext().packageName
     init{
-        //sharedPrefs.edit().remove(keyPassword).apply()
         if (!initKeys())
             generateKeys()
     }
@@ -69,7 +66,6 @@ class UserPasswordStorage @Inject constructor(): UserPasswordStorageInterface {
             keyStore?.load(null)
             keyStore
         } catch (e: Exception) {
-            //keyStore?.deleteEntry(alias)
             sharedPrefs.edit().remove(KEY_PASSWORD).apply()
             null
         }
@@ -116,9 +112,6 @@ class UserPasswordStorage @Inject constructor(): UserPasswordStorageInterface {
         }
     }
 
-    /*override fun existPasswordStore() =
-        !sharedPrefs.getString(keyPassword, null).isNullOrBlank()*/
-
     override fun getDecryptCipher(): Cipher? {
         val keyStore = getKeyStore() ?: return null
         return try {
@@ -130,5 +123,4 @@ class UserPasswordStorage @Inject constructor(): UserPasswordStorageInterface {
             null
         }
     }
-
 }

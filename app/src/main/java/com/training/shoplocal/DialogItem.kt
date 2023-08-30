@@ -8,8 +8,6 @@ sealed class DialogItem {
     object None : DialogItem()
     object RegUserDialog     : DialogItem()
     object RestoreUserDialog : DialogItem()
-    //object ReviewDialog      : DialogItem()
-   // object SearchProductDialog : DialogItem()
 }
 
 object DialogRouter {
