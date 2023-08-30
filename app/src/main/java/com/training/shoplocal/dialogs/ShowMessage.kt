@@ -45,7 +45,6 @@ fun HideMessage(){
 
 @Composable
 fun <T:ViewModel> ShowMessage(message: String, type: MESSAGE = MESSAGE.INFO, viewModel:T){
-    //val scope = rememberCoroutineScope()
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
     val snackbarHostState = remember { mutableStateOf(SnackbarHostState()) }
     LaunchedEffect(null) {
@@ -54,12 +53,9 @@ fun <T:ViewModel> ShowMessage(message: String, type: MESSAGE = MESSAGE.INFO, vie
                 (viewModel as RepositoryViewModel).showSnackbar(visible = false)
             }
             SnackbarResult.ActionPerformed -> {
-
             }
         }
     }
-
-
         Box(Modifier.fillMaxSize()){
             SnackbarHost(
                 modifier = Modifier.align(Alignment.BottomCenter),
@@ -67,14 +63,10 @@ fun <T:ViewModel> ShowMessage(message: String, type: MESSAGE = MESSAGE.INFO, vie
                 snackbar = { snackbarData: SnackbarData ->
                     Card(
                         shape = RoundedCornerShape(16.dp),
-                        //border = BorderStroke(1.dp, TextFieldFont),
                         backgroundColor = type.color,//TextFieldBg,
                         modifier = Modifier
                             .padding(16.dp)
                             .wrapContentSize()
-                        //    .background(TextOrange)
-                        //.align(Alignment.BottomCenter)
-
                     ) {
                         Row(
                             modifier = Modifier.padding(16.dp),
@@ -82,9 +74,6 @@ fun <T:ViewModel> ShowMessage(message: String, type: MESSAGE = MESSAGE.INFO, vie
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(modifier = Modifier.size(48.dp),
-                                //.border(width = 2.dp, color = TextLightGray, CircleShape)
-                                //.padding(8.dp),
-                                //imageVector = Icons.Default.Notifications, contentDescription = ""
                                 imageVector = ImageVector.vectorResource(type.icon),
                                 contentDescription = ""
                             )

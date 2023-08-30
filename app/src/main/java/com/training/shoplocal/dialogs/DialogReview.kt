@@ -62,8 +62,6 @@ fun DialogReview(openDialog: MutableState<Boolean>, review: Review){//}, widthCo
                 }
                 Box(
                     modifier = Modifier
-//                .height(textHeight)
-//                        .padding(all = 16.dp)
                         .heightIn(1.dp, 296.dp)
                         .verticalScroll(rememberScrollState())
                 ) {
@@ -90,7 +88,6 @@ fun DialogReview(openDialog: MutableState<Boolean>, review: Review){//}, widthCo
                         )
                 )
                 DividerVertical(size = 12.dp)
-
                 OutlinedButton(modifier = Modifier.align(Alignment.CenterHorizontally),
                     colors = ButtonDefaults.buttonColors(backgroundColor = PrimaryDark),
                     onClick = {
@@ -107,7 +104,6 @@ fun DialogReview(openDialog: MutableState<Boolean>, review: Review){//}, widthCo
                         fontSize = 13.sp
                     )
                 }
-
             }
         }
     }

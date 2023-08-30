@@ -48,21 +48,10 @@ fun DialogRegistration(){
     var progress by remember {
         mutableStateOf(false)
     }
-  /*  val error = remember {
-        mutableStateListOf(List(5){false})
-    }*/
-
-
-    //LocalConfiguration.current.screenWidthDp.dp
     val focusRequesters = List(5) { FocusRequester() }
     val showChar  = remember{mutableStateOf(false)}
     val labelFont = FontFamily(Font(R.font.robotocondensed_light))
     val dataUser  = List(5){remember{mutableStateOf("")}}
-    /*val family    = remember{mutableStateOf("")}
-    val name      = remember{mutableStateOf("")}
-    val phone     = remember{mutableStateOf("")}
-    val email     = remember{mutableStateOf("")}
-    val password  = remember{mutableStateOf("")}*/
 
     fun changeError(order: Int, value: Boolean) {
         val tError = errors.value.toMutableList()
@@ -73,20 +62,11 @@ fun DialogRegistration(){
     @Composable
     fun TextGroup(label: String, text: MutableState<String>, keyboardType: KeyboardType = KeyboardType.Text, onTextChange: (value: String)-> Unit = { }, order: Int){
         val trailingIcon = @Composable {
-                //val interactionSource = remember { MutableInteractionSource() }
                 val idDrawable = if (showChar.value)
                     R.drawable.ic_showsym_on
                 else
                     R.drawable.ic_showsym_off
                 Image(
-                   /* modifier = Modifier
-                        .clickable(
-                            onClick = {
-                                showChar.value = !showChar.value
-                            }
-                        )
-                        .size(24.dp, 24.dp),*/
-
                     modifier = Modifier
                         .clickable(
                             interactionSource = MutableInteractionSource(),
@@ -99,7 +79,6 @@ fun DialogRegistration(){
                     contentDescription = null
                 )
         }
-
         val focusManager = LocalFocusManager.current
         val borderColor = if (errors.value[order])
                         SelectedItem
@@ -147,38 +126,26 @@ fun DialogRegistration(){
                 keyboardActions = KeyboardActions (
                     onNext = {
                         focusManager.moveFocus(FocusDirection.Down)
-                    }/*,
-                    onDone = {
-                        //keyboardController?.hide()
-                        //  focusManager.clearFocus()
-                    }*/
+                    }
                 ),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next, keyboardType = keyboardType)
             )
-
             }
         }
     }
 
-
     Dialog(onDismissRequest = {
         DialogRouter.reset()
-        /* Toast.makeText(appContext(), "Dialog dismissed!", Toast.LENGTH_SHORT)
-             .show()*/
     }
     ) {
         val viewModel: RepositoryViewModel = viewModel()
-        //val keyboardController = LocalSoftwareKeyboardController.current
         Card(
             elevation = 0.dp,
             shape = RoundedCornerShape(12.dp),
             backgroundColor = PrimaryDark,
             contentColor = TextLightGray
         ) {
-
-
             val focusManager = LocalFocusManager.current
-
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
                     text = stringResource(id = R.string.title_reg),
@@ -193,24 +160,6 @@ fun DialogRegistration(){
                     keyboardType = KeyboardType.Phone,
                     onTextChange = {
                         value -> dataUser[2].value = value
-                        /*val firstCharValid = try {
-                            it[0] == '+' || it[0].isDigit()
-                        } catch(e: java.lang.Exception){
-                            false
-                        }
-
-                        if (it.isEmpty())
-                            dataUser[2].value = it
-                        else
-                        if (firstCharValid) {
-                            val str = if (it[0] == '+')
-                                it.substring(1)
-                            else
-                                it.substring(0)
-                            if (str.isDigitsOnly() && str.length <=11)
-                                dataUser[2].value = it
-                        }
-*/
                     }, order=2)
                 TextGroup(label = stringResource(id = R.string.text_email),     text = dataUser[3],//email,
                     keyboardType = KeyboardType.Email,
@@ -240,53 +189,25 @@ fun DialogRegistration(){
                     Spacer(modifier = Modifier.width(4.dp))
                     TextButton(onClick = {
                             focusManager.clearFocus()
-
-
-                            //DialogRouter.reset()
-                           /* viewModel.onRegisterUser({result ->
-                                if (result)
-                                    DialogRouter.reset()
-                            },
-                                "Сергей",
-                                "Мышанский",
-                                "89185046979",
-                                "myshansky@inbox.ru",
-                                "12345"
-                            )*/
-
-
-
-
-
-
                             val tErrors = MutableList(5){false}
                             for (i in 0..4)
                                 if (dataUser[i].value.isBlank())
                                     tErrors[i] = true
-
                             if (dataUser[4].value.length < 5)
                                 tErrors[4] = true
-
                             if (!validateMail(dataUser[3].value))
                                 tErrors[3] = true
-
                             val regExp = "^(8|\\+7)\\d{10}".toRegex()
                             if (!regExp.matches(dataUser[2].value))
                                 tErrors[2] = true
-
-                            /*if (!Patterns.PHONE.matcher(dataUser[2].value).matches())
-                                tErrors[2] = true*/
-
                             var validate = true
                             tErrors.forEach foreach@{value ->
                                 if (value) {
                                     validate = false
-                                    return@foreach // возврат по метке, можно заменить на return@forEach без указания метки
+                                    return@foreach
                                 }
                             }
-
                             if (validate) {
-                                //viewModel.getLoginState().showProgress()
                                 progress = true
                                 viewModel.onRegisterUser({result ->
                                     progress = false
@@ -295,7 +216,6 @@ fun DialogRegistration(){
                                         viewModel.getLoginState().checkFingerButtonState()
                                         viewModel.showSnackbar(getStringResource(R.string.text_notifyreg))
                                     }
-                                   // viewModel.getLoginState().hideProgress()
                                 },
                                     dataUser[1].value,
                                     dataUser[0].value,
@@ -306,7 +226,6 @@ fun DialogRegistration(){
                             }
                             else
                                 errors.value = tErrors.toList()
-
                     }) {
                         Text(text = stringResource(id = R.string.btn_reg).uppercase(),
                             color = TextOrange
@@ -317,6 +236,5 @@ fun DialogRegistration(){
             if (progress)
                 ShowProgress()
         }
-
     }
 }

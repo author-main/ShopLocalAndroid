@@ -32,15 +32,6 @@ fun ShowProgress() {
             focusable = true
         )
     ) {
-       // Box(modifier = Modifier.fillMaxSize().background(Color.Red)) {
-            /*  Card(
-            elevation = 0.dp,
-            shape = RoundedCornerShape(12.dp),
-            backgroundColor = PrimaryDark,
-            contentColor = TextLightGray
-        ) {*/
             CircularProgressIndicator(color = SelectedItemBottomNavi)
-       // }
-
     }
 }

@@ -49,14 +49,7 @@ fun DialogRestore() {
     val password = remember { mutableStateOf("") }
     val showchar = remember { mutableStateOf(false) }
     val errors = remember { mutableStateListOf<Boolean>(false, false) }
-    /*if (errors[0].contains(true))
-        log("ok")*/
-    /*val error = remember {
-        mutableStateOf(usermail.isEmpty())
-    }*/
-
     val trailingIcon = @Composable {
-        //val interactionSource = remember { MutableInteractionSource() }
         val idDrawable = if (showchar.value)
             R.drawable.ic_showsym_on
         else
@@ -77,18 +70,10 @@ fun DialogRestore() {
 
     Dialog(onDismissRequest = {
         DialogRouter.reset()
-        /* Toast.makeText(appContext(), "Dialog dismissed!", Toast.LENGTH_SHORT)
-            .show()*/
     }) {
-        //val scope = rememberCoroutineScope()
-        //val snackbarHostState = remember { mutableStateOf(SnackbarHostState()) }*/
-
-        //ShowMessage(message = "dfgdfggf")
-
         var progress by remember {
             mutableStateOf(false)
         }
-        //val focusRequester = FocusRequester()
         val focusManager = LocalFocusManager.current
         val keyboardController = LocalSoftwareKeyboardController.current
         val borderColor = arrayOf(Color.Transparent, Color.Transparent)
@@ -96,14 +81,12 @@ fun DialogRestore() {
             borderColor[i] = if (errors[i])
                 SelectedItem
             else Color.Transparent
-
         Card(
             elevation = 8.dp,
             shape = RoundedCornerShape(12.dp),
             backgroundColor = PrimaryDark,
             contentColor = TextLightGray
         ) {
-
             Column(
                 modifier = Modifier.padding(
                     top = 8.dp,
@@ -114,10 +97,8 @@ fun DialogRestore() {
             ) {
                 Text(
                     text = stringResource(id = R.string.title_restore),
-                    //fontWeight = FontWeight.Bold,
                     fontSize = 17.sp,
                     modifier = Modifier.padding(8.dp),
-                    //style = MaterialTheme.typography.h1
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 TextField(
@@ -126,28 +107,19 @@ fun DialogRestore() {
                         email.value = it
                     },
                     Modifier
-                        //.focusRequester(focusRequester)
                         .border(1.dp, borderColor[0], RoundedCornerShape(16.dp))
                         .onFocusChanged {
                             if (it.isFocused || it.hasFocus)
                                 errors[0] = false
-                            /*  else {
-                                //log(it.toString())
-                                errors[0] = !validateMail(email.value)
-                            }*/
-
                         }
 
                         .fillMaxWidth(),
-                    //.padding(horizontal = 8.dp),
-
                     trailingIcon = {
                         if (errors[0])
                             Icon(Icons.Filled.Email, contentDescription = "", tint = SelectedItem)
                         else
                             Icon(Icons.Filled.Email, contentDescription = "")
                     },
-                    //textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = TextFieldBg,
                         cursorColor = TextFieldFont,
@@ -156,12 +128,6 @@ fun DialogRestore() {
                     ),
                     shape = RoundedCornerShape(16.dp),
                     singleLine = true,
-                    /*keyboardActions = KeyboardActions (
-                        onDone = {
-                            keyboardController?.hide()
-                            //  focusManager.clearFocus()
-                          }
-                    ),*/
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Next,
                         keyboardType = KeyboardType.Email
@@ -188,9 +154,6 @@ fun DialogRestore() {
                             .onFocusChanged {
                                 if (it.isFocused || it.hasFocus)
                                     errors[1] = false
-                                /* else
-                                    errors[1] = password.value.length < 5*/
-
                             },
                         colors = TextFieldDefaults.textFieldColors(
                             backgroundColor = TextFieldBg,
@@ -224,10 +187,8 @@ fun DialogRestore() {
 
                 ) {
                     val message = stringResource(id = R.string.message_restore_email)
-                    //val scope = rememberCoroutineScope()
                     TextButton(onClick = {
                         DialogRouter.reset()
-                        //viewModel.showSnackbar(message)
                     }) {
                         Text(
                             text = stringResource(id = R.string.button_cancel).uppercase(),
@@ -244,13 +205,6 @@ fun DialogRestore() {
                             viewModel.onRestoreUser(
                                 action = { result ->
                                     progress = false
-
-/*                                    scope.launch {
-                                        snackbarHostState.value.showSnackbar("Hello")
-                                    }*/
-
-                                    //viewModel.setEmail("жопа")
-
                                     if (result) {
                                         viewModel.setEmail(email.value)
                                         viewModel.removePassword()
@@ -272,7 +226,6 @@ fun DialogRestore() {
                 }
             }
         }
-       // SnackbarHost(snackbarHostState.value)
         if (progress)
             ShowProgress()
     }
