@@ -5,9 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
 sealed class DialogItem {
-    object None : DialogItem()
-    object RegUserDialog     : DialogItem()
-    object RestoreUserDialog : DialogItem()
+    data object None : DialogItem()
+    data object RegUserDialog     : DialogItem()
+    data object RestoreUserDialog : DialogItem()
 }
 
 object DialogRouter {

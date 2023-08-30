@@ -36,34 +36,23 @@ import com.training.shoplocal.ui.theme.TextLightGray
 import com.training.shoplocal.ui.theme.TextOrange
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 
-
 @Composable
 fun HeaderView(modifier: Modifier){
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier) {
-//        Spacer(modifier = Modifier.height(32.dp))
         Image(
             modifier = Modifier
                 .size(170.dp, 200.dp),
             imageVector = ImageVector.vectorResource(R.drawable.ic_local_shop),
             contentDescription = null
         )
-       /* Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text  = stringResource(id = R.string.text_auth),
-            color = TextLightGray
-        )*/
     }
 }
 
 @Composable
 fun BodyView(state: LoginViewState, modifier: Modifier){
-    /*val viewModel: RepositoryViewModel = viewModel()
-    val accessFinger by viewModel.accessFinger.collectAsState()
-    log("accessFinger $accessFinger")*/
+
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         LoginView(state)
-            //Spacer(modifier = Modifier.height(8.dp))
-        //ButtonPasswordPanel(state::changeChar)
         ButtonPasswordPanel(state)
     }
 }
@@ -80,10 +69,6 @@ fun FooterView(state: LoginViewState, modifier: Modifier){
 @Composable
 fun LoginScreen(state: LoginViewState){
     val viewModel: RepositoryViewModel = viewModel()
-    /*val accessFinger by viewModel.accessFinger.collectAsState()
-    log("accessFinger $accessFinger")*/
-
-
     val dataSnackbar: Triple<String, Boolean, MESSAGE> by viewModel.snackbarData.collectAsState()
     ConstraintLayout(modifier = Modifier.background(PrimaryDark)){
         val (header, body, footer) = createRefs()
@@ -101,12 +86,9 @@ fun LoginScreen(state: LoginViewState){
             centerHorizontallyTo(parent)
         })
     }
-
-
     if (dataSnackbar.second) {
         ShowMessage(message = dataSnackbar.first, viewModel = viewModel, type = dataSnackbar.third)//, type = MESSAGE.WARNING)
     } else {
         HideMessage()
     }
-
 }

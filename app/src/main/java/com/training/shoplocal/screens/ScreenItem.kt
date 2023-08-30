@@ -5,12 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
 sealed class ScreenItem(val key: ScreenRouter.KEYSCREEN) {
-    //object None : ScreenItem()
-    object LoginScreen      : ScreenItem(ScreenRouter.KEYSCREEN.LOGIN)
-    object MainScreen       : ScreenItem(ScreenRouter.KEYSCREEN.MAIN)
-    object CatalogScreen    : ScreenItem(ScreenRouter.KEYSCREEN.CATALOG)
-    object CartScreen       : ScreenItem(ScreenRouter.KEYSCREEN.CART)
-    object ProfileScreen    : ScreenItem(ScreenRouter.KEYSCREEN.PROFILE)
+    data object LoginScreen      : ScreenItem(ScreenRouter.KEYSCREEN.LOGIN)
+    data object MainScreen       : ScreenItem(ScreenRouter.KEYSCREEN.MAIN)
+    data object CatalogScreen    : ScreenItem(ScreenRouter.KEYSCREEN.CATALOG)
+    data object CartScreen       : ScreenItem(ScreenRouter.KEYSCREEN.CART)
+    data object ProfileScreen    : ScreenItem(ScreenRouter.KEYSCREEN.PROFILE)
 }
 
 object ScreenRouter {

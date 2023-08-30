@@ -26,10 +26,8 @@ fun rememberProductsState(key: ScreenRouter.KEYSCREEN, initValue: List<Product>)
     log("${productsState.products.value.size}")
     DisposableEffect(Unit) {
         onDispose {
-            //val lastProducts        = productsState.products
             MapScreenProducts[key]  = productsState.products.value
         }
     }
     return productsState
-
 }
