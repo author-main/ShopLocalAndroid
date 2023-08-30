@@ -26,7 +26,6 @@ import kotlinx.coroutines.launch
 
 @Composable
 private fun BottomSheetItem(@DrawableRes id: Int, text: String, divider: Boolean = true, action: ()->Unit){
-
     Row(modifier = Modifier
         .fillMaxWidth()
         .clickable(onClick = {
@@ -37,9 +36,6 @@ private fun BottomSheetItem(@DrawableRes id: Int, text: String, divider: Boolean
         .padding(start = 15.dp), verticalAlignment = Alignment.CenterVertically){
         Icon(painterResource(id = id), contentDescription = null, tint = TextFieldFont)
         Text(modifier = Modifier.padding(start = 16.dp), text = text, color = TextFieldFont)
-        /*   Spacer(modifier = Modifier.fillMaxWidth()
-               .height(1.dp)
-               .background(Color.Red))*/
     }
     if (divider) {
         Spacer(
@@ -65,28 +61,8 @@ fun BottomSheet(state: ModalBottomSheetState, content: @Composable ()-> Unit = {
             scrimColor = Color.Black.copy(alpha = 0.3f),//Color.Transparent,
             sheetElevation = 3.dp
         ) {
-            /* when (ScreenRouter.current) {
-            ScreenItem.MainScreen -> {
-                MainScreen(state, scope)
-                log("MainScreen")
-            }
-            ScreenItem.CatalogScreen -> {
-                CatalogScreen()
-            }
-            ScreenItem.CartScreen -> {
-                CartScreen()
-            }
-            ScreenItem.ProfileScreen -> {
-                ProfileScreen()
-            }
-            else -> {}
-        }*/
             content()
-
-
-            //CardProduct(scope, state)
         }
-
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -97,42 +73,27 @@ private fun BottomSheetContent(state: ModalBottomSheetState){
     val selectedProduct = viewModel.selectedProduct.collectAsState()
     fun hide(){
         scope.launch {
-        //    delay(150)
             state.hide()
         }
     }
 
     val textItems = stringArrayResource(id = R.array.bottomsheet_product_items)
     BottomSheetItem(R.drawable.ic_addcart, textItems[0]){
-        //   MainMenuRouter.clickTo(MainMenuItem.BrandItem)
-        //val product = viewModel.selectedProduct.value
-       /* val brand = product.brand ?: 0
-        if (brand > 0) {
-            log("brand $brand")
-        }*/
         hide()
     }
     BottomSheetItem(R.drawable.ic_brend_bs, textItems[1]){
-     //   MainMenuRouter.clickTo(MainMenuItem.BrandItem)
         val product = viewModel.selectedProduct.value
         val brand = product.brand ?: 0
         if (brand > 0) {
-            log("brand $brand")
+
         }
         hide()
     }
     BottomSheetItem(R.drawable.ic_favorite_bs, run {
-        //val selectedProduct = viewModel.selectedProduct.collectAsState()
         if (selectedProduct.value.favorite > 0)
             textItems[5]
         else
             textItems[2]
-     /*   LocalSelectedProduct.current?.let{product ->
-            if (product.favorite > 0)
-                textItems[4]
-            else
-                textItems[1]
-        } ?: textItems[1]*/
     }){
         val product = viewModel.selectedProduct.value
         val favorite: Byte =
@@ -154,5 +115,4 @@ private fun BottomSheetContent(state: ModalBottomSheetState){
     BottomSheetItem(R.drawable.ic_cancel_bs, textItems[4], divider = false){
        hide()
     }
-
 }

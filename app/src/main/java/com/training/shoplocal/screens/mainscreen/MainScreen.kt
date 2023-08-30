@@ -80,29 +80,16 @@ import kotlin.math.roundToInt
 fun MainScreen(state: ModalBottomSheetState){
     val viewModel: RepositoryViewModel = viewModel()
     val detailProduct = remember {
-        //mutableStateOf(
-            Product()
-        //)
-    } //Product? = null
+        Product()
+    }
     val openDialogMessages = remember {
         mutableStateOf(false)
     }
     if (openDialogMessages.value)
         ShowUserMessages(openDialogMessages)
     val progress by viewModel.progressCRUD.collectAsState()
-    //val countUnreadMessages by viewModel.countUnreadMessages.collectAsState()
     if (progress)
         ShowProgress()
-/*    var progress by remember {
-        mutableStateOf(false)
-    }*/
-    //var heightGrid = 0
-    /*var heightCard by remember {
-        mutableStateOf(0)
-    }*/
-    /*var portition by remember { // подгрузка данных порциями равными portion
-        mutableStateOf(0)
-    }*/
     val scope = rememberCoroutineScope()
     val stateGrid = rememberLazyViewState(ScreenRouter.current.key)
     val context = LocalContext.current
@@ -120,23 +107,9 @@ fun MainScreen(state: ModalBottomSheetState){
                 // возвращает значение если оно в интервале, либо мин значение если меньше или макс значение если больше
                 return Offset.Zero
             }
-
-
         }
     }
-
-    val activeContainer by viewModel.activeContainer.collectAsState()/*remember {
-        mutableStateOf(Container.MAIN)
-    }*/
-
-    /* var searchScreenDisplayed by remember {
-         mutableStateOf(false)
-     }*/
-
-    /*fun searchScreenDisplayed(): Boolean {
-        //log(" active displayer $activeViewDisplayed" )
-      return activeContainer == Container.SEARCH
-    }*/
+    val activeContainer by viewModel.activeContainer.collectAsState()
 
     fun isActiveContainer(value: Container) =
         activeContainer == value
@@ -145,9 +118,6 @@ fun MainScreen(state: ModalBottomSheetState){
         viewModel.putComposeViewStack(value)
     }
 
-    /*fun mainScreenDisplayed()   = activeContainer == Container.MAIN
-    fun filterScreenDisplayed() = activeContainer == Container.FILTER
-    fun detailScreenDisplayed() = activeContainer == Container.DETAIL*/
     val focusManager = LocalFocusManager.current
     var isFocusedSearchTextField by remember {
         mutableStateOf(false)
@@ -156,14 +126,9 @@ fun MainScreen(state: ModalBottomSheetState){
         focusManager.clearFocus()
         panelOffsetHeightPx.value = 0f
         isFocusedSearchTextField = false
-        //viewModel.removeComposeViewStack()
-        //setActiveContainer(viewModel.prevComposeViewStack())
         viewModel.prevComposeViewStack()
-        //log("active displayed $activeViewDisplayed")
         viewModel.showBottomNavigation()
-       // log(activeContainer.name)
     }
-
 
     val searchState = remember {
         mutableStateOf(SearchState.SEARCH_NONE)
@@ -173,26 +138,12 @@ fun MainScreen(state: ModalBottomSheetState){
         mutableStateOf("")
     }
 
-    // Сохраняем значение textSearch перед выбором из списка,
-    // если будет нажата кнопка back в режиме списка -
-    // textSearch присваиваем старое значение prevSearchText
-
     var prevStateScroll = remember {
         0 to 0
     }
     val prevSearchText = remember {
         StringBuilder("")
     }
-
-    /*val prevContainerSearch = remember {
-        derivedStateOf {
-            val prev = viewModel.getPrevContainer()
-            log(prev?.name)
-            prev?.let {
-                it == Container.SEARCH
-            } ?: false
-        }
-    }*/
 
     fun prevContainerSearch(): Boolean {
         val prev = viewModel.getPrevContainer()
@@ -203,12 +154,7 @@ fun MainScreen(state: ModalBottomSheetState){
     }
 
     fun backSearchMode(){
-     /*   val prev = viewModel.getPrevContainer()
-        val isPrevSearchResult = prev?.let {
-            it == Container.SEARCH
-        } ?: false*/
-
-        if (searchState.value == SearchState.SEARCH_QUERY) {
+         if (searchState.value == SearchState.SEARCH_QUERY) {
             if (prevContainerSearch()) {
                 searchState.value = SearchState.SEARCH_RESULT
                 textSearch.value = prevSearchText.toString()
@@ -217,7 +163,7 @@ fun MainScreen(state: ModalBottomSheetState){
                 textSearch.value = EMPTY_STRING
             }
         } else {
-            viewModel.clearResultSearch() // удаляем результаты последнего запроса в БД на сервере
+            viewModel.clearResultSearch()
             val firstIndex =
                 viewModel.restoreScreenProducts(ScreenRouter.current.key)
             scope.launch {
@@ -249,101 +195,22 @@ fun MainScreen(state: ModalBottomSheetState){
         }
     }
 
-
-
-  /*  fun setPrevActiveView() {
-        activeViewDisplayed = ComposeView.MAIN
-    }*/
-
-
-/*    var isFocusedSearchTextField by remember {
-        mutableStateOf(false)
-    }*/
-
-    /*val searchState = remember {
-        mutableStateOf(SearchState.SEARCH_NONE)
-    }
-
-    val textSearch = remember {
-        mutableStateOf("")
-    }*/
-
-    /*val focusManager = LocalFocusManager.current
-
-    fun showBottomNavigation() {
-        focusManager.clearFocus()
-        panelOffsetHeightPx.value = 0f
-        isFocusedSearchTextField = false
-        //viewModel.removeComposeViewStack()
-        //setActiveContainer(viewModel.prevComposeViewStack())
-        viewModel.prevComposeViewStack()
-        //log("active displayed $activeViewDisplayed")
-        viewModel.showBottomNavigation()
-    }*/
-
-    //fun isSearchMode() = activeContainer == Container.SEARCH_EDIT || activeContainer == Container.SEARCH
-        //searchState.value != SearchState.SEARCH_NONE
-
     val isSearchMode by remember {
         derivedStateOf {
             activeContainer == Container.SEARCH_EDIT || activeContainer == Container.SEARCH
         }
     }
 
-
-
-
-
-
-    /*var filterScreenDisplayed by remember {
-        mutableStateOf(false)
-    }*/
-
     var showFloatingButton by remember {
         mutableStateOf(false)
     }
 
-
-
-
-    /*val showSearchResult = remember {
-        derivedStateOf {
-            searchState.value == SearchState.SEARCH_RESULT || searchScreenDisplayed
-        }
-    }*/
-
-    /*log ("prevSearchText $prevSearchText")
-    log ("searchScreenDisplayed $searchScreenDisplayed")
-
-    log ("showFloatingButton $showFloatingButton")
-
-    log ("isFocusedSearchTextField $isFocusedSearchTextField")
-
-    log ("searchState  ${searchState.value.name}")*/
-
-
     DisposableEffect(Unit) {
         onDispose {
-           // isSearchMode = false
-            //searchScreenDisplayed = false
-            //activeContainer = Container.MAIN
             isFocusedSearchTextField = false
             searchState.value = SearchState.SEARCH_NONE
         }
     }
-
-
-
-
-    /*fun backFilterMode(){
-        showBottomNavigation()
-        //filterScreenDisplayed = false
-    }
-
-    fun backDetailMode(){
-        //showBottomNavigation()
-    }*/
-
 
     fun findProducts(query: String, recognizer: Boolean = false){
 
@@ -351,67 +218,31 @@ fun MainScreen(state: ModalBottomSheetState){
         val isPrevDetail = prev?.let {
             it == Container.DETAIL
         } ?: false
-
-
-
-/*        if (products.isNotEmpty())
-            LaunchedEffect(Unit) {
-                scope.launch {
-                    stateGrid.scrollToItem(0)
-                }
-            }*/
-        //if (textSearch.value.isNotBlank()) {
             if (!recognizer)
                 showBottomNavigation()
-
-           // if (!searchScreenDisplayed()) {
             if (!isActiveContainer(Container.SEARCH)) {
-              //  log("saveScreenProducts")
                 viewModel.saveScreenProducts(
                     ScreenRouter.current.key,
                     stateGrid.firstVisibleItemIndex
                 )
             }
-
-            //viewModel.putComposeViewStack(Container.SEARCH)
             viewModel.startLoadedData()
-            viewModel.findProductsRequest(query)//textSearch.value.trim())
+            viewModel.findProductsRequest(query)
             searchState.value = SearchState.SEARCH_RESULT
             panelOffsetHeightPx.value = 0f
             if (isPrevDetail)
                 viewModel.prevComposeViewStack()
             setActiveContainer(Container.SEARCH)
-            //searchScreenDisplayed = true
-       // }
     }
-
 
     @Composable
     fun ShowMessageCount(onClick: () -> Unit){
         val count = viewModel.countUnreadMessages.collectAsState()
-     //   log("pass value $value")
         val animated = remember{ mutableStateOf(count.value > 0) }
-
-      /*  val timer = remember {
-            Timer().apply {
-                val task = object : TimerTask() {
-                    override fun run() {
-                        log("timer task")
-                        animated.value = !animated.value
-                    }
-                }
-                scheduleAtFixedRate(task, 5000L, 5000L)
-            }
-        }*/
-
         val MAX_SIZE = 32f
         val animate  = remember{ Animatable(0f) }
         val animate1 = remember{ Animatable(0f) }
         val animate2 = remember{ Animatable(0f) }
-        //val align = remember{ mutableStateOf( Alignment.Center)}
-        //val align = remember{ mutableStateOf( Alignment.Center)}
-        //val count = remember{ value }
-
             Box(modifier = Modifier
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
@@ -429,7 +260,6 @@ fun MainScreen(state: ModalBottomSheetState){
                             targetValue = MAX_SIZE,
                             animationSpec = tween(400)
                         )
-                        // ** Анимация Icon
                         val offset = 3f
                         for(i in 1 until 5){
                            val direction = if (i.mod(2) > 0) -1 else 1
@@ -437,18 +267,14 @@ fun MainScreen(state: ModalBottomSheetState){
                             animate2.animateTo(
                                 targetValue = delta,
                                 animationSpec = tween(
-                                    //delayMillis = 500,
                                 durationMillis = 20
                             ))
                         }
                         animate2.animateTo(
                             targetValue = 0f,
                             animationSpec = tween(
-                                //delayMillis = 500,
                                 durationMillis = 20)
                         )
-                        // ** end Анимация Icon
-                      //  align.value = Alignment.TopEnd
                         animate.animateTo(
                             targetValue = 18f,
                             animationSpec = tween(
@@ -464,11 +290,9 @@ fun MainScreen(state: ModalBottomSheetState){
                     }
                 }
                 if (count.value > 0) {
-                    //log("count = $count")
                     Surface(
                         modifier = Modifier
                             .align(Alignment.TopEnd)
-                            //.fillMaxWidth()
                             .size(animate.value.dp),
                             shape = CircleShape,
                             color = BgDiscount.copy(alpha = animate.value / MAX_SIZE)
@@ -486,8 +310,6 @@ fun MainScreen(state: ModalBottomSheetState){
                     Box(
                         modifier = Modifier
                             .size(18.dp)//animate1.value.dp)
-                            //.height(animate1.value.dp)
-                            //.width(animate1.value.dp)
                             .background(
                                 color = BgDiscount.copy(alpha = animate1.value / 18),
                                 shape = CircleShape
@@ -503,9 +325,6 @@ fun MainScreen(state: ModalBottomSheetState){
                 }
             }
     }
-
-
-
     val startLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
@@ -522,84 +341,17 @@ fun MainScreen(state: ModalBottomSheetState){
             }
         }
     }
-
-
-
-/*
-    var isSearchMode by remember {
-        mutableStateOf(false)
-    }
-
-    var searchScreenDisplayed by remember {
-        mutableStateOf(false)
-    }
-
-
-    val isFocusedSearchTextField = remember {
-        mutableStateOf(false)
-    }
-
-    */
-/*val lastSearchQuery = remember {
-        mutableStateOf("")
-    }*//*
-
-
-    val searchState = remember {
-        mutableStateOf(SearchState.SEARCH_CANCEL)
-    }
-
-    //val stateGrid = rememberLazyGridState()
-*/
-
-    //val activity = (LocalContext.current as? Activity)
-
     BackHandler(enabled = true){
         actionBack(activeContainer)
-     /*
-
-        //if (filterScreenDisplayed())
-        if (isActiveContainer(Container.FILTER))
-            actionBack(Container.FILTER)// backFilterMode()
-        else if (isSearchMode)
-            backSearchMode()
-        else {
-            //activity?.finish() // закрыть приложение
-            viewModel.closeApp()
-        }*/
     }
-
-
-
-
-
-
- //   log("remember first index ${stateGrid.firstVisibleItemIndex}")
-  //  Column(modifier = Modifier.fillMaxWidth()) {
-         //   Box() {
-             //   ShowDataDisplayPanel(hide = isSearchMode)
-
 
     val visibleFAB = remember {
         MutableTransitionState(false)
     }
     @Composable
     fun AnimatedFloatingActionButton(action: () -> Unit){
-     // val scope = rememberCoroutineScope()
-//     val visible = MutableTransitionState(false)
-      visibleFAB.targetState = showFloatingButton
-      /*val animate = remember{ Animatable(0f) }
-      val scaleButton = if (show) animate.value else 0f
-      LaunchedEffect(Unit) {
-          scope.launch {
-              animate.animateTo(
-                  targetValue = scaleButton,
-                  animationSpec = tween(500)
-              )
-          }
-      }*/
-
-      AnimatedVisibility(
+       visibleFAB.targetState = showFloatingButton
+       AnimatedVisibility(
           visibleState = visibleFAB,
           enter = scaleIn(
               animationSpec = tween(
@@ -614,15 +366,10 @@ fun MainScreen(state: ModalBottomSheetState){
               )
           )
       ) {
-
-          FloatingActionButton(//modifier = Modifier
-             // .graphicsLayer(scaleX = scaleButton, scaleY = scaleButton),
-              backgroundColor = PrimaryDark,// TextFieldBg,// SelectedItem,
+          FloatingActionButton(
+              backgroundColor = PrimaryDark,
               content = {
-
-
                   Image(
-//                      imageVector = Icons.Filled.KeyboardArrowUp,
                       Icons.Filled.ArrowBack,
                       modifier = Modifier.rotate(90f),
                       contentDescription = null,
@@ -633,7 +380,6 @@ fun MainScreen(state: ModalBottomSheetState){
           )
       }
     }
-
     Scaffold(
         floatingActionButton = {
            AnimatedFloatingActionButton {
@@ -647,7 +393,6 @@ fun MainScreen(state: ModalBottomSheetState){
         topBar = {
         TopAppBar(backgroundColor = MaterialTheme.colors.primary,
                     elevation = 0.dp,
-
         ) {
             Row(
                 Modifier
@@ -655,7 +400,6 @@ fun MainScreen(state: ModalBottomSheetState){
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-
                 if (isActiveContainer(Container.FILTER) || isActiveContainer(Container.DETAIL)
                     || isSearchMode
                 )   BackButton(
@@ -664,7 +408,6 @@ fun MainScreen(state: ModalBottomSheetState){
                     ) {
                         actionBack(activeContainer)
                     }
-
                 when (activeContainer) {
                     Container.FILTER -> {
                         Text(modifier = Modifier.weight(1f),
@@ -709,9 +452,8 @@ fun MainScreen(state: ModalBottomSheetState){
                     }
                     else -> {}
                 }
-
                 when (activeContainer) {
-                    Container.MAIN -> //ShowMessageCount(countUnreadMessages){
+                    Container.MAIN ->
                         ShowMessageCount {
                         openDialogMessages.value = true
                     }
@@ -755,30 +497,10 @@ fun MainScreen(state: ModalBottomSheetState){
                     }
                     else -> {}
                 }
-
-
-
             }
         }
     }) {
-
-        //ShowDataDisplayPanel(hide = isSearchMode)
-                /*if (isFocusedSearchTextField.value) {
-            ShowSearchHistory(textSearch, lastSearchQuery)
-        }*/
-                /*AnimatedVisibility(
-                    visible = isFocusedSearchTextField.value,
-                     enter = fadeIn(),
-                    exit  = fadeOut()
-                ) {
-                    ShowSearchHistory(textSearch, lastSearchQuery)
-
-                }*/
-
-                //ShowDataDisplayPanel(hide = isSearchMode)
-        //    }
-            //val verticalScrollState = rememberScrollState()
-        Box(//WithConstraints(
+        Box(
                 modifier = Modifier
                     //.verticalScroll(verticalScrollState)
                     .padding(it)
@@ -786,57 +508,6 @@ fun MainScreen(state: ModalBottomSheetState){
                     .fillMaxSize()
                     .background(BgScreenDark),
             ) {
-                /*val boxScope = this
-                LaunchedEffect(Unit) {
-                    heightGrid = with(localDensity) {
-                        boxScope.maxHeight.roundToPx()
-                    }
-                }
-                log("heightGrid = $heightGrid")*/
-                //log("height = ${boxWithConstraintsScope.maxHeight}")*/
-               /* var heightConstraints by remember {
-                    mutableStateOf(boxWithConstraintsScope.maxHeight)
-                }
-                LaunchedEffect(key1 = boxWithConstraintsScope.maxHeight) {
-                    heightConstraints = boxWithConstraintsScope.maxHeight
-                    log("height = $heightConstraints")
-                }*/
-
-            /*val heightConstraints = remember {
-                boxScope.maxHeight
-            }
-
-            LaunchedEffect(Unit) {
-//                heightConstraints = boxScope.maxHeight
-                log("height = ${heightConstraints.value}")
-            }*/
-
-            /*Column(modifier = Modifier
-                .nestedScroll(nestedScrollConnection)
-                .fillMaxSize()
-                .background(BgScreenDark)) {*/
-                //    log ("recompose Grid")
-
-              /*  Box(Modifier
-                    .offset { IntOffset(x = 0, y = panelOffsetHeightPx.value.roundToInt()) }
-                    .fillMaxWidth()
-                    .background(Color.Red)
-                    .height(40.dp)
-                )*/
-                /*ShowDataDisplayPanel(modifier = Modifier
-                    .offset { IntOffset(x = 0, y = panelOffsetHeightPx.value.roundToInt()) }
-                   *//* .graphicsLayer (
-
-
-                       translationY =  panelOffsetHeightPx.value
-                    )*//*
-                    .fillMaxWidth()
-
-                    //.height(40.dp + panelOffsetHeightPx.value.dp)
-                    .background(MaterialTheme.colors.primary),
-                    hide = isSearchMode)*/
-
-                //log("recomposition...")
                 if (products.isNotEmpty()) {
                    // val verticalScrollState = rememberScrollState()
                     //log("first Index = ${stateGrid.firstVisibleItemIndex}")
@@ -846,88 +517,41 @@ fun MainScreen(state: ModalBottomSheetState){
                     LazyVerticalGrid(
                         modifier = Modifier
                             .padding(horizontal = 10.dp),
-                    //        .verticalScroll(verticalScrollState, true)
-                    //        .height(boxWithConstraintsScope.maxHeight),
-                        //columns = GridCells.Adaptive(minSize = 150.dp),
                         columns = GridCells.Fixed(if (OrderDisplay.getViewMode() == VIEW_MODE.CARD) 2 else 1),
                         state = stateGrid,
-                        //contentPadding = PaddingValues(10.dp),
                         contentPadding = PaddingValues(top = 40.dp),
-                        //horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-
-                        //val isShowButtonMore = !isActiveContainer(Container.SEARCH) && !prevContainerSearch()
-                            /*derivedStateOf {
-                                !isActiveContainer(Container.SEARCH) && !prevContainerSearch()
-                            }*/
-
                         items(products, { product -> product.id }) { product ->
-                            //log("item${product.id}")
-                            // items(products.size, key = {}) { index ->
-
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .animateItemPlacement(),
                                 horizontalArrangement = Arrangement.SpaceEvenly
                             ) {
-                             //   calcHeight = 0
-                                CardProduct(/*modifier = Modifier.onGloballyPositioned { coordinates ->
-                                    calcHeight = coordinates.size.height
-                                },*/
-                                //product, showMoreButton = !isActiveContainer(Container.SEARCH) && !prevContainerSearch.value/*searchScreenDisplayed()*/, state = state, modeview = OrderDisplay.getViewMode()){selectedProduct ->
+                                CardProduct(
                                 product, showMoreButton = isShowButtonMore, state = state, modeview = OrderDisplay.getViewMode()){selectedProduct ->
                                     detailProduct.copydata(selectedProduct)
                                     viewModel.hideBottomNavigation()
                                     showFloatingButton = false
                                     setActiveContainer(Container.DETAIL)
-
                                 }
                             }
-
-                            //**********************************************************************
                             val nextPart = remember {
                                 derivedStateOf {
                                     val total: Int = products.size / SIZE_PORTION
                                     val remains    = products.size % SIZE_PORTION
-                                    // log ("products size = ${products.size}, total = $total, remains = $remains")
                                     val upload = if (remains > 0) false
                                     else total > 0
-                                    //log(upload)
-                                    upload && //viewModel.nextPortionAvailable() &&
-                                            stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.index == stateGrid.layoutInfo.totalItemsCount - 1
-                                            //&& stateGrid.isScrollInProgress
-                                            //&& stateGrid.layoutInfo.visibleItemsInfo.last().offset.y > 0
+                                    upload && stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.index == stateGrid.layoutInfo.totalItemsCount - 1
                                             && stateGrid.layoutInfo.viewportEndOffset - stateGrid.layoutInfo.visibleItemsInfo.last().offset.y >= stateGrid.layoutInfo.visibleItemsInfo.last().size.height / 2
                                 }
                             }
-
-
-
-
-
-
-
                             LaunchedEffect(nextPart.value) {
-                                //log("next portion... ${nextPart.value}")
                                 if (nextPart.value)
                                     viewModel.getNextPortionData(isSearchMode, textSearch.value.trim())
-/*                    if (nextPart.value) {
-                        viewModel.getNextPortionData(isSearchMode, textSearch.value.trim())
-                    }*/
                             }
-
-                            //**********************************************************************
-
-
-
-
                         }
-
-
                     }
-
-
                     if (!isFocusedSearchTextField) {
                         val changeVisibleStateFAB = remember {
                         derivedStateOf {
@@ -954,47 +578,9 @@ fun MainScreen(state: ModalBottomSheetState){
                         showFloatingButton = changeVisibleStateFAB.value
                     }
 
-               /* val nextPart = remember {
-                    derivedStateOf {
-                        val total: Int = products.size / SIZE_PORTION
-                        val remains    = products.size % SIZE_PORTION
-                       // log ("products size = ${products.size}, total = $total, remains = $remains")
-                        val upload = if (remains > 0) false
-                                     else total > 0
-                        //log(upload)
-                        upload && //viewModel.nextPortionAvailable() &&
-                        stateGrid.layoutInfo.visibleItemsInfo.lastOrNull()?.index == stateGrid.layoutInfo.totalItemsCount - 1
-                                //&& stateGrid.isScrollInProgress
-                                //&& stateGrid.layoutInfo.visibleItemsInfo.last().offset.y > 0
-                                && stateGrid.layoutInfo.viewportEndOffset - stateGrid.layoutInfo.visibleItemsInfo.last().offset.y >= stateGrid.layoutInfo.visibleItemsInfo.last().size.height / 2
-                    }
-                }
-
-
-
-
-
-
-
-                LaunchedEffect(nextPart.value) {
-                    //log("next portion... ${nextPart.value}")
-                    if (nextPart.value)
-                        viewModel.getNextPortionData(isSearchMode, textSearch.value.trim())
-*//*                    if (nextPart.value) {
-                        viewModel.getNextPortionData(isSearchMode, textSearch.value.trim())
-                    }*//*
-                }*/
-
-
                 ShowDataDisplayPanel(modifier = Modifier
                     .offset { IntOffset(x = 0, y = panelOffsetHeightPx.value.roundToInt()) }
-                    /* .graphicsLayer (
-
-
-                        translationY =  panelOffsetHeightPx.value
-                     )*/
                     .fillMaxWidth()
-
                     .height(40.dp)
                     .background(MaterialTheme.colors.primary),
                 ) {index ->
@@ -1002,19 +588,14 @@ fun MainScreen(state: ModalBottomSheetState){
                     val CHANGE_ORDER = 0
                     if (index == SHOW_FILTER) {
                         viewModel.hideBottomNavigation()
-                        //filterScreenDisplayed = true
                         setActiveContainer(Container.FILTER)
                         showFloatingButton = false
-                        //viewModel.putComposeViewStack(Container.FILTER)
                     }
                     if (index == CHANGE_ORDER) {
                         viewModel.filterProducts(isActiveContainer(Container.SEARCH))//searchScreenDisplayed())
                     }
                 }
-
-
                 }
-
 
             AnimatedVisibility(
                 visible = isActiveContainer(Container.DETAIL),
@@ -1028,19 +609,11 @@ fun MainScreen(state: ModalBottomSheetState){
                 ShowDetailProduct(detailProduct)
             }
 
-
-            /*if (isActiveContainer(Container.DETAIL))
-                ShowDetailProduct(detailProduct)*/
-
-
-
-
             AnimatedVisibility(
                         visible = isFocusedSearchTextField,
                         enter = fadeIn(),
                         exit = fadeOut()
                     ) {
-                        //if (isFocusedSearchTextField.value) {
                         ShowSearchHistory(textSearch, searchState)//lastSearchQuery)
                     }
 
@@ -1050,52 +623,24 @@ fun MainScreen(state: ModalBottomSheetState){
                 enter = fadeIn(),
                 exit = fadeOut()
             ) {
-                //log("container filter")
                 ShowFilterDisplay(OrderDisplay.getInstance(), reset = {
                     panelOffsetHeightPx.value = 0f
-                    //filterScreenDisplayed = false
                     showBottomNavigation()
                     val result = OrderDisplay.resetFilter()
-                    //log("result = $result")
-                    if (result == 0) {           // CHANGED_FILTER   =  0
-                      //  log("result = changed data")
+                    if (result == 0) {
                         viewModel.filterProducts(isActiveContainer(Container.SEARCH))//searchScreenDisplayed())
-                    } /*else if (result == 1) {    // CHANGED_VIEWMODE =  1
-
-                    }*/
-                    //if (OrderDisplay.resetFilter()) {
-                   /* log("reset $result, order display = ${OrderDisplay.getFilter()}")
-                    val order64 = encodeBase64(OrderDisplay.getFilterQuery())*/
-                   // log(order64)
-                    //}
+                    }
                 }) {filter ->
                     panelOffsetHeightPx.value = 0f
-                    //filterScreenDisplayed = false
                     showBottomNavigation()
                     val changedFilterData   = !OrderDisplay.equalsFilterData(filter)
-                    //val changedViewModeData = !OrderDisplay.equalsFilterViewMode(filter)
                     OrderDisplay.setFilter(filter)
                     if (changedFilterData) {
-                        //log("change filter $filter")
-                        //OrderDisplay.setFilter(filter)
-                        /*val order64 = encodeBase64(OrderDisplay.getFilterQuery())
-                        log(order64)*/
-                      //  log("result = changed data")
                         viewModel.filterProducts(isActiveContainer(Container.SEARCH))//searchScreenDisplayed())
-                    } /*else {
-                        if (changedViewModeData) {
-                          //  log("result = viewmode")
-                            //log("change viewmode $filter")
-                            //OrderDisplay.setViewMode(filter.viewmode)
-                            /*val order64 = encodeBase64(OrderDisplay.getFilterQuery())
-                            log(OrderDisplay.getFilterQuery())*/
-                        }
-                    }*/
+                    }
                 }
             }
         }
-
-
     }
 
     if (dataSnackbar.second) {
@@ -1103,9 +648,8 @@ fun MainScreen(state: ModalBottomSheetState){
                 message = dataSnackbar.first,
                 viewModel = viewModel,
                 type = dataSnackbar.third
-            )//, type = MESSAGE.WARNING)
+            )
         }
-  //  }
  }
 
 private fun getSpeechInput(context: Context) : Intent? {

@@ -64,26 +64,20 @@ fun StarPanel(count: Float, starSize: Dp = 12.dp, starHorzInterval: Dp = 0.dp){
     val floatPart   = remember { if (partNumber.size == 2) partNumber[1].toInt() else 0}
     val bm          = remember { BitmapFactory.decodeResource(appContext().resources, R.drawable.ic_star)}
     val widthStar   = remember { floatPart * (bm.width / 10f)}
-
     Row(modifier = Modifier.padding(top = 2.dp),
-    //    horizontalArrangement = Arrangement.spacedBy(1.dp)
     ) {
         for (i in 0 until MAX_STAR_COUNT) {
             val color = if (i <= intPart - 1)
                 ImageStarOn
             else
                 ImageStarOff
-
             Box{
             Image( modifier = Modifier.requiredSize(starSize),
                 bitmap = bm.asImageBitmap(),
                 colorFilter = ColorFilter.tint(color),
                 contentDescription = null
             )
-            // < * Отрисовка части звезды
             if (i == intPart && floatPart > 0) {
-               /* val part       = bm.width / 10f
-                val widthStar  = floatPart * part*/
                 val bmPart: Bitmap = Bitmap.createBitmap(bm, 0, 0, widthStar.toInt(), bm.height)
                 Image(modifier = Modifier.height(starSize),
                     bitmap = bmPart.asImageBitmap(),
@@ -91,7 +85,6 @@ fun StarPanel(count: Float, starSize: Dp = 12.dp, starHorzInterval: Dp = 0.dp){
                     contentDescription = null
                 )
             }
-            // * >
             }
             if (starHorzInterval > 0.dp && i < MAX_STAR_COUNT - 1)
                 DividerHorizontal(size = starHorzInterval)
@@ -104,36 +97,17 @@ data class ImageLink(val link: String, val md5: String)
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBottomSheetState, modeview: VIEW_MODE = VIEW_MODE.CARD, onClick:(product: Product) -> Unit) {
-
-    /*val mode_View       = rememberUpdatedState(newValue = modeview)
-    val show_MoreButton = rememberUpdatedState(newValue = showMoreButton)*/
-
-    /*val mode_View       = remember{ mutableStateOf(modeview)}
-    val show_MoreButton = remember{ mutableStateOf(showMoreButton)}*/
-
-    /*val product = remember {
-        product
-    }*/
     fun isCardModeView() =
         modeview == VIEW_MODE.CARD
-        //mode_View.value == VIEW_MODE.CARD
     val fontsize = if (isCardModeView()) 14.sp else 13.sp
     val fontSizeDescription = 15.sp//if (isCardModeView()) 16.sp else 15.sp
     val CARD_SIZE = if (isCardModeView()) 150 else 110
-   /* val linkImages: List<ImageLink> = remember {
-        val list = mutableListOf<ImageLink>()
-        cardproduct.linkimages?.forEach {
-            list.add(ImageLink(it, md5(it)))
-        }
-       // log("links = ${list.toString()}")
-        list.toList()
-    }*/
     val viewModel: RepositoryViewModel = viewModel()
     val brand: String = remember {product.brand?.let { viewModel.getBrand(it) } ?: ""}
     val scope = rememberCoroutineScope()
 
     @Composable
-    fun ButtonMore(modifier: Modifier){//}, action: ()-> Unit){
+    fun ButtonMore(modifier: Modifier){
         Image(
             painter = painterResource(R.drawable.ic_more),
             contentDescription = null,
@@ -147,7 +121,6 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                 .clickable {
                     scope.launch {
                         viewModel.setSelectedProduct(product)
-                        //log("card favorite ${cardproduct.favorite}")
                         state.show()
                     }
                 }
@@ -186,8 +159,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                 modifier = modifier
                     .clip(CircleShape)
                     .size(24.dp)
-                    .clickable/*(interactionSource = remember { MutableInteractionSource() },
-                           indication = rememberRipple(radius = 16.dp)) */{
+                    .clickable{
                         product.favorite = if (product.favorite > 0) 0 else 1
                         viewModel.setProductFavorite(product)
                     }
@@ -195,22 +167,17 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
         }
     }
 
-
     @Composable
     fun ProductImages(){
-
         Card(modifier = Modifier
             .requiredSize(CARD_SIZE.dp),
-           // elevation = 3.dp,
             backgroundColor = BgCard,
-           // border = BorderStroke(3.dp, PrimaryDark),
             shape = RoundedCornerShape(16.dp)
         ) {
             Box(modifier = Modifier
                 .padding(8.dp),
                 contentAlignment = Alignment.Center
             ) {
-
                     ShowProductImages(modifier = Modifier.fillMaxSize(), reduce = true, product = product){
                        onClick(product)
                     }
@@ -218,7 +185,6 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                         modifier = Modifier.align(if (isCardModeView()) Alignment.BottomStart else Alignment.TopStart),
                         percent = product.discount
                     )
-                    //if (show_MoreButton.value) {
                     if (showMoreButton) {
                         ButtonMore(
                             modifier = Modifier.align(Alignment.BottomEnd)
@@ -230,22 +196,6 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                         )
             }
         }
-
-
-        /*Text(modifier = Modifier.padding(top = 4.dp),
-            text = product.id.toString(),
-            fontSize = 23.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = TextPriceDiscount)*/
-
-        // < * Text Price
-
-
-
-
-
-
-//**************************************************************************************************
     }
 
     @Composable
@@ -282,7 +232,6 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                 modifier = Modifier.padding(top = 4.dp),
                 fontSize = fontsize,
                 text = text,
-              //  fontWeight = FontWeight.SemiBold,
                 style = style,
                 color = TextPriceDiscount
             )
@@ -291,9 +240,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
     @Composable
     fun CartButton(modifier: Modifier){
         Box(
-            modifier//Modifier
-                //.background(Color.Red)
-                //   .border(1.dp, TextFieldBg, CircleShape)
+            modifier
                 .background(PrimaryDark, CircleShape)
                 .clip(CircleShape)
                 .size(32.dp)
@@ -310,24 +257,15 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
         }
     }
 
-
-
-
     @Composable
     fun ActionText(){
         val promostr: String = product.getTypeSale()
-            /*if (cardproduct.star >= 4)
-                getStringResource(R.string.text_bestseller)
-            else if (cardproduct.discount > 0)
-                getStringResource(R.string.text_action)
-            else
-                ""*/
         if (promostr.isNotEmpty())
             Text(promostr,
                 fontSize = fontsize,
                 color = TextPromotion)
-
     }
+
     @Composable
     fun BrendText(){
         if (brand.isNotEmpty())
@@ -338,7 +276,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
 
     @Composable
     fun DescriptionText(){
-        Text(//modifier = Modifier.background(Color.Red),
+        Text(
             text = product.name,
             fontFamily = FontFamily(Font(R.font.robotocondensed_light)),
             fontSize = fontSizeDescription,
@@ -347,12 +285,6 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
             overflow = TextOverflow.Ellipsis
         )
     }
-
-
-
-
-
-        //val interaction = remember { MutableInteractionSource() }
         if (isCardModeView()) {
             Column(
                 modifier = Modifier
@@ -365,7 +297,6 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                         onClick(product)
                     }
             ) {
-
                 ProductImages()
                 Spacer(modifier = Modifier
                     .height(8.dp)
@@ -386,8 +317,7 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                 DescriptionText()
                 StarPanel(product.star)
             }
-        } else { // VIEW_MODE.ROW
-            //if (mode_View.value == VIEW_MODE.ROW) {
+        } else {
             Column(Modifier
                 .clickable(interactionSource = MutableInteractionSource(),
                     indication = null) {
@@ -396,14 +326,11 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
             ) {
                 Row(
                     Modifier
-                        //.background(Color.Red)
                         .fillMaxWidth()
-                        //    .height(CARD_SIZE.dp)
                         .padding(horizontal = 10.dp, vertical = 6.dp),
                         verticalAlignment = CenterVertically
                 ) {
                     ProductImages()
-
                     Column(
                         Modifier
                             .weight(1f)
@@ -415,12 +342,9 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                                 ActionText()
                                 BrendText()
                             }
-                            /*DiscountPanel(modifier = Modifier.align(CenterVertically),
-                                percent = cardproduct.discount)*/
                             ButtonFavorite(modifier = Modifier.align(CenterVertically))
                             Spacer(modifier = Modifier.width(4.dp))
                         }
-
                         Row {
                             Column(Modifier.weight(1f)) {
                                 StarPanel(product.star)
@@ -441,5 +365,4 @@ fun CardProduct(product: Product, showMoreButton: Boolean = true, state: ModalBo
                      .background(PrimaryDark))
             }
             }
-//    }
  }
