@@ -4,7 +4,6 @@ import androidx.compose.runtime.*
 import com.training.shoplocal.classes.DECIMAL_SEPARATOR
 import com.training.shoplocal.log
 
-
 enum class FieldFilter {
     SORT_TYPE,
     SORT_PROPERTY,
@@ -21,7 +20,6 @@ enum class SORT_TYPE(val value: Int)     {ASCENDING(0), DESCENDING(1)}
 enum class SORT_PROPERTY(val value: Int) {PRICE(0), POPULAR(1), RATING(2)}
 
 interface ProviderDataDisplay {
-    //var state: MutableState<Boolean>
     fun getFilter(): FilterData
     fun equalsFilterData(filter:FilterData): Boolean
     fun equalsFilterViewMode(filter:FilterData): Boolean
@@ -36,7 +34,6 @@ interface ProviderDataDisplay {
     fun setPriceRange(valueFrom: Float, valueTo: Float)
     fun setScreen(value: Int)
     fun setDiscount(value: Int)
-
     fun getViewMode():      VIEW_MODE
     fun getSortType():      SORT_TYPE
     fun getSortProperty():  SORT_PROPERTY
@@ -46,7 +43,6 @@ interface ProviderDataDisplay {
     fun getPriceRange():    Pair<Float, Float>
     fun getScreen():        Int
     fun getDiscount():      Int
-
     fun getFilterQuery(): String {
         val sort_order          = getSortType().value
         val sort_type           = getSortProperty().value

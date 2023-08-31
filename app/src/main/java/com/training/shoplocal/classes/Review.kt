@@ -8,6 +8,4 @@ data class Review (
     @SerializedName("countstar")    var countstar   : Int,
     @SerializedName("date")         var date        : String,
                                     var hasOverflow : Boolean = false
-/*    $time = strtotime($datetimeFromMysql);
-    $myFormatForView = date("m/d/y g:i A", $time);*/
 )

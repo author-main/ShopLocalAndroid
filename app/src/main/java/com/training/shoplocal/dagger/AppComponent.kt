@@ -23,7 +23,7 @@ import javax.inject.Singleton
 
 
 @Singleton
-@Component(modules = [CacheModule::class, RepositoryModule::class, BindsAppModule::class, SubcomponentsModule::class])//, dependencies = [ProviderCacheParam::class])
+@Component(modules = [CacheModule::class, RepositoryModule::class, BindsAppModule::class, SubcomponentsModule::class])
 interface AppComponent {
     fun injectApplication(application: AppShopLocal)
     @Component.Factory
@@ -52,7 +52,6 @@ interface BindsAppModule {
     @Binds
     fun bindDatabaseCRUD_to_DatabaseCRUDInterface(databaseCRUD: DatabaseCRUD): DatabaseCRUDInterface
 }
-
 
 @Module
 class RepositoryModule {

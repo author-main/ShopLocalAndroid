@@ -16,10 +16,6 @@ data class User (
     @SerializedName("token")        var token: String?
 
 ) {
-    /*private val sharedPrefs: SharedPreferences =
-        AppShopLocal.appContext().getSharedPreferences(FILE_PREFERENCES, Context.MODE_PRIVATE)*/
-
-
     fun saveUserData(){
         id          = null
         password    = null
@@ -55,18 +51,3 @@ data class User (
                 null)
     }
 }
-
-
-/*class User {
-    private var id: Int = 0
-    var email: String = ""
-    var firstName: String = ""
-    var lastName : String = ""
-    var phone : String = ""
-    private var password : String = ""
-
-    fun getPassword() = password
-    fun setPassword(value: String) {
-        password = value
-    }
-}*/
