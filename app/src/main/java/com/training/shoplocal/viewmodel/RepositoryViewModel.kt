@@ -767,3 +767,29 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
         USER_TOKEN != null
 
  }
+
+/*
+
+/** Порядок для извлечения в PHP:
+ *  0 - sort_order:         0 - ASCENDING, 1 - DESCENDING
+ *  1 - sort_type:          0 POPULAR, 1 - RATING, 2 - PRICE
+
+/*  2 - filter_category:    ID категории продукта
+ *  3 - filter_brand:       ID бренда  */
+
+ *  2 - filter_enum:        выборка по категории и бренду
+ *  3 - filter_favorite:    0 - все продукты, 1 - избранное
+ *  4 - filter_price:       интервал цен, н/р 1000,00-20000,00
+ *  5 - filter_discount:    скидка
+ *  6 - filrter_screen:     текущий экран
+ */
+
+//log("$sortorder $sorttype $section $filterfavorite $filterprice $filterdiscount $filterscreen")
+
+//  val queryOrder = "$sortorder $sorttype -1 -1 $filterfavorite $filterprice $filterdiscount $filterscreen"
+val queryOrder = "$sortorder $sorttype $section $filterfavorite $filterprice $filterdiscount $filterscreen"
+//log("queryOrder = $queryOrder")
+//val queryOrder = "$sortorder $sorttype $filtercategory $filterbrend $filterfavorite $filterprice $filterdiscount $filterscreen"
+//log(encodeBase64(queryOrder))
+// на выходе строка 0 0 1[1,2]-2[4,5] 0 0-0 2 0
+*/

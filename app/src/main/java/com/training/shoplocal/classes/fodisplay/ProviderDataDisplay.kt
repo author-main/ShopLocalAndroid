@@ -62,6 +62,8 @@ interface ProviderDataDisplay {
         }
         val filter_discount = getDiscount()
         val filter_screen = getScreen()
+
+
         /** Порядок для извлечения в PHP:
          *  0 - sort_order:         0 - ASCENDING, 1 - DESCENDING
          *  1 - sort_type:          0 POPULAR, 1 - RATING, 2 - PRICE
@@ -72,6 +74,19 @@ interface ProviderDataDisplay {
          *  6 - filter_discount:    скидка
          *  7 - filrter_screen:     текущий экран
          */
+
+
+
+        /** Порядок для извлечения в PHP:
+         *  0 - sort_order:         0 - ASCENDING, 1 - DESCENDING
+         *  1 - sort_type:          0 POPULAR, 1 - RATING, 2 - PRICE
+         *  2 - filter_enum:        выборка по категории и бренду
+         *  3 - filter_favorite:    0 - все продукты, 1 - избранное
+         *  4 - filter_price:       интервал цен, н/р 1000,00-20000,00
+         *  5 - filter_discount:    скидка
+         *  6 - filrter_screen:     текущий экран
+         */
+        // на выходе строка 0 0 1[1,2]-2[4,5] 0 0-0 2 0
 
         val sectionCategory = if (filter_category == "-1") EMPTY_STRING else "$ID_CATEGORY[$filter_category]"
         val sectionBrand = if (filter_brend == "-1") EMPTY_STRING else "$ID_BRAND[$filter_brend]"
