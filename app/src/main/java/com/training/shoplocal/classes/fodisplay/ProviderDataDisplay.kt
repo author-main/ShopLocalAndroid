@@ -74,7 +74,7 @@ interface ProviderDataDisplay {
          *  6 - filter_discount:    скидка
          *  7 - filrter_screen:     текущий экран
          */
-
+        // на выходе строка 0 0 1[1,2]-2[2,4,5] 0 0.0-0.0 2 1
 
 
         /** Порядок для извлечения в PHP:
@@ -111,7 +111,8 @@ interface ProviderDataDisplay {
         //log ("$sort_order $sort_type $section $filter_favorite $filter_price $filter_discount $filter_screen")
 
         //return "$sort_order $sort_type $filter_category $filter_brend $filter_favorite $filter_price $filter_discount $filter_screen"
-        return "$sort_order $sort_type $section $filter_favorite $filter_price $filter_discount $filter_screen"
+        val order = "$sort_order $sort_type $section $filter_favorite $filter_price $filter_discount $filter_screen"
+        return order
     }
 
 
