@@ -9,18 +9,11 @@ import java.io.FileReader
 import java.io.IOException
 import javax.inject.Inject
 
-//class Journal(@CacheDir private val cacheDir: String) {
 class Journal @Inject constructor(private val cacheDir: String) {
     private data class CacheEntry(val hash: String) {
         var state:    StateEntry = StateEntry.CLEAN     // состояние файла
         var time:     Long = 0                          // дата создания/изменения файла кеша
         var length:   Long = 0                          // размер файла кеша
-        /*override fun equals(other: Any?): Boolean {
-            if (other == null || other !is CacheEntry)
-                return false
-            return hash == other.hash && time == other.time
-        }
-        override fun hashCode(): Int = hash.hashCode() + time.hashCode()*/
     }
     private val JOURNAL_FILENAME        = "journal"         // файл журнала
     private val JOURNAL_FILENAME_TMP    = "journal.tmp"     // темп файл журнала
@@ -56,7 +49,6 @@ class Journal @Inject constructor(private val cacheDir: String) {
         }
     }
 
-    //@Synchronized
     private fun getEntriesFromJournal() {
         var existsJournal = true
         if (!fileJournal.exists()) {
@@ -90,7 +82,6 @@ class Journal @Inject constructor(private val cacheDir: String) {
         }
     }
 
-    //@Synchronized
     fun clear(){
         entries.clear()
         deleteFile(fileJournal)
@@ -99,7 +90,6 @@ class Journal @Inject constructor(private val cacheDir: String) {
         fileJournal.createNewFile()
     }
 
-    //@Synchronized
     private fun loadEntriesFromJournal(){
         entries.clear()
         try {
@@ -117,7 +107,6 @@ class Journal @Inject constructor(private val cacheDir: String) {
         }
     }
 
-    //@Synchronized
     fun put(hash: String, time: Long) {
         if (entries[hash] != null)
             return
@@ -128,7 +117,6 @@ class Journal @Inject constructor(private val cacheDir: String) {
         }
     }
 
-    //@Synchronized
     fun update(hash: String, state: StateEntry, time: Long = 0) {
         entries[hash]?.let{
             it.state = state
@@ -142,7 +130,6 @@ class Journal @Inject constructor(private val cacheDir: String) {
      *  @param changeState true: будет изменен state на REMOVE,
      *  false: запись будет удалена
      */
-    //@Synchronized
     fun remove(hash: String, changeState: Boolean, cancel: Boolean = false) {
         if (cancel) {
             val entry = entries[hash]
@@ -165,7 +152,6 @@ class Journal @Inject constructor(private val cacheDir: String) {
      *  Сохранение entries state != REMOVE в файл журнала
      *  @return список хэш файлов, которые необходимо удалить
      */
-    //@Synchronized
     fun saveEntriesToJournal(): List<String>{
         val listRemoved = mutableListOf<String>()
         val text = StringBuffer()
@@ -186,9 +172,6 @@ class Journal @Inject constructor(private val cacheDir: String) {
         return listRemoved
     }
 
-    /*private fun isRemoved(state: StateEntry) =
-        state == StateEntry.REMOVE*/
-
     /**
      *  Проверяем, помечена ли запись на удаление StateEntry.REMOVE
      */
@@ -200,32 +183,15 @@ class Journal @Inject constructor(private val cacheDir: String) {
     /**
     *  Получить размер файлов кэша
     */
-   //@Synchronized
    fun getCacheSize(): Long {
-       //entries.values.sumOf { it.length }
        var sum = 0L
        entries.forEach { entry ->
            if (!removed(entry.value))
-           //if (entry.value.state != StateEntry.REMOVE)
                sum += entry.value.length
        }
        return sum
    }
-    /**
-    *  Получить размер файла кэша
-    *  @param hash хэш (имя) файла кэша
-    */
-   //@Synchronized
-  /* fun getCacheFileSize(hash: String): Long =
-       entries[hash]?.let{
-           //if (it.state != StateEntry.REMOVE)
-           if (!removed(it))
-               it.length
-           else
-               0L
-       } ?: 0L
-*/
-    //@Synchronized
+
     fun leavingCacheFiles(limit: Long): List<String> {
         val size = getCacheSize()
         val list = mutableListOf<String>()
@@ -239,47 +205,17 @@ class Journal @Inject constructor(private val cacheDir: String) {
                     list.add(entry.key)
             }
         }
-        /*list.forEach { hash ->
-            entries.remove(hash)
-        }*/
         return list
     }
 
-    /*
-    /**
-    *  Получить список файлов кэша
-    */
-   @Synchronized
-   fun getListCacheFiles(): List<String> {
-       val list = mutableListOf<String>()
-       entries.forEach {entry ->
-           if (!removed(entry.value))
-           //if (entry.value.state != StateEntry.REMOVE)
-               list.add(entry.key)
-       }
-       return list
-       //entries.keys.toList()
-   }*/
-
-   //@Synchronized
-   fun equals(hash: String, time: Long): Boolean =
+    fun equals(hash: String, time: Long): Boolean =
        entries[hash]?.let{entry ->
            entry.time == time
        } ?: false
 
-    //@Synchronized
     fun getTimestamp(hash: String): Long =
         entries[hash]?.time ?: 0L
 
-
-    //@Synchronized
     fun getEntryState(hash: String): StateEntry =
         entries[hash]?.state ?: StateEntry.REMOVE
-
-  /* companion object {
-       private var instance: Journal? = null
-       @JvmName("getInstance1")
-       fun getInstance(cacheDir: String): Journal =
-           instance ?: Journal(cacheDir)
-   }*/
 }

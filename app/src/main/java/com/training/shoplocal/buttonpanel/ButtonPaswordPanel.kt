@@ -25,7 +25,6 @@ import com.training.shoplocal.ui.theme.PrimaryDark
 import com.training.shoplocal.viewmodel.RepositoryViewModel
 
 @Composable
-//fun ButtonPasswordPanel(changeChar: (value: Char)-> Unit){
 fun ButtonPasswordPanel(state: LoginViewState){
     val viewModel: RepositoryViewModel = viewModel()
     val canFingerPrint = remember{state.isEnabledFingerButton()}
@@ -35,7 +34,6 @@ fun ButtonPasswordPanel(state: LoginViewState){
             Row {
                 for (j in 1..3 ) {
                     val st = i * 3 + j
-//                    val char: Char= ((i * 3) + j).toChar()
                     var image = 0
                     val char = if (st > 9) {
                         when (st){
@@ -49,29 +47,23 @@ fun ButtonPasswordPanel(state: LoginViewState){
                         }
                     }
                     else st.toString()[0]
-
-
                     val alpha  =    if (st==10 && !canFingerPrint.value)
                                         0.2f
                                     else
                                         1.0f
-
                     OutlinedButton(
-                        colors = //ButtonDefaults.buttonColors(PrimaryDark),
-                        ButtonDefaults.buttonColors(backgroundColor = PrimaryDark,
+                        colors =
+                            ButtonDefaults.buttonColors(backgroundColor = PrimaryDark,
                         disabledBackgroundColor = Color.Transparent),
                         enabled = alpha == 1.0f,
                         onClick = {
                             if (char == ' ') {
                                 viewModel.onFingerPrint(state.getEmail())
                                 state.clearPassword()
-                                //state.fillPassword()
-
                             } else {
                                 state.changeChar(char)
                                 val password = state.getPassword()
                                 if (password.length == 5) {
-                                    //log("length == 5")
                                     viewModel.onLogin(state.getEmail(), password)
                                 }
                             }
@@ -81,7 +73,6 @@ fun ButtonPasswordPanel(state: LoginViewState){
                         shape = CircleShape,
                         contentPadding = PaddingValues(0.dp),
                     ) {
-
                         if (char != ' ' && char != '<')
                             Text(
                                 text = char.toString(),
@@ -102,20 +93,6 @@ fun ButtonPasswordPanel(state: LoginViewState){
                         Spacer(modifier = Modifier.width(16.dp))
                 }
             }
-          /*  if (i<3)
-                Spacer(modifier = Modifier.height(8.dp))*/
-        }
+         }
     }
-
-    /*
-     LaunchedEffect(true) {
-         delay(1000)
-         changeChar.invoke('<')
-     }*/
 }
-
-/*
-fun ButtonPanel(onClick: ((char:Char) -> Unit)?){
-    onClick?.invoke(char)
-}
- */

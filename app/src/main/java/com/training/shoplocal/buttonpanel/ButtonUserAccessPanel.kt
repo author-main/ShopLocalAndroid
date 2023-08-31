@@ -28,18 +28,7 @@ fun ButtonUserAccessPanel(state: LoginViewState){
         state.setPressedButtons(true)
         state.clearPassword()
     }
-    /*fun clearPassword(){
-        val password = state.getPassword()
-        if (password.isEmpty()) {
-            state.changePassword("12345")
-            state.changePassword("")
-        }
-        else
-            state.changePassword("")
-
-    }*/
-
-     Row(//modifier = Modifier.padding(vertical = 16.dp),
+     Row(
          verticalAlignment = Alignment.CenterVertically
      ){
          OutlinedButton(
@@ -48,7 +37,6 @@ fun ButtonUserAccessPanel(state: LoginViewState){
                 lostFocus()
                 DialogRouter.navigateTo(DialogItem.RegUserDialog)
             },
-
             border = null,
             shape = CircleShape,
             contentPadding = PaddingValues(8.dp)
@@ -61,7 +49,6 @@ fun ButtonUserAccessPanel(state: LoginViewState){
                 letterSpacing = 0.sp
             )
         }
-
         Text(
             modifier = Modifier
                 .padding(horizontal = 4.dp),
@@ -69,7 +56,6 @@ fun ButtonUserAccessPanel(state: LoginViewState){
             color = TextLightGray,
             fontSize = 14.sp,
         )
-
         OutlinedButton(
             colors = ButtonDefaults.buttonColors(backgroundColor = PrimaryDark),
             onClick = {
@@ -90,5 +76,4 @@ fun ButtonUserAccessPanel(state: LoginViewState){
             )
         }
       }
-
 }
