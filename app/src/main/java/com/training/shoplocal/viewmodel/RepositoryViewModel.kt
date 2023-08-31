@@ -182,7 +182,6 @@ class RepositoryViewModel(private val repository: Repository) : ViewModel() {
     }
 
     private fun getProducts(){
-
         if (!validToken()) return
         if (loadState != LoadState.IDLE) return
         showProgressCRUD()
